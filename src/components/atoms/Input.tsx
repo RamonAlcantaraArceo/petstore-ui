@@ -1,17 +1,20 @@
 import React from 'react';
-import type { FC, InputHTMLAttributes } from 'react';
+import type { FC } from 'react';
 import { theme } from '../../tokens/theme';
+import { useTranslation } from '../../i18n';
+import { useAccessibility, generateAccessibilityId } from '../../accessibility';
+
 
 /**
- * Input component with validation states and accessibility features.
- * Supports various input types, validation states, and helper text.
+ * Input component with validation states, comprehensive accessibility, and internationalization.
+ * Supports various input types, validation states, helper text, and full a11y compliance.
  * 
  * @example
  * ```tsx
  * <Input
  *   type="email"
- *   placeholder="Enter your email"
- *   label="Email Address"
+ *   placeholder={t('components.input.emailPlaceholder')}
+ *   label={t('components.input.examples.email')}
  *   required
  * />
  * 
@@ -20,11 +23,12 @@ import { theme } from '../../tokens/theme';
  *   value={value}
  *   onChange={handleChange}
  *   validationState="error"
- *   helperText="Please enter a valid name"
+ *   errorMessage={t('components.input.invalid')}
+ *   ariaLabel={t('components.input.ariaInvalid', { label: 'Name' })}
  * />
  * ```
  */
-interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** Visual validation state */
   validationState?: 'default' | 'success' | 'warning' | 'error';
   /** Size of the input */
@@ -43,6 +47,18 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>
   endIcon?: React.ReactNode;
   /** Additional CSS class names */
   className?: string;
+  /** Use default translation for aria-label if none provided */
+  useDefaultAriaLabel?: boolean;
+  /** Translation key for label */
+  labelTranslationKey?: string;
+  /** Translation key for placeholder */
+  placeholderTranslationKey?: string;
+  /** Translation key for helper text */
+  helperTextTranslationKey?: string;
+  /** Translation key for error message */
+  errorTranslationKey?: string;
+  /** Parameters for translation interpolation */
+  translationParams?: Record<string, string | number>;
 }
 
 export const Input: FC<InputProps> = ({
@@ -58,11 +74,90 @@ export const Input: FC<InputProps> = ({
   disabled = false,
   required = false,
   id,
+  useDefaultAriaLabel = true,
+  labelTranslationKey,
+  placeholderTranslationKey,
+  helperTextTranslationKey,
+  errorTranslationKey,
+  translationParams,
   ...props
 }) => {
-  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
-  const helperId = helperText || errorMessage ? `${inputId}-helper` : undefined;
+  const { t } = useTranslation();
   
+  // Generate stable IDs for accessibility relationships
+  const inputId = id || generateAccessibilityId('input');
+  const helperId = (helperText || errorMessage || helperTextTranslationKey || errorTranslationKey) ? `${inputId}-helper` : undefined;
+  const labelId = label || labelTranslationKey ? `${inputId}-label` : undefined;
+  
+  // Use accessibility hook for comprehensive a11y features
+  const {
+    ariaAttributes,
+    announceChange,
+    handleKeyDown
+  } = useAccessibility({
+    id: inputId,
+    announceOnChange: () => 'Input changed',
+    accessibilityError: validationState === 'error'
+  });
+  
+  // Get translated content
+  const displayLabel = labelTranslationKey 
+    ? t(labelTranslationKey, translationParams) 
+    : label;
+    
+  const displayPlaceholder = placeholderTranslationKey 
+    ? t(placeholderTranslationKey, translationParams)
+    : props.placeholder;
+    
+  const displayHelperText = helperTextTranslationKey 
+    ? t(helperTextTranslationKey, translationParams)
+    : helperText;
+    
+  const displayErrorMessage = errorTranslationKey 
+    ? t(errorTranslationKey, translationParams)
+    : errorMessage;
+  
+  // Generate accessible aria-label
+  const getAriaLabel = () => {
+    if (ariaAttributes['aria-label']) {
+      return ariaAttributes['aria-label'];
+    }
+    
+    if (!useDefaultAriaLabel) {
+      return undefined;
+    }
+    
+    const labelText = displayLabel || 'input field';
+    
+    if (validationState === 'error') {
+      return t('components.input.ariaInvalid', { label: labelText });
+    }
+    
+    if (required) {
+      return t('components.input.ariaRequired', { label: labelText });
+    }
+    
+    return t('components.input.ariaLabel', { label: labelText });
+  };
+  
+  // Enhanced change handler with announcements
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    
+    // Announce changes for screen readers if configured
+    if (announceChange) {
+      announceChange(value);
+    }
+    
+    props.onChange?.(event);
+  };
+  
+  // Enhanced keyboard handler
+  const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    handleKeyDown(event as any);
+    props.onKeyDown?.(event);
+  };
+
   const baseClasses = 'input';
   const validationClasses = `input--${validationState}`;
   const sizeClasses = `input--${size}`;
@@ -202,15 +297,24 @@ export const Input: FC<InputProps> = ({
     fontFamily: theme.typography.fontFamily.sans.join(', '),
   };
 
-  const displayedHelperText = validationState === 'error' ? errorMessage || helperText : helperText;
+  const displayedHelperText = validationState === 'error' 
+    ? displayErrorMessage || displayHelperText 
+    : displayHelperText;
 
   return (
     <div style={containerStyles}>
-      {label && (
-        <label htmlFor={inputId} style={labelStyles}>
-          {label}
+      {displayLabel && (
+        <label 
+          htmlFor={inputId} 
+          id={labelId}
+          style={labelStyles}
+        >
+          {displayLabel}
           {required && (
-            <span style={{ color: theme.colors.semantic.error, marginLeft: theme.spacing[1] }}>
+            <span 
+              style={{ color: theme.colors.semantic.error, marginLeft: theme.spacing[1] }}
+              aria-label={t('accessibility.labels.required')}
+            >
               *
             </span>
           )}
@@ -218,7 +322,11 @@ export const Input: FC<InputProps> = ({
       )}
       <div style={inputWrapperStyles}>
         {startIcon && (
-          <span style={startIconStyles} aria-hidden="true">
+          <span 
+            style={startIconStyles} 
+            aria-hidden="true"
+            role="img"
+          >
             {startIcon}
           </span>
         )}
@@ -228,28 +336,47 @@ export const Input: FC<InputProps> = ({
           style={inputStyles}
           disabled={disabled}
           required={required}
+          placeholder={displayPlaceholder}
           aria-invalid={validationState === 'error'}
           aria-describedby={helperId}
+          aria-labelledby={labelId}
+          aria-label={!displayLabel ? getAriaLabel() : undefined}
+          aria-required={required}
+          onChange={handleChange}
+          onKeyDown={handleKeyDownEvent}
           onFocus={(e) => {
             if (!disabled) {
               e.currentTarget.style.borderColor = theme.colors.primary[500];
               e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.colors.primary[500]}20`;
             }
+            props.onFocus?.(e);
           }}
           onBlur={(e) => {
             e.currentTarget.style.borderColor = getValidationColor();
             e.currentTarget.style.boxShadow = 'none';
+            props.onBlur?.(e);
           }}
-          {...props}
+          {...ariaAttributes}
+          {...(props as any)} // Spread remaining props
         />
         {endIcon && (
-          <span style={endIconStyles} aria-hidden="true">
+          <span 
+            style={endIconStyles} 
+            aria-hidden="true"
+            role="img"
+          >
             {endIcon}
           </span>
         )}
       </div>
       {displayedHelperText && (
-        <span id={helperId} style={helperTextStyles} role={validationState === 'error' ? 'alert' : undefined}>
+        <span 
+          id={helperId} 
+          style={helperTextStyles} 
+          role={validationState === 'error' ? 'alert' : 'status'}
+          aria-live={validationState === 'error' ? 'assertive' : 'polite'}
+          aria-atomic="true"
+        >
           {displayedHelperText}
         </span>
       )}

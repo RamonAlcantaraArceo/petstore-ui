@@ -2,7 +2,7 @@
  * Petstore UI Component Library
  * 
  * A modern React + TypeScript component library with design system foundation.
- * Built with accessibility, performance, and developer experience in mind.
+ * Built with accessibility, internationalization, performance, and developer experience in mind.
  */
 
 // Design tokens
@@ -13,6 +13,11 @@ export { colors, spacing, typography, breakpoints, getThemeValue } from './token
 // Components
 export * from './components';
 
-// Future exports
-// export * from './hooks';
-// export * from './utils';
+// Internationalization (i18n)
+export * from './i18n';
+
+// Accessibility (a11y)
+export * from './accessibility';
+
+// Testing utilities (for development and testing environments)
+export * from './testing';

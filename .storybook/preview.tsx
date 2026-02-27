@@ -1,23 +1,30 @@
 import type { Preview } from '@storybook/react';
 import React from 'react';
 import { theme } from '../src/tokens/theme';
+import { LocaleProvider, localeMetadata, getAvailableLocales } from '../src/i18n';
+import type { SupportedLocale } from '../src/i18n';
 
 // Theme Provider Context
 const ThemeContext = React.createContext(theme);
 
-// Theme Provider Component
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+// Theme and Locale Provider Component
+export const StoryProvider: React.FC<{ 
+  children: React.ReactNode;
+  locale: SupportedLocale;
+}> = ({ children, locale }) => (
   <ThemeContext.Provider value={theme}>
-    <div style={{
-      fontFamily: theme.typography.fontFamily.sans.join(', '),
-      fontSize: theme.typography.fontSize.base,
-      lineHeight: theme.typography.lineHeight.normal,
-      color: theme.colors.text?.primary || theme.colors.secondary[900],
-      backgroundColor: theme.colors.background?.primary || theme.colors.secondary[50],
-      padding: '1rem'
-    }}>
-      {children}
-    </div>
+    <LocaleProvider locale={locale}>
+      <div style={{
+        fontFamily: theme.typography.fontFamily.sans.join(', '),
+        fontSize: theme.typography.fontSize.base,
+        lineHeight: theme.typography.lineHeight.normal,
+        color: theme.colors.text?.primary || theme.colors.secondary[900],
+        backgroundColor: theme.colors.background?.primary || theme.colors.secondary[50],
+        padding: '1rem'
+      }}>
+        {children}
+      </div>
+    </LocaleProvider>
   </ThemeContext.Provider>
 );
 
@@ -91,16 +98,49 @@ const preview: Preview = {
         fontBase: theme.typography.fontFamily.sans.join(', '),
         fontCode: theme.typography.fontFamily.mono.join(', '),
       }
-    }
+    },
+    /* a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', enabled: true },
+          { id: 'focus-order-semantics', enabled: true },
+          { id: 'keyboard-navigation', enabled: true },
+          { id: 'landmark-one-main', enabled: true },
+          { id: 'page-has-heading-one', enabled: false },  // Stories don't need h1
+          { id: 'region', enabled: false }  // Stories are regions by default
+        ],
+        tags: ['wcag2a', 'wcag2aa', 'wcag21aa'],
+        disableOtherRules: false
+      },
+      manual: false
+    } */
   },
   decorators: [
-    (Story) => (
-      <ThemeProvider>
-        <Story />
-      </ThemeProvider>
-    ),
+    (Story, context) => {
+      const locale = context.globals.locale as SupportedLocale || 'en';
+      return (
+        <StoryProvider locale={locale}>
+          <Story />
+        </StoryProvider>
+      );
+    },
   ],
   globalTypes: {
+    locale: {
+      name: 'Locale',
+      description: 'Internationalization locale',
+      defaultValue: 'en',
+      toolbar: {
+        icon: 'globe',
+        items: getAvailableLocales().map(locale => ({
+          value: locale,
+          title: localeMetadata[locale].name,
+          right: localeMetadata[locale].flag
+        })),
+        showName: true,
+        dynamicTitle: true
+      }
+    },
     theme: {
       description: 'Global theme for components',
       defaultValue: 'light',

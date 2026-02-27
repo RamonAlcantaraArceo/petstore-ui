@@ -1,19 +1,31 @@
 import React from 'react';
 import type { FC, HTMLAttributes } from 'react';
 import { theme } from '../../tokens/theme';
+import { useTranslation } from '../../i18n';
+import { useAccessibility } from '../../accessibility';
+
 
 /**
- * Card component with elevation system for content containers.
- * Provides visual hierarchy through shadow levels and supports interactive states.
+ * Card component with elevation system, comprehensive accessibility, and internationalization.
+ * Provides visual hierarchy through shadow levels and supports interactive states with full a11y.
  * 
  * @example
  * ```tsx
- * <Card elevation="md" padding="lg">
- *   <h3>Card Title</h3>
- *   <p>Card content goes here...</p>
+ * <Card 
+ *   elevation="md" 
+ *   padding="lg"
+ *   ariaLabel={t('components.card.ariaLabel', { title: 'Product' })}
+ * >
+ *   <h3>{t('stories.card.examples.title')}</h3>
+ *   <p>{t('stories.card.examples.content')}</p>
  * </Card>
  * 
- * <Card elevation="lg" interactive onClick={handleClick}>
+ * <Card 
+ *   elevation="lg" 
+ *   interactive 
+ *   onClick={handleClick}
+ *   translationKey="components.card.defaultTitle"
+ * >
  *   <div>Clickable card content</div>
  * </Card>
  * ```
@@ -39,6 +51,17 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
   /** Card content */
   children: React.ReactNode;
+  /** Use default translation for aria-label if none provided */
+  useDefaultAriaLabel?: boolean;
+  /** Translation key for card title/label */
+  translationKey?: string;
+  /** Parameters for translation interpolation */
+  translationParams?: Record<string, string | number>;
+  /** Keyboard navigation settings */
+  enterActivation?: boolean;
+  spaceActivation?: boolean;
+  /** Announcement on action completion */
+  announceOnAction?: string;
 }
 
 export const Card: FC<CardProps> = ({
@@ -54,8 +77,48 @@ export const Card: FC<CardProps> = ({
   children,
   onClick,
   onKeyDown,
+  useDefaultAriaLabel = true,
+  translationKey,
+  translationParams,
+  enterActivation = true,
+  spaceActivation = true,
+  announceOnAction,
   ...props
 }) => {
+  const { t } = useTranslation();
+  
+  // Use accessibility hook for comprehensive a11y features
+  const {
+    ariaAttributes,
+    handleKeyDown: accessibilityKeyDown,
+    announceAction
+  } = useAccessibility({
+    enterActivation: interactive && enterActivation,
+    spaceActivation: interactive && spaceActivation,
+    announceOnAction: announceOnAction || ''
+  });
+  
+  // Get translated content if translation key provided
+  const displayTitle = translationKey 
+    ? t(translationKey, translationParams)
+    : undefined;
+  
+  // Generate accessible aria-label
+  const getAriaLabel = () => {
+    if (ariaAttributes['aria-label']) {
+      return ariaAttributes['aria-label'];
+    }
+    
+    if (!useDefaultAriaLabel) {
+      return undefined;
+    }
+    
+    if (displayTitle) {
+      return t('components.card.ariaLabel', { title: displayTitle });
+    }
+    
+    return t('components.card.defaultTitle');
+  };
   const baseClasses = 'card';
   const elevationClasses = `card--elevation-${elevation}`;
   const paddingClasses = `card--padding-${padding}`;
@@ -218,19 +281,35 @@ export const Card: FC<CardProps> = ({
                theme.boxShadow['2xl']
   } : {};
 
+  // Enhanced click handler with accessibility announcements
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (interactive && onClick) {
+      // Announce action to screen readers
+      if (announceOnAction) {
+        announceAction();
+      }
+      
       onClick(event);
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  // Combined keyboard handler
+  const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    // Handle accessibility keyboard events
+    accessibilityKeyDown(event as any);
+    
+    // Handle card-specific keyboard events
     if (interactive && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
       if (onClick) {
+        // Announce action to screen readers
+        if (announceOnAction) {
+          announceAction();
+        }
         onClick(event as any);
       }
     }
+    
     onKeyDown?.(event);
   };
 
@@ -241,34 +320,55 @@ export const Card: FC<CardProps> = ({
       className={cardClasses}
       style={cardStyles}
       onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      role={shouldBeInteractive ? 'button' : undefined}
+      onKeyDown={handleKeyDownEvent}
+      role={shouldBeInteractive ? 'button' : 'region'}
       tabIndex={shouldBeInteractive ? 0 : undefined}
       aria-pressed={shouldBeInteractive && selected ? 'true' : undefined}
+      aria-label={getAriaLabel()}
+      aria-selected={selected}
+      {...ariaAttributes}
       onMouseEnter={(e) => {
         if (interactive) {
           Object.assign(e.currentTarget.style, { ...cardStyles, ...hoverStyles });
         }
+        props.onMouseEnter?.(e);
       }}
       onMouseLeave={(e) => {
         if (interactive) {
           Object.assign(e.currentTarget.style, cardStyles);
         }
+        props.onMouseLeave?.(e);
       }}
       onFocus={(e) => {
         if (interactive) {
           e.currentTarget.style.outline = `2px solid ${theme.colors.primary[500]}`;
           e.currentTarget.style.outlineOffset = '2px';
         }
+        props.onFocus?.(e);
       }}
       onBlur={(e) => {
         if (interactive) {
           e.currentTarget.style.outline = 'none';
           e.currentTarget.style.outlineOffset = '0';
         }
+        props.onBlur?.(e);
       }}
-      {...props}
+      {...(props as any)} // Spread remaining props, excluding ones we've handled
     >
+      {displayTitle && (
+        <div 
+          style={{ 
+            position: 'absolute', 
+            left: '-10000px', 
+            width: '1px', 
+            height: '1px', 
+            overflow: 'hidden' 
+          }}
+          aria-hidden="true"
+        >
+          {displayTitle}
+        </div>
+      )}
       {children}
     </div>
   );

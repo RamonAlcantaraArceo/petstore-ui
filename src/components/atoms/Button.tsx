@@ -1,23 +1,31 @@
 import React from 'react';
 import type { FC, ButtonHTMLAttributes } from 'react';
 import { theme } from '../../tokens/theme';
+import { useTranslation } from '../../i18n';
+import { useAccessibility } from '../../accessibility';
+
 
 /**
- * Button component for user interactions with multiple variants and sizes.
- * Supports primary, secondary, and danger color schemes with accessible design.
+ * Button component for user interactions with multiple variants, sizes, and comprehensive accessibility.
+ * Supports primary, secondary, and danger color schemes with full i18n and a11y integration.
  * 
  * @example
  * ```tsx
  * <Button variant="primary" size="large" onClick={handleSubmit}>
- *   Submit Form
+ *   {t('components.button.submit')}
  * </Button>
  * 
- * <Button variant="danger" disabled>
- *   Delete Account
+ * <Button 
+ *   variant="danger" 
+ *   disabled 
+ *   ariaLabel={t('components.button.ariaLabel', { content: 'Delete' })}
+ * >
+ *   {t('components.button.delete')}
  * </Button>
  * ```
  */
-interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
+interface ButtonProps extends 
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
   /** Visual style variant of the button */
   variant?: 'primary' | 'secondary' | 'danger';
   /** Size of the button */
@@ -34,6 +42,17 @@ interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'typ
   className?: string;
   /** Button content */
   children: React.ReactNode;
+  /** Use default translation for aria-label if none provided */
+  useDefaultAriaLabel?: boolean;
+  /** Translation key for button content */
+  translationKey?: string;
+  /** Parameters for translation interpolation */
+  translationParams?: Record<string, string | number>;
+  /** Keyboard navigation settings */
+  enterActivation?: boolean;
+  spaceActivation?: boolean;
+  /** Announcement on action completion */
+  announceOnAction?: string;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -46,8 +65,33 @@ export const Button: FC<ButtonProps> = ({
   className = '',
   children,
   onClick,
+  useDefaultAriaLabel = true,
+  translationKey,
+  translationParams,
+  enterActivation = true,
+  spaceActivation = true,
+  announceOnAction,
   ...props
 }) => {
+  const { t } = useTranslation();
+  
+  // Use accessibility hook for comprehensive a11y features
+  const {
+    ariaAttributes,
+    handleKeyDown,
+    announceAction
+  } = useAccessibility({
+    enterActivation,
+    spaceActivation,
+    announceOnAction: announceOnAction || '',
+    accessibilityLoading: loading,
+    accessibilityError: disabled
+  });
+  
+  // Get translated content if translation key provided
+  const displayContent = translationKey 
+    ? t(translationKey, translationParams)
+    : children;
   const baseClasses = 'btn';
   const variantClasses = `btn--${variant}`;
   const sizeClasses = `btn--${size}`;
@@ -65,12 +109,44 @@ export const Button: FC<ButtonProps> = ({
     .filter(Boolean)
     .join(' ');
 
+  // Enhanced click handler with accessibility announcements
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (disabled || loading) {
       event.preventDefault();
       return;
     }
+    
+    // Announce action to screen readers
+    if (announceOnAction) {
+      announceAction();
+    }
+    
     onClick?.(event);
+  };
+  
+  // Combined keyboard and click handlers
+  const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    handleKeyDown(event as any);
+    props.onKeyDown?.(event);
+  };
+  
+  // Generate accessible aria-label
+  const getAriaLabel = () => {
+    if (ariaAttributes['aria-label']) {
+      return ariaAttributes['aria-label'];
+    }
+    
+    if (!useDefaultAriaLabel) {
+      return undefined;
+    }
+    
+    const content = typeof displayContent === 'string' ? displayContent : 'button';
+    
+    if (loading) {
+      return t('components.button.ariaLabelLoading', { content });
+    }
+    
+    return t('components.button.ariaLabel', { content });
   };
 
   const buttonStyles: React.CSSProperties = {
@@ -148,27 +224,34 @@ export const Button: FC<ButtonProps> = ({
       style={buttonStyles}
       disabled={disabled || loading}
       onClick={handleClick}
+      onKeyDown={handleKeyDownEvent}
       aria-disabled={disabled || loading}
-      aria-label={loading ? `Loading: ${children}` : undefined}
+      aria-busy={loading}
+      aria-label={getAriaLabel()}
+      {...ariaAttributes}
       onMouseEnter={(e) => {
         if (!disabled && !loading) {
           Object.assign(e.currentTarget.style, hoverStyles);
         }
+        props.onMouseEnter?.(e);
       }}
       onMouseLeave={(e) => {
         Object.assign(e.currentTarget.style, buttonStyles);
+        props.onMouseLeave?.(e);
       }}
       onFocus={(e) => {
         if (!disabled && !loading) {
           e.currentTarget.style.outline = `2px solid ${theme.colors.primary[500]}`;
           e.currentTarget.style.outlineOffset = '2px';
         }
+        props.onFocus?.(e);
       }}
       onBlur={(e) => {
         e.currentTarget.style.outline = 'none';
         e.currentTarget.style.outlineOffset = '0';
+        props.onBlur?.(e);
       }}
-      {...props}
+      {...(props as any)} // Spread remaining props, excluding ones we've handled
     >
       {loading && (
         <span
@@ -181,10 +264,12 @@ export const Button: FC<ButtonProps> = ({
             animation: 'spin 1s linear infinite'
           }}
           aria-hidden="true"
+          role="img"
+          aria-label={t('components.loading.ariaLabel')}
         />
       )}
       <span style={{ opacity: loading ? 0.7 : 1 }}>
-        {children}
+        {displayContent}
       </span>
     </button>
   );
