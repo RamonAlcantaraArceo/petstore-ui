@@ -5,7 +5,7 @@
 # Enable exact versions for reproducible builds
 exact = true
 
-# Use hardlinks to save disk space (when possible)
+# Use hardlinks to save disk space (when possible)  
 hardlinks = true
 
 # Automatically install peer dependencies
@@ -13,6 +13,18 @@ auto = true
 
 # Custom registry settings (if needed)
 # registry = "https://registry.npmjs.org/"
+
+# Fix package hoisting issues with Storybook dependencies
+[install.scopes]
+# Disable hoisting for problematic Storybook packages
+"@storybook" = { hoist = false }
+"cli-table3" = { hoist = false }
+"string-width" = { hoist = false }
+
+# Configure peer dependencies for Storybook
+[install.peer]
+"@storybook/react" = "auto"
+"@storybook/react-vite" = "auto"
 
 [install.cache]
 # Cache location for downloaded packages
