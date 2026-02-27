@@ -1,0 +1,57 @@
+{
+  "name": "petstore-ui",
+  "version": "1.0.0",
+  "description": "A modern React + TypeScript component library with Storybook documentation and Petstore demo",
+  "type": "module",
+  "private": true,
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "bun run storybook",
+    "build": "bun run build-storybook && bun run build-website",
+    "build-storybook": "storybook build",
+    "build-website": "bun build src/website/index.ts --outdir public/dist",
+    "storybook": "storybook dev -p 6006",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format": "prettier --write src/**/*.{ts,tsx,json,md}",
+    "type-check": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@storybook/react": "^7.6.0",
+    "@storybook/react-vite": "^7.6.0",
+    "@storybook/addon-essentials": "^7.6.0",
+    "@storybook/addon-docs": "^7.6.0",
+    "@storybook/addon-controls": "^7.6.0",
+    "@storybook/addon-viewport": "^7.6.0",
+    "@storybook/blocks": "^7.6.0",
+    "typescript": "^5.0.0",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-storybook": "^0.6.15",
+    "prettier": "^3.0.0",
+    "lint-staged": "^15.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "bun": ">=1.0.0"
+  }
+}

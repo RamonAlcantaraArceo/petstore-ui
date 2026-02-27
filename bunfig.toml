@@ -1,0 +1,72 @@
+# Bun configuration for petstore-ui project
+# This file configures Bun's behavior for module resolution and package management
+
+[install]
+# Enable exact versions for reproducible builds
+exact = true
+
+# Use hardlinks to save disk space (when possible)
+hardlinks = true
+
+# Automatically install peer dependencies
+auto = true
+
+# Custom registry settings (if needed)
+# registry = "https://registry.npmjs.org/"
+
+[install.cache]
+# Cache location for downloaded packages
+dir = ".bun"
+
+# Disable cache validation for faster installs (use with caution)
+disable = false
+
+[run]
+# Show more verbose output during script execution
+verbose = true
+
+# Set Bun environment
+env = "development"
+
+[build]
+# TypeScript configuration
+compile = true
+minify = false
+sourcemap = "external"
+
+# Module format preferences
+format = "esm"
+
+# Target environment
+target = "browser"
+
+# Entry points for the build
+entry = [
+  "./src/components/index.ts",
+  "./src/tokens/index.ts"
+]
+
+# Output directory
+outdir = "./dist"
+
+[test]
+# Test runner configuration
+preload = ["./test-setup.ts"]
+timeout = 5000
+
+# Coverage settings
+coverage = true
+coverageDir = "./coverage"
+
+[macros]
+# Enable React JSX transform
+# Note: Bun handles JSX automatically, this section is for future macro expansions
+
+# File extensions that Bun should handle
+[loader]
+".svg" = "file"
+".png" = "file"
+".jpg" = "file"
+".jpeg" = "file"
+".gif" = "file"
+".webp" = "file"
