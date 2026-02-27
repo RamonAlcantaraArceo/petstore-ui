@@ -10,7 +10,7 @@ const config: StorybookConfig = {
     '@storybook/addon-controls',
     '@storybook/addon-docs',
     '@storybook/addon-viewport',
-    // '@storybook/addon-a11y' // Temporarily disabled due to compatibility issues
+    '@storybook/addon-a11y'
   ],
   framework: {
     name: '@storybook/react-vite',
@@ -50,8 +50,7 @@ const config: StorybookConfig = {
     // Fix Node.js compatibility issues in browser environment
     config.optimizeDeps = {
       ...config.optimizeDeps,
-      include: ['react', 'react-dom'],
-      exclude: ['@storybook/blocks']
+      include: ['react', 'react-dom', '@storybook/blocks']
     };
     
     return config;

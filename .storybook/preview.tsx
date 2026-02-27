@@ -93,10 +93,31 @@ const preview: Preview = {
     docs: {
       theme: {
         base: 'light',
+        // Brand
         colorPrimary: theme.colors.primary[500],
         colorSecondary: theme.colors.secondary[500],
+        // UI
+        appBg: '#f8fafc',
+        appContentBg: '#ffffff',
+        appPreviewBg: '#ffffff',
+        appBorderColor: '#e2e8f0',
+        appBorderRadius: 6,
+        // Typography
         fontBase: theme.typography.fontFamily.sans.join(', '),
         fontCode: theme.typography.fontFamily.mono.join(', '),
+        // Text colors
+        textColor: '#1e293b',
+        textInverseColor: '#ffffff',
+        textMutedColor: '#64748b',
+        // Toolbar colors
+        barTextColor: '#64748b',
+        barSelectedColor: '#3b82f6',
+        barBg: '#ffffff',
+        // Form colors
+        inputBg: '#ffffff',
+        inputBorder: '#cbd5e1',
+        inputTextColor: '#1e293b',
+        inputBorderRadius: 4,
       }
     },
     /* a11y: {

@@ -16,7 +16,8 @@ Unit 4: Storybook Configuration
 Prompt: "Set up Storybook with Bun compatibility and configure it for the design system. Create .storybook/main.ts configured for React + TypeScript with essential addons. Create .storybook/preview.tsx with global styles, theme provider, and viewport configurations. Add package.json scripts for 'storybook' (dev server) and 'build-storybook' (static build). Ensure configuration works with Bun's module resolution."
 
 Unit 5: Component Stories Creation
-Prompt: "Create comprehensive Storybook stories for all atomic components. For each component (Button, Input, Card), create a corresponding .stories.tsx file in /src/stories using MDX documentation. Include multiple story variants, controls for interactive props, and comprehensive documentation. Follow the Storybook design system reference patterns for story organization and documentation structure."
+Prompt: "Create comprehensive Storybook stories for all atomic components. For each component (Button, Input, Card), create a corresponding .stories.tsx file in /src/stories using MDX documentation. Include multiple story variants, controls for interactive props, and comprehensive documentation. Follow the Storybook design system reference patterns for story organization and documentation structure.
+Use the button stories implemented at this time as a reference for creating stories for Input and Card components."
 
 Unit 6: Static Website Structure
 Prompt: "Create the basic static website structure that will showcase the component library and integrate with the petstore API. In /public, create index.html with responsive layout, style.css for website-specific styles, and app.js for JavaScript functionality. Create a homepage that introduces the design system, a components showcase page, and a petstore demo page with sections for browsing pets, viewing pet details, and demonstrating API integration."

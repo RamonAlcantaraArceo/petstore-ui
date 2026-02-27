@@ -9,7 +9,7 @@
         "react-dom": "^18.2.0",
       },
       "devDependencies": {
-        "@storybook/addon-a11y": "10.2.13",
+        "@storybook/addon-a11y": "7.6.23",
         "@storybook/addon-controls": "^7.6.0",
         "@storybook/addon-docs": "^7.6.0",
         "@storybook/addon-essentials": "^7.6.0",
@@ -473,7 +473,7 @@
 
     "@sinclair/typebox": ["@sinclair/typebox@0.27.10", "", {}, "sha512-MTBk/3jGLNB2tVxv6uLlFh1iu64iYOQ2PbdOSK3NW8JZsmlaOh2q6sdtKowBhfw8QFLmYNzTW4/oK4uATIi6ZA=="],
 
-    "@storybook/addon-a11y": ["@storybook/addon-a11y@10.2.13", "", { "dependencies": { "@storybook/global": "^5.0.0", "axe-core": "^4.2.0" }, "peerDependencies": { "storybook": "^10.2.13" } }, "sha512-zuR1n1xgWoieEnr6E5xdTR40BI61IBQahgmsRpTvqRffL3mxAs5aFoORDmA5pZWI2LE9URdMkY85h218ijuLiw=="],
+    "@storybook/addon-a11y": ["@storybook/addon-a11y@7.6.23", "", { "dependencies": { "@storybook/addon-highlight": "7.6.23", "axe-core": "^4.2.0" } }, "sha512-g98NQ2FlN19aLON3btYUgiavWj/lcH0BvDTztcYXKuzWJ6nFpJdhCrMd0A0zZcdZMngk8nbDVbwuwsMWH4fbTg=="],
 
     "@storybook/addon-actions": ["@storybook/addon-actions@7.6.23", "", { "dependencies": { "@storybook/core-events": "7.6.23", "@storybook/global": "^5.0.0", "@types/uuid": "^9.0.1", "dequal": "^2.0.2", "polished": "^4.2.2", "uuid": "^9.0.0" } }, "sha512-X+r2hwHJEs4qxOfEItbrdYHb4yIlcWJH+AfqC4PLuW+xSI3HNM/vW+iXqYNA+cTchm2HjQESh/MprQ+ozi5ZaA=="],
 
