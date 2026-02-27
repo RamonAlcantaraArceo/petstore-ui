@@ -1,0 +1,378 @@
+/*\n * Global styles for petstore-ui component library\n * \n * This file contains base styles and CSS custom properties\n * that are used across all components.\n */
+\n\n
+
+/* Import design tokens as CSS custom properties */
+\n:root {
+  \n
+  /* Colors */
+  \n --color-primary: #0ea5e9;
+  \n --color-primary-light: #bae6fd;
+  \n --color-primary-dark: #0369a1;
+  \n --color-secondary: #6366f1;
+  \n --color-text-primary: #111827;
+  \n --color-text-secondary: #6b7280;
+  \n --color-text-tertiary: #9ca3af;
+  \n --color-background: #ffffff;
+  \n --color-background-secondary: #f9fafb;
+  \n --color-border: #d1d5db;
+  \n --color-border-light: #e5e7eb;
+  \n \n
+  /* Semantic colors */
+  \n --color-success: #10b981;
+  \n --color-warning: #f59e0b;
+  \n --color-error: #ef4444;
+  \n --color-info: #3b82f6;
+  \n \n
+  /* Typography */
+  \n --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  \n --font-family-mono: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, monospace;
+  \n --font-size-xs: 0.75rem;
+  \n --font-size-sm: 0.875rem;
+  \n --font-size-base: 1rem;
+  \n --font-size-lg: 1.125rem;
+  \n --font-size-xl: 1.25rem;
+  \n --font-weight-normal: 400;
+  \n --font-weight-medium: 500;
+  \n --font-weight-bold: 700;
+  \n --line-height-normal: 1.5;
+  \n \n
+  /* Spacing */
+  \n --spacing-xs: 0.25rem;
+  \n --spacing-sm: 0.5rem;
+  \n --spacing-md: 1rem;
+  \n --spacing-lg: 1.5rem;
+  \n --spacing-xl: 2rem;
+  \n \n
+  /* Borders */
+  \n --border-radius: 0.25rem;
+  \n --border-radius-lg: 0.5rem;
+  \n --border-radius-full: 9999px;
+  \n \n
+  /* Shadows */
+  \n --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  \n --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  \n --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  \n \n
+  /* Transitions */
+  \n --transition-fast: 150ms ease-out;
+  \n --transition-normal: 300ms ease-out;
+  \n
+}
+
+\n\n
+
+/* Base reset and global styles */
+\n*,
+\n*::before,
+\n*::after {
+  \n box-sizing: border-box;
+  \n
+}
+
+\n\nhtml {
+  \n font-family: var(--font-family-sans);
+  \n font-size: var(--font-size-base);
+  \n line-height: var(--line-height-normal);
+  \n color: var(--color-text-primary);
+  \n background-color: var(--color-background);
+  \n
+}
+
+\n\nbody {
+  \n margin: 0;
+  \n padding: 0;
+  \n -webkit-font-smoothing: antialiased;
+  \n -moz-osx-font-smoothing: grayscale;
+  \n
+}
+
+\n\n
+
+/* Focus styles for accessibility */
+\n:focus-visible {
+  \n outline: 2px solid var(--color-primary);
+  \n outline-offset: 2px;
+  \n
+}
+
+\n\n
+
+/* Button reset */
+\nbutton {
+  \n font-family: inherit;
+  \n cursor: pointer;
+  \n
+}
+
+\n\n
+
+/* Input reset */
+\ninput,
+\ntextarea,
+\nselect {
+  \n font-family: inherit;
+  \n
+}
+
+\n\n
+
+/* Link styles */
+\na {
+  \n color: var(--color-primary);
+  \n text-decoration: none;
+  \n transition: color var(--transition-fast);
+  \n
+}
+
+\n\na:hover {
+  \n color: var(--color-primary-dark);
+  \n text-decoration: underline;
+  \n
+}
+
+\n\n
+
+/* Utility classes for common patterns */
+\n.sr-only {
+  \n position: absolute;
+  \n width: 1px;
+  \n height: 1px;
+  \n padding: 0;
+  \n margin: -1px;
+  \n overflow: hidden;
+  \n clip: rect(0, 0, 0, 0);
+  \n white-space: nowrap;
+  \n border: 0;
+  \n
+}
+
+\n\n
+
+/* Common component base classes */
+\n.btn {
+  \n display: inline-flex;
+  \n align-items: center;
+  \n justify-content: center;
+  \n padding: var(--spacing-sm) var(--spacing-md);
+  \n border: 1px solid transparent;
+  \n border-radius: var(--border-radius);
+  \n font-size: var(--font-size-base);
+  \n font-weight: var(--font-weight-medium);
+  \n line-height: 1;
+  \n text-align: center;
+  \n text-decoration: none;
+  \n cursor: pointer;
+  \n transition: all var(--transition-fast);
+  \n white-space: nowrap;
+  \n user-select: none;
+  \n
+}
+
+\n\n.btn:disabled {
+  \n opacity: 0.5;
+  \n cursor: not-allowed;
+  \n pointer-events: none;
+  \n
+}
+
+\n\n.btn--primary {
+  \n background-color: var(--color-primary);
+  \n color: white;
+  \n border-color: var(--color-primary);
+  \n
+}
+
+\n\n.btn--primary:hover:not(:disabled) {
+  \n background-color: var(--color-primary-dark);
+  \n border-color: var(--color-primary-dark);
+  \n
+}
+
+\n\n.btn--secondary {
+  \n background-color: transparent;
+  \n color: var(--color-primary);
+  \n border-color: var(--color-primary);
+  \n
+}
+
+\n\n.btn--secondary:hover:not(:disabled) {
+  \n background-color: var(--color-primary-light);
+  \n
+}
+
+\n\n.btn--small {
+  \n padding: var(--spacing-xs) var(--spacing-sm);
+  \n font-size: var(--font-size-sm);
+  \n
+}
+
+\n\n.btn--large {
+  \n padding: var(--spacing-md) var(--spacing-lg);
+  \n font-size: var(--font-size-lg);
+  \n
+}
+
+\n\n
+
+/* Input base styles */
+\n.input {
+  \n display: block;
+  \n width: 100%;
+  \n padding: var(--spacing-sm) var(--spacing-md);
+  \n font-size: var(--font-size-base);
+  \n line-height: var(--line-height-normal);
+  \n color: var(--color-text-primary);
+  \n background-color: var(--color-background);
+  \n background-image: none;
+  \n border: 1px solid var(--color-border);
+  \n border-radius: var(--border-radius);
+  \n transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  \n
+}
+
+\n\n.input:focus {
+  \n outline: 0;
+  \n border-color: var(--color-primary);
+  \n box-shadow: 0 0 0 3px rgb(14 165 233 / 0.1);
+  \n
+}
+
+\n\n.input:disabled {
+  \n opacity: 0.5;
+  \n cursor: not-allowed;
+  \n background-color: var(--color-background-secondary);
+  \n
+}
+
+\n\n.input--error {
+  \n border-color: var(--color-error);
+  \n
+}
+
+\n\n.input--error:focus {
+  \n border-color: var(--color-error);
+  \n box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1);
+  \n
+}
+
+\n\n
+
+/* Card base styles */
+\n.card {
+  \n background-color: var(--color-background);
+  \n border: 1px solid var(--color-border-light);
+  \n border-radius: var(--border-radius-lg);
+  \n box-shadow: var(--shadow-sm);
+  \n overflow: hidden;
+  \n
+}
+
+\n\n.card--elevated {
+  \n box-shadow: var(--shadow-md);
+  \n
+}
+
+\n\n.card--interactive {
+  \n cursor: pointer;
+  \n transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+  \n
+}
+
+\n\n.card--interactive:hover {
+  \n box-shadow: var(--shadow-lg);
+  \n transform: translateY(-2px);
+  \n
+}
+
+\n\n
+
+/* Loading states */
+\n.loading {
+  \n position: relative;
+  \n overflow: hidden;
+  \n
+}
+
+\n\n.loading::after {
+  \n content: '';
+  \n position: absolute;
+  \n top: 0;
+  \n left: -100%;
+  \n width: 100%;
+  \n height: 100%;
+  \n background: linear-gradient(\n 90deg, \n transparent, \n rgba(255, 255, 255, 0.4), \n transparent\n);
+  \n animation: loading 1.5s infinite;
+  \n
+}
+
+\n\n@keyframes loading {
+  \n 0% {
+    \n left: -100%;
+    \n
+  }
+
+  \n 100% {
+    \n left: 100%;
+    \n
+  }
+
+  \n
+}
+
+\n\n
+/* Dark mode support (future enhancement) */
+\n@media (prefers-color-scheme: dark) {
+  \n :root {
+    \n --color-text-primary: #f9fafb;
+    \n --color-text-secondary: #d1d5db;
+    \n --color-background: #111827;
+    \n --color-background-secondary: #1f2937;
+    \n --color-border: #374151;
+    \n --color-border-light: #4b5563;
+    \n
+  }
+
+  \n
+}
+
+\n\n
+/* Responsive utilities */
+\n@media (max-width: 640px) {
+  \n .btn {
+    \n width: 100%;
+    \n justify-content: center;
+    \n
+  }
+
+  \n
+}
+
+\n\n
+/* Print styles */
+\n@media print {
+
+  \n .btn,
+  \n .no-print {
+    \n display: none !important;
+    \n
+  }
+
+  \n
+}
+
+\n\n
+/* Reduced motion preferences */
+\n@media (prefers-reduced-motion: reduce) {
+
+  \n *,
+  \n *::before,
+  \n *::after {
+    \n animation-duration: 0.01ms !important;
+    \n animation-iteration-count: 1 !important;
+    \n transition-duration: 0.01ms !important;
+    \n scroll-behavior: auto !important;
+    \n
+  }
+
+  \n
+}

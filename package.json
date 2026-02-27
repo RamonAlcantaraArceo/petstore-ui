@@ -1,0 +1,163 @@
+{
+  "name": "petstore-ui",
+  "version": "0.1.0",
+  "description": "A Storybook component library with static website for the Petstore application",
+  "type": "module",
+  "private": true,
+  "keywords": [
+    "react",
+    "typescript",
+    "storybook",
+    "component-library",
+    "design-system",
+    "petstore",
+    "ai-assisted"
+  ],
+  "author": "RamonAlcantaraArceo",
+  "license": "MIT",
+  "homepage": "https://ramonalcantaraarceo.github.io/petstore-ui",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RamonAlcantaraArceo/petstore-ui.git"
+  },
+  "scripts": {
+    "dev": "bun run storybook",
+    "build": "bun run build-storybook && bun run build-website",
+    "build-storybook": "storybook build --output-dir dist/storybook",
+    "build-website": "bun build public/index.html --outdir dist --target browser",
+    "storybook": "storybook dev -p 6006",
+    "preview": "bun run build && bun run serve",
+    "serve": "npx http-server dist -p 3000 -o",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:a11y": "jest --selectProjects accessibility",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,css,md}\"",
+    "clean": "rm -rf dist storybook-static .bun",
+    "prepare": "husky install",
+    "generate:component": "node scripts/generate-component.js",
+    "generate:story": "node scripts/generate-story.js",
+    "validate": "bun run type-check && bun run lint && bun run test",
+    "ci": "bun run validate && bun run build"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^7.6.0",
+    "@storybook/addon-docs": "^7.6.0",
+    "@storybook/addon-essentials": "^7.6.0",
+    "@storybook/addon-interactions": "^7.6.0",
+    "@storybook/addon-links": "^7.6.0",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.6.0",
+    "@storybook/react": "^7.6.0",
+    "@storybook/react-vite": "^7.6.0",
+    "@storybook/test": "^7.6.0",
+    "@testing-library/dom": "^9.3.4",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/jest": "^29.5.8",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-storybook": "^0.6.15",
+    "husky": "^8.0.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "lint-staged": "^15.1.0",
+    "prettier": "^3.1.0",
+    "storybook": "^7.6.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "bun": ">=1.0.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,md,json}": [
+      "prettier --write"
+    ]
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.ts"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{ts,tsx}",
+      "<rootDir>/src/**/*.{test,spec}.{ts,tsx}"
+    ],
+    "moduleNameMapping": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/**/*.stories.{ts,tsx}",
+      "!src/setupTests.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
+    "projects": [
+      {
+        "displayName": "unit",
+        "testMatch": [
+          "<rootDir>/src/**/*.{test,spec}.{ts,tsx}"
+        ]
+      },
+      {
+        "displayName": "accessibility",
+        "testMatch": [
+          "<rootDir>/src/**/*.a11y.{test,spec}.{ts,tsx}"
+        ]
+      }
+    ]
+  },
+  "storybook": {
+    "port": 6006,
+    "host": "localhost"
+  }
+}
