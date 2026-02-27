@@ -13,11 +13,7 @@ const config: StorybookConfig = {
   ],
   framework: {
     name: '@storybook/react-vite',
-    options: {
-      builder: {
-        viteConfigPath: undefined
-      }
-    }
+    options: {}
   },
   typescript: {
     check: false,
@@ -64,7 +60,6 @@ const config: StorybookConfig = {
     defaultName: 'Documentation'
   },
   features: {
-    modernInlineRender: true,
     buildStoriesJson: true
   }
 };

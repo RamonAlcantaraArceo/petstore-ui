@@ -50,6 +50,22 @@ export const theme = {
       infoLight: '#dbeafe',
       infoDark: '#2563eb'
     },
+    // Text colors
+    text: {
+      primary: '#374151',      // Dark gray for primary text (gray-700)
+      secondary: '#6b7280',    // Medium gray for secondary text (gray-500)
+      muted: '#9ca3af',        // Light gray for muted text (gray-400)
+      inverse: '#ffffff',      // White text for dark backgrounds
+      disabled: '#d1d5db'      // Very light gray for disabled text (gray-300)
+    },
+    // Background colors
+    background: {
+      primary: '#ffffff',      // White background for light theme
+      secondary: '#f9fafb',    // Very light gray for secondary backgrounds (gray-50)
+      tertiary: '#f3f4f6',     // Light gray for tertiary backgrounds (gray-100)
+      inverse: '#1f2937',      // Dark background for dark theme (gray-800)
+      overlay: 'rgba(0, 0, 0, 0.5)' // Semi-transparent overlay
+    },
     // Neutral colors
     neutral: {
       white: '#ffffff',
