@@ -29,6 +29,10 @@ const config: StorybookConfig = {
     },
   },
   viteFinal: async (config) => {
+    // Prevent Vite from copying public/ into the build output
+    // (public/ contains the static website, not Storybook assets)
+    config.publicDir = false;
+
     // Ensure compatibility with Bun's module resolution
     if (config.resolve) {
       config.resolve.alias = {

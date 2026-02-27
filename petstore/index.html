@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Petstore UI | Petstore Demo</title>
+    <link rel="stylesheet" href="/style.css" data-local-href="../public/style.css" />
+  </head>
+  <body>
+    <main class="container page-shell">
+      <header>
+        <p class="eyebrow">Demo Application</p>
+        <h1 class="headline">Petstore API Demo</h1>
+        <p class="intro">
+          This page is the initial shell for the Petstore demo. API integration and interactive data
+          features will be implemented in Unit 7.
+        </p>
+      </header>
+
+      <section class="card" aria-labelledby="status-title">
+        <h2 id="status-title">Under Construction</h2>
+        <p>The Petstore UI demo layout is ready. Dynamic pet data and search capabilities are coming next.</p>
+      </section>
+
+      <div class="inline-links" aria-label="Navigation links">
+        <a class="btn btn-secondary" href="/" data-local-href="../public/index.html">
+          Back to Home
+        </a>
+        <a class="btn btn-primary" href="/storybook/" data-local-href="../storybook-static/index.html">
+          Open Storybook
+        </a>
+      </div>
+    </main>
+
+    <script>
+      if (window.location.protocol === 'file:') {
+        document.querySelectorAll('[data-local-href]').forEach((el) => {
+          el.setAttribute('href', el.getAttribute('data-local-href'));
+        });
+      }
+    </script>
+  </body>
+</html>

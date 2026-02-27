@@ -86,6 +86,36 @@ bun run storybook
 bun run build-storybook
 ```
 
+
+## Static Website Preview & Navigation
+
+All navigation is now server-based for a production-like experience:
+
+- `/` &rarr; Homepage (public/index.html)
+- `/storybook/` &rarr; Full Storybook UI (served from storybook-static/)
+- `/petstore/` &rarr; Petstore demo placeholder (petstore/index.html)
+
+### Local Preview Workflow
+
+1. Build Storybook static output:
+
+	```bash
+	bun run build-storybook
+	```
+
+2. Start the preview server:
+
+	```bash
+	bun run preview
+	```
+
+3. Open [http://localhost:4000](http://localhost:4000) in your browser.
+
+	- Use the homepage navigation cards to access Storybook or the Petstore demo.
+	- All routes work as they will in deployment—no local HTML fallback is needed.
+
+> **Note:** Direct file:// preview is no longer supported. Always use the preview server for navigation and testing.
+
 ## Contributor Guidelines
 
 - Use design tokens from `src/tokens/theme.ts`; avoid hardcoded visual values.

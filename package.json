@@ -15,6 +15,7 @@
     "build": "bun run build-storybook && bun run build-website",
     "build-storybook": "storybook build",
     "build-website": "bun build src/website/index.ts --outdir public/dist",
+    "preview": "bun run scripts/preview-server.ts",
     "storybook": "storybook dev -p 6006",
     "lint": "eslint src --ext .ts,.tsx",
     "format": "prettier --write src/**/*.{ts,tsx,json,md}",

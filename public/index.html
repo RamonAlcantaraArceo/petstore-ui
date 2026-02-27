@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Petstore UI</title>
+    <meta
+      name="description"
+      content="Petstore UI component library with Storybook documentation and a Petstore API demo."
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <p class="eyebrow">Design System + Demo App</p>
+        <h1 class="headline">Petstore UI</h1>
+        <p class="intro">
+          A React + TypeScript component library with Storybook documentation and a Petstore demo site.
+          Use the shortcuts below to explore the docs or preview the upcoming API integration.
+        </p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="grid" aria-label="Project destinations">
+        <article class="card" aria-labelledby="storybook-title">
+          <h2 id="storybook-title">Storybook</h2>
+          <p>Browse components, variants, controls, and documentation.</p>
+          <a
+            class="btn btn-primary"
+            href="/storybook/"
+            data-track="storybook"
+            data-local-href="../storybook-static/index.html"
+          >
+            Open Storybook
+          </a>
+        </article>
+
+        <article class="card" aria-labelledby="petstore-title">
+          <h2 id="petstore-title">Petstore Demo</h2>
+          <p>Visit the demo shell. API integration is scheduled for Unit 7.</p>
+          <a
+            class="btn btn-secondary"
+            href="/petstore/"
+            data-track="petstore"
+            data-local-href="../petstore/index.html"
+          >
+            Open Petstore Demo
+          </a>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <small>&copy; <span id="current-year"></span> Petstore UI</small>
+        <small>Built with Bun, React, TypeScript, and Storybook</small>
+      </div>
+    </footer>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
