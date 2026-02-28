@@ -19,5 +19,8 @@ export * from './i18n';
 // Accessibility (a11y)
 export * from './accessibility';
 
+// App context
+export * from './context';
+
 // Testing utilities (for development and testing environments)
 export * from './testing';
