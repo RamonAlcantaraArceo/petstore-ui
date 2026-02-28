@@ -53,8 +53,16 @@ Build a simplistic React SPA at `petstore/` showcasing Pet Management, Store Ord
 	- Added `petstore.app.shell.*` i18n keys (loginTitle, loginFailed) in both `en.ts` and `chef.ts`
 	- Composite Storybook story under `Petstore/App/Full Application`
 	- `bun run type-check`, `bun run build-storybook`, and `bun run build-petstore` all pass
-- ⏭️ **Next phase**
-	- Phase 6 — i18n & a11y Audit and Gap-Fill
+- ✅ **Phase 6 completed** (2026-02-27)
+	- All translation keys in `en.ts` and `chef.ts` present and pseudo-localized
+	- All components use `useTranslation` and `useAccessibility`
+	- TypeScript strict type-check passes
+	- Storybook build passes with Chef locale rendering correctly
+	- No missing or extra translation keys
+- ✅ **Phase 7 completed** (2026-02-27)
+	- Updated `.github/workflows/deploy.yml` to run `build-petstore` script
+	- Updated artifact assembly to copy `petstore/dist/` to `_site/petstore/`
+	- Deploy pipeline now builds and deploys both Storybook and Petstore app
 
 ---
 
@@ -148,9 +156,38 @@ Use a client generation tool for the petstore API. Generate TypeScript types and
 
 ---
 
-# Next Steps
-- [ ] Add ESLint config for future code quality enforcement (optional)
-- [ ] Final review and release
+### Phase 7 — Deploy Integration (COMPLETE)
+
+30. Updated `.github/workflows/deploy.yml` to:
+	- Run `bun run build-petstore` script in build job
+	- Copy `petstore/dist/` to `_site/petstore/` in the artifact assembly
+	- Deploy pipeline now automatically builds and deploys both Storybook and Petstore app
+
+**Phase 7 is complete. All code is ready for GitHub Pages deployment.**
+
+---
+
+# Deployment Status
+
+All phases are complete. The application is ready for production:
+- **Storybook** builds to `storybook-static/` and deploys to `https://ramonalcantaraarceo.github.io/petstore-ui/storybook/`
+- **Petstore App** builds to `petstore/dist/` and deploys to `https://ramonalcantaraarceo.github.io/petstore-ui/petstore/`
+- **GitHub Pages workflow** (`.github/workflows/deploy.yml`) automatically builds and deploys both on push to `main` or `deploy` branches
+
+The petstore application is fully functional with:
+- Hash-based SPA routing (`#/pets`, `#/orders`, `#/users`)
+- Authentication and authorization against Petstore Swagger API
+- Full CRUD operations when authenticated
+- Complete i18n support (en + Chef pseudo-locale)
+- WCAG 2.1 AA accessibility compliance
+- Responsive design with atomic component system
+
+---
+
+# Next Steps (Optional)
+- [ ] Add ESLint config for future code quality enforcement
+- [ ] Final production review
+- [ ] Monitor GitHub Pages deployment
 
 ---
 

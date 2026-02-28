@@ -33,6 +33,9 @@ jobs:
       - name: Build Storybook
         run: bun run build-storybook
 
+      - name: Build Petstore App
+        run: bun run build-petstore
+
       - name: Assemble deployment artifact
         run: |
           mkdir -p _site/storybook
@@ -46,8 +49,8 @@ jobs:
           # Copy Storybook build to /storybook
           cp -r storybook-static/* _site/storybook/
 
-          # Copy petstore demo to /petstore
-          cp petstore/index.html _site/petstore/
+          # Copy petstore demo app to /petstore
+          cp -r petstore/dist/* _site/petstore/
 
           # Add .nojekyll so GitHub Pages serves files starting with _
           touch _site/.nojekyll
