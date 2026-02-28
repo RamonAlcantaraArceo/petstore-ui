@@ -84,14 +84,21 @@ Bun.serve({
       if (res) return res;
     }
 
-    // --- /petstore/* → petstore/* ---
+    // --- /petstore/* → petstore/* (with dist/ bundled assets) ---
     if (pathname === '/petstore') {
       return Response.redirect('/petstore/', 301);
     }
     if (pathname.startsWith('/petstore/')) {
       const sub = pathname.slice('/petstore'.length);
+      // First try petstore/ root (index.html, etc.)
       const res = serveFromDir(join(ROOT, 'petstore'), sub);
       if (res) return res;
+      // Then try petstore/dist/ for bundled JS
+      const distRes = serveFromDir(join(ROOT, 'petstore', 'dist'), sub);
+      if (distRes) return distRes;
+      // SPA fallback: serve index.html for unmatched routes (hash routing)
+      const spaFallback = tryFile(join(ROOT, 'petstore', 'index.html'));
+      if (spaFallback) return spaFallback;
       // Fallback: serve shared assets from public/
       const publicFallback = serveFromDir(join(ROOT, 'public'), sub);
       if (publicFallback) return publicFallback;

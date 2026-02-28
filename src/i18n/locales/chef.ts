@@ -366,6 +366,10 @@ export const chef = {
         deleteTitle: 'Dëlëtë Üsër-a',
         deleteMessage: 'Ärë yøü sürë yøü wäñt tø dëlëtë üsër {username}?-a',
       },
+      shell: {
+        loginTitle: 'Sïgñ Ïñ-a',
+        loginFailed: 'Løgïñ fäïlëd. Plëäsë chëck yøür crëdëñtïäls.-a',
+      },
     },
   }
 } as const;

@@ -41,8 +41,20 @@ Build a simplistic React SPA at `petstore/` showcasing Pet Management, Store Ord
 	- Added `petstore.app.*` i18n keys (navigation, pets, orders, users) in both `en.ts` and `chef.ts`
 	- Created `organisms/index.ts` barrel and updated `components/index.ts` exports
 	- `bun run type-check` and `bun run build-storybook` pass
+- ✅ **Phase 5 completed** (2026-02-27)
+	- Added `src/components/organisms/PetstoreApp.tsx` — top-level app shell with AuthProvider → LocaleProvider → hash routing
+	- Hash-based routing: `#/pets`, `#/orders`, `#/users` with `hashchange` listener
+	- Login modal opens via Sign In button, uses `LoginForm` in `Modal`
+	- Added `src/petstore/index.tsx` — React entry point with `ReactDOM.createRoot`
+	- Replaced `petstore/index.html` with minimal HTML shell loading bundled JS
+	- Added `build-petstore` script: `bun build src/petstore/index.tsx --outdir petstore/dist --minify`
+	- Updated `build` script to include `build-petstore`
+	- Updated preview server to serve `petstore/dist/` and SPA fallback
+	- Added `petstore.app.shell.*` i18n keys (loginTitle, loginFailed) in both `en.ts` and `chef.ts`
+	- Composite Storybook story under `Petstore/App/Full Application`
+	- `bun run type-check`, `bun run build-storybook`, and `bun run build-petstore` all pass
 - ⏭️ **Next phase**
-	- Phase 5 — App Shell & Entry Point
+	- Phase 6 — i18n & a11y Audit and Gap-Fill
 
 ---
 

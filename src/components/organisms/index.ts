@@ -9,3 +9,6 @@ export type { StoreOrdersViewProps } from './StoreOrdersView';
 
 export { UserManagementView } from './UserManagementView';
 export type { UserManagementViewProps } from './UserManagementView';
+
+export { PetstoreApp } from './PetstoreApp';
+export type { PetstoreAppProps } from './PetstoreApp';

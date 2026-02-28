@@ -365,6 +365,10 @@ export const en = {
         deleteTitle: 'Delete User',
         deleteMessage: 'Are you sure you want to delete user {username}?',
       },
+      shell: {
+        loginTitle: 'Sign In',
+        loginFailed: 'Login failed. Please check your credentials.',
+      },
     },
   }
 } as const;

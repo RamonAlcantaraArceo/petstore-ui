@@ -12,9 +12,10 @@
   ],
   "scripts": {
     "dev": "bun run storybook",
-    "build": "bun run build-storybook && bun run build-website",
+    "build": "bun run build-storybook && bun run build-website && bun run build-petstore",
     "build-storybook": "storybook build",
     "build-website": "bun build src/website/index.ts --outdir public/dist",
+    "build-petstore": "bun build src/petstore/index.tsx --outdir petstore/dist --minify",
     "preview": "bun run scripts/preview-server.ts",
     "storybook": "storybook dev -p 6006",
     "lint": "eslint src --ext .ts,.tsx",
