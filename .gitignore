@@ -5,3 +5,9 @@ build/
 storybook-static/
 .env*
 .DS_Store
+
+# Do NOT ignore built petstore app for deploy
+# petstore/dist/ must be committed for GitHub Pages deploy
+!petstore/dist/
+!petstore/dist/index.html
+!petstore/dist/index.js
