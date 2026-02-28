@@ -3,9 +3,9 @@ import React from 'react';
 import { Select } from '../../components/atoms/Select';
 
 const statusOptions = [
-  { value: 'available', label: 'Available' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'sold', label: 'Sold' },
+  { value: 'available', labelTranslationKey: 'petstore.common.status.available' },
+  { value: 'pending', labelTranslationKey: 'petstore.common.status.pending' },
+  { value: 'sold', labelTranslationKey: 'petstore.common.status.sold' },
 ];
 
 const meta: Meta<typeof Select> = {
@@ -45,7 +45,7 @@ function SelectTemplate(args: React.ComponentProps<typeof Select>) {
 export const Default: Story = {
   render: (args) => <SelectTemplate {...args} />,
   args: {
-    label: 'Status',
+    labelTranslationKey: 'petstore.select.statusLabel',
     options: statusOptions,
     value: 'available',
     size: 'medium',
@@ -67,12 +67,12 @@ export const WithOptions: Story = {
   args: {
     ...Default.args,
     options: [
-      { value: 'dog', label: 'Dog' },
-      { value: 'cat', label: 'Cat' },
-      { value: 'bird', label: 'Bird' },
-      { value: 'fish', label: 'Fish' },
+      { value: 'dog', labelTranslationKey: 'petstore.select.petTypes.dog' },
+      { value: 'cat', labelTranslationKey: 'petstore.select.petTypes.cat' },
+      { value: 'bird', labelTranslationKey: 'petstore.select.petTypes.bird' },
+      { value: 'fish', labelTranslationKey: 'petstore.select.petTypes.fish' },
     ],
     value: 'dog',
-    label: 'Pet type',
+    labelTranslationKey: 'petstore.select.petTypeLabel',
   },
 };

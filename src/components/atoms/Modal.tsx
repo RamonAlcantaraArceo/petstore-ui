@@ -2,12 +2,15 @@ import React, { useEffect } from 'react';
 import type { FC } from 'react';
 import ReactDOM from 'react-dom';
 import { theme } from '../../tokens/theme';
+import { useTranslation } from '../../i18n';
 import { useAccessibility, useFocusManagement } from '../../accessibility';
 
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
+  title?: string;
+  titleTranslationKey?: string;
+  titleTranslationParams?: Record<string, string | number>;
   children: React.ReactNode;
   size?: 'small' | 'medium' | 'large';
 }
@@ -16,11 +19,18 @@ export const Modal: FC<ModalProps> = ({
   isOpen,
   onClose,
   title,
+  titleTranslationKey,
+  titleTranslationParams,
   children,
   size = 'medium',
 }) => {
+  const { t } = useTranslation();
+  const displayTitle = titleTranslationKey
+    ? t(titleTranslationKey, titleTranslationParams)
+    : (title ?? t('petstore.modal.defaultTitle'));
+
   const { ariaAttributes } = useAccessibility({
-    'aria-label': title,
+    'aria-label': displayTitle,
   });
 
   const { elementRef } = useFocusManagement({
@@ -90,7 +100,7 @@ export const Modal: FC<ModalProps> = ({
         aria-modal="true"
         {...ariaAttributes}
       >
-        <h2 style={titleStyles}>{title}</h2>
+        <h2 style={titleStyles}>{displayTitle}</h2>
         {children}
       </div>
     </div>,

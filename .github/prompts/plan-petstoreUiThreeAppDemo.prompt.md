@@ -26,6 +26,8 @@ Build a simplistic React SPA at `petstore/` showcasing Pet Management, Store Ord
 	- Added `src/components/atoms/Tabs.tsx`
 	- Added stories under `src/stories/petstore/*` for all new atoms
 	- Updated `src/components/atoms/index.ts` exports
+	- Refined all new atoms/stories for locale-aware text (`en`/`chef`) and improved a11y labels
+	- **Patch**: Fixed `Table.stories.tsx` — status cell values were rendering raw English strings instead of translated text when Chef locale was active. Added `InventoryTable` wrapper component that uses `useTranslation()` with a `render` function on the status column to call `t('petstore.common.status.' + row.status)`. This pattern must be followed for all stories that display translatable data values in cells/badges.
 - ✅ **Verification completed**
 	- `bun run type-check` passes with strict TypeScript settings
 - ⏭️ **Next phase**
@@ -54,15 +56,22 @@ Use a client generation tool for the petstore API. Generate TypeScript types and
 
 ### Phase 2 — New Atom Components (each with story + i18n + a11y)
 
-7. Create `src/components/atoms/Badge.tsx` — Props: `variant` (`'available' | 'pending' | 'sold' | 'placed' | 'approved' | 'delivered' | 'info' | 'default'`), `size` (`'small' | 'medium'`), `children`. Renders a styled `<span>` with semantic colors from theme. Story at `src/stories/petstore/Badge.stories.tsx` under `Petstore/Atoms/Badge`.
+> **i18n/a11y rule for ALL atoms and stories in this phase:**
+> - Every atom must use `useTranslation()` for all visible text and `useAccessibility()` for ARIA labels, keyboard support, and screen-reader announcements.
+> - Column/header/label props must accept `*TranslationKey` variants (e.g. `headerTranslationKey`, `emptyMessageTranslationKey`) so the component calls `t(key)` internally.
+> - **Stories must translate data-level values too** — not just headers and labels. When a cell or badge displays an enum-like value (e.g. a pet status string `"available"`), the story must use a `render` function with `useTranslation()` to map it through existing translation keys (e.g. `t('petstore.common.status.' + row.status)`). Raw enum strings must never appear untranslated in Storybook.
+> - All required translation keys must be added to **both** `src/i18n/locales/en.ts` and `src/i18n/locales/chef.ts` as part of this phase — do not defer to Phase 6.
+> - Verify every story by switching to Chef locale in Storybook toolbar and confirming **all** visible text changes (headers, cells, labels, empty states, ARIA labels).
 
-8. Create `src/components/atoms/Select.tsx` — Props: `options: {value, label}[]`, `value`, `onChange`, `label`, `size`, `disabled`, `fullWidth`, plus i18n/a11y props. Wraps a native `<select>` with consistent styling matching the Input atom. Story at `src/stories/petstore/Select.stories.tsx` under `Petstore/Atoms/Select`.
+7. Create `src/components/atoms/Badge.tsx` — Props: `variant` (`'available' | 'pending' | 'sold' | 'placed' | 'approved' | 'delivered' | 'info' | 'default'`), `size` (`'small' | 'medium'`), `labelTranslationKey?`, `children`. Renders a styled `<span>` with semantic colors from theme. Uses `useTranslation()` to resolve `labelTranslationKey` when provided (e.g. `petstore.common.status.{variant}`). Uses `useAccessibility()` with `aria-label` for the badge meaning. Story at `src/stories/petstore/Badge.stories.tsx` under `Petstore/Atoms/Badge` — stories must show translated variant labels in all locales.
 
-9. Create `src/components/atoms/Modal.tsx` — Props: `isOpen`, `onClose`, `title`, `children`, `size` (`'small' | 'medium' | 'large'`). Uses `useFocusManagement` for focus trapping, Escape-to-close. Renders portal overlay + centered content. Story under `Petstore/Atoms/Modal`.
+8. Create `src/components/atoms/Select.tsx` — Props: `options: {value, labelTranslationKey?}[]`, `value`, `onChange`, `labelTranslationKey?`, `label?`, `size`, `disabled`, `fullWidth`, plus a11y props. Wraps a native `<select>` with consistent styling matching the Input atom. Component calls `t(option.labelTranslationKey)` for each option when the key is present, falling back to `option.label`. Uses `useAccessibility()` for ARIA labelling and keyboard support. Story at `src/stories/petstore/Select.stories.tsx` under `Petstore/Atoms/Select` — option labels must translate when switching locale.
 
-10. Create `src/components/atoms/Table.tsx` — Props: `columns: {key, header, render?}[]`, `data: T[]`, `emptyMessage`. Renders a styled `<table>` with header row and data rows. Story under `Petstore/Atoms/Table`.
+9. Create `src/components/atoms/Modal.tsx` — Props: `isOpen`, `onClose`, `titleTranslationKey?`, `title?`, `children`, `size` (`'small' | 'medium' | 'large'`). Uses `useFocusManagement` for focus trapping, Escape-to-close. Uses `useTranslation()` for the title and close-button label. Uses `useAccessibility()` for `role="dialog"`, `aria-modal`, `aria-labelledby`. Renders portal overlay + centered content. Story under `Petstore/Atoms/Modal`.
 
-11. Create `src/components/atoms/Tabs.tsx` — Props: `tabs: {id, label, icon?}[]`, `activeTab`, `onChange`. Renders a horizontal tab bar with keyboard arrow navigation (using `useKeyboardNavigation`). ARIA `role="tablist"` + `role="tab"`. Story under `Petstore/Atoms/Tabs`.
+10. Create `src/components/atoms/Table.tsx` — Generic `<T>`. Props: `columns: {key, headerTranslationKey?, header?, render?(row: T): ReactNode}[]`, `data: T[]`, `emptyMessageTranslationKey?`, `emptyMessage?`. Component calls `t(headerTranslationKey)` for column headers and `t(emptyMessageTranslationKey)` for the empty state. Uses `useAccessibility()` for table `aria-label`. **Story requirement**: when a column displays translatable data (e.g. status enum), the story must define a `render` function that wraps the cell value with `t()` — for example `render: (row) => t('petstore.common.status.' + row.status)`. The story should use a small wrapper component that calls `useTranslation()` so the columns rebuild on locale change. Story under `Petstore/Atoms/Table`.
+
+11. Create `src/components/atoms/Tabs.tsx` — Props: `tabs: {id, labelTranslationKey?, label?, icon?}[]`, `activeTab`, `onChange`. Component calls `t(tab.labelTranslationKey)` for each tab label when the key is present. Renders a horizontal tab bar with keyboard arrow navigation (using `useKeyboardNavigation`). Uses `useAccessibility()` for ARIA `role="tablist"` + `role="tab"` + `aria-selected`. Story under `Petstore/Atoms/Tabs` — tab labels must translate when switching locale.
 
 ### Phase 3 — Molecule Components (each with story)
 
@@ -102,11 +111,13 @@ Use a client generation tool for the petstore API. Generate TypeScript types and
 
 27. Add a `build-petstore` script to `package.json`: `bun build src/petstore/index.tsx --outdir petstore/dist --minify`. Update the `build` script to include it. Update the preview server to serve the petstore dist.
 
-### Phase 6 — i18n & a11y Integration
+### Phase 6 — i18n & a11y Audit and Gap-Fill
 
-28. Add translation keys to `src/i18n/locales/en.ts` and `src/i18n/locales/chef.ts` for all new components. Namespace: `petstore.navigation.*`, `petstore.pets.*`, `petstore.orders.*`, `petstore.users.*`, `petstore.auth.*`, `petstore.common.*` (CRUD action labels, status labels, form labels, empty states, error messages).
+> **Note:** Translation keys for atoms (Phase 2) and molecules (Phase 3) are added inline with each component, not deferred to this phase. This phase is for auditing completeness and adding any remaining keys for organisms, views, and the app shell.
 
-29. All new components use `useTranslation()` for visible text and `useAccessibility()` for keyboard/screen-reader support, following the exact same pattern as the existing `Button`, `Card`, and `Input` atoms.
+28. Audit `src/i18n/locales/en.ts` and `src/i18n/locales/chef.ts` for completeness. Add any missing translation keys for organism/view components. Namespaces: `petstore.navigation.*`, `petstore.pets.*`, `petstore.orders.*`, `petstore.users.*`, `petstore.auth.*`, `petstore.common.*` (CRUD action labels, status labels, form labels, empty states, error messages).
+
+29. Audit all components to confirm they use `useTranslation()` for **every** piece of visible text — including data-level values rendered in cells, badges, and select options — and `useAccessibility()` for keyboard/screen-reader support. Verify by switching to Chef locale in Storybook and confirming no English text remains (except literal proper nouns like API URLs). This is a **regression check** — individual phases should have handled this inline.
 
 ### Phase 7 — Deploy Integration
 

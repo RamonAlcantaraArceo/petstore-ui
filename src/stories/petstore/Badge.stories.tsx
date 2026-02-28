@@ -30,21 +30,20 @@ export const Default: Story = {
   args: {
     variant: 'default',
     size: 'medium',
-    children: 'Default',
   },
 };
 
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-      <Badge variant="available">Available</Badge>
-      <Badge variant="pending">Pending</Badge>
-      <Badge variant="sold">Sold</Badge>
-      <Badge variant="placed">Placed</Badge>
-      <Badge variant="approved">Approved</Badge>
-      <Badge variant="delivered">Delivered</Badge>
-      <Badge variant="info">Info</Badge>
-      <Badge variant="default">Default</Badge>
+      <Badge variant="available" />
+      <Badge variant="pending" />
+      <Badge variant="sold" />
+      <Badge variant="placed" />
+      <Badge variant="approved" />
+      <Badge variant="delivered" />
+      <Badge variant="info" />
+      <Badge variant="default" />
     </div>
   ),
 };
@@ -52,8 +51,8 @@ export const AllVariants: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-      <Badge size="small" variant="available">Small</Badge>
-      <Badge size="medium" variant="available">Medium</Badge>
+      <Badge size="small" variant="available" />
+      <Badge size="medium" variant="available" />
     </div>
   ),
 };

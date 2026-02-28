@@ -6,7 +6,8 @@ import { useAccessibility, generateAccessibilityId } from '../../accessibility';
 
 export interface SelectOption {
   value: string;
-  label: string;
+  label?: string;
+  labelTranslationKey?: string;
 }
 
 export interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'onChange'> {
@@ -46,15 +47,15 @@ export const Select: FC<SelectProps> = ({
 
   const selectId = id || generateAccessibilityId('select');
   const labelId = (label || labelTranslationKey) ? `${selectId}-label` : undefined;
+  const displayLabel = labelTranslationKey ? t(labelTranslationKey, translationParams) : label;
 
   const { ariaAttributes, handleKeyDown, announceAction } = useAccessibility({
     id: selectId,
+    'aria-label': displayLabel ?? t('petstore.common.selectLabel'),
     enterActivation,
     spaceActivation,
     ...(announceOnAction ? { announceOnAction } : {}),
   });
-
-  const displayLabel = labelTranslationKey ? t(labelTranslationKey, translationParams) : label;
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(event.target.value);
@@ -117,7 +118,9 @@ export const Select: FC<SelectProps> = ({
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
-            {option.label}
+            {option.labelTranslationKey
+              ? t(option.labelTranslationKey, translationParams)
+              : option.label ?? option.value}
           </option>
         ))}
       </select>

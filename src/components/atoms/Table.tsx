@@ -5,20 +5,28 @@ import { useAccessibility } from '../../accessibility';
 
 export interface TableColumn<T> {
   key: keyof T | string;
-  header: string;
+  header?: string;
+  headerTranslationKey?: string;
   render?: (row: T) => React.ReactNode;
 }
 
 export interface TableProps<T> {
   columns: TableColumn<T>[];
   data: T[];
-  emptyMessage: string;
+  emptyMessage?: string;
+  emptyMessageTranslationKey?: string;
 }
 
-function TableInner<T>({ columns, data, emptyMessage }: TableProps<T>): JSX.Element {
+function TableInner<T>({
+  columns,
+  data,
+  emptyMessage,
+  emptyMessageTranslationKey = 'petstore.table.emptyState',
+}: TableProps<T>): JSX.Element {
   const { t } = useTranslation();
+  const displayEmptyMessage = emptyMessage ?? t(emptyMessageTranslationKey);
   const { ariaAttributes } = useAccessibility({
-    'aria-label': t('accessibility.labels.table', { defaultValue: 'Data table' }),
+    'aria-label': t('petstore.table.ariaLabel'),
   });
 
   const tableStyles: React.CSSProperties = {
@@ -48,7 +56,7 @@ function TableInner<T>({ columns, data, emptyMessage }: TableProps<T>): JSX.Elem
         <tr>
           {columns.map((column) => (
             <th key={String(column.key)} scope="col" style={headerCellStyles}>
-              {column.header}
+              {column.headerTranslationKey ? t(column.headerTranslationKey) : column.header ?? String(column.key)}
             </th>
           ))}
         </tr>
@@ -67,7 +75,7 @@ function TableInner<T>({ columns, data, emptyMessage }: TableProps<T>): JSX.Elem
         ) : (
           <tr>
             <td colSpan={columns.length} style={bodyCellStyles}>
-              {emptyMessage}
+              {displayEmptyMessage}
             </td>
           </tr>
         )}

@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { Tabs } from '../../components/atoms/Tabs';
+import { useTranslation } from '../../i18n';
 
 const tabs = [
-  { id: 'pets', label: 'Pets' },
-  { id: 'orders', label: 'Orders' },
-  { id: 'users', label: 'Users' },
+  { id: 'pets', labelTranslationKey: 'petstore.navigation.pets' },
+  { id: 'orders', labelTranslationKey: 'petstore.navigation.orders' },
+  { id: 'users', labelTranslationKey: 'petstore.navigation.users' },
 ];
 
 const meta: Meta<typeof Tabs> = {
@@ -21,12 +22,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function TabsTemplate(args: React.ComponentProps<typeof Tabs>) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = React.useState(args.activeTab || 'pets');
 
   return (
     <div style={{ minWidth: '24rem' }}>
       <Tabs {...args} activeTab={activeTab} onChange={setActiveTab} />
-      <div style={{ marginTop: '1rem' }}>Active tab: {activeTab}</div>
+      <div style={{ marginTop: '1rem' }}>
+        {t('petstore.tabs.activeLabel')}: {t(`petstore.navigation.${activeTab}`)}
+      </div>
     </div>
   );
 }

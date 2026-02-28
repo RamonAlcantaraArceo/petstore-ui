@@ -170,6 +170,64 @@ export const en = {
       expanded: 'Expanded',
       collapsed: 'Collapsed'
     }
+  },
+  petstore: {
+    common: {
+      close: 'Close',
+      selectLabel: 'Select option',
+      status: {
+        available: 'Available',
+        pending: 'Pending',
+        sold: 'Sold',
+        placed: 'Placed',
+        approved: 'Approved',
+        delivered: 'Delivered',
+        info: 'Info',
+        default: 'Status',
+      },
+    },
+    navigation: {
+      tabsAriaLabel: 'Petstore sections',
+      pets: 'Pets',
+      orders: 'Orders',
+      users: 'Users',
+    },
+    tabs: {
+      activeLabel: 'Active tab',
+    },
+    select: {
+      statusLabel: 'Status',
+      petTypeLabel: 'Pet type',
+      petTypes: {
+        dog: 'Dog',
+        cat: 'Cat',
+        bird: 'Bird',
+        fish: 'Fish',
+      },
+    },
+    modal: {
+      defaultTitle: 'Modal',
+      openButton: 'Open modal',
+      content: 'Modal content goes here.',
+      editPetTitle: 'Edit Pet',
+      smallTitle: 'Small modal',
+      mediumTitle: 'Medium modal',
+      largeTitle: 'Large modal',
+      reopenButton: 'Re-open modal',
+      focusTrapTitle: 'Focus trap demo',
+      firstInputPlaceholder: 'First input',
+      secondInputPlaceholder: 'Second input',
+      doneButton: 'Done',
+    },
+    table: {
+      ariaLabel: 'Data table',
+      emptyState: 'No data available',
+      emptyInventory: 'No inventory found',
+      headers: {
+        status: 'Status',
+        count: 'Count',
+      },
+    },
   }
 } as const;
 

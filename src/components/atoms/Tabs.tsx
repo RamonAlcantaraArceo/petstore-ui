@@ -1,11 +1,13 @@
 import React from 'react';
 import type { FC } from 'react';
 import { theme } from '../../tokens/theme';
+import { useTranslation } from '../../i18n';
 import { useAccessibility, useKeyboardNavigation } from '../../accessibility';
 
 export interface TabItem {
   id: string;
-  label: string;
+  label?: string;
+  labelTranslationKey?: string;
   icon?: React.ReactNode;
 }
 
@@ -16,7 +18,10 @@ export interface TabsProps {
 }
 
 export const Tabs: FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
-  const { ariaAttributes } = useAccessibility({});
+  const { t } = useTranslation();
+  const { ariaAttributes } = useAccessibility({
+    'aria-label': t('petstore.navigation.tabsAriaLabel'),
+  });
   const { handleKeyDown } = useKeyboardNavigation({
     arrowNavigation: 'horizontal',
     homeEndKeys: true,
@@ -113,6 +118,7 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
         const isActive = tab.id === activeTab;
         const tabId = `tab-${tab.id}`;
         const panelId = `tabpanel-${tab.id}`;
+        const displayLabel = tab.labelTranslationKey ? t(tab.labelTranslationKey) : tab.label ?? tab.id;
 
         return (
           <button
@@ -131,7 +137,7 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
             type="button"
           >
             {tab.icon}
-            {tab.label}
+            {displayLabel}
           </button>
         );
       })}

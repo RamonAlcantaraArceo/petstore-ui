@@ -13,6 +13,17 @@ export interface BadgeProps {
   translationParams?: Record<string, string | number>;
 }
 
+const BADGE_LABEL_KEYS: Record<NonNullable<BadgeProps['variant']>, string> = {
+  available: 'petstore.common.status.available',
+  pending: 'petstore.common.status.pending',
+  sold: 'petstore.common.status.sold',
+  placed: 'petstore.common.status.placed',
+  approved: 'petstore.common.status.approved',
+  delivered: 'petstore.common.status.delivered',
+  info: 'petstore.common.status.info',
+  default: 'petstore.common.status.default',
+};
+
 export const Badge: FC<BadgeProps> = ({
   variant = 'default',
   size = 'medium',
@@ -24,7 +35,8 @@ export const Badge: FC<BadgeProps> = ({
   const { t } = useTranslation();
   const { ariaAttributes } = useAccessibility({});
 
-  const label = labelTranslationKey ? t(labelTranslationKey, translationParams) : children;
+  const label = children
+    ?? t(labelTranslationKey ?? BADGE_LABEL_KEYS[variant], translationParams);
 
   const getColors = (): { backgroundColor: string; color: string } => {
     switch (variant) {

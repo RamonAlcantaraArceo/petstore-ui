@@ -171,6 +171,64 @@ export const chef = {
       expanded: 'Éxpäñdëd - børk børk øpëñ ñøw!',
       collapsed: 'Çøl läpsëd - børk børk çløsëd ñøw!'
     }
+  },
+  petstore: {
+    common: {
+      close: 'Çløøsë-a',
+      selectLabel: 'Sëlëct-a øptïøñ',
+      status: {
+        available: 'Aväïläblë-a',
+        pending: 'Pëñdïñg-a',
+        sold: 'Søld-a',
+        placed: 'Pläcëd-a',
+        approved: 'Äpprøved-a',
+        delivered: 'Dëlïvërëd-a',
+        info: 'Ïñfø-a',
+        default: 'Stätüs-a',
+      },
+    },
+    navigation: {
+      tabsAriaLabel: 'Pëtstørë-a sëctïøñs',
+      pets: 'Pëts-a',
+      orders: 'Ørdërs-a',
+      users: 'Üsërs-a',
+    },
+    tabs: {
+      activeLabel: 'Äctïvë täb-a',
+    },
+    select: {
+      statusLabel: 'Stätüs-a',
+      petTypeLabel: 'Pët typë-a',
+      petTypes: {
+        dog: 'Døg-a',
+        cat: 'Cät-a',
+        bird: 'Bïrd-a',
+        fish: 'Fïsh-a',
+      },
+    },
+    modal: {
+      defaultTitle: 'Mødäl-a',
+      openButton: 'Øpën mødäl-a',
+      content: 'Mødäl cøñtënt göës hërë-a.',
+      editPetTitle: 'Édït Pët-a',
+      smallTitle: 'Smäll mødäl-a',
+      mediumTitle: 'Mëdïüm mødäl-a',
+      largeTitle: 'Lärgë mødäl-a',
+      reopenButton: 'Rë-øpën mødäl-a',
+      focusTrapTitle: 'Føçüs träp dëmø-a',
+      firstInputPlaceholder: 'Fïrst ïñpüt-a',
+      secondInputPlaceholder: 'Sëcøñd ïñpüt-a',
+      doneButton: 'Døñë-a',
+    },
+    table: {
+      ariaLabel: 'Dätä täblë-a',
+      emptyState: 'Nø dätä äväïläblë-a',
+      emptyInventory: 'Nø ïñvëntøry føüñd-a',
+      headers: {
+        status: 'Stätüs-a',
+        count: 'Cøüñt-a',
+      },
+    },
   }
 } as const;
 
