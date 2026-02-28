@@ -30,8 +30,19 @@ Build a simplistic React SPA at `petstore/` showcasing Pet Management, Store Ord
 	- **Patch**: Fixed `Table.stories.tsx` — status cell values were rendering raw English strings instead of translated text when Chef locale was active. Added `InventoryTable` wrapper component that uses `useTranslation()` with a `render` function on the status column to call `t('petstore.common.status.' + row.status)`. This pattern must be followed for all stories that display translatable data values in cells/badges.
 - ✅ **Verification completed**
 	- `bun run type-check` passes with strict TypeScript settings
+- ✅ **Phase 3 completed** (2025-07-18)
+	- Added 9 molecule components: `LoginForm`, `PetCard`, `PetForm`, `OrderCard`, `OrderForm`, `UserCard`, `UserForm`, `StatusFilter`, `ConfirmDialog`
+	- Added stories under `src/stories/petstore/*` for all molecules (36 stories)
+	- Updated i18n keys in both `en.ts` and `chef.ts`
+- ✅ **Phase 4 completed** (2025-07-18)
+	- Added 4 organism components: `AppNavigation`, `PetManagementView`, `StoreOrdersView`, `UserManagementView`
+	- All organisms use `mockMode` prop pattern for story/testing isolation
+	- Added organism stories (14 stories across 4 files)
+	- Added `petstore.app.*` i18n keys (navigation, pets, orders, users) in both `en.ts` and `chef.ts`
+	- Created `organisms/index.ts` barrel and updated `components/index.ts` exports
+	- `bun run type-check` and `bun run build-storybook` pass
 - ⏭️ **Next phase**
-	- Phase 3 — Molecules (`LoginForm`, `PetCard`, `PetForm`, `OrderCard`, `OrderForm`, `UserCard`, `UserForm`, `StatusFilter`, `ConfirmDialog`)
+	- Phase 5 — App Shell & Entry Point
 
 ---
 

@@ -328,6 +328,45 @@ export const chef = {
         announceSubmit: 'Ørdër süßmïttëd-a',
       },
     },
+    app: {
+      navigation: {
+        ariaLabel: 'Pëtstørë äpplïcätïøñ nävïgätïøñ-a',
+        signIn: 'Sïgñ Ïñ-a',
+        signOut: 'Sïgñ Øüt-a',
+        loggedInAs: 'Løggëd ïñ äs {username}-a',
+        announceSignIn: 'Øpëñïñg sïgñ ïñ førm-a',
+        announceSignOut: 'Sïgñïñg øüt-a',
+      },
+      pets: {
+        ariaLabel: 'Pët mänägëmëñt-a',
+        addButton: 'Ädd Pët-a',
+        announceAdd: 'Øpëñïñg ädd pët førm-a',
+        emptyState: 'Nø pëts føüñd før thïs stätüs-a.',
+        deleteTitle: 'Dëlëtë Pët-a',
+        deleteMessage: 'Ärë yøü sürë yøü wäñt tø dëlëtë {name}?-a',
+      },
+      orders: {
+        ariaLabel: 'Størë ørdërs-a',
+        inventoryTitle: 'Ïñvëñtøry-a',
+        loading: 'Løädïñg...-a',
+        lookupTitle: 'Ørdër Løøküp-a',
+        lookupLabel: 'Ørdër ÏD-a',
+        lookupPlaceholder: 'Ëñtër ørdër ÏD...-a',
+        lookupButton: 'Sëärçh-a',
+        notFound: 'Ørdër nøt føüñd-a.',
+        placeOrderButton: 'Pläcë Ørdër-a',
+        announcePlaceOrder: 'Øpëñïñg pläcë ørdër førm-a',
+        deleteTitle: 'Dëlëtë Ørdër-a',
+        deleteMessage: 'Ärë yøü sürë yøü wäñt tø dëlëtë ørdër #{id}?-a',
+      },
+      users: {
+        ariaLabel: 'Üsër mänägëmëñt-a',
+        createButton: 'Crëätë Üsër-a',
+        announceCreate: 'Øpëñïñg crëätë üsër førm-a',
+        deleteTitle: 'Dëlëtë Üsër-a',
+        deleteMessage: 'Ärë yøü sürë yøü wäñt tø dëlëtë üsër {username}?-a',
+      },
+    },
   }
 } as const;
 

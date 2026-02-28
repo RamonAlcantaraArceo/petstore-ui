@@ -327,6 +327,45 @@ export const en = {
         announceSubmit: 'Order submitted',
       },
     },
+    app: {
+      navigation: {
+        ariaLabel: 'Petstore application navigation',
+        signIn: 'Sign In',
+        signOut: 'Sign Out',
+        loggedInAs: 'Logged in as {username}',
+        announceSignIn: 'Opening sign in form',
+        announceSignOut: 'Signing out',
+      },
+      pets: {
+        ariaLabel: 'Pet management',
+        addButton: 'Add Pet',
+        announceAdd: 'Opening add pet form',
+        emptyState: 'No pets found for this status.',
+        deleteTitle: 'Delete Pet',
+        deleteMessage: 'Are you sure you want to delete {name}?',
+      },
+      orders: {
+        ariaLabel: 'Store orders',
+        inventoryTitle: 'Inventory',
+        loading: 'Loading...',
+        lookupTitle: 'Order Lookup',
+        lookupLabel: 'Order ID',
+        lookupPlaceholder: 'Enter order ID...',
+        lookupButton: 'Search',
+        notFound: 'Order not found.',
+        placeOrderButton: 'Place Order',
+        announcePlaceOrder: 'Opening place order form',
+        deleteTitle: 'Delete Order',
+        deleteMessage: 'Are you sure you want to delete order #{id}?',
+      },
+      users: {
+        ariaLabel: 'User management',
+        createButton: 'Create User',
+        announceCreate: 'Opening create user form',
+        deleteTitle: 'Delete User',
+        deleteMessage: 'Are you sure you want to delete user {username}?',
+      },
+    },
   }
 } as const;
 

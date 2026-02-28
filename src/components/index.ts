@@ -10,6 +10,8 @@
 // Atomic components
 export * from './atoms';
 
-// Future exports for molecules and organisms
-// export * from './molecules';
-// export * from './organisms';
+// Molecule components
+export * from './molecules';
+
+// Organism components
+export * from './organisms';
