@@ -18,10 +18,18 @@ Build a simplistic React SPA at `petstore/` showcasing Pet Management, Store Ord
 	- Added `src/context/AuthContext.tsx`
 	- Added `src/context/index.ts`
 	- Updated `src/index.ts` exports to include context module
+- ✅ **Phase 2 completed** (2026-02-27)
+	- Added `src/components/atoms/Badge.tsx`
+	- Added `src/components/atoms/Select.tsx`
+	- Added `src/components/atoms/Modal.tsx`
+	- Added `src/components/atoms/Table.tsx`
+	- Added `src/components/atoms/Tabs.tsx`
+	- Added stories under `src/stories/petstore/*` for all new atoms
+	- Updated `src/components/atoms/index.ts` exports
 - ✅ **Verification completed**
 	- `bun run type-check` passes with strict TypeScript settings
 - ⏭️ **Next phase**
-	- Phase 2 — Atoms (`Badge`, `Select`, `Modal`, `Table`, `Tabs`)
+	- Phase 3 — Molecules (`LoginForm`, `PetCard`, `PetForm`, `OrderCard`, `OrderForm`, `UserCard`, `UserForm`, `StatusFilter`, `ConfirmDialog`)
 
 ---
 
