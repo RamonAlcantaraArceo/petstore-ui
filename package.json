@@ -23,8 +23,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
-    "test": "bun test",
-    "test:coverage": "bun test --coverage"
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ci": "vitest run --coverage --reporter=default --reporter=junit"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,md,css}": "prettier --write"
@@ -42,6 +43,7 @@
     "@storybook/blocks": "^7.6.0",
     "@storybook/react": "^7.6.0",
     "@storybook/react-vite": "^7.6.0",
+    "@vitest/coverage-istanbul": "^3.2.4",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
     "@types/bun": "latest",
@@ -57,10 +59,12 @@
     "eslint-plugin-storybook": "^0.6.15",
     "happy-dom": "14",
     "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
     "lint-staged": "^15.0.0",
     "prettier": "^3.0.0",
     "storybook": "7.6.23",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^3.2.4"
   },
   "peerDependencies": {
     "react": "^18.0.0",

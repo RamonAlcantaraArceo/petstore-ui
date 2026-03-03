@@ -30,16 +30,35 @@ jobs:
         run: bun run type-check
 
       - name: Test
-        run: bun run test:coverage
+        run: bun run test:ci
+
+      - name: Upload JUnit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: junit-report
+          path: junit.xml
+          if-no-files-found: warn
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
-          directory: ./coverage
+          files: ./coverage/lcov.info
           flags: unittests
           fail_ci_if_error: false
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./junit.xml
+          flags: vitest-tests
+          name: codecov-tests-vitest
+          report_type: test_results
+          verbose: true
+          fail_ci_if_error: false
 
       - name: Build Storybook
         run: bun run build-storybook

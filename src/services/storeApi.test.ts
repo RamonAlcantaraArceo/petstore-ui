@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { getInventory, placeOrder, getOrderById, deleteOrder } from './storeApi';
 import { clearApiToken } from './apiClient';
 import type { Order, Inventory } from './types';
@@ -9,7 +9,7 @@ import type { Order, Inventory } from './types';
 
 function mockFetch(responseData: unknown, options: { status?: number; ok?: boolean } = {}) {
   const { status = 200, ok = true } = options;
-  return mock(async () => ({
+  return vi.fn(async () => ({
     ok,
     status,
     headers: { get: () => 'application/json' },

@@ -1,4 +1,4 @@
-import { describe, it, expect, mock } from 'bun:test';
+import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import React from 'react';
 import { LocaleProvider } from '../../i18n';
@@ -61,7 +61,7 @@ describe('PetCard', () => {
     });
 
     it('calls onEdit with the pet when edit button is clicked', () => {
-      const handleEdit = mock((p: Pet) => p);
+      const handleEdit = vi.fn((p: Pet) => p);
       const { container } = renderWithLocale(<PetCard pet={mockPet} onEdit={handleEdit} />);
       const editBtn = Array.from(container.querySelectorAll('button')).find((b) =>
         b.textContent?.toLowerCase().includes('edit'),
@@ -72,7 +72,7 @@ describe('PetCard', () => {
     });
 
     it('calls onDelete with the pet when delete button is clicked', () => {
-      const handleDelete = mock((p: Pet) => p);
+      const handleDelete = vi.fn((p: Pet) => p);
       const { container } = renderWithLocale(<PetCard pet={mockPet} onDelete={handleDelete} />);
       const deleteBtn = Array.from(container.querySelectorAll('button')).find((b) =>
         b.textContent?.toLowerCase().includes('delete'),

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { get, post, put, del, setApiToken, clearApiToken, getApiToken } from './apiClient';
 
 // -------------------------------------------------------------------------
@@ -10,7 +10,7 @@ function mockFetch(
   options: { status?: number; ok?: boolean; contentType?: string } = {},
 ) {
   const { status = 200, ok = true, contentType = 'application/json' } = options;
-  return mock(async () => ({
+  return vi.fn(async () => ({
     ok,
     status,
     headers: { get: () => contentType },
@@ -80,7 +80,7 @@ describe('apiClient', () => {
     });
 
     it('returns error on network failure', async () => {
-      globalThis.fetch = mock(async () => {
+      globalThis.fetch = vi.fn(async () => {
         throw new Error('Network error');
       }) as any;
       const result = await get('/pet/1');
@@ -90,7 +90,7 @@ describe('apiClient', () => {
 
     it('includes query params in URL', async () => {
       let capturedUrl = '';
-      globalThis.fetch = mock(async (url: string) => {
+      globalThis.fetch = vi.fn(async (url: string) => {
         capturedUrl = url;
         return {
           ok: true,
@@ -106,7 +106,7 @@ describe('apiClient', () => {
     it('injects api_key header when token is set', async () => {
       setApiToken('my-token');
       let capturedInit: RequestInit | undefined;
-      globalThis.fetch = mock(async (_url: string, init: RequestInit) => {
+      globalThis.fetch = vi.fn(async (_url: string, init: RequestInit) => {
         capturedInit = init;
         return {
           ok: true,

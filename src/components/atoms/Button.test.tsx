@@ -1,4 +1,4 @@
-import { describe, it, expect, mock } from 'bun:test';
+import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import React from 'react';
 import { LocaleProvider } from '../../i18n';
@@ -68,14 +68,14 @@ describe('Button', () => {
 
   describe('interactions', () => {
     it('calls onClick handler when clicked', () => {
-      const handleClick = mock(() => {});
+      const handleClick = vi.fn(() => {});
       const { container } = renderWithLocale(<Button onClick={handleClick}>Click</Button>);
       container.querySelector('button')!.click();
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
     it('does not call onClick when disabled', () => {
-      const handleClick = mock(() => {});
+      const handleClick = vi.fn(() => {});
       const { container } = renderWithLocale(
         <Button disabled onClick={handleClick}>
           Disabled
@@ -86,7 +86,7 @@ describe('Button', () => {
     });
 
     it('does not call onClick when loading', () => {
-      const handleClick = mock(() => {});
+      const handleClick = vi.fn(() => {});
       const { container } = renderWithLocale(
         <Button loading onClick={handleClick}>
           Loading

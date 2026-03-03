@@ -13,3 +13,4 @@ storybook-static/
 !petstore/dist/index.js
 
 coverage/
+junit.xml

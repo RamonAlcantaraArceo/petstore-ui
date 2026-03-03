@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { findPetsByStatus, getPetById, addPet, updatePet, deletePet } from './petApi';
 import { clearApiToken } from './apiClient';
 import type { Pet } from './types';
@@ -9,7 +9,7 @@ import type { Pet } from './types';
 
 function mockFetch(responseData: unknown, options: { status?: number; ok?: boolean } = {}) {
   const { status = 200, ok = true } = options;
-  return mock(async () => ({
+  return vi.fn(async () => ({
     ok,
     status,
     headers: { get: () => 'application/json' },
@@ -57,7 +57,7 @@ describe('petApi', () => {
 
     it('joins multiple statuses into comma-separated query param', async () => {
       let capturedUrl = '';
-      globalThis.fetch = mock(async (url: string) => {
+      globalThis.fetch = vi.fn(async (url: string) => {
         capturedUrl = url;
         return {
           ok: true,

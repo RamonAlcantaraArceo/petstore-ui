@@ -6,7 +6,7 @@
  * multi-locale rendering behaviour using the i18n infrastructure.
  */
 
-import { describe, it, expect } from 'bun:test';
+import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import React from 'react';
 import { LocaleProvider } from '../i18n';

@@ -12,7 +12,7 @@ This project follows an i18n + accessibility-first approach from the component c
 - React 18 + TypeScript (strict mode)
 - Bun (runtime, package manager, scripts)
 - Storybook 7 (component docs and visual validation)
-- Jest-compatible test runner via `bun test` with `@testing-library/react`
+- Vitest test runner with `@testing-library/react`
 
 ## Setup
 
@@ -28,7 +28,7 @@ bun install
 
 ### Node.js fallback
 
-All scripts are compatible with Node + npm/npx — replace `bun run` with `npm run`. The test runner (`bun test`) has no Node equivalent; use `bun` for tests.
+All scripts are compatible with Node + npm/npx — replace `bun run` with `npm run`.
 
 ## Project Structure
 
@@ -71,11 +71,11 @@ bun run build-storybook  # Static Storybook build
 
 ## Testing Layers
 
-| Layer | Location | Runner |
-|---|---|---|
-| Unit/component | `src/components/**/*.test.tsx` | `bun test` |
-| Integration/API | `src/services/**/*.test.ts` | `bun test` |
-| Accessibility + i18n | `src/testing/a11y-i18n.test.tsx` | `bun test` |
+| Layer                | Location                         | Runner   |
+| -------------------- | -------------------------------- | -------- |
+| Unit/component       | `src/components/**/*.test.tsx`   | `vitest` |
+| Integration/API      | `src/services/**/*.test.ts`      | `vitest` |
+| Accessibility + i18n | `src/testing/a11y-i18n.test.tsx` | `vitest` |
 
 All test files use `@testing-library/react` with happy-dom (set up in `test-setup.ts`).
 
@@ -90,8 +90,8 @@ Coverage reports are written to `./coverage/` and uploaded to Codecov on every C
 ## Internationalization (i18n)
 
 - Supported locales:
-	- `en` (English)
-	- `chef` (pseudo-localization for layout/text expansion testing)
+  - `en` (English)
+  - `chef` (pseudo-localization for layout/text expansion testing)
 - Use `useTranslation()` from `src/i18n/context.tsx` in components.
 - Prefer translation keys over hardcoded strings.
 - Provide static/fallback labels when translation keys are not provided.
@@ -106,9 +106,9 @@ const label = t('components.button.primary');
 ## Accessibility (a11y)
 
 - Use `useAccessibility()` from `src/accessibility/hooks.ts` for:
-	- keyboard activation (Enter/Space)
-	- ARIA attribute support
-	- screen reader announcements
+  - keyboard activation (Enter/Space)
+  - ARIA attribute support
+  - screen reader announcements
 - Follow WCAG 2.1 AA targets for keyboard navigation, semantics, focus behavior, and contrast.
 - Prefer semantic HTML first, then augment with ARIA when needed.
 
@@ -126,9 +126,9 @@ Every PR and push to `main` runs the full CI pipeline:
 
 - Stories are the primary component documentation surface.
 - Include stories that demonstrate:
-	- locale switching (`en` and `chef`)
-	- keyboard interaction behavior
-	- accessibility-focused scenarios
+  - locale switching (`en` and `chef`)
+  - keyboard interaction behavior
+  - accessibility-focused scenarios
 - Run Storybook locally to validate translated text length and interaction behavior.
 
 ## Docker
@@ -160,15 +160,15 @@ All navigation is now server-based for a production-like experience:
 
 1. Build Storybook static output:
 
-	```bash
-	bun run build-storybook
-	```
+   ```bash
+   bun run build-storybook
+   ```
 
 2. Start the preview server:
 
-	```bash
-	bun run preview
-	```
+   ```bash
+   bun run preview
+   ```
 
 3. Open [http://localhost:4000](http://localhost:4000) in your browser.
 
@@ -176,8 +176,8 @@ All navigation is now server-based for a production-like experience:
 
 ## Troubleshooting
 
-**`bun test` fails with "document is not defined"**
-— Ensure `test-setup.ts` is listed as `preload` in `bunfig.toml`. Do **not** add `environment = "happy-dom"` — it conflicts with the manual GlobalWindow setup.
+**`vitest` fails with "document is not defined"**
+— Ensure `vitest.config.ts` sets `test.environment = "happy-dom"` and `test.setupFiles = ["./test-setup.ts"]`.
 
 **`SyntaxError` or `GlobalWindow` errors in test-setup**
 — Use `happy-dom@14` (not v15+). Run `bun add --dev happy-dom@14`.
