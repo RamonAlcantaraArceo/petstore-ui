@@ -13,9 +13,10 @@
   "scripts": {
     "dev": "bun run storybook",
     "prepare": "husky",
-    "build": "bun run build-storybook && bun run build-website && bun run build-petstore",
+    "build": "bun run build-storybook && bun run build-petstore",
+    "build:bundle-stats": "vite build --config vite.config.ts",
     "build-storybook": "storybook build",
-    "build-website": "bun build src/website/index.ts --outdir public/dist",
+    "build-website": "echo 'Static website uses public/ assets (no build step required)'",
     "build-petstore": "bun build src/petstore/index.tsx --outdir petstore/dist --minify",
     "preview": "bun run scripts/preview-server.ts",
     "storybook": "storybook dev -p 6006",
@@ -35,6 +36,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@codecov/vite-plugin": "1.9.1",
     "@storybook/addon-a11y": "7.6.23",
     "@storybook/addon-controls": "^7.6.0",
     "@storybook/addon-docs": "^7.6.0",
@@ -43,7 +45,6 @@
     "@storybook/blocks": "^7.6.0",
     "@storybook/react": "^7.6.0",
     "@storybook/react-vite": "^7.6.0",
-    "@vitest/coverage-istanbul": "^3.2.4",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
     "@types/bun": "latest",
@@ -52,6 +53,7 @@
     "@types/react-dom": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "@vitest/coverage-istanbul": "^3.2.4",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.33.0",
@@ -64,6 +66,7 @@
     "prettier": "^3.0.0",
     "storybook": "7.6.23",
     "typescript": "^5.0.0",
+    "vite": "^5",
     "vitest": "^3.2.4"
   },
   "peerDependencies": {

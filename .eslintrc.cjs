@@ -38,12 +38,21 @@ module.exports = {
       rules: {
         'react-hooks/rules-of-hooks': 'off',
         'react/no-unescaped-entities': 'off',
+        'storybook/no-redundant-story-name': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
+    {
+      files: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
       },
     },
     {
       files: ['src/testing/**/*.ts', 'src/testing/**/*.tsx'],
       rules: {
         '@typescript-eslint/no-namespace': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
       },
     },
   ],

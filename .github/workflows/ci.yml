@@ -63,6 +63,22 @@ jobs:
       - name: Build Storybook
         run: bun run build-storybook
 
+      - name: Emit bundle stats (Vite + Codecov plugin)
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          CODECOV_DRY_RUN: "true"
+        run: bun run build:bundle-stats
+
+      - name: Upload bundle stats to Codecov
+        if: ${{ hashFiles('dist/codecov/*-stats.json') != '' }}
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./dist/codecov/*-stats.json
+          flags: bundle-analysis
+          name: codecov-bundle-analysis
+          fail_ci_if_error: false
+
       - name: Docker build validation
         timeout-minutes: 15
         env:
