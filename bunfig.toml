@@ -66,6 +66,10 @@ outdir = "./dist"
 preload = ["./test-setup.ts"]
 timeout = 5000
 
+# DOM environment — must be set here so document/window globals exist
+# before test file imports (e.g. @testing-library/dom screen module)
+environment = "happy-dom"
+
 # Coverage settings
 coverage = true
 coverageDir = "./coverage"
