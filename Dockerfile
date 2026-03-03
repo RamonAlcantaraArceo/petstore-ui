@@ -6,6 +6,14 @@ FROM oven/bun:1 AS builder
 
 WORKDIR /app
 
+ARG CI=true
+ARG STORYBOOK_DISABLE_TELEMETRY=1
+ARG DO_NOT_TRACK=1
+
+ENV CI=${CI}
+ENV STORYBOOK_DISABLE_TELEMETRY=${STORYBOOK_DISABLE_TELEMETRY}
+ENV DO_NOT_TRACK=${DO_NOT_TRACK}
+
 # Install dependencies first (layer-cache friendly)
 COPY package.json bun.lock bunfig.toml ./
 RUN bun install --frozen-lockfile
