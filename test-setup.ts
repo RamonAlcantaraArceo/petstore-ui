@@ -8,6 +8,8 @@
  */
 
 import { GlobalWindow } from 'happy-dom';
+import { afterEach } from 'bun:test';
+import { cleanup } from '@testing-library/react';
 
 // ---------------------------------------------------------------------------
 // DOM environment — set up before any test file import sees globalThis
@@ -36,6 +38,13 @@ const happyWindow = new GlobalWindow({ url: 'http://localhost/' });
 (globalThis as any).cancelAnimationFrame = clearTimeout;
 (globalThis as any).localStorage = (happyWindow as any).localStorage;
 (globalThis as any).sessionStorage = (happyWindow as any).sessionStorage;
+
+// ---------------------------------------------------------------------------
+// Auto-cleanup after each test to prevent DOM contamination across files
+// ---------------------------------------------------------------------------
+afterEach(() => {
+  cleanup();
+});
 
 // ---------------------------------------------------------------------------
 // Suppress React / testing-library noise

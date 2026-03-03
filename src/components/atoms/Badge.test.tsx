@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
 import { LocaleProvider } from '../../i18n';
 import { Badge } from './Badge';
@@ -11,8 +11,8 @@ function renderWithLocale(ui: React.ReactElement) {
 describe('Badge', () => {
   describe('rendering', () => {
     it('renders with children', () => {
-      renderWithLocale(<Badge>custom label</Badge>);
-      expect(screen.getByText('custom label')).toBeDefined();
+      const { getByText } = renderWithLocale(<Badge>custom label</Badge>);
+      expect(getByText('custom label')).toBeDefined();
     });
 
     it('renders translated label for available variant', () => {
