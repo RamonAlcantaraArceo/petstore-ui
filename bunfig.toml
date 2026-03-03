@@ -73,6 +73,7 @@ environment = "happy-dom"
 # Coverage settings
 coverage = true
 coverageDir = "./coverage"
+coverageReporter = ["lcov", "text"]
 
 [macros]
 # Enable React JSX transform

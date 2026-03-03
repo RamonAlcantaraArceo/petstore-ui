@@ -11,3 +11,5 @@ storybook-static/
 !petstore/dist/
 !petstore/dist/index.html
 !petstore/dist/index.js
+
+coverage/
