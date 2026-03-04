@@ -24,9 +24,22 @@ if (!existsSync(storybookIndexPath)) {
 
 const indexJson = readFileSync(storybookIndexPath, 'utf-8');
 const parsedIndex = JSON.parse(indexJson) as StorybookIndex;
-const storyEntries = Object.values(parsedIndex.entries).sort((left, right) =>
+
+// Support filtering by STORY_FILTER env variable (prefix match on id or title)
+const STORY_FILTER = process.env.STORY_FILTER;
+const allEntries = Object.values(parsedIndex.entries).sort((left, right) =>
   left.id.localeCompare(right.id),
 );
+// Exclude docs entries from visual regression
+const storyEntries = (
+  STORY_FILTER
+    ? allEntries.filter(
+        (entry) =>
+          entry.id.startsWith(STORY_FILTER) ||
+          entry.title.toLowerCase().startsWith(STORY_FILTER.toLowerCase()),
+      )
+    : allEntries
+).filter((entry) => entry.type !== 'docs');
 
 test.describe('Storybook visual regression', () => {
   test.beforeEach(async ({ page }) => {
