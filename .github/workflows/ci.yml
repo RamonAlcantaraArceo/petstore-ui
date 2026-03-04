@@ -66,7 +66,7 @@ jobs:
       - name: Emit bundle stats (Vite + Codecov plugin)
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          CODECOV_DRY_RUN: "true"
+          CODECOV_DRY_RUN: "false"
         run: bun run build:bundle-stats
 
       - name: Upload bundle stats to Codecov
