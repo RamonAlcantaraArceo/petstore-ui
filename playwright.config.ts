@@ -8,7 +8,9 @@ export default defineConfig({
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
   workers: isCI ? 2 : undefined,
-  reporter: isCI ? [['github'], ['html', { open: 'never' }]] : [['list']],
+  reporter: isCI
+    ? [['github'], ['html', { open: 'never' }]]
+    : [['list'], ['html', { open: 'always' }]],
   use: {
     baseURL: 'http://127.0.0.1:4000',
     headless: true,
