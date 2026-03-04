@@ -5,18 +5,20 @@
 
 import { en } from './locales/en';
 import { chef } from './locales/chef';
-import type { 
-  SupportedLocale, 
-  LocaleRegistry, 
-  TranslationKey, 
-  TranslationParams, 
-  LocaleData 
+import debugLocale from './locales/debug';
+import type {
+  SupportedLocale,
+  LocaleRegistry,
+  TranslationKey,
+  TranslationParams,
+  LocaleData,
 } from './types';
 
 // Registry of all available locales
 export const locales: LocaleRegistry = {
   en,
-  chef
+  chef,
+  debug: debugLocale as any, // Type override for debug
 } as const;
 
 // Locale metadata for UI display
@@ -25,14 +27,20 @@ export const localeMetadata = {
     name: 'English',
     nativeName: 'English',
     flag: '🇺🇸',
-    direction: 'ltr' as const
+    direction: 'ltr' as const,
   },
   chef: {
     name: 'Swedish Chef (Pseudo)',
     nativeName: 'Børk Børk (Pšëüdø)',
     flag: '👨‍🍳',
-    direction: 'ltr' as const
-  }
+    direction: 'ltr' as const,
+  },
+  debug: {
+    name: 'Debug (Show Key)',
+    nativeName: 'Debug',
+    flag: '🪲',
+    direction: 'ltr' as const,
+  },
 } as const;
 
 // Default locale
@@ -51,13 +59,13 @@ export const RTL_LOCALES: SupportedLocale[] = [];
 export function getTranslation(
   locale: LocaleData,
   key: TranslationKey | string,
-  params?: TranslationParams
+  params?: TranslationParams,
 ): string {
   try {
     // Split the key by dots to traverse the object
     const keyParts = key.split('.');
     let value: any = locale;
-    
+
     // Traverse the nested object
     for (const part of keyParts) {
       if (value && typeof value === 'object' && part in value) {
@@ -68,12 +76,12 @@ export function getTranslation(
         return key;
       }
     }
-    
+
     // If we found a string, interpolate parameters if provided
     if (typeof value === 'string') {
       return params ? interpolateParams(value, params) : value;
     }
-    
+
     // If we ended up at a non-string value, return the key as fallback
     console.warn(`Translation key "${key}" does not point to a string value`);
     return key;
@@ -90,10 +98,7 @@ export function getTranslation(
  * @param params The parameter values
  * @returns The interpolated string
  */
-export function interpolateParams(
-  text: string, 
-  params: TranslationParams
-): string {
+export function interpolateParams(text: string, params: TranslationParams): string {
   return text.replace(/\{(\w+)\}/g, (match, paramName) => {
     const value = params[paramName];
     if (value !== undefined) {
@@ -157,7 +162,7 @@ export function validateTranslationKey(key: string): boolean {
   try {
     const keyParts = key.split('.');
     let value: any = locales[DEFAULT_LOCALE];
-    
+
     for (const part of keyParts) {
       if (value && typeof value === 'object' && part in value) {
         value = value[part];
@@ -165,7 +170,7 @@ export function validateTranslationKey(key: string): boolean {
         return false;
       }
     }
-    
+
     return typeof value === 'string';
   } catch {
     return false;
@@ -180,7 +185,7 @@ export function validateTranslationKey(key: string): boolean {
 export function getTranslationKeysInNamespace(namespace: string): string[] {
   const namespaceParts = namespace.split('.');
   let value: any = locales[DEFAULT_LOCALE];
-  
+
   for (const part of namespaceParts) {
     if (value && typeof value === 'object' && part in value) {
       value = value[part];
@@ -188,10 +193,10 @@ export function getTranslationKeysInNamespace(namespace: string): string[] {
       return [];
     }
   }
-  
+
   if (typeof value === 'object') {
-    return Object.keys(value).filter(key => typeof value[key] === 'string');
+    return Object.keys(value).filter((key) => typeof value[key] === 'string');
   }
-  
+
   return [];
 }
