@@ -63,6 +63,12 @@ jobs:
       - name: Build Storybook
         run: bun run build-storybook
 
+      - name: Install Playwright browser
+        run: bunx playwright install --with-deps chromium
+
+      - name: Visual regression tests
+        run: bun run test:visual
+
       - name: Emit bundle stats (Vite + Codecov plugin)
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
