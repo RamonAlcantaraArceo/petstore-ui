@@ -1,6 +1,43 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const isCI = !!process.env.CI;
+const additionalViewportProjectsEnabled = process.env.PW_ENABLE_ADDITIONAL_VIEWPORTS === '1';
+
+const baseProjects = [
+  {
+    name: 'desktop',
+    use: {
+      viewport: { width: 1280, height: 720 },
+    },
+  },
+  {
+    name: 'mobile',
+    use: {
+      ...devices['iPhone 13'],
+    },
+  },
+];
+
+const additionalProjects = [
+  {
+    name: 'tablet',
+    use: {
+      ...devices['iPad Pro 11'],
+    },
+  },
+  {
+    name: 'desktop-wide',
+    use: {
+      viewport: { width: 1440, height: 900 },
+    },
+  },
+  {
+    name: 'mobile-small',
+    use: {
+      ...devices['iPhone SE'],
+    },
+  },
+];
 
 export default defineConfig({
   testDir: './tests/visual',
@@ -24,20 +61,9 @@ export default defineConfig({
       caret: 'hide',
     },
   },
-  projects: [
-    {
-      name: 'desktop',
-      use: {
-        viewport: { width: 1280, height: 720 },
-      },
-    },
-    {
-      name: 'mobile',
-      use: {
-        ...devices['iPhone 13'],
-      },
-    },
-  ],
+  projects: additionalViewportProjectsEnabled
+    ? [...baseProjects, ...additionalProjects]
+    : baseProjects,
   webServer: {
     command: 'bun run preview',
     port: 4000,
