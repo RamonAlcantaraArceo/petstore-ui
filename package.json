@@ -28,7 +28,8 @@
     "test:visual": "playwright test --config=playwright.config.ts",
     "test:visual:update": "playwright test --config=playwright.config.ts --update-snapshots",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "vitest run --coverage --reporter=default --reporter=junit"
+    "test:ci": "vitest run --coverage --reporter=default --reporter=junit",
+    "postinstall": "npx playwright install --with-deps"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,md,css}": "prettier --write"
