@@ -157,17 +157,32 @@ const collectStatuses = (
 const collectViewportNames = (): Set<string> => {
   const names = new Set<string>();
 
+  const addViewportFromFileName = (fileName: string) => {
+    if (!fileName.endsWith('.png')) {
+      return;
+    }
+
+    const stem = fileName.slice(0, -4);
+    const lastSeparatorIndex = stem.lastIndexOf('--');
+    if (lastSeparatorIndex === -1) {
+      return;
+    }
+
+    const viewport = stem.slice(lastSeparatorIndex + 2).toLowerCase();
+    if (viewport) {
+      names.add(viewport);
+    }
+  };
+
   if (existsSync(EXPECTED_DIR)) {
     for (const fileName of readdirSync(EXPECTED_DIR)) {
-      const match = fileName.match(/--([a-z0-9-_]+)\.png$/i);
-      if (match?.[1]) names.add(match[1].toLowerCase());
+      addViewportFromFileName(fileName);
     }
   }
 
   if (existsSync(ACTUAL_DIR)) {
     for (const fileName of readdirSync(ACTUAL_DIR)) {
-      const match = fileName.match(/--([a-z0-9-_]+)\.png$/i);
-      if (match?.[1]) names.add(match[1].toLowerCase());
+      addViewportFromFileName(fileName);
     }
   }
 
