@@ -1,7 +1,7 @@
 {
   "name": "petstore-ui",
   "version": "1.0.0",
-  "description": "A modern React + TypeScript component library with Storybook documentation and Petstore demo",
+  "description": "A * modern React + TypeScript component library with Storybook documentation and Petstore demo",
   "type": "module",
   "private": true,
   "main": "dist/index.js",
