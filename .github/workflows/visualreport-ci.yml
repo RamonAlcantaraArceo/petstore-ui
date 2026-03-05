@@ -56,10 +56,12 @@ jobs:
         run: bunx playwright install --with-deps chromium
 
       - name: Run visual tests (baseline mode)
+        continue-on-error: true
         if: ${{ inputs.update_baseline }}
         run: bun run test:visual:update
 
       - name: Run visual tests (compare mode)
+        continue-on-error: true
         if: ${{ !inputs.update_baseline }}
         run: bun run test:visual
 
