@@ -1,7 +1,7 @@
 const state = {
   data: null,
   selectedKey: null,
-  statusFilter: 'all',
+  selectedStatusFilters: new Set(),
   variantModes: new Map(),
 };
 
@@ -13,6 +13,30 @@ const selectionSubtitle = document.getElementById('selection-subtitle');
 const filtersElement = document.getElementById('status-filters');
 
 const FILTERS = ['all', 'passed', 'failed', 'flaky', 'skipped', 'unknown'];
+const FILTER_LABELS = {
+  all: 'All',
+  passed: 'Passed',
+  failed: 'Failed',
+  flaky: 'Flaky',
+  skipped: 'Skipped',
+  unknown: 'Unknown',
+};
+const FILTER_ICONS = {
+  all: '📋',
+  passed: '✅',
+  failed: '❌',
+  flaky: '⚠️',
+  skipped: '⏭️',
+  unknown: '❔',
+};
+const TREE_STATUS_ORDER = ['failed', 'flaky', 'unknown', 'skipped', 'passed'];
+const STATUS_ICONS = {
+  passed: '✅',
+  failed: '❌',
+  flaky: '⚠️',
+  skipped: '⏭️',
+  unknown: '❔',
+};
 const COMPARISON_MODES = [
   { value: 'diff', label: 'Diff' },
   { value: 'actual', label: 'Actual' },
@@ -72,18 +96,86 @@ const buildTree = (componentGroups) => {
 };
 
 const createStatusBadge = (status) => {
+  const normalizedStatus = status ?? 'unknown';
+  const icon = STATUS_ICONS[normalizedStatus] ?? STATUS_ICONS.unknown;
   const span = document.createElement('span');
-  span.className = `badge ${status}`;
-  span.textContent = status;
+  span.className = `badge ${normalizedStatus}`;
+  span.textContent = `${icon} ${normalizedStatus}`;
+  span.setAttribute('aria-label', `Status: ${normalizedStatus}`);
   return span;
 };
 
 const variantMatchesFilter = (variant) => {
-  if (state.statusFilter === 'all') {
+  if (state.selectedStatusFilters.size === 0) {
     return true;
   }
 
-  return (variant.status ?? 'unknown') === state.statusFilter;
+  return state.selectedStatusFilters.has(variant.status ?? 'unknown');
+};
+
+const createStatusCounts = () => new Map(TREE_STATUS_ORDER.map((status) => [status, 0]));
+
+const collectStatusCounts = (variants) => {
+  const counts = createStatusCounts();
+
+  for (const variant of variants) {
+    const status = variant.status ?? 'unknown';
+    if (!counts.has(status)) {
+      counts.set(status, 0);
+    }
+
+    counts.set(status, (counts.get(status) ?? 0) + 1);
+  }
+
+  return counts;
+};
+
+const mergeStatusCounts = (targetCounts, sourceCounts) => {
+  for (const [status, value] of sourceCounts.entries()) {
+    targetCounts.set(status, (targetCounts.get(status) ?? 0) + value);
+  }
+};
+
+const getVisibleVariantsForGroup = (group) =>
+  group.stories.flatMap((story) =>
+    story.variants.filter((variant) => variantMatchesFilter(variant)),
+  );
+
+const formatStatusBreakdown = (statusCounts) =>
+  TREE_STATUS_ORDER.filter((status) => (statusCounts.get(status) ?? 0) > 0)
+    .map((status) => `${status} ${statusCounts.get(status)}`)
+    .join(', ');
+
+const createTreeStatusChips = (statusCounts) => {
+  const wrap = document.createElement('span');
+  wrap.className = 'tree-status-chips';
+
+  for (const status of TREE_STATUS_ORDER) {
+    const count = statusCounts.get(status) ?? 0;
+    if (!count) {
+      continue;
+    }
+
+    const chip = document.createElement('span');
+    chip.className = `tree-status-chip ${status}`;
+    chip.textContent = `${STATUS_ICONS[status] ?? STATUS_ICONS.unknown} ${count}`;
+    chip.setAttribute('aria-label', `${status} ${count}`);
+    wrap.append(chip);
+  }
+
+  return wrap;
+};
+
+const createTreeLabel = (labelText, statusCounts) => {
+  const wrap = document.createElement('span');
+  wrap.className = 'tree-label';
+
+  const text = document.createElement('span');
+  text.className = 'tree-label-text';
+  text.textContent = labelText;
+
+  wrap.append(text, createTreeStatusChips(statusCounts));
+  return wrap;
 };
 
 const getAllVariants = (componentGroups) =>
@@ -111,13 +203,28 @@ const getFilteredComponentGroups = () => {
     return [];
   }
 
-  if (state.statusFilter === 'all') {
-    return state.data.componentGroups;
-  }
-
   return state.data.componentGroups.filter((group) =>
     group.stories.some((story) => story.variants.some((variant) => variantMatchesFilter(variant))),
   );
+};
+
+const isFilterActive = (filter) =>
+  filter === 'all'
+    ? state.selectedStatusFilters.size === 0
+    : state.selectedStatusFilters.has(filter);
+
+const toggleFilter = (filter) => {
+  if (filter === 'all') {
+    state.selectedStatusFilters.clear();
+    return;
+  }
+
+  if (state.selectedStatusFilters.has(filter)) {
+    state.selectedStatusFilters.delete(filter);
+    return;
+  }
+
+  state.selectedStatusFilters.add(filter);
 };
 
 const ensureSelectedKeyVisible = (componentGroups) => {
@@ -144,18 +251,23 @@ const renderFilters = () => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'status-filter';
-    button.classList.toggle('active', state.statusFilter === filter);
+    button.classList.toggle('active', isFilterActive(filter));
+
+    const icon = document.createElement('span');
+    icon.className = 'status-filter-icon';
+    icon.textContent = FILTER_ICONS[filter] ?? FILTER_ICONS.unknown;
 
     const label = document.createElement('span');
-    label.textContent = filter[0].toUpperCase() + filter.slice(1);
+    label.className = 'status-filter-label';
+    label.textContent = FILTER_LABELS[filter] ?? filter;
 
     const count = document.createElement('span');
     count.className = 'count';
     count.textContent = String(counts.get(filter) ?? 0);
 
-    button.append(label, count);
+    button.append(icon, label, count);
     button.addEventListener('click', () => {
-      state.statusFilter = filter;
+      toggleFilter(filter);
       renderTree();
       renderVariants();
       renderFilters();
@@ -685,34 +797,58 @@ const renderTree = () => {
   const tree = buildTree(filteredGroups);
 
   for (const [namespace, levels] of [...tree.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    const namespaceCounts = createStatusCounts();
+    for (const groups of levels.values()) {
+      for (const group of groups) {
+        mergeStatusCounts(namespaceCounts, collectStatusCounts(getVisibleVariantsForGroup(group)));
+      }
+    }
+
     const namespaceDetails = document.createElement('details');
     namespaceDetails.open = true;
 
     const namespaceSummary = document.createElement('summary');
-    namespaceSummary.textContent = namespace;
+    namespaceSummary.append(createTreeLabel(namespace, namespaceCounts));
+    const namespaceBreakdown = formatStatusBreakdown(namespaceCounts);
+    if (namespaceBreakdown) {
+      namespaceSummary.setAttribute('aria-label', `${namespace}. ${namespaceBreakdown}`);
+    }
 
     namespaceDetails.append(namespaceSummary);
 
     for (const [level, groups] of [...levels.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+      const levelCounts = createStatusCounts();
+      for (const group of groups) {
+        mergeStatusCounts(levelCounts, collectStatusCounts(getVisibleVariantsForGroup(group)));
+      }
+
       const levelDetails = document.createElement('details');
       levelDetails.open = true;
 
       const levelSummary = document.createElement('summary');
-      levelSummary.textContent = `${level} (${groups.length})`;
+      const levelLabel = `${level} (${groups.length})`;
+      levelSummary.append(createTreeLabel(levelLabel, levelCounts));
+      const levelBreakdown = formatStatusBreakdown(levelCounts);
+      if (levelBreakdown) {
+        levelSummary.setAttribute('aria-label', `${levelLabel}. ${levelBreakdown}`);
+      }
 
       const list = document.createElement('div');
       list.className = 'tree-list';
 
       for (const group of groups.sort((a, b) => a.component.localeCompare(b.component))) {
-        const visibleVariantsCount = group.stories.reduce(
-          (total, story) =>
-            total + story.variants.filter((variant) => variantMatchesFilter(variant)).length,
-          0,
-        );
+        const visibleVariants = getVisibleVariantsForGroup(group);
+        const visibleVariantsCount = visibleVariants.length;
+        const groupCounts = collectStatusCounts(visibleVariants);
+        const componentLabel = `${group.component} (${visibleVariantsCount})`;
 
         const button = document.createElement('button');
         button.type = 'button';
-        button.textContent = `${group.component} (${visibleVariantsCount})`;
+        button.append(createTreeLabel(componentLabel, groupCounts));
+        const groupBreakdown = formatStatusBreakdown(groupCounts);
+        if (groupBreakdown) {
+          button.setAttribute('aria-label', `${componentLabel}. ${groupBreakdown}`);
+        }
         button.classList.toggle('active', state.selectedKey === group.key);
         button.addEventListener('click', () => {
           state.selectedKey = group.key;
