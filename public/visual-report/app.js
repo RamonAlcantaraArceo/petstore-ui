@@ -187,12 +187,15 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
   const sizeNote = document.createElement('div');
   sizeNote.className = 'slider-note';
 
+  const controls = document.createElement('div');
+  controls.className = 'slider-controls';
+
+  const orientationToggle = document.createElement('button');
+  orientationToggle.type = 'button';
+  orientationToggle.className = 'slider-orientation-toggle';
+
   const divider = document.createElement('div');
   divider.className = 'slider-divider';
-
-  actualLayer.append(actualImg);
-  sliderContainer.append(expectedImg, actualLayer, divider);
-  wrap.append(sliderContainer, sizeNote);
 
   const input = document.createElement('input');
   input.className = 'slider-input';
@@ -200,11 +203,79 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
   input.min = '0';
   input.max = '100';
   input.value = '50';
+  input.setAttribute('aria-label', 'Compare expected and actual image');
 
-  const applySlider = (value, canvasWidth = sliderContainer.clientWidth) => {
-    const revealWidth = Math.round((Math.max(0, Math.min(100, value)) / 100) * canvasWidth);
+  let orientation = 'horizontal';
+  let hasInitializedLayout = false;
+  const DEFAULT_SLIDER_VALUE = 50;
+
+  actualLayer.append(actualImg);
+  sliderContainer.append(expectedImg, actualLayer, input, divider);
+  controls.append(sizeNote, orientationToggle);
+  wrap.append(sliderContainer, controls);
+
+  const syncOrientationUi = () => {
+    const isVertical = orientation === 'vertical';
+    sliderContainer.classList.toggle('is-vertical', isVertical);
+    divider.classList.toggle('is-vertical', isVertical);
+    orientationToggle.textContent = isVertical ? 'Slide: Up/Down' : 'Slide: Left/Right';
+    input.setAttribute(
+      'aria-label',
+      isVertical
+        ? 'Compare expected and actual image by sliding up and down'
+        : 'Compare expected and actual image by sliding left and right',
+    );
+  };
+
+  const applySlider = (
+    value,
+    canvasWidth = sliderContainer.clientWidth,
+    canvasHeight = sliderContainer.clientHeight,
+  ) => {
+    const clampedValue = Math.max(0, Math.min(100, value));
+
+    if (orientation === 'vertical') {
+      const revealHeight = Math.round((clampedValue / 100) * canvasHeight);
+      actualLayer.style.width = `${canvasWidth}px`;
+      actualLayer.style.height = `${revealHeight}px`;
+      divider.style.left = '0';
+      divider.style.top = `${revealHeight}px`;
+      return;
+    }
+
+    const revealWidth = Math.round((clampedValue / 100) * canvasWidth);
     actualLayer.style.width = `${revealWidth}px`;
+    actualLayer.style.height = `${canvasHeight}px`;
     divider.style.left = `${revealWidth}px`;
+    divider.style.top = '0';
+  };
+
+  const setCentered = (
+    canvasWidth = sliderContainer.clientWidth,
+    canvasHeight = sliderContainer.clientHeight,
+  ) => {
+    input.value = String(DEFAULT_SLIDER_VALUE);
+    applySlider(DEFAULT_SLIDER_VALUE, canvasWidth, canvasHeight);
+  };
+
+  const setSliderFromPointer = (clientX, clientY) => {
+    const bounds = sliderContainer.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) {
+      return;
+    }
+
+    const position =
+      orientation === 'vertical'
+        ? Math.min(Math.max(clientY - bounds.top, 0), bounds.height)
+        : Math.min(Math.max(clientX - bounds.left, 0), bounds.width);
+
+    const value =
+      orientation === 'vertical'
+        ? Math.round((position / bounds.height) * 100)
+        : Math.round((position / bounds.width) * 100);
+
+    input.value = String(value);
+    applySlider(value, bounds.width, bounds.height);
   };
 
   const updateLayout = () => {
@@ -239,10 +310,17 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
       ? `${expectedWidth} × ${expectedHeight}`
       : `Size mismatch: expected ${expectedWidth}×${expectedHeight}, actual ${actualWidth}×${actualHeight}`;
 
-    applySlider(Number(input.value), canvasWidth);
+    if (!hasInitializedLayout) {
+      setCentered(canvasWidth, canvasHeight);
+      hasInitializedLayout = true;
+      return;
+    }
+
+    applySlider(Number(input.value), canvasWidth, canvasHeight);
   };
 
-  applySlider(50);
+  syncOrientationUi();
+  setCentered();
   expectedImg.addEventListener('load', updateLayout);
   actualImg.addEventListener('load', updateLayout);
 
@@ -261,7 +339,41 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
     applySlider(Number(event.target.value));
   });
 
-  wrap.append(input);
+  let isDraggingDivider = false;
+
+  const onPointerMove = (event) => {
+    if (!isDraggingDivider) {
+      return;
+    }
+    setSliderFromPointer(event.clientX, event.clientY);
+  };
+
+  const onPointerUp = () => {
+    if (!isDraggingDivider) {
+      return;
+    }
+    isDraggingDivider = false;
+    window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('pointerup', onPointerUp);
+  };
+
+  const startDrag = (event) => {
+    event.preventDefault();
+    isDraggingDivider = true;
+    setSliderFromPointer(event.clientX, event.clientY);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+  };
+
+  orientationToggle.addEventListener('click', () => {
+    orientation = orientation === 'horizontal' ? 'vertical' : 'horizontal';
+    syncOrientationUi();
+    setCentered();
+  });
+
+  divider.addEventListener('pointerdown', startDrag);
+  sliderContainer.addEventListener('pointerdown', startDrag);
+
   return wrap;
 };
 
