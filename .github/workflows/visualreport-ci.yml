@@ -41,8 +41,9 @@ jobs:
         run: |
           echo "AWS_REGION=${{ vars.AWS_REGION }}" >> $GITHUB_ENV
           echo "S3_VISUAL_REPORTS_BUCKET=${{ vars.S3_VISUAL_REPORTS_BUCKET }}" >> $GITHUB_ENV
-          echo "TARGET_ENV=${{ inputs.target_env }}" >> $GITHUB_ENV
-          echo "VISUAL_REPORT_BASE_PATH=${{ inputs.target_env }}/visual-report" >> $GITHUB_ENV
+          echo "TARGET_ENV=${{ github.event.inputs.target_env || 'dev' }}" >> $GITHUB_ENV
+          echo "VISUAL_REPORT_BASE_PATH=${{ github.event.inputs.target_env || 'dev' }}/visual-report" >> $GITHUB_ENV
+          echo "BASELINE_S3_BASE_PATH=${{ github.event.inputs.target_env || 'dev' }}/visual-baseline/storybook.visual.spec.ts-snapshots" >> $GITHUB_ENV
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
@@ -56,9 +57,32 @@ jobs:
         run: bunx playwright install --with-deps chromium
 
       - name: Run visual tests (baseline mode)
+        id: baseline_tests
         continue-on-error: true
         if: ${{ inputs.update_baseline }}
         run: bun run test:visual:update
+
+      - name: Publish Playwright baseline snapshots to immutable SHA path
+        continue-on-error: true
+        if: ${{ inputs.update_baseline }}
+        run: |
+          aws s3 sync tests/visual/storybook.visual.spec.ts-snapshots/ "s3://${S3_VISUAL_REPORTS_BUCKET}/${BASELINE_S3_BASE_PATH}/${GITHUB_SHA}/" --delete --no-cli-pager
+
+      - name: Publish Playwright baseline snapshots to latest path
+        continue-on-error: true
+        if: ${{ inputs.update_baseline }}
+        run: |
+          aws s3 sync tests/visual/storybook.visual.spec.ts-snapshots/ "s3://${S3_VISUAL_REPORTS_BUCKET}/${BASELINE_S3_BASE_PATH}/latest/" --delete --no-cli-pager
+
+      - name: Download Playwright baseline snapshots from S3 latest
+        if: ${{ !inputs.update_baseline }}
+        run: |
+          if ! aws s3 ls "s3://${S3_VISUAL_REPORTS_BUCKET}/${BASELINE_S3_BASE_PATH}/latest/" --no-cli-pager >/dev/null 2>&1; then
+            echo "::error::No baseline snapshots found at s3://${S3_VISUAL_REPORTS_BUCKET}/${BASELINE_S3_BASE_PATH}/latest/. Run baseline mode first (update_baseline=true)."
+            exit 1
+          fi
+          mkdir -p tests/visual/storybook.visual.spec.ts-snapshots/
+          aws s3 sync "s3://${S3_VISUAL_REPORTS_BUCKET}/${BASELINE_S3_BASE_PATH}/latest/" tests/visual/storybook.visual.spec.ts-snapshots/ --delete --no-cli-pager
 
       - name: Run visual tests (compare mode)
         continue-on-error: true
@@ -80,6 +104,8 @@ jobs:
         run: |
           IMMUTABLE_URL="https://${S3_VISUAL_REPORTS_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${VISUAL_REPORT_BASE_PATH}/${GITHUB_SHA}/index.html"
           LATEST_URL="https://${S3_VISUAL_REPORTS_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${VISUAL_REPORT_BASE_PATH}/latest/index.html"
+          BASELINE_IMMUTABLE_URL="s3://${S3_VISUAL_REPORTS_BUCKET}/${BASELINE_S3_BASE_PATH}/${GITHUB_SHA}/"
+          BASELINE_LATEST_URL="s3://${S3_VISUAL_REPORTS_BUCKET}/${BASELINE_S3_BASE_PATH}/latest/"
           echo "Immutable report URL: ${IMMUTABLE_URL}"
           echo "Latest report URL: ${LATEST_URL}"
           {
@@ -88,4 +114,6 @@ jobs:
             echo "- Baseline mode: ${{ inputs.update_baseline }}"
             echo "- Immutable: ${IMMUTABLE_URL}"
             echo "- Latest: ${LATEST_URL}"
+            echo "- Baseline immutable snapshot path: ${BASELINE_IMMUTABLE_URL}"
+            echo "- Baseline latest snapshot path: ${BASELINE_LATEST_URL}"
           } >> "$GITHUB_STEP_SUMMARY"
