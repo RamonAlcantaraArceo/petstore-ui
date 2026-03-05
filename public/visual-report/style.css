@@ -146,34 +146,39 @@ body {
 }
 
 .slider-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border: 1px solid #1f2937;
   border-radius: 8px;
   overflow: hidden;
   background: #0b1220;
+  padding: 12px;
 }
 
 .image-slider {
   position: relative;
-  display: inline-block;
-  max-width: 100%;
+  display: flex;
+  flex: none;
+  overflow: hidden;
 }
 
 .image-slider img {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: block;
-  max-width: 100%;
-  height: auto;
+  max-width: none;
+  user-select: none;
+  pointer-events: none;
 }
 
 .image-actual {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
   overflow: hidden;
-}
-
-.image-actual img {
-  width: 100%;
-  height: auto;
-  max-width: none;
 }
 
 .slider-divider {
@@ -187,7 +192,13 @@ body {
 
 .slider-input {
   width: 100%;
+  margin-top: 10px;
+}
+
+.slider-note {
   margin-top: 8px;
+  color: #9ca3af;
+  font-size: 0.78rem;
 }
 
 .empty {
