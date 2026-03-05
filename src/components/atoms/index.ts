@@ -1,6 +1,6 @@
 /**
  * Atomic Components
- * 
+ *
  * Basic building blocks of the design system.
  * These components are the smallest reusable units that compose larger interfaces.
  */
@@ -8,7 +8,7 @@
 export { Button } from './Button';
 export type { ButtonProps } from './Button';
 
-export { Input } from './Input'; 
+export { Input } from './Input';
 export type { InputProps } from './Input';
 
 export { Card } from './Card';
@@ -28,6 +28,15 @@ export type { TableProps, TableColumn } from './Table';
 
 export { Tabs } from './Tabs';
 export type { TabsProps, TabItem } from './Tabs';
+
+export { VisualStatusBadge } from './VisualStatusBadge';
+export type { VisualStatusBadgeProps } from './VisualStatusBadge';
+
+export { VisualStatusChip } from './VisualStatusChip';
+export type { VisualStatusChipProps } from './VisualStatusChip';
+
+export { VisualFilterButton } from './VisualFilterButton';
+export type { VisualFilterButtonProps } from './VisualFilterButton';
 
 // Re-export default exports for alternative import patterns
 export { default as ButtonComponent } from './Button';

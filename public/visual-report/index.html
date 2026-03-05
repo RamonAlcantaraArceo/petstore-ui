@@ -4,31 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Visual Report</title>
-    <link rel="stylesheet" href="/visual-report/style.css" />
   </head>
   <body>
-    <main class="layout">
+    <link rel="stylesheet" href="/visual-report/style.css" />
+    <div class="layout">
       <aside class="sidebar">
-        <header class="sidebar-header">
-          <h1>Visual Report</h1>
-          <p id="meta">Loading…</p>
-        </header>
-        <div id="tree" class="tree" aria-label="Component hierarchy"></div>
+        <div id="meta"></div>
+        <nav id="tree"></nav>
       </aside>
-
-      <section class="content">
-        <div class="content-toolbar">
-          <div id="status-filters" class="status-filters" aria-label="Status filters"></div>
+      <main class="main">
+        <div class="status-filters-sticky">
+          <button id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">🌙</button>
+          <div id="status-filters"></div>
         </div>
-
-        <header class="content-header">
-          <h2 id="selection-title">Select a component</h2>
-          <p id="selection-subtitle">Choose a component on the left to view all story variants.</p>
+        <header>
+          <h1 id="selection-title"></h1>
+          <div id="selection-subtitle"></div>
         </header>
-        <div id="variants" class="variants"></div>
-      </section>
-    </main>
-
+        <section id="variants"></section>
+      </main>
+    </div>
     <script type="module" src="/visual-report/app.js"></script>
+    <script type="module" src="/visual-report/theme-toggle.js"></script>
   </body>
 </html>
