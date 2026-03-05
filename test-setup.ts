@@ -1,27 +1,39 @@
-import { afterEach } from 'vitest';
+import { beforeEach, afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 
 // ---------------------------------------------------------------------------
-// Auto-cleanup after each test to prevent DOM contamination across files
+// Suppress React / testing-library noise via a scoped console.error spy
 // ---------------------------------------------------------------------------
-afterEach(() => {
-  cleanup();
+const originalConsoleError = console.error;
+let consoleErrorMock: ReturnType<typeof vi.spyOn> | undefined;
+
+beforeEach(() => {
+  consoleErrorMock = vi
+    .spyOn(console, 'error')
+    .mockImplementation((...args: unknown[]) => {
+      const message = typeof args[0] === 'string' ? args[0] : '';
+      if (
+        message.includes('Warning:') ||
+        message.includes('ReactDOM.render') ||
+        message.includes('act(')
+      ) {
+        return;
+      }
+      // Forward non-filtered messages to the original implementation
+      originalConsoleError(...(args as Parameters<typeof originalConsoleError>));
+    });
 });
 
 // ---------------------------------------------------------------------------
-// Suppress React / testing-library noise
+// Auto-cleanup after each test to prevent DOM contamination across files
+// and restore console.error spy
 // ---------------------------------------------------------------------------
-const originalConsoleError = console.error;
-console.error = (...args: unknown[]) => {
-  const message = typeof args[0] === 'string' ? args[0] : '';
-  if (
-    message.includes('Warning:') ||
-    message.includes('ReactDOM.render') ||
-    message.includes('act(')
-  ) {
-    return;
+afterEach(() => {
+  cleanup();
+  if (consoleErrorMock) {
+    consoleErrorMock.mockRestore();
+    consoleErrorMock = undefined;
   }
-  originalConsoleError(...args);
-};
+});
 
 export {};

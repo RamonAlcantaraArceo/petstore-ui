@@ -90,7 +90,7 @@ import { auditAccessibility, testKeyboardNavigation } from '../../testing/a11y-u
 ```bash
 bun run test               # all tests
 bun run test:coverage      # with coverage report
-bun test src/components/atoms/Button.test.tsx  # single file
+bun run test -- src/components/atoms/Button.test.tsx  # single file
 ```
 
 Coverage target: **≥ 80% line coverage**.
