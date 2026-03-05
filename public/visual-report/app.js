@@ -9,6 +9,15 @@ const variantsElement = document.getElementById('variants');
 const selectionTitle = document.getElementById('selection-title');
 const selectionSubtitle = document.getElementById('selection-subtitle');
 
+const getAssetUrl = (url) => {
+  if (!url || !state.data?.generatedAt) {
+    return url;
+  }
+
+  const separator = url.includes('?') ? '&' : '?';
+  return `${url}${separator}v=${encodeURIComponent(state.data.generatedAt)}`;
+};
+
 const getComponentKey = (item) => `${item.namespace}::${item.atomicLevel}::${item.component}`;
 
 const groupByComponent = (components) => {
@@ -72,14 +81,14 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
   sliderContainer.className = 'image-slider';
 
   const expectedImg = document.createElement('img');
-  expectedImg.src = expectedUrl;
+  expectedImg.src = getAssetUrl(expectedUrl);
   expectedImg.alt = `${altText} expected`;
 
   const actualLayer = document.createElement('div');
   actualLayer.className = 'image-actual';
 
   const actualImg = document.createElement('img');
-  actualImg.src = actualUrl;
+  actualImg.src = getAssetUrl(actualUrl);
   actualImg.alt = `${altText} actual`;
 
   const divider = document.createElement('div');
@@ -97,7 +106,8 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
   input.value = '50';
 
   const applySlider = (value) => {
-    actualLayer.style.width = `${value}%`;
+    actualLayer.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
+    actualLayer.style.webkitClipPath = `inset(0 ${100 - value}% 0 0)`;
     divider.style.left = `${value}%`;
   };
 

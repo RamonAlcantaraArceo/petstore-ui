@@ -130,35 +130,20 @@ test.describe('Storybook visual regression', () => {
         await document.fonts.ready;
       });
 
-      const canvasLocator = page
-        .locator('#storybook-root > *:not(script), #docs-root > *:not(script)')
-        .first();
+      const projectName = sanitizeVariantName(testInfo.project.name);
+      const baseName = `${entry.id}--${projectName}`;
 
-      await expect(canvasLocator).toBeVisible();
-      const canvasBox = await canvasLocator.boundingBox();
-
-      if (canvasBox) {
-        const clip = {
-          x: Math.max(0, Math.floor(canvasBox.x)),
-          y: Math.max(0, Math.floor(canvasBox.y)),
-          width: Math.max(1, Math.ceil(canvasBox.width)),
-          height: Math.max(1, Math.ceil(canvasBox.height)),
-        };
-
-        const projectName = sanitizeVariantName(testInfo.project.name);
-        const baseName = `${entry.id}--${projectName}`;
-
-        const expectedSnapshotPath = findExpectedSnapshotPath(entry.id, projectName);
-        if (expectedSnapshotPath) {
-          copyFileSync(expectedSnapshotPath, resolve(EXPECTED_DIR, `${baseName}.png`));
-        }
-
-        await page.screenshot({
-          path: resolve(ACTUAL_DIR, `${baseName}.png`),
-          clip,
-          animations: 'disabled',
-        });
+      const expectedSnapshotPath = findExpectedSnapshotPath(entry.id, projectName);
+      if (expectedSnapshotPath) {
+        copyFileSync(expectedSnapshotPath, resolve(EXPECTED_DIR, `${baseName}.png`));
       }
+
+      await page.screenshot({
+        path: resolve(ACTUAL_DIR, `${baseName}.png`),
+        fullPage: false,
+        animations: 'disabled',
+        caret: 'hide',
+      });
 
         await expect(page).toHaveScreenshot(`${entry.id}.png`, { fullPage: false });
       });
