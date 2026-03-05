@@ -235,7 +235,6 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  bottom: 0;
   overflow: hidden;
 }
 
@@ -245,16 +244,107 @@ body {
   bottom: 0;
   width: 2px;
   background: #60a5fa;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: ew-resize;
+  z-index: 5;
+}
+
+.slider-divider.is-vertical {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: auto;
+  width: auto;
+  height: 2px;
+  cursor: ns-resize;
 }
 
 .slider-input {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  margin-top: 10px;
+  height: 100%;
+  margin: 0;
+  z-index: 4;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.slider-input:focus {
+  outline: none;
+}
+
+.image-slider:focus-within {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+.slider-controls {
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.slider-orientation-toggle {
+  border: 1px solid #374151;
+  background: #111827;
+  color: #d1d5db;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.slider-orientation-toggle:hover {
+  border-color: #4b5563;
+  color: #f3f4f6;
+}
+
+.slider-orientation-toggle:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+.slider-input::-webkit-slider-runnable-track {
+  height: 2px;
+  background: rgba(96, 165, 250, 0.7);
+  border-radius: 999px;
+}
+
+.slider-input::-moz-range-track {
+  height: 2px;
+  background: rgba(96, 165, 250, 0.7);
+  border-radius: 999px;
+}
+
+.slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid #60a5fa;
+  background: #0b1220;
+  margin-top: -5px;
+}
+
+.slider-input::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid #60a5fa;
+  background: #0b1220;
 }
 
 .slider-note {
-  margin-top: 8px;
+  margin-top: 0;
   color: #9ca3af;
   font-size: 0.78rem;
 }
