@@ -27,7 +27,7 @@ const FILTER_ICONS = {
   failed: '❌',
   flaky: '⚠️',
   skipped: '⏭️',
-  unknown: '❔',
+  unknown: '?',
 };
 const TREE_STATUS_ORDER = ['failed', 'flaky', 'unknown', 'skipped', 'passed'];
 const STATUS_ICONS = {
@@ -35,7 +35,7 @@ const STATUS_ICONS = {
   failed: '❌',
   flaky: '⚠️',
   skipped: '⏭️',
-  unknown: '❔',
+  unknown: '?',
 };
 const COMPARISON_MODES = [
   { value: 'diff', label: 'Diff' },
@@ -785,6 +785,7 @@ const renderVariants = () => {
 };
 
 const renderTree = () => {
+  treeElement.className = 'tree';
   treeElement.innerHTML = '';
 
   const filteredGroups = getFilteredComponentGroups();
@@ -805,9 +806,11 @@ const renderTree = () => {
     }
 
     const namespaceDetails = document.createElement('details');
+    namespaceDetails.className = 'tree-group tree-group-namespace';
     namespaceDetails.open = true;
 
     const namespaceSummary = document.createElement('summary');
+    namespaceSummary.className = 'tree-summary tree-summary-namespace';
     namespaceSummary.append(createTreeLabel(namespace, namespaceCounts));
     const namespaceBreakdown = formatStatusBreakdown(namespaceCounts);
     if (namespaceBreakdown) {
@@ -823,9 +826,11 @@ const renderTree = () => {
       }
 
       const levelDetails = document.createElement('details');
+      levelDetails.className = 'tree-group tree-group-level';
       levelDetails.open = true;
 
       const levelSummary = document.createElement('summary');
+      levelSummary.className = 'tree-summary tree-summary-level';
       const levelLabel = `${level} (${groups.length})`;
       levelSummary.append(createTreeLabel(levelLabel, levelCounts));
       const levelBreakdown = formatStatusBreakdown(levelCounts);
@@ -834,7 +839,7 @@ const renderTree = () => {
       }
 
       const list = document.createElement('div');
-      list.className = 'tree-list';
+      list.className = 'tree-list tree-list-components';
 
       for (const group of groups.sort((a, b) => a.component.localeCompare(b.component))) {
         const visibleVariants = getVisibleVariantsForGroup(group);
@@ -843,6 +848,7 @@ const renderTree = () => {
         const componentLabel = `${group.component} (${visibleVariantsCount})`;
 
         const button = document.createElement('button');
+        button.className = 'tree-item';
         button.type = 'button';
         button.append(createTreeLabel(componentLabel, groupCounts));
         const groupBreakdown = formatStatusBreakdown(groupCounts);
