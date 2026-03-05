@@ -17,3 +17,5 @@ junit.xml
 test-results/
 tests/visual/storybook.visual.spec.ts-snapshots/
 playwright-report/
+public/visual-report/data.json
+public/visual-report/assets/

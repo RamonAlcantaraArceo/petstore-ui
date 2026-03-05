@@ -1,0 +1,209 @@
+:root {
+  color-scheme: light dark;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #0b0f14;
+  color: #e8eef7;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid #1f2937;
+  padding: 16px;
+  background: #101722;
+}
+
+.sidebar-header h1 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.sidebar-header p {
+  margin: 6px 0 0;
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.tree {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.tree details {
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 8px;
+  background: #0f172a;
+}
+
+.tree summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tree-list {
+  margin-top: 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.tree button {
+  text-align: left;
+  width: 100%;
+  border: 1px solid #374151;
+  background: #111827;
+  color: #e5e7eb;
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.tree button.active {
+  border-color: #60a5fa;
+  background: #172554;
+}
+
+.content {
+  padding: 16px;
+}
+
+.content-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.content-header p {
+  margin: 6px 0 0;
+  color: #9ca3af;
+}
+
+.variants {
+  margin-top: 16px;
+  display: grid;
+  gap: 14px;
+}
+
+.variant-card {
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  background: #0f172a;
+  padding: 12px;
+}
+
+.variant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.variant-title {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.badge {
+  border-radius: 999px;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border: 1px solid #374151;
+}
+
+.badge.passed {
+  border-color: #16a34a;
+  color: #86efac;
+}
+
+.badge.failed {
+  border-color: #dc2626;
+  color: #fca5a5;
+}
+
+.badge.unknown,
+.badge.skipped {
+  color: #d1d5db;
+}
+
+.slider-wrap {
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0b1220;
+}
+
+.image-slider {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.image-slider img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.image-actual {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.image-actual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.slider-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #60a5fa;
+  pointer-events: none;
+}
+
+.slider-input {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.empty {
+  color: #9ca3af;
+  border: 1px dashed #374151;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #1f2937;
+  }
+}
