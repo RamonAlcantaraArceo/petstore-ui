@@ -2,6 +2,7 @@ const state = {
   data: null,
   selectedKey: null,
   statusFilter: 'all',
+  variantModes: new Map(),
 };
 
 const metaElement = document.getElementById('meta');
@@ -12,6 +13,14 @@ const selectionSubtitle = document.getElementById('selection-subtitle');
 const filtersElement = document.getElementById('status-filters');
 
 const FILTERS = ['all', 'passed', 'failed', 'flaky', 'skipped', 'unknown'];
+const COMPARISON_MODES = [
+  { value: 'diff', label: 'Diff' },
+  { value: 'actual', label: 'Actual' },
+  { value: 'expected', label: 'Expected' },
+  { value: 'side-by-side', label: 'Side by Side' },
+  { value: 'slider', label: 'Slider' },
+];
+const DEFAULT_COMPARISON_MODE = 'slider';
 
 const getAssetUrl = (url) => {
   if (!url || !state.data?.generatedAt) {
@@ -377,6 +386,210 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
   return wrap;
 };
 
+const getVariantMode = (variantKey) => {
+  const activeMode = state.variantModes.get(variantKey);
+  if (COMPARISON_MODES.some((mode) => mode.value === activeMode)) {
+    return activeMode;
+  }
+
+  return DEFAULT_COMPARISON_MODE;
+};
+
+const createMissingState = (message) => {
+  const empty = document.createElement('div');
+  empty.className = 'empty';
+  empty.textContent = message;
+  return empty;
+};
+
+const createImagePanel = ({ imageUrl, altText, missingMessage }) => {
+  const panel = document.createElement('div');
+  panel.className = 'image-panel';
+
+  if (!imageUrl) {
+    panel.append(createMissingState(missingMessage));
+    return panel;
+  }
+
+  const image = document.createElement('img');
+  image.src = getAssetUrl(imageUrl);
+  image.alt = altText;
+  image.draggable = false;
+
+  panel.append(image);
+  return panel;
+};
+
+const createSideBySide = (expectedUrl, actualUrl, baseAltText) => {
+  const container = document.createElement('div');
+  container.className = 'side-by-side';
+
+  const expectedPane = document.createElement('section');
+  expectedPane.className = 'compare-pane';
+  const expectedLabel = document.createElement('h4');
+  expectedLabel.className = 'compare-label';
+  expectedLabel.textContent = 'Expected';
+  expectedPane.append(
+    expectedLabel,
+    createImagePanel({
+      imageUrl: expectedUrl,
+      altText: `${baseAltText} expected`,
+      missingMessage: 'Expected image is not available for this variant.',
+    }),
+  );
+
+  const actualPane = document.createElement('section');
+  actualPane.className = 'compare-pane';
+  const actualLabel = document.createElement('h4');
+  actualLabel.className = 'compare-label';
+  actualLabel.textContent = 'Actual';
+  actualPane.append(
+    actualLabel,
+    createImagePanel({
+      imageUrl: actualUrl,
+      altText: `${baseAltText} actual`,
+      missingMessage: 'Actual image is not available for this variant.',
+    }),
+  );
+
+  container.append(expectedPane, actualPane);
+  return container;
+};
+
+const renderVariantMode = (mode, variant, baseAltText) => {
+  if (mode === 'diff') {
+    return createImagePanel({
+      imageUrl: variant.diff ?? null,
+      altText: `${baseAltText} diff`,
+      missingMessage: 'Diff image is not available for this variant.',
+    });
+  }
+
+  if (mode === 'actual') {
+    return createImagePanel({
+      imageUrl: variant.actual,
+      altText: `${baseAltText} actual`,
+      missingMessage: 'Actual image is not available for this variant.',
+    });
+  }
+
+  if (mode === 'expected') {
+    return createImagePanel({
+      imageUrl: variant.expected,
+      altText: `${baseAltText} expected`,
+      missingMessage: 'Expected image is not available for this variant.',
+    });
+  }
+
+  if (mode === 'side-by-side') {
+    return createSideBySide(variant.expected, variant.actual, baseAltText);
+  }
+
+  return createSlider(variant.expected, variant.actual, baseAltText);
+};
+
+const createModeControls = (variantKey, variant, onModeChange) => {
+  const controls = document.createElement('div');
+  controls.className = 'mode-controls';
+  controls.setAttribute('role', 'tablist');
+  controls.setAttribute('aria-label', 'Comparison mode');
+
+  const idPrefix = `variant-${variantKey.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+  const tabButtons = [];
+  const disabledModes = new Set();
+
+  if (variant.status === 'passed') {
+    disabledModes.add('diff');
+  }
+
+  const enabledModes = COMPARISON_MODES.filter((mode) => !disabledModes.has(mode.value));
+
+  const resolveSelectableMode = (mode) => {
+    if (enabledModes.some((entry) => entry.value === mode)) {
+      return mode;
+    }
+
+    if (enabledModes.some((entry) => entry.value === DEFAULT_COMPARISON_MODE)) {
+      return DEFAULT_COMPARISON_MODE;
+    }
+
+    return enabledModes[0]?.value ?? DEFAULT_COMPARISON_MODE;
+  };
+
+  const updateSelection = (nextMode, focusSelected = false) => {
+    const resolvedMode = resolveSelectableMode(nextMode);
+    state.variantModes.set(variantKey, resolvedMode);
+
+    for (const button of tabButtons) {
+      const selected = button.dataset.mode === resolvedMode;
+      button.setAttribute('aria-selected', selected ? 'true' : 'false');
+      button.tabIndex = selected ? 0 : -1;
+    }
+
+    const selectedButton =
+      tabButtons.find((button) => button.dataset.mode === resolvedMode) ?? null;
+    onModeChange(resolvedMode, selectedButton?.id ?? null);
+
+    if (focusSelected) {
+      selectedButton?.focus();
+    }
+  };
+
+  const moveSelection = (direction) => {
+    const activeMode = resolveSelectableMode(getVariantMode(variantKey));
+    const currentIndex = enabledModes.findIndex((mode) => mode.value === activeMode);
+    if (currentIndex === -1) {
+      updateSelection(DEFAULT_COMPARISON_MODE, true);
+      return;
+    }
+
+    const nextIndex = (currentIndex + direction + enabledModes.length) % enabledModes.length;
+    updateSelection(enabledModes[nextIndex].value, true);
+  };
+
+  for (const mode of COMPARISON_MODES) {
+    const button = document.createElement('button');
+    const isDisabled = disabledModes.has(mode.value);
+    button.type = 'button';
+    button.className = 'mode-tab';
+    button.dataset.mode = mode.value;
+    button.id = `${idPrefix}-tab-${mode.value}`;
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-controls', `${idPrefix}-panel`);
+    button.setAttribute('aria-disabled', isDisabled ? 'true' : 'false');
+    button.disabled = isDisabled;
+    button.textContent = mode.label;
+    button.addEventListener('click', () => {
+      if (isDisabled) {
+        return;
+      }
+      updateSelection(mode.value);
+    });
+    button.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        event.preventDefault();
+        moveSelection(1);
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        moveSelection(-1);
+      } else if (event.key === 'Home') {
+        event.preventDefault();
+        updateSelection(enabledModes[0].value, true);
+      } else if (event.key === 'End') {
+        event.preventDefault();
+        updateSelection(enabledModes[enabledModes.length - 1].value, true);
+      }
+    });
+
+    tabButtons.push(button);
+    controls.append(button);
+  }
+
+  updateSelection(resolveSelectableMode(getVariantMode(variantKey)));
+
+  return controls;
+};
+
 const renderVariants = () => {
   variantsElement.innerHTML = '';
 
@@ -422,12 +635,37 @@ const renderVariants = () => {
       title.className = 'variant-title';
       title.textContent = `${story.name} · ${variant.viewport}`;
 
+      const variantKey = `${story.id}::${variant.viewport}`;
+      const panelId = `variant-${variantKey.replace(/[^a-zA-Z0-9_-]/g, '-')}-panel`;
+      const altTextBase = `${story.name} ${variant.viewport}`;
+
       header.append(title, createStatusBadge(variant.status));
       card.append(header);
 
-      card.append(
-        createSlider(variant.expected, variant.actual, `${story.name} ${variant.viewport}`),
-      );
+      const panel = document.createElement('div');
+      panel.id = panelId;
+      panel.className = 'mode-panel';
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-label', `Comparison preview for ${story.name} ${variant.viewport}`);
+
+      const renderPanel = (mode, tabId) => {
+        panel.innerHTML = '';
+        panel.append(renderVariantMode(mode, variant, altTextBase));
+        if (tabId) {
+          panel.setAttribute('aria-labelledby', tabId);
+        }
+      };
+
+      const controls = createModeControls(variantKey, variant, renderPanel);
+      const activeTab = controls.querySelector('.mode-tab[aria-selected="true"]');
+      const activeMode = activeTab?.dataset.mode ?? getVariantMode(variantKey);
+      if (activeTab) {
+        panel.setAttribute('aria-labelledby', activeTab.id);
+      }
+
+      renderPanel(activeMode, activeTab?.id ?? null);
+
+      card.append(controls, panel);
 
       variantsElement.append(card);
     }

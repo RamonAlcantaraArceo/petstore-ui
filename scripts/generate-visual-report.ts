@@ -4,6 +4,7 @@ import {
   mkdirSync,
   readdirSync,
   readFileSync,
+  statSync,
   rmSync,
   writeFileSync,
 } from 'node:fs';
@@ -44,6 +45,7 @@ interface VariantAsset {
   viewport: string;
   expected: string | null;
   actual: string | null;
+  diff?: string | null;
   status: 'passed' | 'failed' | 'skipped' | 'unknown';
 }
 
@@ -60,12 +62,15 @@ interface ComponentVariant {
 const ROOT = process.cwd();
 const STORYBOOK_INDEX_PATH = resolve(ROOT, 'storybook-static', 'index.json');
 const PLAYWRIGHT_JSON_PATH = resolve(ROOT, 'test-results', 'playwright-report.json');
+const TEST_RESULTS_DIR = resolve(ROOT, 'test-results');
 const EXPECTED_DIR = resolve(ROOT, 'test-results', 'visual-report-artifacts', 'expected');
 const ACTUAL_DIR = resolve(ROOT, 'test-results', 'visual-report-artifacts', 'actual');
+const DIFF_DIR = resolve(ROOT, 'test-results', 'visual-report-artifacts', 'diff');
 const OUTPUT_DIR = resolve(ROOT, 'public', 'visual-report');
 const OUTPUT_ASSETS_DIR = resolve(OUTPUT_DIR, 'assets');
 const OUTPUT_EXPECTED_DIR = resolve(OUTPUT_ASSETS_DIR, 'expected');
 const OUTPUT_ACTUAL_DIR = resolve(OUTPUT_ASSETS_DIR, 'actual');
+const OUTPUT_DIFF_DIR = resolve(OUTPUT_ASSETS_DIR, 'diff');
 const OUTPUT_JSON_PATH = resolve(OUTPUT_DIR, 'data.json');
 
 const KNOWN_ATOMIC_LEVELS = new Set(['atoms', 'molecules', 'organisms']);
@@ -200,6 +205,7 @@ const resetOutputAssets = () => {
   rmSync(OUTPUT_ASSETS_DIR, { recursive: true, force: true });
   mkdirSync(OUTPUT_EXPECTED_DIR, { recursive: true });
   mkdirSync(OUTPUT_ACTUAL_DIR, { recursive: true });
+  mkdirSync(OUTPUT_DIFF_DIR, { recursive: true });
 };
 
 const syncAssetIfExists = (sourcePath: string, outputPath: string) => {
@@ -211,24 +217,160 @@ const syncAssetIfExists = (sourcePath: string, outputPath: string) => {
   return true;
 };
 
+const syncFirstExistingAsset = (sourcePaths: string[], outputPath: string) => {
+  for (const sourcePath of sourcePaths) {
+    if (!existsSync(sourcePath)) {
+      continue;
+    }
+
+    copyFileSync(sourcePath, outputPath);
+    return true;
+  }
+
+  return false;
+};
+
+const walkFiles = (directory: string): string[] => {
+  if (!existsSync(directory)) {
+    return [];
+  }
+
+  const entries = readdirSync(directory);
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = resolve(directory, entry);
+    const stats = statSync(fullPath);
+    if (stats.isDirectory()) {
+      files.push(...walkFiles(fullPath));
+      continue;
+    }
+
+    files.push(fullPath);
+  }
+
+  return files;
+};
+
+const parseViewportFromPath = (filePath: string): string | null => {
+  const marker = '--';
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  const parentDir = normalizedPath.split('/').slice(-2, -1)[0] ?? '';
+  const markerIndex = parentDir.lastIndexOf(marker);
+  if (markerIndex !== -1) {
+    const viewportFromDir = parentDir.slice(markerIndex + marker.length).toLowerCase();
+    if (viewportFromDir) {
+      return viewportFromDir;
+    }
+  }
+
+  const fileName = basename(filePath, '.png');
+  const viewportMatch = fileName.match(/--([a-z0-9_-]+)-diff$/i);
+  if (viewportMatch?.[1]) {
+    return viewportMatch[1].toLowerCase();
+  }
+
+  return null;
+};
+
+const parseStoryIdFromDiffFileName = (filePath: string, viewport: string): string | null => {
+  const fileName = basename(filePath, '.png');
+  const viewportSuffix = `--${viewport}-diff`;
+  if (fileName.endsWith(viewportSuffix)) {
+    return fileName.slice(0, -viewportSuffix.length);
+  }
+
+  const simpleSuffix = '-diff';
+  if (fileName.endsWith(simpleSuffix)) {
+    return fileName.slice(0, -simpleSuffix.length);
+  }
+
+  return null;
+};
+
+const collectDiffArtifacts = (): Map<string, string> => {
+  const byStoryViewport = new Map<string, string>();
+
+  const addDiffAsset = (storyId: string, viewport: string, sourcePath: string) => {
+    const key = `${storyId}::${viewport}`;
+    if (!byStoryViewport.has(key)) {
+      byStoryViewport.set(key, sourcePath);
+    }
+  };
+
+  if (existsSync(DIFF_DIR)) {
+    for (const fileName of readdirSync(DIFF_DIR)) {
+      if (!fileName.endsWith('.png')) {
+        continue;
+      }
+
+      const diffPath = resolve(DIFF_DIR, fileName);
+      const viewportMatch = fileName.match(/--([a-z0-9_-]+)-diff\.png$/i);
+      const viewport = viewportMatch?.[1]?.toLowerCase() ?? null;
+      if (!viewport) {
+        continue;
+      }
+
+      const storyId = fileName.slice(0, -`--${viewport}-diff.png`.length);
+      if (!storyId) {
+        continue;
+      }
+
+      addDiffAsset(storyId, viewport, diffPath);
+    }
+  }
+
+  for (const filePath of walkFiles(TEST_RESULTS_DIR)) {
+    if (!filePath.endsWith('-diff.png')) {
+      continue;
+    }
+
+    const viewport = parseViewportFromPath(filePath);
+    if (!viewport) {
+      continue;
+    }
+
+    const storyId = parseStoryIdFromDiffFileName(filePath, viewport);
+    if (!storyId) {
+      continue;
+    }
+
+    addDiffAsset(storyId, viewport, filePath);
+  }
+
+  return byStoryViewport;
+};
+
 const buildVariantAsset = (
   storyId: string,
   viewport: string,
   statusMap: Map<string, VariantAsset['status']> | undefined,
+  diffArtifacts: Map<string, string>,
 ): VariantAsset => {
   const fileName = `${storyId}--${viewport}.png`;
+  const diffFileName = `${storyId}--${viewport}-diff.png`;
   const expectedPath = resolve(EXPECTED_DIR, fileName);
   const actualPath = resolve(ACTUAL_DIR, fileName);
+  const discoveredDiffPath = diffArtifacts.get(`${storyId}::${viewport}`) ?? null;
+  const diffCandidatePaths = [
+    ...(discoveredDiffPath ? [discoveredDiffPath] : []),
+    resolve(DIFF_DIR, diffFileName),
+    resolve(DIFF_DIR, fileName),
+    resolve(ACTUAL_DIR, diffFileName),
+  ];
   const outputExpectedPath = resolve(OUTPUT_EXPECTED_DIR, fileName);
   const outputActualPath = resolve(OUTPUT_ACTUAL_DIR, fileName);
+  const outputDiffPath = resolve(OUTPUT_DIFF_DIR, diffFileName);
 
   const hasExpected = syncAssetIfExists(expectedPath, outputExpectedPath);
   const hasActual = syncAssetIfExists(actualPath, outputActualPath);
+  const hasDiff = syncFirstExistingAsset(diffCandidatePaths, outputDiffPath);
 
   return {
     viewport,
     expected: hasExpected ? publicPath(`visual-report/assets/expected/${fileName}`) : null,
     actual: hasActual ? publicPath(`visual-report/assets/actual/${fileName}`) : null,
+    diff: hasDiff ? publicPath(`visual-report/assets/diff/${diffFileName}`) : null,
     status: statusMap?.get(viewport) ?? 'unknown',
   };
 };
@@ -251,6 +393,7 @@ const main = () => {
 
   const statuses = collectStatuses(reportJson);
   const viewports = [...collectViewportNames()].sort((left, right) => left.localeCompare(right));
+  const diffArtifacts = collectDiffArtifacts();
 
   resetOutputAssets();
 
@@ -265,7 +408,9 @@ const main = () => {
       namespace: hierarchy.namespace,
       atomicLevel: hierarchy.atomicLevel,
       component: hierarchy.component,
-      variants: viewports.map((viewport) => buildVariantAsset(entry.id, viewport, statusMap)),
+      variants: viewports.map((viewport) =>
+        buildVariantAsset(entry.id, viewport, statusMap, diffArtifacts),
+      ),
     };
   });
 
@@ -285,6 +430,7 @@ const main = () => {
           playwrightJson: existsSync(PLAYWRIGHT_JSON_PATH) ? basename(PLAYWRIGHT_JSON_PATH) : null,
           expectedDir: publicPath('visual-report/assets/expected'),
           actualDir: publicPath('visual-report/assets/actual'),
+          diffDir: publicPath('visual-report/assets/diff'),
         },
         viewports,
         namespaces,
