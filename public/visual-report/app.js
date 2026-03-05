@@ -83,6 +83,7 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
   const expectedImg = document.createElement('img');
   expectedImg.src = getAssetUrl(expectedUrl);
   expectedImg.alt = `${altText} expected`;
+  expectedImg.draggable = false;
 
   const actualLayer = document.createElement('div');
   actualLayer.className = 'image-actual';
@@ -90,13 +91,17 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
   const actualImg = document.createElement('img');
   actualImg.src = getAssetUrl(actualUrl);
   actualImg.alt = `${altText} actual`;
+  actualImg.draggable = false;
+
+  const sizeNote = document.createElement('div');
+  sizeNote.className = 'slider-note';
 
   const divider = document.createElement('div');
   divider.className = 'slider-divider';
 
   actualLayer.append(actualImg);
   sliderContainer.append(expectedImg, actualLayer, divider);
-  wrap.append(sliderContainer);
+  wrap.append(sliderContainer, sizeNote);
 
   const input = document.createElement('input');
   input.className = 'slider-input';
@@ -105,13 +110,62 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
   input.max = '100';
   input.value = '50';
 
-  const applySlider = (value) => {
-    actualLayer.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
-    actualLayer.style.webkitClipPath = `inset(0 ${100 - value}% 0 0)`;
-    divider.style.left = `${value}%`;
+  const applySlider = (value, canvasWidth = sliderContainer.clientWidth) => {
+    const revealWidth = Math.round((Math.max(0, Math.min(100, value)) / 100) * canvasWidth);
+    actualLayer.style.width = `${revealWidth}px`;
+    divider.style.left = `${revealWidth}px`;
+  };
+
+  const updateLayout = () => {
+    if (!expectedImg.naturalWidth || !actualImg.naturalWidth || !wrap.clientWidth) {
+      return;
+    }
+
+    const expectedWidth = expectedImg.naturalWidth;
+    const expectedHeight = expectedImg.naturalHeight;
+    const actualWidth = actualImg.naturalWidth;
+    const actualHeight = actualImg.naturalHeight;
+    const sameSize = expectedWidth === actualWidth && expectedHeight === actualHeight;
+
+    const canvasNaturalWidth = sameSize ? expectedWidth : Math.max(expectedWidth, actualWidth);
+    const canvasNaturalHeight = sameSize ? expectedHeight : Math.max(expectedHeight, actualHeight);
+
+    const availableWidth = Math.max(1, wrap.clientWidth - 24);
+    const scale = Math.min(1, availableWidth / canvasNaturalWidth);
+    const canvasWidth = Math.max(1, Math.round(canvasNaturalWidth * scale));
+    const canvasHeight = Math.max(1, Math.round(canvasNaturalHeight * scale));
+
+    sliderContainer.style.width = `${canvasWidth}px`;
+    sliderContainer.style.height = `${canvasHeight}px`;
+
+    expectedImg.style.width = `${Math.round(expectedWidth * scale)}px`;
+    expectedImg.style.height = `${Math.round(expectedHeight * scale)}px`;
+
+    actualImg.style.width = `${Math.round(actualWidth * scale)}px`;
+    actualImg.style.height = `${Math.round(actualHeight * scale)}px`;
+
+    sizeNote.textContent = sameSize
+      ? `${expectedWidth} × ${expectedHeight}`
+      : `Size mismatch: expected ${expectedWidth}×${expectedHeight}, actual ${actualWidth}×${actualHeight}`;
+
+    applySlider(Number(input.value), canvasWidth);
   };
 
   applySlider(50);
+  expectedImg.addEventListener('load', updateLayout);
+  actualImg.addEventListener('load', updateLayout);
+
+  if (typeof ResizeObserver !== 'undefined') {
+    const resizeObserver = new ResizeObserver(updateLayout);
+    resizeObserver.observe(wrap);
+  } else {
+    window.addEventListener('resize', updateLayout);
+  }
+
+  if (expectedImg.complete && actualImg.complete) {
+    updateLayout();
+  }
+
   input.addEventListener('input', (event) => {
     applySlider(Number(event.target.value));
   });
