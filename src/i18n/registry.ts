@@ -18,7 +18,7 @@ import type {
 export const locales: LocaleRegistry = {
   en,
   chef,
-  debug: debugLocale as any, // Type override for debug
+  debug: debugLocale,
 } as const;
 
 // Locale metadata for UI display
@@ -50,6 +50,22 @@ export const DEFAULT_LOCALE: SupportedLocale = 'en';
 export const RTL_LOCALES: SupportedLocale[] = [];
 
 /**
+ * Format debug-locale output without triggering missing-key warnings.
+ * Returns the key and, when provided, a compact params preview.
+ */
+function formatDebugTranslation(key: TranslationKey | string, params?: TranslationParams): string {
+  if (!params || Object.keys(params).length === 0) {
+    return key;
+  }
+
+  const paramPreview = Object.entries(params)
+    .map(([paramKey, value]) => `${paramKey}=${String(value)}`)
+    .join(', ');
+
+  return `${key} [${paramPreview}]`;
+}
+
+/**
  * Get a translation from a locale object using dot notation key path
  * @param locale The locale data object
  * @param key The translation key using dot notation
@@ -61,15 +77,27 @@ export function getTranslation(
   key: TranslationKey | string,
   params?: TranslationParams,
 ): string {
+  // Debug locale intentionally returns keys directly (with optional params)
+  // to avoid warning spam when enumerating arbitrary translation paths.
+  if (locale === locales.debug) {
+    return formatDebugTranslation(key, params);
+  }
+
   try {
     // Split the key by dots to traverse the object
     const keyParts = key.split('.');
-    let value: any = locale;
+    let value: unknown = locale;
 
     // Traverse the nested object
     for (const part of keyParts) {
-      if (value && typeof value === 'object' && part in value) {
-        value = value[part];
+      if (
+        value &&
+        typeof value === 'object' &&
+        value !== null &&
+        Object.prototype.hasOwnProperty.call(value, part)
+      ) {
+        // Safe to index
+        value = (value as Record<string, unknown>)[part];
       } else {
         // Key not found, return the key itself as fallback
         console.warn(`Translation key "${key}" not found in locale`);
@@ -161,11 +189,16 @@ export function getLocaleMetadata(locale: SupportedLocale) {
 export function validateTranslationKey(key: string): boolean {
   try {
     const keyParts = key.split('.');
-    let value: any = locales[DEFAULT_LOCALE];
+    let value: unknown = locales[DEFAULT_LOCALE];
 
     for (const part of keyParts) {
-      if (value && typeof value === 'object' && part in value) {
-        value = value[part];
+      if (
+        value &&
+        typeof value === 'object' &&
+        value !== null &&
+        Object.prototype.hasOwnProperty.call(value, part)
+      ) {
+        value = (value as Record<string, unknown>)[part];
       } else {
         return false;
       }
@@ -184,18 +217,25 @@ export function validateTranslationKey(key: string): boolean {
  */
 export function getTranslationKeysInNamespace(namespace: string): string[] {
   const namespaceParts = namespace.split('.');
-  let value: any = locales[DEFAULT_LOCALE];
+  let value: unknown = locales[DEFAULT_LOCALE];
 
   for (const part of namespaceParts) {
-    if (value && typeof value === 'object' && part in value) {
-      value = value[part];
+    if (
+      value &&
+      typeof value === 'object' &&
+      value !== null &&
+      Object.prototype.hasOwnProperty.call(value, part)
+    ) {
+      value = (value as Record<string, unknown>)[part];
     } else {
       return [];
     }
   }
 
-  if (typeof value === 'object') {
-    return Object.keys(value).filter((key) => typeof value[key] === 'string');
+  if (value && typeof value === 'object' && value !== null) {
+    return Object.keys(value).filter(
+      (key) => typeof (value as Record<string, unknown>)[key] === 'string',
+    );
   }
 
   return [];

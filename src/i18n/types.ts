@@ -10,7 +10,13 @@ import type { ChefLocale } from './locales/chef';
 export type SupportedLocale = 'en' | 'chef' | 'debug';
 
 // Union type of all locale objects
-export type LocaleData = EnLocale | ChefLocale | Record<string, any>;
+/**
+ * Type for a single locale's translation data
+ *
+ * Use `unknown` for values to avoid propagating `any`.
+ */
+export type DebugLocale = Record<string, unknown>;
+export type LocaleData = EnLocale | ChefLocale | DebugLocale;
 
 // Extract all possible translation keys from the English locale
 export type TranslationKeyPath<T, P extends string = ''> = {
@@ -18,7 +24,7 @@ export type TranslationKeyPath<T, P extends string = ''> = {
     ? P extends ''
       ? K
       : `${P}.${string & K}`
-    : T[K] extends Record<string, any>
+    : T[K] extends Record<string, unknown>
       ? TranslationKeyPath<T[K], P extends '' ? string & K : `${P}.${string & K}`>
       : never;
 }[keyof T];
@@ -71,7 +77,7 @@ export type ChefLocaleValidation = LocaleStructureCheck<{
 export interface LocaleRegistry {
   en: EnLocale;
   chef: ChefLocale;
-  debug: Record<string, any>;
+  debug: DebugLocale;
 }
 
 // Common translation patterns
