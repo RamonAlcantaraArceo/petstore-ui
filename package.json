@@ -29,6 +29,9 @@
     "test:visual:atoms": "bun run build-storybook && STORY_FILTER=atoms- npx playwright test --config=playwright.config.ts",
     "test:visual:petstore": "bun run build-storybook && STORY_FILTER=petstore- npx playwright test --config=playwright.config.ts",
     "test:visual:update": "bun run build-storybook && playwright test --config=playwright.config.ts --update-snapshots",
+    "report:visual:build": "bun run scripts/generate-visual-report.ts",
+    "report:visual": "bun run test:visual && bun run report:visual:build",
+    "report:visual:triage:petstore-atoms": "bun run scripts/run-visual-atoms-triage.ts",
     "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run --coverage --reporter=default --reporter=junit",
     "postinstall": "npx playwright install --with-deps"

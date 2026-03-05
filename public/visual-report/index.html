@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visual Report</title>
+    <link rel="stylesheet" href="/visual-report/style.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <aside class="sidebar">
+        <header class="sidebar-header">
+          <h1>Visual Report</h1>
+          <p id="meta">Loading…</p>
+        </header>
+        <div id="tree" class="tree" aria-label="Component hierarchy"></div>
+      </aside>
+
+      <section class="content">
+        <header class="content-header">
+          <h2 id="selection-title">Select a component</h2>
+          <p id="selection-subtitle">Choose a component on the left to view all story variants.</p>
+        </header>
+        <div id="variants" class="variants"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/visual-report/app.js"></script>
+  </body>
+</html>

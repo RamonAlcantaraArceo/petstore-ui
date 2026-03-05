@@ -46,8 +46,16 @@ export default defineConfig({
   retries: isCI ? 2 : 0,
   workers: isCI ? 2 : undefined,
   reporter: isCI
-    ? [['github'], ['html', { open: 'never' }]]
-    : [['list'], ['html', { open: 'always' }]],
+    ? [
+        ['github'],
+        ['html', { open: 'never' }],
+        ['json', { outputFile: 'test-results/playwright-report.json' }],
+      ]
+    : [
+        ['list'],
+        ['html', { open: 'always' }],
+        ['json', { outputFile: 'test-results/playwright-report.json' }],
+      ],
   use: {
     baseURL: 'http://127.0.0.1:4000',
     headless: true,

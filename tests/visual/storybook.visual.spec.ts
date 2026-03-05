@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { expect, test } from '@playwright/test';
@@ -29,58 +29,136 @@ if (existsSync(storybookIndexPath)) {
   storybookIndexError = `Storybook index not found at ${storybookIndexPath}. Run \"bun run build-storybook\" before visual tests.`;
 }
 
-// Only define tests if index is available
-if (storybookIndexError) {
-  test.describe('Storybook visual regression', () => {
-    test.skip(true, storybookIndexError);
-    test('storybook index missing', async () => {
-      // This test is always skipped
+const indexJson = readFileSync(storybookIndexPath, 'utf-8');
+const parsedIndex = JSON.parse(indexJson) as StorybookIndex;
+
+const VISUAL_REPORT_ARTIFACTS_DIR = resolve(
+  process.cwd(),
+  'test-results',
+  'visual-report-artifacts',
+);
+const EXPECTED_DIR = resolve(VISUAL_REPORT_ARTIFACTS_DIR, 'expected');
+const ACTUAL_DIR = resolve(VISUAL_REPORT_ARTIFACTS_DIR, 'actual');
+
+const ensureVisualArtifactDirs = () => {
+  mkdirSync(EXPECTED_DIR, { recursive: true });
+  mkdirSync(ACTUAL_DIR, { recursive: true });
+};
+
+const sanitizeVariantName = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-_]/g, '');
+
+const findExpectedSnapshotPath = (entryId: string, projectName: string): string | null => {
+  const snapshotsDir = resolve(
+    process.cwd(),
+    'tests',
+    'visual',
+    'storybook.visual.spec.ts-snapshots',
+  );
+  if (!existsSync(snapshotsDir)) {
+    return null;
+  }
+
+  const variants = [
+    `${entryId}-${projectName}-${process.platform}.png`,
+    `${entryId}-${projectName}.png`,
+    `${entryId}.png`,
+  ];
+
+  for (const candidate of variants) {
+    const candidatePath = resolve(snapshotsDir, candidate);
+    if (existsSync(candidatePath)) {
+      return candidatePath;
+    }
+  }
+
+  return null;
+};
+
+// Support filtering by STORY_FILTER env variable (prefix match on id or title)
+const STORY_FILTER = process.env.STORY_FILTER;
+const allEntries = Object.values(parsedIndex.entries).sort((left, right) =>
+  left.id.localeCompare(right.id),
+);
+// Exclude docs entries from visual regression
+const storyEntries = (
+  STORY_FILTER
+    ? allEntries.filter(
+        (entry) =>
+          entry.id.startsWith(STORY_FILTER) ||
+          entry.title.toLowerCase().startsWith(STORY_FILTER.toLowerCase()),
+      )
+    : allEntries
+).filter((entry) => entry.type !== 'docs');
+
+test.describe('Storybook visual regression', () => {
+  test.beforeAll(() => {
+    ensureVisualArtifactDirs();
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await page.addStyleTag({
+      content: `
+        *, *::before, *::after {
+          animation: none !important;
+          transition: none !important;
+          caret-color: transparent !important;
+        }
+      `,
     });
   });
-} else if (parsedIndex) {
-  // Support filtering by STORY_FILTER env variable (prefix match on id or title)
-  const STORY_FILTER = process.env.STORY_FILTER;
-  const allEntries = Object.values(parsedIndex.entries).sort((left, right) =>
-    left.id.localeCompare(right.id),
-  );
-  // Exclude docs entries from visual regression
-  const storyEntries = (
-    STORY_FILTER
-      ? allEntries.filter(
-          (entry) =>
-            entry.id.startsWith(STORY_FILTER) ||
-            entry.title.toLowerCase().startsWith(STORY_FILTER.toLowerCase()),
-        )
-      : allEntries
-  ).filter((entry) => entry.type !== 'docs');
 
-  test.describe('Storybook visual regression', () => {
-    test.beforeEach(async ({ page }) => {
-      await page.addStyleTag({
-        content: `
-          *, *::before, *::after {
-            animation: none !important;
-            transition: none !important;
-            caret-color: transparent !important;
-          }
-        `,
-      });
-    });
-
-    for (const entry of storyEntries) {
-      test(`${entry.id} (${entry.type ?? 'unknown'})`, async ({ page }) => {
-        const iframeUrl = `/storybook/iframe.html?id=${encodeURIComponent(entry.id)}&viewMode=${entry.type === 'docs' ? 'docs' : 'story'}`;
+  for (const entry of storyEntries) {
+    test(`${entry.id} (${entry.type ?? 'unknown'})`, async ({ page }, testInfo) => {
+      const iframeUrl = `/storybook/iframe.html?id=${encodeURIComponent(entry.id)}&viewMode=${entry.type === 'docs' ? 'docs' : 'story'}`;
 
         await page.goto(iframeUrl, { waitUntil: 'domcontentloaded' });
         await page.waitForLoadState('networkidle');
 
-        await page.waitForFunction(() => {
-          const docsRoot = document.getElementById('docs-root');
-          const storyRoot = document.getElementById('storybook-root');
-          const docsReady = !!docsRoot && docsRoot.childElementCount > 0;
-          const storyReady = !!storyRoot && storyRoot.childElementCount > 0;
-          return docsReady || storyReady;
+      await page.waitForFunction(() => {
+        const docsRoot = document.getElementById('docs-root');
+        const storyRoot = document.getElementById('storybook-root');
+        const docsReady = !!docsRoot && docsRoot.childElementCount > 0;
+        const storyReady = !!storyRoot && storyRoot.childElementCount > 0;
+        return docsReady || storyReady;
+      });
+
+      await page.evaluate(async () => {
+        await document.fonts.ready;
+      });
+
+      const canvasLocator = page
+        .locator('#storybook-root > *:not(script), #docs-root > *:not(script)')
+        .first();
+
+      await expect(canvasLocator).toBeVisible();
+      const canvasBox = await canvasLocator.boundingBox();
+
+      if (canvasBox) {
+        const clip = {
+          x: Math.max(0, Math.floor(canvasBox.x)),
+          y: Math.max(0, Math.floor(canvasBox.y)),
+          width: Math.max(1, Math.ceil(canvasBox.width)),
+          height: Math.max(1, Math.ceil(canvasBox.height)),
+        };
+
+        const projectName = sanitizeVariantName(testInfo.project.name);
+        const baseName = `${entry.id}--${projectName}`;
+
+        const expectedSnapshotPath = findExpectedSnapshotPath(entry.id, projectName);
+        if (expectedSnapshotPath) {
+          copyFileSync(expectedSnapshotPath, resolve(EXPECTED_DIR, `${baseName}.png`));
+        }
+
+        await page.screenshot({
+          path: resolve(ACTUAL_DIR, `${baseName}.png`),
+          clip,
+          animations: 'disabled',
         });
+      }
 
         await expect(page).toHaveScreenshot(`${entry.id}.png`, { fullPage: false });
       });
