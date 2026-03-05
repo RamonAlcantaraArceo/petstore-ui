@@ -61,15 +61,6 @@ entry = [
 # Output directory
 outdir = "./dist"
 
-[test]
-# Test runner configuration
-preload = ["./test-setup.ts"]
-timeout = 5000
-
-# Coverage settings
-coverage = true
-coverageDir = "./coverage"
-
 [macros]
 # Enable React JSX transform
 # Note: Bun handles JSX automatically, this section is for future macro expansions

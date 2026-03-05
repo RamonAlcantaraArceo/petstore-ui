@@ -7,18 +7,24 @@ import type { EnLocale } from './locales/en';
 import type { ChefLocale } from './locales/chef';
 
 // Supported locale codes
-export type SupportedLocale = 'en' | 'chef';
+export type SupportedLocale = 'en' | 'chef' | 'debug';
 
 // Union type of all locale objects
-export type LocaleData = EnLocale | ChefLocale;
+/**
+ * Type for a single locale's translation data
+ *
+ * Use `unknown` for values to avoid propagating `any`.
+ */
+export type DebugLocale = Record<string, unknown>;
+export type LocaleData = EnLocale | ChefLocale | DebugLocale;
 
 // Extract all possible translation keys from the English locale
 export type TranslationKeyPath<T, P extends string = ''> = {
-  [K in keyof T]: T[K] extends string 
-    ? P extends '' 
-      ? K 
+  [K in keyof T]: T[K] extends string
+    ? P extends ''
+      ? K
       : `${P}.${string & K}`
-    : T[K] extends Record<string, any>
+    : T[K] extends Record<string, unknown>
       ? TranslationKeyPath<T[K], P extends '' ? string & K : `${P}.${string & K}`>
       : never;
 }[keyof T];
@@ -34,7 +40,7 @@ export interface TranslationParams {
 // Translation function type
 export type TranslationFunction = (
   key: TranslationKey | string,
-  params?: TranslationParams
+  params?: TranslationParams,
 ) => string;
 
 // Locale context types
@@ -71,6 +77,7 @@ export type ChefLocaleValidation = LocaleStructureCheck<{
 export interface LocaleRegistry {
   en: EnLocale;
   chef: ChefLocale;
+  debug: DebugLocale;
 }
 
 // Common translation patterns

@@ -1,0 +1,7 @@
+node_modules
+storybook-static
+petstore/dist
+public/dist
+coverage
+.bun
+dist

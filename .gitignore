@@ -11,3 +11,9 @@ storybook-static/
 !petstore/dist/
 !petstore/dist/index.html
 !petstore/dist/index.js
+
+coverage/
+junit.xml
+test-results/
+tests/visual/storybook.visual.spec.ts-snapshots/
+playwright-report/
