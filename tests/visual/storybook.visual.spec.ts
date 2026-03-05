@@ -29,9 +29,6 @@ if (existsSync(storybookIndexPath)) {
   storybookIndexError = `Storybook index not found at ${storybookIndexPath}. Run \"bun run build-storybook\" before visual tests.`;
 }
 
-const indexJson = readFileSync(storybookIndexPath, 'utf-8');
-const parsedIndex = JSON.parse(indexJson) as StorybookIndex;
-
 const VISUAL_REPORT_ARTIFACTS_DIR = resolve(
   process.cwd(),
   'test-results',
@@ -115,8 +112,8 @@ test.describe('Storybook visual regression', () => {
     test(`${entry.id} (${entry.type ?? 'unknown'})`, async ({ page }, testInfo) => {
       const iframeUrl = `/storybook/iframe.html?id=${encodeURIComponent(entry.id)}&viewMode=${entry.type === 'docs' ? 'docs' : 'story'}`;
 
-        await page.goto(iframeUrl, { waitUntil: 'domcontentloaded' });
-        await page.waitForLoadState('networkidle');
+      await page.goto(iframeUrl, { waitUntil: 'domcontentloaded' });
+      await page.waitForLoadState('networkidle');
 
       await page.waitForFunction(() => {
         const docsRoot = document.getElementById('docs-root');
