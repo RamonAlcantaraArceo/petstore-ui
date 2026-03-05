@@ -138,15 +138,37 @@ test.describe('Storybook visual regression', () => {
         copyFileSync(expectedSnapshotPath, resolve(EXPECTED_DIR, `${baseName}.png`));
       }
 
-      await page.screenshot({
-        path: resolve(ACTUAL_DIR, `${baseName}.png`),
+      const actualArtifactPath = resolve(ACTUAL_DIR, `${baseName}.png`);
+      let assertionError: unknown = null;
+      try {
+        await expect(page).toHaveScreenshot(`${entry.id}.png`, {
+          fullPage: false,
+          scale: 'css',
+          maxDiffPixels: 0,
+          threshold: 0,
+        });
+      } catch (error) {
+        assertionError = error;
+      }
+
+      // Always take the screenshot
+      const screenshotBuffer = await page.screenshot({
+        path: actualArtifactPath,
         fullPage: false,
         animations: 'disabled',
         caret: 'hide',
+        scale: 'css',
       });
 
-        await expect(page).toHaveScreenshot(`${entry.id}.png`, { fullPage: false });
+      if (assertionError) {
+        throw assertionError;
+      }
+
+      // Attach actual screenshot to test report on success too
+      await testInfo.attach('actual-screenshot', {
+        body: screenshotBuffer,
+        contentType: 'image/png',
       });
-    }
-  });
-}
+    });
+  }
+});

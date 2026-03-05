@@ -3,11 +3,17 @@ const args = new Set(process.argv.slice(2));
 const shouldSkipBuild = args.has('--skip-build');
 const shouldSkipTests = args.has('--skip-tests');
 const shouldUpdateSnapshots = args.has('--update-snapshots');
+const shouldFailOnError = args.has('--fail-on-error');
 
 interface Step {
   label: string;
   cmd: string[];
   env?: Record<string, string>;
+}
+
+interface FailedStep {
+  label: string;
+  exitCode: number;
 }
 
 const steps: Step[] = [];
@@ -40,7 +46,7 @@ steps.push({
   cmd: ['bun', 'run', 'report:visual:build'],
 });
 
-const runStep = (step: Step) => {
+const runStep = (step: Step): number => {
   console.log(`\n▶ ${step.label}`);
   console.log(`$ ${step.cmd.join(' ')}`);
 
@@ -55,14 +61,31 @@ const runStep = (step: Step) => {
     stderr: 'inherit',
   });
 
-  if (result.exitCode !== 0) {
-    process.exit(result.exitCode ?? 1);
-  }
+  return result.exitCode ?? 1;
 };
 
+const failedSteps: FailedStep[] = [];
+
 for (const step of steps) {
-  runStep(step);
+  const exitCode = runStep(step);
+  if (exitCode !== 0) {
+    failedSteps.push({
+      label: step.label,
+      exitCode,
+    });
+  }
 }
 
-console.log('\n✅ Petstore atoms visual triage flow completed.');
+if (failedSteps.length === 0) {
+  console.log('\n✅ Petstore atoms visual triage flow completed.');
+} else {
+  console.log('\n⚠️  Petstore atoms visual triage flow completed with step failures:');
+  for (const failedStep of failedSteps) {
+    console.log(`- ${failedStep.label} (exit code ${failedStep.exitCode})`);
+  }
+  if (shouldFailOnError) {
+    process.exitCode = 1;
+  }
+}
+
 console.log('Run `bun run preview` then open http://localhost:4000/visual-report/ to triage.');

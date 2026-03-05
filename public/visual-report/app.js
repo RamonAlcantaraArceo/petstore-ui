@@ -1,6 +1,7 @@
 const state = {
   data: null,
   selectedKey: null,
+  statusFilter: 'all',
 };
 
 const metaElement = document.getElementById('meta');
@@ -8,6 +9,9 @@ const treeElement = document.getElementById('tree');
 const variantsElement = document.getElementById('variants');
 const selectionTitle = document.getElementById('selection-title');
 const selectionSubtitle = document.getElementById('selection-subtitle');
+const filtersElement = document.getElementById('status-filters');
+
+const FILTERS = ['all', 'passed', 'failed', 'flaky', 'skipped', 'unknown'];
 
 const getAssetUrl = (url) => {
   if (!url || !state.data?.generatedAt) {
@@ -63,6 +67,93 @@ const createStatusBadge = (status) => {
   span.className = `badge ${status}`;
   span.textContent = status;
   return span;
+};
+
+const variantMatchesFilter = (variant) => {
+  if (state.statusFilter === 'all') {
+    return true;
+  }
+
+  return (variant.status ?? 'unknown') === state.statusFilter;
+};
+
+const getAllVariants = (componentGroups) =>
+  componentGroups.flatMap((group) => group.stories.flatMap((story) => story.variants));
+
+const getFilterCounts = () => {
+  if (!state.data) {
+    return new Map(FILTERS.map((filter) => [filter, 0]));
+  }
+
+  const variants = getAllVariants(state.data.componentGroups);
+  const counts = new Map(FILTERS.map((filter) => [filter, 0]));
+  counts.set('all', variants.length);
+
+  for (const variant of variants) {
+    const status = variant.status ?? 'unknown';
+    counts.set(status, (counts.get(status) ?? 0) + 1);
+  }
+
+  return counts;
+};
+
+const getFilteredComponentGroups = () => {
+  if (!state.data) {
+    return [];
+  }
+
+  if (state.statusFilter === 'all') {
+    return state.data.componentGroups;
+  }
+
+  return state.data.componentGroups.filter((group) =>
+    group.stories.some((story) => story.variants.some((variant) => variantMatchesFilter(variant))),
+  );
+};
+
+const ensureSelectedKeyVisible = (componentGroups) => {
+  if (!componentGroups.length) {
+    state.selectedKey = null;
+    return;
+  }
+
+  const hasSelected = componentGroups.some((group) => group.key === state.selectedKey);
+  if (!hasSelected) {
+    state.selectedKey = componentGroups[0].key;
+  }
+};
+
+const renderFilters = () => {
+  if (!filtersElement) {
+    return;
+  }
+
+  filtersElement.innerHTML = '';
+  const counts = getFilterCounts();
+
+  for (const filter of FILTERS) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'status-filter';
+    button.classList.toggle('active', state.statusFilter === filter);
+
+    const label = document.createElement('span');
+    label.textContent = filter[0].toUpperCase() + filter.slice(1);
+
+    const count = document.createElement('span');
+    count.className = 'count';
+    count.textContent = String(counts.get(filter) ?? 0);
+
+    button.append(label, count);
+    button.addEventListener('click', () => {
+      state.statusFilter = filter;
+      renderTree();
+      renderVariants();
+      renderFilters();
+    });
+
+    filtersElement.append(button);
+  }
 };
 
 const createSlider = (expectedUrl, actualUrl, altText) => {
@@ -177,21 +268,38 @@ const createSlider = (expectedUrl, actualUrl, altText) => {
 const renderVariants = () => {
   variantsElement.innerHTML = '';
 
+  const filteredGroups = getFilteredComponentGroups();
+  ensureSelectedKeyVisible(filteredGroups);
+
   if (!state.data || !state.selectedKey) {
+    selectionTitle.textContent = 'No matching components';
+    selectionSubtitle.textContent = 'Try a different status filter.';
     return;
   }
 
-  const componentGroup = state.data.componentGroups.find((item) => item.key === state.selectedKey);
+  const componentGroup = filteredGroups.find((item) => item.key === state.selectedKey);
 
   if (!componentGroup) {
+    selectionTitle.textContent = 'No matching components';
+    selectionSubtitle.textContent = 'Try a different status filter.';
     return;
   }
 
+  const visibleVariantsCount = componentGroup.stories.reduce(
+    (total, story) =>
+      total + story.variants.filter((variant) => variantMatchesFilter(variant)).length,
+    0,
+  );
+  const totalVariantsCount = componentGroup.stories.reduce(
+    (total, story) => total + story.variants.length,
+    0,
+  );
+
   selectionTitle.textContent = `${componentGroup.namespace} / ${componentGroup.atomicLevel} / ${componentGroup.component}`;
-  selectionSubtitle.textContent = `${componentGroup.stories.length} story variant(s)`;
+  selectionSubtitle.textContent = `${visibleVariantsCount} shown of ${totalVariantsCount} variant(s)`;
 
   for (const story of componentGroup.stories.sort((a, b) => a.name.localeCompare(b.name))) {
-    for (const variant of story.variants) {
+    for (const variant of story.variants.filter((item) => variantMatchesFilter(item))) {
       const card = document.createElement('article');
       card.className = 'variant-card';
 
@@ -217,11 +325,14 @@ const renderVariants = () => {
 const renderTree = () => {
   treeElement.innerHTML = '';
 
+  const filteredGroups = getFilteredComponentGroups();
+  ensureSelectedKeyVisible(filteredGroups);
+
   if (!state.data) {
     return;
   }
 
-  const tree = buildTree(state.data.componentGroups);
+  const tree = buildTree(filteredGroups);
 
   for (const [namespace, levels] of [...tree.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
     const namespaceDetails = document.createElement('details');
@@ -243,9 +354,15 @@ const renderTree = () => {
       list.className = 'tree-list';
 
       for (const group of groups.sort((a, b) => a.component.localeCompare(b.component))) {
+        const visibleVariantsCount = group.stories.reduce(
+          (total, story) =>
+            total + story.variants.filter((variant) => variantMatchesFilter(variant)).length,
+          0,
+        );
+
         const button = document.createElement('button');
         button.type = 'button';
-        button.textContent = `${group.component} (${group.stories.length})`;
+        button.textContent = `${group.component} (${visibleVariantsCount})`;
         button.classList.toggle('active', state.selectedKey === group.key);
         button.addEventListener('click', () => {
           state.selectedKey = group.key;
@@ -282,6 +399,7 @@ const bootstrap = async () => {
   state.selectedKey = componentGroups[0]?.key ?? null;
   metaElement.textContent = `Generated ${new Date(data.generatedAt).toLocaleString()} · ${componentGroups.length} components`;
 
+  renderFilters();
   renderTree();
   renderVariants();
 };

@@ -15,7 +15,8 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: #0b0f14;
   color: #e8eef7;
 }
@@ -23,13 +24,16 @@ body {
 .layout {
   display: grid;
   grid-template-columns: 320px 1fr;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
 }
 
 .sidebar {
   border-right: 1px solid #1f2937;
   padding: 16px;
   background: #101722;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .sidebar-header h1 {
@@ -85,6 +89,20 @@ body {
 
 .content {
   padding: 16px;
+  overflow-y: auto;
+  min-height: 0;
+  background: #0b0f14;
+}
+
+.content-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #0b0f14;
+  isolation: isolate;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #1f2937;
+  box-shadow: 0 6px 10px rgba(11, 15, 20, 0.85);
 }
 
 .content-header h2 {
@@ -95,6 +113,46 @@ body {
 .content-header p {
   margin: 6px 0 0;
   color: #9ca3af;
+}
+
+.status-filters {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #374151;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.status-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-right: 1px solid #374151;
+  background: #111827;
+  color: #d1d5db;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.status-filter:last-child {
+  border-right: none;
+}
+
+.status-filter.active {
+  background: #172554;
+  color: #f3f4f6;
+}
+
+.status-filter .count {
+  min-width: 22px;
+  text-align: center;
+  font-size: 0.82rem;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: #4b5563;
+  color: #e5e7eb;
 }
 
 .variants {
@@ -209,12 +267,24 @@ body {
 }
 
 @media (max-width: 960px) {
+  body {
+    height: auto;
+    overflow: auto;
+  }
+
   .layout {
     grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
   }
 
   .sidebar {
     border-right: none;
     border-bottom: 1px solid #1f2937;
+    overflow-y: visible;
+  }
+
+  .content {
+    overflow-y: visible;
   }
 }
