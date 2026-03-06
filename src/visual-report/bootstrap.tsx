@@ -13,7 +13,24 @@ const renderError = (message: string) => {
     return;
   }
 
-  mount.innerHTML = `<div style="padding:16px;color:${theme.colors.semantic.errorLight};background:${theme.colors.secondary[900]};border:1px solid ${theme.colors.semantic.errorDark};border-radius:${theme.borderRadius.lg};font-family:${theme.typography.fontFamily.sans.join(',')};">${message}</div>`;
+  // Use React to render the error box
+  const root = createRoot(mount);
+  root.render(
+    <div
+      style={{
+        padding: '16px',
+        color: theme.colors.semantic.errorLight,
+        background: theme.colors.secondary[900],
+        border: `1px solid ${theme.colors.semantic.errorDark}`,
+        borderRadius: theme.borderRadius.lg,
+        fontFamily: theme.typography.fontFamily.sans.join(','),
+      }}
+      role="alert"
+      aria-live="assertive"
+    >
+      {message}
+    </div>,
+  );
 };
 
 const bootstrap = async () => {
