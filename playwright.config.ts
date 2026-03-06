@@ -53,7 +53,7 @@ export default defineConfig({
       ]
     : [
         ['list'],
-        ['html', { open: 'always' }],
+        ['html', { open: 'never' }],
         ['json', { outputFile: 'test-results/playwright-report.json' }],
       ],
   use: {

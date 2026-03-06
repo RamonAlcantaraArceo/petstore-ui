@@ -60,7 +60,7 @@ jobs:
         id: baseline_tests
         continue-on-error: true
         if: ${{ inputs.update_baseline }}
-        run: bun run test:visual:update
+        run: bun run build-storybook && bun run test:visual:update
 
       - name: Publish Playwright baseline snapshots to immutable SHA path
         continue-on-error: true
@@ -87,7 +87,7 @@ jobs:
       - name: Run visual tests (compare mode)
         continue-on-error: true
         if: ${{ !inputs.update_baseline }}
-        run: bun run test:visual
+        run: bun run build-storybook && bun run test:visual
 
       - name: Build visual report assets
         run: bun run report:visual:build
