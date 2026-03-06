@@ -48,6 +48,24 @@ const sanitizeVariantName = (name: string) =>
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9-_]/g, '');
 
+/**
+ * Finds the expected snapshot file path for a given Storybook entry and project.
+ *
+ * This function searches for a PNG snapshot file in the `storybook.visual.spec.ts-snapshots`
+ * directory, matching the provided `entryId` and `projectName`. It considers the current
+ * operating system (from the `PWTEST_OS` environment variable or `process.platform`) as part
+ * of the filename, and tries several filename variants in order of specificity:
+ * - `${entryId}-${projectName}-${osName}.png`
+ * - `${entryId}-${projectName}.png`
+ * - `${entryId}.png`
+ *
+ * If a matching file is found, its absolute path is returned. If the snapshots directory
+ * does not exist or no matching file is found, `null` is returned.
+ *
+ * @param entryId - The unique identifier for the Storybook entry.
+ * @param projectName - The name of the project or test context.
+ * @returns The absolute path to the expected snapshot file, or `null` if not found.
+ */
 const findExpectedSnapshotPath = (entryId: string, projectName: string): string | null => {
   const snapshotsDir = resolve(
     process.cwd(),
@@ -59,8 +77,10 @@ const findExpectedSnapshotPath = (entryId: string, projectName: string): string 
     return null;
   }
 
+  const osName = process.env.PWTEST_OS || process.platform;
+
   const variants = [
-    `${entryId}-${projectName}-${process.platform}.png`,
+    `${entryId}-${projectName}-linux.png`,
     `${entryId}-${projectName}.png`,
     `${entryId}.png`,
   ];

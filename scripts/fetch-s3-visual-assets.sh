@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# filepath: /Users/ramonalcantaraarceo/github/petstore-ui/scripts/fetch-s3-visual-assets.sh
 set -euo pipefail
 
 TARGET_ENV="${1:-${TARGET_ENV:-dev}}"
@@ -10,7 +11,9 @@ NO_SERVER="${NO_SERVER:-0}"
 REPORT_PREFIX="${REPORT_PREFIX:-${TARGET_ENV}/visual-report/latest}"
 BASELINE_PREFIX="${BASELINE_PREFIX:-${TARGET_ENV}/visual-baseline/storybook.visual.spec.ts-snapshots/latest}"
 
-REPORT_DIR="${OUT_ROOT}/${TARGET_ENV}/report"
+# Keep folder name aligned with absolute paths used by report HTML (/visual-report/*)
+REPORT_PARENT_DIR="${OUT_ROOT}/${TARGET_ENV}"
+REPORT_DIR="${REPORT_PARENT_DIR}/visual-report"
 BASELINE_DIR="${OUT_ROOT}/${TARGET_ENV}/baseline"
 
 mkdir -p "${REPORT_DIR}" "${BASELINE_DIR}"
@@ -32,5 +35,5 @@ if [[ "${NO_SERVER}" == "1" ]]; then
   exit 0
 fi
 
-echo "Starting local preview server on http://localhost:${PORT}/index.html"
-python3 -m http.server "${PORT}" --directory "${REPORT_DIR}"
+echo "Starting local preview server on http://localhost:${PORT}/visual-report/index.html"
+python3 -m http.server "${PORT}" --directory "${REPORT_PARENT_DIR}"
