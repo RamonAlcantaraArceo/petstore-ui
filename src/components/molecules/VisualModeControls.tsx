@@ -1,5 +1,5 @@
 import type { CSSProperties, FC, KeyboardEvent } from 'react';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useTranslation } from '../../i18n';
 import { theme } from '../../tokens/theme';
 import { COMPARISON_MODES, DEFAULT_COMPARISON_MODE } from '../../visual-report/constants';
@@ -20,6 +20,7 @@ export const VisualModeControls: FC<VisualModeControlsProps> = ({
   onModeChange,
 }) => {
   const { t } = useTranslation();
+  const tabRefs = useRef<Partial<Record<ComparisonMode, HTMLButtonElement | null>>>({});
 
   const disabledModes = useMemo(() => {
     const blocked = new Set<ComparisonMode>();
@@ -37,11 +38,32 @@ export const VisualModeControls: FC<VisualModeControlsProps> = ({
 
   const idPrefix = `variant-${variantKey.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
 
+  const focusTab = (mode: ComparisonMode) => {
+    const focus = () => tabRefs.current[mode]?.focus();
+
+    // Move focus immediately for keyboard interaction semantics.
+    focus();
+
+    if (typeof globalThis.requestAnimationFrame === 'function') {
+      globalThis.requestAnimationFrame(focus);
+      return;
+    }
+
+    setTimeout(focus, 0);
+  };
+
+  const selectMode = (mode: ComparisonMode, focusSelected = false) => {
+    onModeChange(mode, focusSelected);
+    if (focusSelected) {
+      focusTab(mode);
+    }
+  };
+
   const moveSelection = (direction: number) => {
     const current = resolveSelectableMode(activeMode, enabledModes);
     const index = enabledModes.indexOf(current);
     const nextIndex = (index + direction + enabledModes.length) % enabledModes.length;
-    onModeChange(enabledModes[nextIndex] ?? DEFAULT_COMPARISON_MODE, true);
+    selectMode(enabledModes[nextIndex] ?? DEFAULT_COMPARISON_MODE, true);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -59,13 +81,13 @@ export const VisualModeControls: FC<VisualModeControlsProps> = ({
 
     if (event.key === 'Home') {
       event.preventDefault();
-      onModeChange(enabledModes[0] ?? DEFAULT_COMPARISON_MODE, true);
+      selectMode(enabledModes[0] ?? DEFAULT_COMPARISON_MODE, true);
       return;
     }
 
     if (event.key === 'End') {
       event.preventDefault();
-      onModeChange(enabledModes[enabledModes.length - 1] ?? DEFAULT_COMPARISON_MODE, true);
+      selectMode(enabledModes[enabledModes.length - 1] ?? DEFAULT_COMPARISON_MODE, true);
     }
   };
 
@@ -107,7 +129,10 @@ export const VisualModeControls: FC<VisualModeControlsProps> = ({
             tabIndex={selected ? 0 : -1}
             style={style}
             onKeyDown={handleKeyDown}
-            onClick={() => !disabled && onModeChange(mode.value)}
+            onClick={() => !disabled && selectMode(mode.value)}
+            ref={(element) => {
+              tabRefs.current[mode.value] = element;
+            }}
           >
             {t(mode.labelKey)}
           </button>
