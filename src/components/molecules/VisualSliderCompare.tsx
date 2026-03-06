@@ -1,5 +1,5 @@
 import type { CSSProperties, FC } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from '../../i18n';
 import { theme } from '../../tokens/theme';
 
@@ -18,6 +18,7 @@ export const VisualSliderCompare: FC<VisualSliderCompareProps> = ({
 }) => {
   const { t } = useTranslation();
   const sliderRef = useRef<HTMLDivElement | null>(null);
+  const rangeId = useId();
   const [value, setValue] = useState(50);
   const [orientation, setOrientation] = useState<Orientation>('horizontal');
 
@@ -155,7 +156,7 @@ export const VisualSliderCompare: FC<VisualSliderCompareProps> = ({
         }}
       >
         <label
-          htmlFor="visual-slider-range"
+          htmlFor={rangeId}
           style={{ color: theme.colors.neutral.gray[400], fontSize: theme.typography.fontSize.xs }}
         >
           {t('visualReport.modes.slider')}
@@ -180,7 +181,7 @@ export const VisualSliderCompare: FC<VisualSliderCompareProps> = ({
         </button>
       </div>
       <input
-        id="visual-slider-range"
+        id={rangeId}
         type="range"
         min={0}
         max={100}
