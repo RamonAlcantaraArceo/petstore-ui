@@ -45,7 +45,7 @@ export const Badge: FC<BadgeProps> = ({
         return { backgroundColor: theme.colors.semantic.successLight, color: theme.colors.semantic.successDark };
       case 'pending':
       case 'placed':
-        return { backgroundColor: theme.colors.semantic.warningLight, color: theme.colors.semantic.warningDark };
+        return { backgroundColor: theme.colors.semantic.warningLight, color: theme.colors.semantic.errorLight };
       case 'sold':
       case 'delivered':
         return { backgroundColor: theme.colors.semantic.infoLight, color: theme.colors.semantic.infoDark };
