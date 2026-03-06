@@ -16,6 +16,7 @@ coverage/
 junit.xml
 test-results/
 tests/visual/storybook.visual.spec.ts-snapshots/
+tmp/s3-visual/dev/report/
 playwright-report/
 public/visual-report/data.json
 public/visual-report/assets/
