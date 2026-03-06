@@ -46,7 +46,7 @@ interface VariantAsset {
   expected: string | null;
   actual: string | null;
   diff?: string | null;
-  status: 'passed' | 'failed' | 'skipped' | 'unknown';
+  status: 'passed' | 'failed' | 'skipped' | 'unknown' | 'flaky';
 }
 
 interface ComponentVariant {

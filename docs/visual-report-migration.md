@@ -5,7 +5,7 @@
 The visual report UI has been migrated from imperative DOM rendering in `public/visual-report/app.js` to typed React + TypeScript components organized by atomic design:
 
 - Atoms: status badge/chip and filter button
-- Molecules: filter bar, tree label, mode controls, image/sider panels
+- Molecules: filter bar, tree label, mode controls, image/slider panels
 - Organisms: component tree, variant card, report app shell
 
 The static route `/visual-report/` is now bootstrapped from `src/visual-report/bootstrap.tsx` and bundled during `bun run report:visual:build`.
@@ -35,7 +35,7 @@ The static route `/visual-report/` is now bootstrapped from `src/visual-report/b
 ## Files Retained
 
 - `public/visual-report/style.css` remains in repo for backward compatibility reference.
-- `public/visual-report/index.html` is retained but simplified to React mount root.
+- `public/visual-report/index.html` is retained with the legacy layout DOM (meta/tree/variants) and currently does not define a `#visual-report-root`; React bootstrap logic attaches to the existing structure.
 
 ## Tradeoffs
 
