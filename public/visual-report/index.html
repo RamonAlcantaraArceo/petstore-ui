@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visual Report</title>
+  </head>
+  <body>
+    <link rel="stylesheet" href="/visual-report/style.css" />
+    <div class="layout">
+      <aside class="sidebar">
+        <div id="meta"></div>
+        <nav id="tree"></nav>
+      </aside>
+      <main class="main">
+        <div class="status-filters-sticky">
+          <button id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">🌙</button>
+          <div id="status-filters"></div>
+        </div>
+        <header>
+          <h1 id="selection-title"></h1>
+          <div id="selection-subtitle"></div>
+        </header>
+        <section id="variants"></section>
+      </main>
+    </div>
+    <script type="module" src="/visual-report/app.js"></script>
+    <script type="module" src="/visual-report/theme-toggle.js"></script>
+  </body>
+</html>

@@ -24,3 +24,21 @@ export type { StatusFilterProps } from './StatusFilter';
 
 export { ConfirmDialog } from './ConfirmDialog';
 export type { ConfirmDialogProps } from './ConfirmDialog';
+
+export { VisualFilterBar } from './VisualFilterBar';
+export type { VisualFilterBarProps } from './VisualFilterBar';
+
+export { VisualTreeLabel } from './VisualTreeLabel';
+export type { VisualTreeLabelProps } from './VisualTreeLabel';
+
+export { VisualModeControls } from './VisualModeControls';
+export type { VisualModeControlsProps } from './VisualModeControls';
+
+export { VisualImagePanel } from './VisualImagePanel';
+export type { VisualImagePanelProps } from './VisualImagePanel';
+
+export { VisualSliderCompare } from './VisualSliderCompare';
+export type { VisualSliderCompareProps } from './VisualSliderCompare';
+
+export { VisualComparisonPanel } from './VisualComparisonPanel';
+export type { VisualComparisonPanelProps } from './VisualComparisonPanel';

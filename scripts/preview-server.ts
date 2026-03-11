@@ -118,4 +118,5 @@ console.log(`\n  Petstore UI preview server running at:\n`);
 console.log(`    Homepage:        http://localhost:${PORT}/`);
 console.log(`    Storybook:       http://localhost:${PORT}/storybook/`);
 console.log(`    Petstore Demo:   http://localhost:${PORT}/petstore/`);
+console.log(`    Visual Report:   http://localhost:${PORT}/visual-report/`);
 console.log();

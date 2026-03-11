@@ -64,6 +64,9 @@ bun run type-check     # TypeScript strict check
 
 bun run test           # Run all tests
 bun run test:coverage  # Run tests with coverage report
+bun run report:visual:build  # Build custom visual diff report data/UI
+bun run report:visual  # Run visual tests then build custom visual diff report
+bun run report:visual:triage:petstore-atoms  # Build + run only Petstore atoms visual flow + report
 
 bun run storybook      # Interactive component dev (localhost:6006)
 bun run build-storybook  # Static Storybook build
@@ -172,7 +175,25 @@ All navigation is now server-based for a production-like experience:
 
 3. Open [http://localhost:4000](http://localhost:4000) in your browser.
 
+4. Open [http://localhost:4000/visual-report/](http://localhost:4000/visual-report/) to view the custom visual diff report.
+
 > **Note:** Direct file:// preview is no longer supported. Always use the preview server for navigation and testing.
+
+### Custom Visual Diff Report
+
+The custom visual report provides:
+
+- Left hierarchy: namespace → atomic design level → component
+- Right panel: all story variants for the selected component
+- Per-viewport rows (desktop/mobile) with an expected-vs-actual slider
+
+To generate report data after visual tests:
+
+```bash
+bun run report:visual:build
+```
+
+Data and copied image assets are generated under `public/visual-report/`.
 
 ## Troubleshooting
 

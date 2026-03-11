@@ -19,7 +19,7 @@ export const en = {
       ariaLabel: 'Button: {content}',
       ariaLabelLoading: 'Loading: {content}',
       ariaPressed: 'Button pressed: {content}',
-      ariaExpanded: 'Button expanded: {content}'
+      ariaExpanded: 'Button expanded: {content}',
     },
     input: {
       required: 'Required field',
@@ -30,114 +30,118 @@ export const en = {
       ariaInvalid: 'Invalid input: {label}',
       emailPlaceholder: 'Enter email address...',
       passwordPlaceholder: 'Enter password...',
-      searchPlaceholder: 'Search...'
+      searchPlaceholder: 'Search...',
     },
     card: {
       ariaLabel: 'Card: {title}',
       ariaLabelContent: 'Card content: {content}',
       defaultTitle: 'Card',
-      moreActions: 'More actions'
+      moreActions: 'More actions',
     },
     navigation: {
       menu: 'Navigation menu',
       mainMenu: 'Main navigation',
       skipToMain: 'Skip to main content',
-      openMenu: 'Open menu', 
-      closeMenu: 'Close menu'
+      openMenu: 'Open menu',
+      closeMenu: 'Close menu',
     },
     form: {
       submitSuccess: 'Form submitted successfully',
       submitError: 'Error submitting form',
       validationError: 'Please fix validation errors',
       fieldRequired: 'This field is required',
-      fieldInvalid: 'This field is invalid'
+      fieldInvalid: 'This field is invalid',
     },
     loading: {
       default: 'Loading...',
       content: 'Loading content...',
       page: 'Loading page...',
-      ariaLabel: 'Loading indicator'
+      ariaLabel: 'Loading indicator',
     },
     error: {
       general: 'An error occurred',
       notFound: 'Content not found',
       network: 'Network error occurred',
-      ariaLabel: 'Error message: {message}'
-    }
+      ariaLabel: 'Error message: {message}',
+    },
   },
   stories: {
     button: {
       title: 'Button Component',
-      description: 'Basic button component with multiple variants, sizes, and accessibility features. Supports primary, secondary, and danger color schemes.',
+      description:
+        'Basic button component with multiple variants, sizes, and accessibility features. Supports primary, secondary, and danger color schemes.',
       variants: {
         primary: 'Primary Button',
         secondary: 'Secondary Button',
-        danger: 'Danger Button'
+        danger: 'Danger Button',
       },
       sizes: {
         small: 'Small Button',
         medium: 'Medium Button',
-        large: 'Large Button'
+        large: 'Large Button',
       },
       states: {
         default: 'Default Button',
         disabled: 'Disabled Button',
         loading: 'Loading Button',
-        fullWidth: 'Full Width Button'
+        fullWidth: 'Full Width Button',
       },
       examples: {
         clickMe: 'Click me',
         submitForm: 'Submit Form',
         deleteAccount: 'Delete Account',
         saveChanges: 'Save Changes',
-        cancelOrder: 'Cancel Order'
+        cancelOrder: 'Cancel Order',
       },
       accessibility: {
         title: 'Accessibility Features',
-        description: 'Demonstrates button accessibility features including ARIA labels, focus management, and keyboard navigation.'
+        description:
+          'Demonstrates button accessibility features including ARIA labels, focus management, and keyboard navigation.',
       },
       allVariants: {
         title: 'All Variants',
-        description: 'Shows all button variants in a single view for comparison.'
-      }
+        description: 'Shows all button variants in a single view for comparison.',
+      },
     },
     input: {
       title: 'Input Component',
-      description: 'Form input component with validation, accessibility features, and multiple types.',
+      description:
+        'Form input component with validation, accessibility features, and multiple types.',
       variants: {
         text: 'Text Input',
         email: 'Email Input',
         password: 'Password Input',
-        search: 'Search Input'
+        search: 'Search Input',
       },
       states: {
         default: 'Default Input',
         required: 'Required Input',
         invalid: 'Invalid Input',
-        disabled: 'Disabled Input'
+        disabled: 'Disabled Input',
       },
       examples: {
         firstName: 'First Name',
         lastName: 'Last Name',
         email: 'Email Address',
-        password: 'Password'
-      }
+        password: 'Password',
+      },
     },
     card: {
       title: 'Card Component',
-      description: 'Flexible card component for displaying content with optional headers, footers, and actions.',
+      description:
+        'Flexible card component for displaying content with optional headers, footers, and actions.',
       variants: {
         basic: 'Basic Card',
         withHeader: 'Card with Header',
         withFooter: 'Card with Footer',
-        interactive: 'Interactive Card'
+        interactive: 'Interactive Card',
       },
       examples: {
         title: 'Example Card',
         content: 'This is an example card with some content to demonstrate the component.',
         headerTitle: 'Card Header',
-        footerText: 'Card Footer'
-      }
+        footerText: 'Card Footer',
+      },
     },
     general: {
       examples: 'Examples',
@@ -145,8 +149,8 @@ export const en = {
       states: 'States',
       accessibility: 'Accessibility',
       documentation: 'Documentation',
-      playground: 'Playground'
-    }
+      playground: 'Playground',
+    },
   },
   accessibility: {
     announcements: {
@@ -154,13 +158,13 @@ export const en = {
       pageLoaded: 'Page loaded',
       contentUpdated: 'Content updated',
       formSubmitted: 'Form submitted',
-      errorOccurred: 'Error occurred: {error}'
+      errorOccurred: 'Error occurred: {error}',
     },
     instructions: {
       keyboard: 'Use Tab to navigate between elements',
       buttonActivation: 'Press Enter or Space to activate button',
       menuNavigation: 'Use arrow keys to navigate menu items',
-      formNavigation: 'Use Tab to move between form fields'
+      formNavigation: 'Use Tab to move between form fields',
     },
     labels: {
       required: 'Required',
@@ -168,8 +172,8 @@ export const en = {
       invalid: 'Invalid',
       loading: 'Loading',
       expanded: 'Expanded',
-      collapsed: 'Collapsed'
-    }
+      collapsed: 'Collapsed',
+    },
   },
   petstore: {
     common: {
@@ -370,7 +374,42 @@ export const en = {
         loginFailed: 'Login failed. Please check your credentials.',
       },
     },
-  }
+  },
+  visualReport: {
+    title: 'Visual Report',
+    generatedAt: 'Generated {date} · {count} components',
+    filters: {
+      ariaLabel: 'Status filters',
+      all: 'All',
+      passed: 'Passed',
+      failed: 'Failed',
+      flaky: 'Flaky',
+      skipped: 'Skipped',
+      unknown: 'Unknown',
+    },
+    selection: {
+      noMatchingComponents: 'No matching components',
+      tryDifferentFilter: 'Try a different status filter.',
+      shownOf: '{shown} shown of {total} variant(s)',
+    },
+    modes: {
+      ariaLabel: 'Comparison mode',
+      diff: 'Diff',
+      actual: 'Actual',
+      expected: 'Expected',
+      sideBySide: 'Side by Side',
+      slider: 'Slider',
+      slideLeftRight: 'Slide: Left/Right',
+      slideUpDown: 'Slide: Up/Down',
+      sliderAria: 'Compare expected and actual image',
+    },
+    messages: {
+      missingExpectedActual: 'Missing expected/actual image for this variant.',
+      missingDiff: 'Diff image is not available for this variant.',
+      missingActual: 'Actual image is not available for this variant.',
+      missingExpected: 'Expected image is not available for this variant.',
+    },
+  },
 } as const;
 
 export type EnLocale = typeof en;
