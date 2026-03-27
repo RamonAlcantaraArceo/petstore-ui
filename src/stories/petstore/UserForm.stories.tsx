@@ -34,7 +34,7 @@ const handleCancel = () => {
 export const CreateMode: Story = {
   name: 'Create Mode',
   render: () => (
-    <div style={{ maxWidth: '28rem' }}>
+    <div>
       <UserForm onSubmit={handleSubmit} onCancel={handleCancel} />
     </div>
   ),
@@ -51,7 +51,7 @@ export const CreateMode: Story = {
 export const EditMode: Story = {
   name: 'Edit Mode',
   render: () => (
-    <div style={{ maxWidth: '28rem' }}>
+    <div>
       <UserForm
         user={{
           username: 'johndoe',
@@ -78,7 +78,7 @@ export const EditMode: Story = {
 export const Loading: Story = {
   name: 'Loading / Submitting',
   render: () => (
-    <div style={{ maxWidth: '28rem' }}>
+    <div>
       <UserForm
         user={{
           username: 'janedoe',
@@ -96,8 +96,31 @@ export const Loading: Story = {
   parameters: {
     docs: {
       description: {
+        story: 'Form in loading state — Save button is disabled and shows a loading indicator.',
+      },
+    },
+  },
+};
+
+export const AccessibilityShowcase: Story = {
+  name: 'Accessibility + Keyboard',
+  render: () => (
+    <div>
+      <UserForm
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+        announceOnSubmit="User creation submitted"
+      />
+      <p>
+        Use Tab to move through fields, Enter on Create User to submit, and Shift+Tab to reverse.
+      </p>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
         story:
-          'Form in loading state — Save button is disabled and shows a loading indicator.',
+          'A11y-focused example highlighting keyboard flow and screen reader submit announcement. Switch locale from toolbar to verify translated field labels.',
       },
     },
   },

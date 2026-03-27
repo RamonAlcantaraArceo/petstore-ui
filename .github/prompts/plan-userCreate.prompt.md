@@ -19,26 +19,31 @@ Add a user creation feature to the Petstore UI, following atomic design, i18n, a
 
 3. **Atoms**
    - Reuse existing `Input`, `Button`, and `FormField` atoms for the form fields.
+   - Status: Completed. `UserForm` uses existing `Input` and `Button` atoms; no `FormField` atom exists in the current codebase.
 
 4. **Molecule: UserForm**
    - Use the `UserForm` molecule in [src/components/molecules/UserForm.tsx](../../src/components/molecules/UserForm.tsx).
    - Integrate i18n and a11y hooks.
    - Show error/success messages.
    - Support keyboard navigation and screen reader announcements.
+   - Status: Completed. `UserForm` now includes validation, translated success/error messages, keyboard/a11y behavior, and screen reader announcements for submit actions.
 
 5. **Organism: UserManagementView**
    - Update or extend the `UserManagementView` organism in [src/components/organisms/UserManagementView.tsx](../../src/components/organisms/UserManagementView.tsx) to include the user creation form.
    - Add or verify a "Create User" button that opens the form (modal).
    - The button "Create user" should be visible only when a user is not logged in, and hidden when a user is logged in. This can be achieved by checking the authentication state in the component and conditionally rendering the button based on that state. The authentication can also be validated if the proper cookie is present in the request headers, which indicates that the user is logged in. This way, we can ensure that only unauthenticated users see the "Create user" button, while authenticated users do not have access to it.
+   - Status: Completed. `UserManagementView` includes the create-user modal flow, auth-based conditional rendering of the Create User button, and improved modal/submit lifecycle handling.
 
 ### Phase 3: UI Integration & Storybook
 
 6. **Page Integration**
    - Update the Users page to display the user creation feature, ensuring layout consistency.
+   - Status: Completed. `PetstoreApp` routes the Users section to `UserManagementView`, which now exposes the user-creation flow according to auth state.
 
 7. **Storybook**
    - Add or extend stories for `UserForm` and updated `UserManagementView` in [src/stories/](../../src/stories/).
    - Include locale switching and a11y showcases.
+   - Status: Completed. Stories for `UserForm` and `UserManagementView` were extended with locale guidance and dedicated a11y/keyboard showcase scenarios.
 
 ### Phase 4: Testing
 
@@ -63,12 +68,12 @@ Add a user creation feature to the Petstore UI, following atomic design, i18n, a
 
 **Relevant files**
 
-- `src/services/apiClient.ts` — Add `createUser` API function
+- `src/services/userApi.ts` — Use existing `createUser` API function
 - `src/i18n/locales/en.ts`, `src/i18n/locales/chef.ts` — Add translation keys
-- `src/components/molecules/UserCreateForm.tsx` — New molecule
-- `src/components/organisms/UserManagement.tsx` — Update for user creation
-- `src/stories/UserCreateForm.stories.tsx`, `src/stories/UserManagement.stories.tsx` — Add/extend stories
-- `src/services/apiClient.test.ts`, `src/components/molecules/UserCreateForm.test.tsx`, `src/components/organisms/UserManagement.test.tsx` — Add/extend tests
+- `src/components/molecules/UserForm.tsx` — User form molecule enhancements
+- `src/components/organisms/UserManagementView.tsx` — Update for user creation flow
+- `src/stories/petstore/UserForm.stories.tsx`, `src/stories/petstore/UserManagementView.stories.tsx` — Add/extend stories
+- `src/services/userApi.test.ts`, `src/components/molecules/UserForm.test.tsx`, `src/components/organisms/UserManagementView.test.tsx` — Add/extend tests
 
 **Verification**
 

@@ -49,6 +49,16 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
   // Delete confirmation
   const [deletingUser, setDeletingUser] = React.useState<User | undefined>(undefined);
 
+  const closeEditModal = () => {
+    setFormOpen(false);
+    setEditingUser(undefined);
+  };
+
+  const closeCreateModal = () => {
+    setCreateModalOpen(false);
+    setEditingUser(undefined);
+  };
+
   // Lookup handler
   const handleLookup = async () => {
     if (!lookupUsername.trim()) return;
@@ -78,19 +88,26 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
   // Form submit
   const handleFormSubmit = async (fields: UserFormFields) => {
     if (mockMode) {
-      setFormOpen(false);
+      closeEditModal();
+      closeCreateModal();
       return;
     }
+
     setFormLoading(true);
+
     if (editingUser) {
-      await updateUser(editingUser.username, {
+      const updateResult = await updateUser(editingUser.username, {
         ...editingUser,
         ...fields,
         id: editingUser.id,
         userStatus: editingUser.userStatus,
       });
+      if (updateResult.error) {
+        setFormLoading(false);
+        throw new Error(updateResult.error);
+      }
     } else {
-      await createUser({
+      const createResult = await createUser({
         username: fields.username,
         firstName: fields.firstName,
         lastName: fields.lastName,
@@ -99,9 +116,20 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
         phone: fields.phone,
         userStatus: 0,
       });
+      if (createResult.error) {
+        setFormLoading(false);
+        throw new Error(createResult.error);
+      }
     }
+
     setFormLoading(false);
-    setFormOpen(false);
+
+    if (editingUser) {
+      closeEditModal();
+    } else {
+      closeCreateModal();
+    }
+
     // Re-lookup the user if we were editing the same one
     if (editingUser && editingUser.username === lookedUpUser?.username) {
       const result = await getUserByName(editingUser.username);
@@ -212,7 +240,7 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
       {/* Create / Edit modal (only for editing, not for creation when not logged in) */}
       <Modal
         isOpen={formOpen}
-        onClose={() => setFormOpen(false)}
+        onClose={closeEditModal}
         titleTranslationKey={
           editingUser ? 'petstore.users.form.editTitle' : 'petstore.users.form.createTitle'
         }
@@ -231,7 +259,7 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
               }
             : {})}
           onSubmit={handleFormSubmit}
-          onCancel={() => setFormOpen(false)}
+          onCancel={closeEditModal}
           isLoading={formLoading}
         />
       </Modal>
@@ -239,15 +267,11 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
       {/* User creation modal for unauthenticated users */}
       <Modal
         isOpen={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
+        onClose={closeCreateModal}
         titleTranslationKey="petstore.users.form.createTitle"
         size="medium"
       >
-        <UserForm
-          onSubmit={handleFormSubmit}
-          onCancel={() => setCreateModalOpen(false)}
-          isLoading={formLoading}
-        />
+        <UserForm onSubmit={handleFormSubmit} onCancel={closeCreateModal} isLoading={formLoading} />
       </Modal>
 
       {/* Delete confirmation */}
