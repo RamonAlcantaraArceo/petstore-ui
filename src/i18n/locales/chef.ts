@@ -22,6 +22,28 @@ export const chef = {
       ariaPressed: 'Büttön prëssëd døwñ: {content} - børk børk açtïvätëd!',
       ariaExpanded: 'Büttön ëxpäñdëd øpëñ: {content} - børk børk shøwíñg møré!',
     },
+    userCreateForm: {
+      title: 'Crëätë Ñëw Üsër-a',
+      formLabel: 'Üsër crëätïøñ førm-a',
+      fields: {
+        username: 'Üsërnämë-a',
+        password: 'Påsswørd-a',
+        email: 'Émäïl (øptïøñäl)-a',
+        firstName: 'Fïrst Nämë (øptïøñäl)-a',
+        lastName: 'Läst Nämë (øptïøñäl)-a',
+        phone: 'Phøñë (øptïøñäl)-a',
+      },
+      submit: 'Crëätë Üsër-a',
+      loading: 'Crëätïñg üsër...-a',
+      success: 'Üsër crëätëd süççëssfûlly!-a',
+      errors: {
+        usernameRequired: 'Üsërnämë ïs rëqüïrëd-a',
+        passwordRequired: 'Påsswørd ïs rëqüïrëd-a',
+        emailInvalid: 'Ïñvälïd émâïl ädrëss-a',
+        generic: 'Fäïlëd tø crëätë üsër. Plëäsë try ägäïñ.-a',
+      },
+      announceOnCreate: 'Üsër crëätëd-a',
+    },
     input: {
       required: 'Rëqüïrëd fïëld - müst hävë dätä, børk børk!',
       invalid: 'Ïñvälïd ïñpüt - nø güüd, børk børk!',

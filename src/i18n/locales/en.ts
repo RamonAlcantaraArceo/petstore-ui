@@ -21,6 +21,28 @@ export const en = {
       ariaPressed: 'Button pressed: {content}',
       ariaExpanded: 'Button expanded: {content}',
     },
+    userCreateForm: {
+      title: 'Create New User',
+      formLabel: 'User creation form',
+      fields: {
+        username: 'Username',
+        password: 'Password',
+        email: 'Email (optional)',
+        firstName: 'First Name (optional)',
+        lastName: 'Last Name (optional)',
+        phone: 'Phone (optional)',
+      },
+      submit: 'Create User',
+      loading: 'Creating user...',
+      success: 'User created successfully!',
+      errors: {
+        usernameRequired: 'Username is required',
+        passwordRequired: 'Password is required',
+        emailInvalid: 'Invalid email address',
+        generic: 'Failed to create user. Please try again.',
+      },
+      announceOnCreate: 'User created',
+    },
     input: {
       required: 'Required field',
       invalid: 'Invalid input',
