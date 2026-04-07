@@ -30,6 +30,7 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
   const { t } = useTranslation();
   const { ariaAttributes } = useAccessibility({
     'aria-label': t('petstore.app.users.ariaLabel'),
+    role: 'group',
   });
 
   // Lookup state
@@ -177,7 +178,7 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
 
       {/* Lookup bar only if logged in */}
       {isLoggedIn && (
-        <div
+        <form
           style={{
             display: 'flex',
             alignItems: 'flex-end',
@@ -186,6 +187,10 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
             marginBottom: theme.spacing[4],
           }}
           aria-label={t('petstore.users.lookup.ariaLabel')}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLookup();
+          }}
         >
           <Input
             name="username"
@@ -193,12 +198,6 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
             placeholderTranslationKey="petstore.users.lookup.placeholder"
             value={lookupUsername}
             onChange={(e) => setLookupUsername(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleLookup();
-              }
-            }}
           />
           <Button
             variant="secondary"
@@ -208,7 +207,7 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
           >
             {t('petstore.users.lookup.button')}
           </Button>
-        </div>
+        </form>
       )}
 
       {/* Lookup error */}
