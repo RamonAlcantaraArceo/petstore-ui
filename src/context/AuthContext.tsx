@@ -36,6 +36,23 @@ function parseTokenFromLoginPayload(payload: unknown): string | null {
   }
 
   if (payload && typeof payload === 'object') {
+    const directToken =
+      (
+        payload as {
+          token?: unknown;
+          accessToken?: unknown;
+          sessionToken?: unknown;
+          api_key?: unknown;
+        }
+      ).token ??
+      (payload as { accessToken?: unknown }).accessToken ??
+      (payload as { sessionToken?: unknown }).sessionToken ??
+      (payload as { api_key?: unknown }).api_key;
+
+    if (typeof directToken === 'string' && directToken.trim()) {
+      return directToken.trim();
+    }
+
     const maybeMessage = (payload as { message?: unknown }).message;
     if (typeof maybeMessage === 'string') {
       const index = maybeMessage.indexOf('logged in user session:');
@@ -133,11 +150,14 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     setAuthState({ isLoggedIn: false, username: null, token: null });
   }, []);
 
-  const contextValue = useMemo<AuthContextValue>(() => ({
-    ...authState,
-    login,
-    logout,
-  }), [authState, login, logout]);
+  const contextValue = useMemo<AuthContextValue>(
+    () => ({
+      ...authState,
+      login,
+      logout,
+    }),
+    [authState, login, logout],
+  );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }

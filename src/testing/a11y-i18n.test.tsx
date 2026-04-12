@@ -272,6 +272,20 @@ describe('Internationalisation (i18n)', () => {
       'petstore.common.status.available',
       'petstore.common.status.pending',
       'petstore.common.status.sold',
+      'components.userCreateForm.title',
+      'components.userCreateForm.fields.username',
+      'components.userCreateForm.fields.password',
+      'components.userCreateForm.fields.email',
+      'components.userCreateForm.fields.firstName',
+      'components.userCreateForm.fields.lastName',
+      'components.userCreateForm.fields.phone',
+      'components.userCreateForm.submit',
+      'components.userCreateForm.success',
+      'components.userCreateForm.errors.usernameRequired',
+      'components.userCreateForm.errors.passwordRequired',
+      'components.userCreateForm.errors.emailInvalid',
+      'components.userCreateForm.errors.generic',
+      'components.userCreateForm.announceOnCreate',
     ];
 
     criticalKeys.forEach((key) => {

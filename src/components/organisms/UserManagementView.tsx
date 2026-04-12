@@ -30,6 +30,7 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
   const { t } = useTranslation();
   const { ariaAttributes } = useAccessibility({
     'aria-label': t('petstore.app.users.ariaLabel'),
+    role: 'group',
   });
 
   // Lookup state
@@ -38,13 +39,26 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
   const [lookupError, setLookupError] = React.useState<string | null>(null);
   const [lookupLoading, setLookupLoading] = React.useState(false);
 
-  // Form modal state
+  // Form modal state (edit/create)
   const [formOpen, setFormOpen] = React.useState(false);
   const [editingUser, setEditingUser] = React.useState<User | undefined>(undefined);
   const [formLoading, setFormLoading] = React.useState(false);
 
+  // User creation modal (for unauthenticated users)
+  const [createModalOpen, setCreateModalOpen] = React.useState(false);
+
   // Delete confirmation
   const [deletingUser, setDeletingUser] = React.useState<User | undefined>(undefined);
+
+  const closeEditModal = () => {
+    setFormOpen(false);
+    setEditingUser(undefined);
+  };
+
+  const closeCreateModal = () => {
+    setCreateModalOpen(false);
+    setEditingUser(undefined);
+  };
 
   // Lookup handler
   const handleLookup = async () => {
@@ -66,12 +80,6 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
     setLookupLoading(false);
   };
 
-  // Create user
-  const handleCreate = () => {
-    setEditingUser(undefined);
-    setFormOpen(true);
-  };
-
   // Edit user
   const handleEdit = (user: User) => {
     setEditingUser(user);
@@ -81,19 +89,26 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
   // Form submit
   const handleFormSubmit = async (fields: UserFormFields) => {
     if (mockMode) {
-      setFormOpen(false);
+      closeEditModal();
+      closeCreateModal();
       return;
     }
+
     setFormLoading(true);
+
     if (editingUser) {
-      await updateUser(editingUser.username, {
+      const updateResult = await updateUser(editingUser.username, {
         ...editingUser,
         ...fields,
         id: editingUser.id,
         userStatus: editingUser.userStatus,
       });
+      if (updateResult.error) {
+        setFormLoading(false);
+        throw new Error(updateResult.error);
+      }
     } else {
-      await createUser({
+      const createResult = await createUser({
         username: fields.username,
         firstName: fields.firstName,
         lastName: fields.lastName,
@@ -102,9 +117,20 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
         phone: fields.phone,
         userStatus: 0,
       });
+      if (createResult.error) {
+        setFormLoading(false);
+        throw new Error(createResult.error);
+      }
     }
+
     setFormLoading(false);
-    setFormOpen(false);
+
+    if (editingUser) {
+      closeEditModal();
+    } else {
+      closeCreateModal();
+    }
+
     // Re-lookup the user if we were editing the same one
     if (editingUser && editingUser.username === lookedUpUser?.username) {
       const result = await getUserByName(editingUser.username);
@@ -126,53 +152,63 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
   };
 
   return (
-    <section {...ariaAttributes} style={{ padding: theme.spacing[4] }}>
-      <h2 style={{ fontSize: theme.typography.fontSize.lg, marginBottom: theme.spacing[3], fontWeight: theme.typography.fontWeight.semibold }}>
+    <section {...ariaAttributes} role="group" style={{ padding: theme.spacing[4] }}>
+      <h2
+        style={{
+          fontSize: theme.typography.fontSize.lg,
+          marginBottom: theme.spacing[3],
+          fontWeight: theme.typography.fontWeight.semibold,
+        }}
+      >
         {t('petstore.users.title')}
       </h2>
 
-      {/* Lookup bar */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-end',
-          gap: theme.spacing[3],
-          flexWrap: 'wrap',
-          marginBottom: theme.spacing[4],
-        }}
-        aria-label={t('petstore.users.lookup.ariaLabel')}
-      >
-        <Input
-          name="username"
-          labelTranslationKey="petstore.users.lookup.label"
-          placeholderTranslationKey="petstore.users.lookup.placeholder"
-          value={lookupUsername}
-          onChange={(e) => setLookupUsername(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              handleLookup();
-            }
-          }}
-        />
-        <Button
-          variant="secondary"
-          onClick={handleLookup}
-          disabled={lookupLoading || !lookupUsername.trim()}
-          loading={lookupLoading}
-        >
-          {t('petstore.users.lookup.button')}
-        </Button>
-        {isLoggedIn && (
+      {/* Show create user button/modal only if NOT logged in */}
+      {!isLoggedIn && (
+        <div style={{ marginBottom: theme.spacing[4] }}>
           <Button
             variant="primary"
-            onClick={handleCreate}
-            announceOnAction={t('petstore.app.users.announceCreate')}
+            onClick={() => setCreateModalOpen(true)}
+            announceOnAction={t('components.userCreateForm.announceOnCreate')}
           >
-            {t('petstore.app.users.createButton')}
+            {t('components.userCreateForm.title')}
           </Button>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Lookup bar only if logged in */}
+      {isLoggedIn && (
+        <form
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            gap: theme.spacing[3],
+            flexWrap: 'wrap',
+            marginBottom: theme.spacing[4],
+          }}
+          aria-label={t('petstore.users.lookup.ariaLabel')}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLookup();
+          }}
+        >
+          <Input
+            name="username"
+            labelTranslationKey="petstore.users.lookup.label"
+            placeholderTranslationKey="petstore.users.lookup.placeholder"
+            value={lookupUsername}
+            onChange={(e) => setLookupUsername(e.target.value)}
+          />
+          <Button
+            variant="secondary"
+            onClick={handleLookup}
+            disabled={lookupLoading || !lookupUsername.trim()}
+            loading={lookupLoading}
+          >
+            {t('petstore.users.lookup.button')}
+          </Button>
+        </form>
+      )}
 
       {/* Lookup error */}
       {lookupError && (
@@ -200,11 +236,13 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
         </div>
       )}
 
-      {/* Create / Edit modal */}
+      {/* Create / Edit modal (only for editing, not for creation when not logged in) */}
       <Modal
         isOpen={formOpen}
-        onClose={() => setFormOpen(false)}
-        titleTranslationKey={editingUser ? 'petstore.users.form.editTitle' : 'petstore.users.form.createTitle'}
+        onClose={closeEditModal}
+        titleTranslationKey={
+          editingUser ? 'petstore.users.form.editTitle' : 'petstore.users.form.createTitle'
+        }
         size="medium"
       >
         <UserForm
@@ -220,9 +258,19 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
               }
             : {})}
           onSubmit={handleFormSubmit}
-          onCancel={() => setFormOpen(false)}
+          onCancel={closeEditModal}
           isLoading={formLoading}
         />
+      </Modal>
+
+      {/* User creation modal for unauthenticated users */}
+      <Modal
+        isOpen={createModalOpen}
+        onClose={closeCreateModal}
+        titleTranslationKey="petstore.users.form.createTitle"
+        size="medium"
+      >
+        <UserForm onSubmit={handleFormSubmit} onCancel={closeCreateModal} isLoading={formLoading} />
       </Modal>
 
       {/* Delete confirmation */}

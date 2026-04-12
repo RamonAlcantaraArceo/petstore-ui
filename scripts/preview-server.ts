@@ -15,6 +15,7 @@ import { existsSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
 
 const PORT = Number(process.env.PORT) || 4000;
+const API_PROXY_TARGET = process.env.API_PROXY_TARGET || 'http://localhost:8000';
 const ROOT = join(import.meta.dir, '..');
 
 /** Map file extensions to content types. */
@@ -74,6 +75,24 @@ Bun.serve({
     const url = new URL(req.url);
     let pathname = decodeURIComponent(url.pathname);
 
+    // --- /api/* → proxy to API_PROXY_TARGET ---
+    if (pathname.startsWith('/api/')) {
+      const target = `${API_PROXY_TARGET}${pathname}${url.search}`;
+      const headers = new Headers(req.headers);
+      const allowsBody = req.method !== 'GET' && req.method !== 'HEAD' && req.method !== 'OPTIONS';
+
+      headers.delete('host');
+      if (!allowsBody) {
+        headers.delete('content-length');
+      }
+
+      return fetch(target, {
+        method: req.method,
+        headers,
+        ...(allowsBody ? { body: req.body } : {}),
+      });
+    }
+
     // --- /storybook/* → storybook-static/* ---
     if (pathname === '/storybook') {
       return Response.redirect('/storybook/', 301);
@@ -118,5 +137,6 @@ console.log(`\n  Petstore UI preview server running at:\n`);
 console.log(`    Homepage:        http://localhost:${PORT}/`);
 console.log(`    Storybook:       http://localhost:${PORT}/storybook/`);
 console.log(`    Petstore Demo:   http://localhost:${PORT}/petstore/`);
+console.log(`    API proxy:       http://localhost:${PORT}/api/* → ${API_PROXY_TARGET}`);
 console.log(`    Visual Report:   http://localhost:${PORT}/visual-report/`);
 console.log();

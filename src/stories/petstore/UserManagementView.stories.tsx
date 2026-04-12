@@ -47,7 +47,7 @@ export const WithUser: Story = {
     docs: {
       description: {
         story:
-          'Authenticated view with a pre-loaded user result. Create User button is visible. ' +
+          'Authenticated view with a pre-loaded user result. Lookup and card actions are available; Create User button is hidden while logged in. ' +
           'Click Edit or Delete on the card to exercise modal flows.',
       },
     },
@@ -55,7 +55,7 @@ export const WithUser: Story = {
 };
 
 export const ReadOnly: Story = {
-  name: 'Read-Only (Logged Out)',
+  name: 'Logged Out (Create Access)',
   args: {
     isLoggedIn: false,
     initialUser: sampleUser,
@@ -65,14 +65,14 @@ export const ReadOnly: Story = {
     docs: {
       description: {
         story:
-          'Unauthenticated view — no Create User button and card actions are hidden.',
+          'Unauthenticated view — Create User button is visible and opens the creation modal, while card edit/delete actions remain hidden.',
       },
     },
   },
 };
 
 export const NoUser: Story = {
-  name: 'No User Looked Up',
+  name: 'No User Looked Up (Logged In)',
   args: {
     isLoggedIn: true,
     mockMode: true,
@@ -81,7 +81,23 @@ export const NoUser: Story = {
     docs: {
       description: {
         story:
-          'Initial state before any lookup. Only the username search input, lookup button, and Create User button are shown.',
+          'Initial authenticated state before any lookup. Username search input and lookup button are shown.',
+      },
+    },
+  },
+};
+
+export const AccessibilityAndLocaleShowcase: Story = {
+  name: 'A11y + Locale Showcase',
+  args: {
+    isLoggedIn: false,
+    mockMode: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use keyboard navigation (Tab / Enter / Shift+Tab) to reach Create User and open the modal. Switch locale in the toolbar to verify translated labels and button text.',
       },
     },
   },

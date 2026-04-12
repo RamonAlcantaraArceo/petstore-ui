@@ -16,7 +16,48 @@
 
 import type { ApiResult } from './types';
 
-const BASE_URL = 'https://petstore.swagger.io/v2';
+// ---------------------------------------------------------------------------
+// Environment configuration
+// ---------------------------------------------------------------------------
+
+const DEFAULT_BASE_URL = 'https://petstore.swagger.io/v2';
+
+function resolveBaseUrl(): string {
+  // Vite / Storybook (.env.local)
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) {
+      return import.meta.env.VITE_API_BASE_URL;
+    }
+  } catch {
+    /* not in Vite context */
+  }
+
+  // HTML meta tag: <meta name="api-base-url" content="http://localhost:8000" />
+  try {
+    const meta =
+      typeof document !== 'undefined' &&
+      document.querySelector<HTMLMetaElement>('meta[name="api-base-url"]');
+    if (meta && 'content' in meta && meta.content) {
+      return meta.content;
+    }
+  } catch {
+    /* SSR / non-browser */
+  }
+
+  return DEFAULT_BASE_URL;
+}
+
+let _baseUrl: string = resolveBaseUrl();
+
+/** Override the API base URL at runtime. */
+export function setBaseUrl(url: string): void {
+  _baseUrl = url;
+}
+
+/** Get the current API base URL. */
+export function getBaseUrl(): string {
+  return _baseUrl;
+}
 
 // ---------------------------------------------------------------------------
 // Token management — AuthContext (Phase 1) will call these helpers.
@@ -58,7 +99,9 @@ function buildHeaders(extra: Record<string, string> = {}): Record<string, string
 }
 
 function buildUrl(path: string, params?: Record<string, string>): string {
-  const url = new URL(`${BASE_URL}${path}`);
+  const raw = `${_baseUrl}${path}`;
+  const base = globalThis.location?.origin ?? 'http://localhost';
+  const url = raw.startsWith('http') ? new URL(raw) : new URL(raw, base);
   if (params) {
     for (const [key, value] of Object.entries(params)) {
       url.searchParams.set(key, value);
