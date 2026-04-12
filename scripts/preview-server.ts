@@ -79,11 +79,17 @@ Bun.serve({
     if (pathname.startsWith('/api/')) {
       const target = `${API_PROXY_TARGET}${pathname}${url.search}`;
       const headers = new Headers(req.headers);
+      const allowsBody = req.method !== 'GET' && req.method !== 'HEAD' && req.method !== 'OPTIONS';
+
       headers.delete('host');
+      if (!allowsBody) {
+        headers.delete('content-length');
+      }
+
       return fetch(target, {
         method: req.method,
         headers,
-        body: req.body,
+        ...(allowsBody ? { body: req.body } : {}),
       });
     }
 

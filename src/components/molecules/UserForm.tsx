@@ -127,7 +127,9 @@ export const UserForm: FC<UserFormProps> = ({
       onSubmit={handleSubmit}
       {...ariaAttributes}
       onKeyDown={handleKeyDown}
-      aria-label={t('petstore.users.form.ariaLabel')}
+      aria-label={t(
+        isCreateMode ? 'components.userCreateForm.formLabel' : 'petstore.users.form.ariaLabel',
+      )}
       autoComplete="off"
       noValidate
     >
@@ -179,7 +181,7 @@ export const UserForm: FC<UserFormProps> = ({
         value={fields.password}
         onChange={handleChange}
         type="password"
-        required={!user}
+        required={isCreateMode}
         autoComplete="new-password"
       />
       <Input

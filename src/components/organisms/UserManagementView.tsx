@@ -152,7 +152,7 @@ export const UserManagementView: FC<UserManagementViewProps> = ({
   };
 
   return (
-    <section {...ariaAttributes} style={{ padding: theme.spacing[4] }}>
+    <section {...ariaAttributes} role="group" style={{ padding: theme.spacing[4] }}>
       <h2
         style={{
           fontSize: theme.typography.fontSize.lg,

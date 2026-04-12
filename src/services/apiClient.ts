@@ -88,7 +88,6 @@ function buildHeaders(extra: Record<string, string> = {}): Record<string, string
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    'X-API-Key': 'dev-api-key',
     ...extra,
   };
 
@@ -101,7 +100,8 @@ function buildHeaders(extra: Record<string, string> = {}): Record<string, string
 
 function buildUrl(path: string, params?: Record<string, string>): string {
   const raw = `${_baseUrl}${path}`;
-  const url = raw.startsWith('http') ? new URL(raw) : new URL(raw, window.location.origin);
+  const base = globalThis.location?.origin ?? 'http://localhost';
+  const url = raw.startsWith('http') ? new URL(raw) : new URL(raw, base);
   if (params) {
     for (const [key, value] of Object.entries(params)) {
       url.searchParams.set(key, value);
