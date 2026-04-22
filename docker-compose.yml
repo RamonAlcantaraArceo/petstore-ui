@@ -8,8 +8,8 @@ services:
     restart: unless-stopped
     environment:
       # Runtime API target — overridable without rebuilding the image.
-      # Create a .env file in this directory to override for other environments.
-      API_BASE_URL: "${API_BASE_URL:-https://petstore-api-dev.ramon-alcantara.work/api/v1}"
+      # Set in a .env file: API_BASE_URL=https://your-api-url.com/api/v1
+      API_BASE_URL: "${VITE_API_BASE_URL:-}"
       # Optional API key — injected server-side by nginx (never sent to the browser).
       # Set in a .env file: API_KEY=your-key
-      API_KEY: "${API_KEY:-dev-api-key}"
+      API_KEY: "${API_KEY:-}"

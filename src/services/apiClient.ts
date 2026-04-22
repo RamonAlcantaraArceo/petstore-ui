@@ -21,14 +21,15 @@ import type { ApiResult } from './types';
 // ---------------------------------------------------------------------------
 
 // Allow TypeScript to see the optional runtime config object injected by the
-// container entrypoint (docker/entrypoint.sh writes /config.js at startup).
+// container entrypoint (docker/entrypoint.sh writes /config.js at startup, and
+// scripts/preview-server.ts serves it dynamically in local dev mode).
 declare global {
   interface Window {
-    __RUNTIME_CONFIG__?: { API_BASE_URL?: string };
+    __RUNTIME_CONFIG__?: { API_BASE_URL?: string; API_KEY?: string };
   }
 }
 
-const DEFAULT_BASE_URL = 'https://petstore-api-dev.ramon-alcantara.work/api/v1';
+const DEFAULT_BASE_URL = 'https://petstore-api-qa.ramon-alcantara.work/api/v1';
 
 function resolveBaseUrl(): string {
   // 1. Runtime-injected config (set by container entrypoint via /config.js).
@@ -82,7 +83,19 @@ export function getBaseUrl(): string {
 // Token management — AuthContext (Phase 1) will call these helpers.
 // ---------------------------------------------------------------------------
 
-let _token: string | null = null;
+function resolveDefaultToken(): string | null {
+  try {
+    if (typeof window !== 'undefined' && window.__RUNTIME_CONFIG__?.API_KEY) {
+      return window.__RUNTIME_CONFIG__.API_KEY;
+    }
+  } catch {
+    /* non-browser / SSR */
+  }
+  return null;
+}
+
+const _defaultToken: string | null = resolveDefaultToken();
+let _token: string | null = _defaultToken;
 
 /** Store the API session token (called by AuthContext on login). */
 export function setApiToken(token: string): void {
@@ -91,7 +104,8 @@ export function setApiToken(token: string): void {
 
 /** Clear the API session token (called by AuthContext on logout). */
 export function clearApiToken(): void {
-  _token = null;
+  // Revert to runtime default token so anonymous requests still work.
+  _token = _defaultToken;
 }
 
 /** Retrieve the current API session token. */
@@ -111,7 +125,7 @@ function buildHeaders(extra: Record<string, string> = {}): Record<string, string
   };
 
   if (_token) {
-    headers['api_key'] = _token;
+    headers['x-api-key'] = _token;
   }
 
   return headers;

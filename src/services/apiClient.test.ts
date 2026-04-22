@@ -103,7 +103,7 @@ describe('apiClient', () => {
       expect(capturedUrl).toContain('status=available');
     });
 
-    it('injects api_key header when token is set', async () => {
+    it('injects x-api-key header when token is set', async () => {
       setApiToken('my-token');
       let capturedInit: RequestInit | undefined;
       globalThis.fetch = vi.fn(async (_url: string, init: RequestInit) => {
@@ -117,7 +117,7 @@ describe('apiClient', () => {
       }) as any;
       await get('/pet/1');
       const headers = capturedInit?.headers as Record<string, string>;
-      expect(headers?.['api_key']).toBe('my-token');
+      expect(headers?.['x-api-key']).toBe('my-token');
     });
   });
 

@@ -28,17 +28,21 @@ API_HOSTNAME=$(echo "$API_HOST" | sed 's|https\{0,1\}://||')
 
 # 1. config.js — always relative so the browser hits nginx (avoids CORS).
 #    The actual backend target lives only in the nginx proxy conf below.
+#    Use VITE_API_BASE_URL if set, else API_BASE_URL, else default to /api/v1
+FRONTEND_API_BASE_URL="${VITE_API_BASE_URL:-${API_BASE_URL:-/api/v1}}"
+FRONTEND_API_BASE_URL="${FRONTEND_API_BASE_URL%/}" # strip trailing slash
 cat > /usr/share/nginx/html/config.js <<EOF
 /* Runtime configuration – generated at container startup. Do not edit. */
 window.__RUNTIME_CONFIG__ = {
-  API_BASE_URL: "/api/v1"
+  API_BASE_URL: "${FRONTEND_API_BASE_URL}"
 };
 EOF
-echo "[entrypoint] config.js written — API_BASE_URL=/api/v1 (proxied -> ${BACKEND})"
+echo "[entrypoint] config.js written — API_BASE_URL=${FRONTEND_API_BASE_URL} (proxied -> ${BACKEND})"
 
 # 2. nginx proxy location — generated with the runtime backend URL.
-#    Uses resolver + set variable so DNS is resolved per-request, not at
-#    nginx startup (prevents startup failure when upstream is temporarily unreachable).
+#    For host.docker.internal / localhost we use a static proxy_pass because
+#    nginx resolver directives cannot resolve Docker's special host aliases.
+#    For normal DNS hosts, keep variable+resolver behavior for per-request DNS.
 #    Backslash-escaped $ are nginx variables; unescaped ${...} are shell variables.
 
 # Build optional api_key header line (server-side only — never in config.js).
@@ -50,21 +54,40 @@ else
   echo "[entrypoint] API_KEY not set — requests proxied without api_key header"
 fi
 
-cat > /tmp/api-proxy-location.conf <<NGINX_EOF
+case "${API_HOSTNAME}" in
+  host.docker.internal*|localhost*|127.0.0.1*)
+  cat > /tmp/api-proxy-location.conf <<NGINX_EOF
 location /api/v1/ {
-    resolver           1.1.1.1 8.8.8.8 valid=30s ipv6=off;
-    set                \$api_backend "${API_HOST}";
-    proxy_pass         \$api_backend;
-    proxy_http_version 1.1;
-    proxy_ssl_server_name on;
-    proxy_set_header   Host              "${API_HOSTNAME}";
-    proxy_set_header   X-Real-IP         \$remote_addr;
-    proxy_set_header   X-Forwarded-For   \$proxy_add_x_forwarded_for;
-    proxy_set_header   X-Forwarded-Proto \$scheme;
+  proxy_pass         ${API_HOST};
+  proxy_http_version 1.1;
+  proxy_ssl_server_name on;
+  proxy_set_header   Host              "${API_HOSTNAME}";
+  proxy_set_header   X-Real-IP         \$remote_addr;
+  proxy_set_header   X-Forwarded-For   \$proxy_add_x_forwarded_for;
+  proxy_set_header   X-Forwarded-Proto \$scheme;
 ${API_KEY_HEADER}
-    proxy_pass_header  Cache-Control;
+  proxy_pass_header  Cache-Control;
 }
 NGINX_EOF
+  ;;
+  *)
+  cat > /tmp/api-proxy-location.conf <<NGINX_EOF
+location /api/v1/ {
+  resolver           1.1.1.1 8.8.8.8 valid=30s ipv6=off;
+  set                \$api_backend "${API_HOST}";
+  proxy_pass         \$api_backend;
+  proxy_http_version 1.1;
+  proxy_ssl_server_name on;
+  proxy_set_header   Host              "${API_HOSTNAME}";
+  proxy_set_header   X-Real-IP         \$remote_addr;
+  proxy_set_header   X-Forwarded-For   \$proxy_add_x_forwarded_for;
+  proxy_set_header   X-Forwarded-Proto \$scheme;
+${API_KEY_HEADER}
+  proxy_pass_header  Cache-Control;
+}
+NGINX_EOF
+  ;;
+esac
 echo "[entrypoint] nginx proxy configured — /api/v1/ -> ${BACKEND}/ (host: ${API_HOSTNAME})"
 
 # Hand off to nginx
