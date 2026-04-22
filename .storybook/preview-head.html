@@ -1,0 +1,13 @@
+<!--
+  Runtime configuration loader.
+
+  In deployed containers the nginx entrypoint (docker/entrypoint.sh) generates
+  /config.js from environment variables before nginx starts.  That file sets
+  window.__RUNTIME_CONFIG__ so apiClient.ts can pick up the right API base URL
+  without a rebuild.
+
+  During local Storybook development (`bun run storybook`) the file is simply
+  absent and the browser silently ignores the 404, falling through to the
+  VITE_API_BASE_URL env var or the built-in default.
+-->
+<script src="/config.js" onerror="/* config.js absent in local dev – using defaults */"></script>

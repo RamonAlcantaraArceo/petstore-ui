@@ -20,10 +20,28 @@ import type { ApiResult } from './types';
 // Environment configuration
 // ---------------------------------------------------------------------------
 
-const DEFAULT_BASE_URL = 'https://petstore.swagger.io/v2';
+// Allow TypeScript to see the optional runtime config object injected by the
+// container entrypoint (docker/entrypoint.sh writes /config.js at startup).
+declare global {
+  interface Window {
+    __RUNTIME_CONFIG__?: { API_BASE_URL?: string };
+  }
+}
+
+const DEFAULT_BASE_URL = 'https://petstore-api-dev.ramon-alcantara.work/api/v1';
 
 function resolveBaseUrl(): string {
-  // Vite / Storybook (.env.local)
+  // 1. Runtime-injected config (set by container entrypoint via /config.js).
+  //    Highest priority — allows switching API targets without rebuilding the image.
+  try {
+    if (typeof window !== 'undefined' && window.__RUNTIME_CONFIG__?.API_BASE_URL) {
+      return window.__RUNTIME_CONFIG__.API_BASE_URL;
+    }
+  } catch {
+    /* non-browser / SSR */
+  }
+
+  // 2. Vite / Storybook build-time variable (.env.local)
   try {
     if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) {
       return import.meta.env.VITE_API_BASE_URL;
@@ -32,7 +50,7 @@ function resolveBaseUrl(): string {
     /* not in Vite context */
   }
 
-  // HTML meta tag: <meta name="api-base-url" content="http://localhost:8000" />
+  // 3. HTML meta tag: <meta name="api-base-url" content="https://..." />
   try {
     const meta =
       typeof document !== 'undefined' &&
@@ -44,6 +62,7 @@ function resolveBaseUrl(): string {
     /* SSR / non-browser */
   }
 
+  // 4. Default (DEV environment)
   return DEFAULT_BASE_URL;
 }
 

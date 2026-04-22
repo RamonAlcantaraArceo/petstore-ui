@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="api-base-url" content="/api/v1" />
     <title>Petstore UI | Petstore Demo</title>
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,6 +10,13 @@
       #root { min-height: 100vh; }
     </style>
     <link rel="icon" type="image/x-icon" href="petstore.ico" />
+    <!--
+      Load runtime config before the app bundle so window.__RUNTIME_CONFIG__
+      is populated when apiClient.resolveBaseUrl() runs.
+      onerror silently ignores a 404 in local dev (bun run preview serves
+      config.js from the preview-server's /api proxy, not from a file).
+    -->
+    <script src="/config.js" onerror="void 0"></script>
   </head>
   <body>
     <div id="root"></div>

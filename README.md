@@ -142,14 +142,58 @@ Build and run the production Storybook server locally:
 docker compose up --build
 ```
 
-The app will be available at [http://localhost:8080](http://localhost:8080).
+The app will be available at [http://localhost:8080](http://localhost:8080).  
+By default it targets the DEV API (`https://petstore-api-dev.ramon-alcantara.work/api/v1`).
+
+### Runtime API configuration
+
+The container reads `API_BASE_URL` at startup (from `docker/entrypoint.sh`) and
+writes it into `/config.js`, which Storybook loads on every page via
+`.storybook/preview-head.html`. This means **you can switch API targets without
+rebuilding the image**:
+
+```bash
+# Point at a different API without rebuilding
+API_BASE_URL=https://your-api/api/v1 docker compose up
+
+# Or create a .env file
+echo "API_BASE_URL=https://your-api/api/v1" > .env
+docker compose up
+```
 
 Single image build (no compose):
 
 ```bash
 docker build -t petstore-ui .
-docker run -p 8080:80 petstore-ui
+docker run -p 8080:80 -e API_BASE_URL=https://petstore-api-dev.ramon-alcantara.work/api/v1 petstore-ui
 ```
+
+### Deploying to Fly.io (DEV)
+
+Deployment is a two-step process:
+
+1. **Push image to GHCR** — trigger the _"Create and publish a Docker image"_
+   workflow (runs on `main`, `release-ghcr/*`, or `deploy-to-fly` branches, or
+   manually via `workflow_dispatch`). The workflow publishes:
+   - `ghcr.io/ramonalcantaraarceo/petstore-ui:latest`
+   - `ghcr.io/ramonalcantaraarceo/petstore-ui:sha-<short-sha>` (for rollback)
+
+2. **Deploy** — trigger the _"Deploy to Fly.io Dev"_ workflow
+   (`workflow_dispatch`). Optionally pass a specific tag (e.g. `sha-abc1234`)
+   in the `version` input; leave blank to deploy `latest`.
+
+The Fly config lives in `.fly/dev/fly.toml`. Key settings:
+
+| Setting         | Value                                                  |
+| --------------- | ------------------------------------------------------ |
+| `internal_port` | `80` (nginx)                                           |
+| `memory`        | `256mb`                                                |
+| `API_BASE_URL`  | `https://petstore-api-dev.ramon-alcantara.work/api/v1` |
+| Health check    | `GET /` every 15 s                                     |
+
+**Rollback:** re-trigger the deploy workflow with a previous `sha-<short-sha>` tag.
+
+**Troubleshoot:** `flyctl logs --app petstore-ui-dev`
 
 ## Static Website Preview & Navigation
 
