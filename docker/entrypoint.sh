@@ -11,7 +11,7 @@
 #                      Example: https://petstore-api-dev.ramon-alcantara.work/api/v1
 #   API_BASE_URL     — Browser-facing API path written into config.js.
 #                      Default: /api/v1. Keep this relative to avoid CORS.
-#   API_KEY          — Optional. If set, injected as the api_key header on every
+#   API_KEY          — Optional. If set, injected as the x-api-key header on every
 #                      proxied request (server-side only — never sent to the browser).
 #
 # Usage (Dockerfile CMD or compose entrypoint):
@@ -54,13 +54,13 @@ echo "[entrypoint] config.js written — API_BASE_URL=${FRONTEND_API_BASE_URL} (
 #    For normal DNS hosts, keep variable+resolver behavior for per-request DNS.
 #    Backslash-escaped $ are nginx variables; unescaped ${...} are shell variables.
 
-# Build optional api_key header line (server-side only — never in config.js).
+# Build optional x-api-key header line (server-side only — never in config.js).
 if [ -n "${API_KEY:-}" ]; then
   API_KEY_HEADER="    proxy_set_header   x-api-key         \"${API_KEY}\";"
-  echo "[entrypoint] API_KEY detected — will inject api_key header in proxy requests"
+  echo "[entrypoint] API_KEY detected — will inject x-api-key header in proxy requests"
 else
   API_KEY_HEADER=""
-  echo "[entrypoint] API_KEY not set — requests proxied without api_key header"
+  echo "[entrypoint] API_KEY not set — requests proxied without x-api-key header"
 fi
 
 case "${API_HOSTNAME}" in
