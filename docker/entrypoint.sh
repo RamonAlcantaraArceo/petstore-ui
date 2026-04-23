@@ -50,7 +50,6 @@ JSON_ESCAPED_FRONTEND_API_BASE_URL=$(printf '%s' "$FRONTEND_API_BASE_URL" | awk 
 cat > /usr/share/nginx/html/config.js <<EOF
 /* Runtime configuration – generated at container startup. Do not edit. */
 window.__RUNTIME_CONFIG__ = {
-  API_BASE_URL: "${JSON_ESCAPED_FRONTEND_API_BASE_URL}"
   API_BASE_URL: "${FRONTEND_API_BASE_URL}"
 };
 EOF

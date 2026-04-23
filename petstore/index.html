@@ -10,14 +10,15 @@
       #root { min-height: 100vh; }
     </style>
     <link rel="icon" type="image/x-icon" href="petstore.ico" />
+    <meta name="api-base-url" content="/api/v1" />
     <!--
       Load runtime config before the app bundle so window.__RUNTIME_CONFIG__
       is populated when apiClient.resolveBaseUrl() runs.
-      onerror silently ignores a 404 in local dev. Without config.js,
-      apiClient requires a meta tag fallback:
-      <meta name="api-base-url" content="..." />
+      If /config.js is unavailable (for example on static hosting), the
+      meta fallback above keeps apiClient startup working.
       bun run preview serves /config.js dynamically from environment variables.
     -->
+    <script src="../config.js" onerror="/* config.js absent in dev */"></script>  
     <script src="/config.js" onerror="/* config.js absent in dev */"></script>
   </head>
   <body>
