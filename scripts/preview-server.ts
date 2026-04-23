@@ -102,7 +102,7 @@ function serveFromDir(dir: string, urlPath: string): Response | null {
  */
 function generateConfigJs(): string {
   const apiBaseUrl = process.env.API_BASE_URL || '/api/v1';
-  const apiKey = process.env.API_KEY || undefined;
+  const apiKey = process.env.API_KEY;
   const config: Record<string, string> = { API_BASE_URL: apiBaseUrl };
   if (apiKey) {
     config.API_KEY = apiKey;

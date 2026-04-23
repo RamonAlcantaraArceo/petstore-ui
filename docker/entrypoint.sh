@@ -19,8 +19,14 @@
 
 set -e
 
+# Canonical default backend URL for this entrypoint script.
+# Keep this value aligned with the application's default API backend in the
+# other codepaths called out by CodeQL (for example apiClient.ts and
+# preview-server.ts) to avoid configuration drift.
+DEFAULT_API_PROXY_TARGET="https://petstore-api-dev.ramon-alcantara.work/api/v1"
+
 # Full backend URL used by nginx reverse-proxy (never sent to the browser).
-BACKEND_RAW="${API_PROXY_TARGET:-https://petstore-api-dev.ramon-alcantara.work/api/v1}"
+BACKEND_RAW="${API_PROXY_TARGET:-$DEFAULT_API_PROXY_TARGET}"
 BACKEND_RAW="${BACKEND_RAW%/}"  # strip any trailing slash
 
 # In containers, localhost/127.0.0.1 points to the container itself, not the host.

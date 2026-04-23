@@ -36,6 +36,7 @@ jobs:
             flyctl apps create --name petstore-ui-dev --auto-confirm
 
           else
+            flyctl apps list
             echo "App petstore-ui-dev already exists, skipping creation."
           fi
 
