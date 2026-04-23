@@ -5,7 +5,15 @@ import { useTranslation } from '../../i18n';
 import { useAccessibility } from '../../accessibility';
 
 export interface BadgeProps {
-  variant?: 'available' | 'pending' | 'sold' | 'placed' | 'approved' | 'delivered' | 'info' | 'default';
+  variant?:
+    | 'available'
+    | 'pending'
+    | 'sold'
+    | 'placed'
+    | 'approved'
+    | 'delivered'
+    | 'info'
+    | 'default';
   size?: 'small' | 'medium';
   children?: React.ReactNode;
   className?: string;
@@ -35,20 +43,28 @@ export const Badge: FC<BadgeProps> = ({
   const { t } = useTranslation();
   const { ariaAttributes } = useAccessibility({});
 
-  const label = children
-    ?? t(labelTranslationKey ?? BADGE_LABEL_KEYS[variant], translationParams);
+  const label = children ?? t(labelTranslationKey ?? BADGE_LABEL_KEYS[variant], translationParams);
 
   const getColors = (): { backgroundColor: string; color: string } => {
     switch (variant) {
       case 'available':
       case 'approved':
-        return { backgroundColor: theme.colors.semantic.successLight, color: theme.colors.semantic.successDark };
+        return {
+          backgroundColor: theme.colors.semantic.successLight,
+          color: theme.colors.semantic.successDark,
+        };
       case 'pending':
       case 'placed':
-        return { backgroundColor: theme.colors.semantic.warningLight, color: theme.colors.semantic.warningDark };
+        return {
+          backgroundColor: theme.colors.semantic.warningLight,
+          color: theme.colors.semantic.warningDark,
+        };
       case 'sold':
       case 'delivered':
-        return { backgroundColor: theme.colors.semantic.infoLight, color: theme.colors.semantic.infoDark };
+        return {
+          backgroundColor: theme.colors.semantic.infoLight,
+          color: theme.colors.semantic.infoDark,
+        };
       case 'info':
         return { backgroundColor: theme.colors.primary[100], color: theme.colors.primary[700] };
       default:
@@ -69,7 +85,10 @@ export const Badge: FC<BadgeProps> = ({
     fontWeight: theme.typography.fontWeight.semibold,
     fontSize: size === 'small' ? theme.typography.fontSize.xs : theme.typography.fontSize.sm,
     lineHeight: theme.typography.lineHeight.tight,
-    padding: size === 'small' ? `${theme.spacing[1]} ${theme.spacing[2]}` : `${theme.spacing[1.5]} ${theme.spacing[3]}`,
+    padding:
+      size === 'small'
+        ? `${theme.spacing[1]} ${theme.spacing[2]}`
+        : `${theme.spacing[1.5]} ${theme.spacing[3]}`,
     whiteSpace: 'nowrap',
   };
 

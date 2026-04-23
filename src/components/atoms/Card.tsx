@@ -4,25 +4,24 @@ import { theme } from '../../tokens/theme';
 import { useTranslation } from '../../i18n';
 import { useAccessibility } from '../../accessibility';
 
-
 /**
  * Card component with elevation system, comprehensive accessibility, and internationalization.
  * Provides visual hierarchy through shadow levels and supports interactive states with full a11y.
- * 
+ *
  * @example
  * ```tsx
- * <Card 
- *   elevation="md" 
+ * <Card
+ *   elevation="md"
  *   padding="lg"
  *   ariaLabel={t('components.card.ariaLabel', { title: 'Product' })}
  * >
  *   <h3>{t('stories.card.examples.title')}</h3>
  *   <p>{t('stories.card.examples.content')}</p>
  * </Card>
- * 
- * <Card 
- *   elevation="lg" 
- *   interactive 
+ *
+ * <Card
+ *   elevation="lg"
+ *   interactive
  *   onClick={handleClick}
  *   translationKey="components.card.defaultTitle"
  * >
@@ -86,37 +85,35 @@ export const Card: FC<CardProps> = ({
   ...props
 }) => {
   const { t } = useTranslation();
-  
+
   // Use accessibility hook for comprehensive a11y features
   const {
     ariaAttributes,
     handleKeyDown: accessibilityKeyDown,
-    announceAction
+    announceAction,
   } = useAccessibility({
     enterActivation: interactive && enterActivation,
     spaceActivation: interactive && spaceActivation,
-    announceOnAction: announceOnAction || ''
+    announceOnAction: announceOnAction || '',
   });
-  
+
   // Get translated content if translation key provided
-  const displayTitle = translationKey 
-    ? t(translationKey, translationParams)
-    : undefined;
-  
+  const displayTitle = translationKey ? t(translationKey, translationParams) : undefined;
+
   // Generate accessible aria-label
   const getAriaLabel = () => {
     if (ariaAttributes['aria-label']) {
       return ariaAttributes['aria-label'];
     }
-    
+
     if (!useDefaultAriaLabel) {
       return undefined;
     }
-    
+
     if (displayTitle) {
       return t('components.card.ariaLabel', { title: displayTitle });
     }
-    
+
     return t('components.card.defaultTitle');
   };
   const baseClasses = 'card';
@@ -127,7 +124,7 @@ export const Card: FC<CardProps> = ({
   const interactiveClass = interactive ? 'card--interactive' : '';
   const selectedClass = selected ? 'card--selected' : '';
   const fullWidthClass = fullWidth ? 'card--full-width' : '';
-  
+
   const cardClasses = [
     baseClasses,
     elevationClasses,
@@ -137,7 +134,7 @@ export const Card: FC<CardProps> = ({
     interactiveClass,
     selectedClass,
     fullWidthClass,
-    className
+    className,
   ]
     .filter(Boolean)
     .join(' ');
@@ -161,11 +158,11 @@ export const Card: FC<CardProps> = ({
 
   const getBorderColor = () => {
     if (!border && !selected) return 'transparent';
-    
+
     if (selected) {
       return theme.colors.primary[500];
     }
-    
+
     switch (variant) {
       case 'primary':
         return theme.colors.primary[200];
@@ -255,31 +252,39 @@ export const Card: FC<CardProps> = ({
     position: 'relative',
     width: fullWidth ? '100%' : 'auto',
     cursor: interactive ? 'pointer' : 'default',
-    
+
     // Selected state
     ...(selected && {
       borderWidth: '2px',
-      borderColor: theme.colors.primary[500]
+      borderColor: theme.colors.primary[500],
     }),
-    
+
     // Focus styles for interactive cards
     ...(interactive && {
       '&:focus': {
         outline: `2px solid ${theme.colors.primary[500]}`,
-        outlineOffset: '2px'
-      }
-    })
+        outlineOffset: '2px',
+      },
+    }),
   };
 
-  const hoverStyles: React.CSSProperties = interactive ? {
-    transform: 'translateY(-1px)',
-    boxShadow: elevation === 'none' ? theme.boxShadow.md : 
-               elevation === 'sm' ? theme.boxShadow.md :
-               elevation === 'base' ? theme.boxShadow.lg :
-               elevation === 'md' ? theme.boxShadow.xl :
-               elevation === 'lg' ? theme.boxShadow['2xl'] :
-               theme.boxShadow['2xl']
-  } : {};
+  const hoverStyles: React.CSSProperties = interactive
+    ? {
+        transform: 'translateY(-1px)',
+        boxShadow:
+          elevation === 'none'
+            ? theme.boxShadow.md
+            : elevation === 'sm'
+              ? theme.boxShadow.md
+              : elevation === 'base'
+                ? theme.boxShadow.lg
+                : elevation === 'md'
+                  ? theme.boxShadow.xl
+                  : elevation === 'lg'
+                    ? theme.boxShadow['2xl']
+                    : theme.boxShadow['2xl'],
+      }
+    : {};
 
   // Enhanced click handler with accessibility announcements
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -288,7 +293,7 @@ export const Card: FC<CardProps> = ({
       if (announceOnAction) {
         announceAction();
       }
-      
+
       onClick(event);
     }
   };
@@ -297,7 +302,7 @@ export const Card: FC<CardProps> = ({
   const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLDivElement>) => {
     // Handle accessibility keyboard events
     accessibilityKeyDown(event as any);
-    
+
     // Handle card-specific keyboard events
     if (interactive && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
@@ -309,7 +314,7 @@ export const Card: FC<CardProps> = ({
         onClick(event as any);
       }
     }
-    
+
     onKeyDown?.(event);
   };
 
@@ -356,13 +361,13 @@ export const Card: FC<CardProps> = ({
       {...(props as any)} // Spread remaining props, excluding ones we've handled
     >
       {displayTitle && (
-        <div 
-          style={{ 
-            position: 'absolute', 
-            left: '-10000px', 
-            width: '1px', 
-            height: '1px', 
-            overflow: 'hidden' 
+        <div
+          style={{
+            position: 'absolute',
+            left: '-10000px',
+            width: '1px',
+            height: '1px',
+            overflow: 'hidden',
           }}
           aria-hidden="true"
         >

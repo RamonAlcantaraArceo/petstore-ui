@@ -108,12 +108,8 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
       />
 
       <main>
-        {activeApp === 'pets' && (
-          <PetManagementView isLoggedIn={isLoggedIn} mockMode={mockMode} />
-        )}
-        {activeApp === 'orders' && (
-          <StoreOrdersView isLoggedIn={isLoggedIn} mockMode={mockMode} />
-        )}
+        {activeApp === 'pets' && <PetManagementView isLoggedIn={isLoggedIn} mockMode={mockMode} />}
+        {activeApp === 'orders' && <StoreOrdersView isLoggedIn={isLoggedIn} mockMode={mockMode} />}
         {activeApp === 'users' && (
           <UserManagementView isLoggedIn={isLoggedIn} mockMode={mockMode} />
         )}
@@ -146,10 +142,7 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
  * @example
  * <PetstoreApp />
  */
-export const PetstoreApp: FC<PetstoreAppProps> = ({
-  locale,
-  mockMode = false,
-}) => {
+export const PetstoreApp: FC<PetstoreAppProps> = ({ locale, mockMode = false }) => {
   return (
     <AuthProvider>
       <LocaleProvider {...(locale !== undefined ? { locale } : {})}>

@@ -8,20 +8,22 @@ import type { SupportedLocale } from '../src/i18n';
 const ThemeContext = React.createContext(theme);
 
 // Theme and Locale Provider Component
-export const StoryProvider: React.FC<{ 
+export const StoryProvider: React.FC<{
   children: React.ReactNode;
   locale: SupportedLocale;
 }> = ({ children, locale }) => (
   <ThemeContext.Provider value={theme}>
     <LocaleProvider locale={locale}>
-      <div style={{
-        fontFamily: theme.typography.fontFamily.sans.join(', '),
-        fontSize: theme.typography.fontSize.base,
-        lineHeight: theme.typography.lineHeight.normal,
-        color: theme.colors.text?.primary || theme.colors.secondary[900],
-        backgroundColor: theme.colors.background?.primary || theme.colors.secondary[50],
-        padding: '1rem'
-      }}>
+      <div
+        style={{
+          fontFamily: theme.typography.fontFamily.sans.join(', '),
+          fontSize: theme.typography.fontSize.base,
+          lineHeight: theme.typography.lineHeight.normal,
+          color: theme.colors.text?.primary || theme.colors.secondary[900],
+          backgroundColor: theme.colors.background?.primary || theme.colors.secondary[50],
+          padding: '1rem',
+        }}
+      >
         {children}
       </div>
     </LocaleProvider>
@@ -37,7 +39,7 @@ const preview: Preview = {
         date: /Date$/,
       },
       expanded: true,
-      sort: 'requiredFirst'
+      sort: 'requiredFirst',
     },
     backgrounds: {
       default: 'light',
@@ -66,7 +68,7 @@ const preview: Preview = {
           },
         },
         tablet: {
-          name: 'Tablet', 
+          name: 'Tablet',
           styles: {
             width: theme.breakpoints.md,
             height: '1024px',
@@ -118,7 +120,7 @@ const preview: Preview = {
         inputBorder: '#cbd5e1',
         inputTextColor: '#1e293b',
         inputBorderRadius: 4,
-      }
+      },
     },
     /* a11y: {
       config: {
@@ -138,7 +140,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const locale = context.globals.locale as SupportedLocale || 'en';
+      const locale = (context.globals.locale as SupportedLocale) || 'en';
       return (
         <StoryProvider locale={locale}>
           <Story />
@@ -153,14 +155,14 @@ const preview: Preview = {
       defaultValue: 'en',
       toolbar: {
         icon: 'globe',
-        items: getAvailableLocales().map(locale => ({
+        items: getAvailableLocales().map((locale) => ({
           value: locale,
           title: localeMetadata[locale].name,
-          right: localeMetadata[locale].flag
+          right: localeMetadata[locale].flag,
         })),
         showName: true,
-        dynamicTitle: true
-      }
+        dynamicTitle: true,
+      },
     },
     theme: {
       description: 'Global theme for components',

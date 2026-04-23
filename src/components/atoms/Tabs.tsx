@@ -108,7 +108,9 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
     gap: theme.spacing[2],
     fontFamily: theme.typography.fontFamily.sans.join(', '),
     fontSize: theme.typography.fontSize.sm,
-    fontWeight: isActive ? theme.typography.fontWeight.semibold : theme.typography.fontWeight.medium,
+    fontWeight: isActive
+      ? theme.typography.fontWeight.semibold
+      : theme.typography.fontWeight.medium,
     cursor: 'pointer',
   });
 
@@ -118,7 +120,9 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
         const isActive = tab.id === activeTab;
         const tabId = `tab-${tab.id}`;
         const panelId = `tabpanel-${tab.id}`;
-        const displayLabel = tab.labelTranslationKey ? t(tab.labelTranslationKey) : tab.label ?? tab.id;
+        const displayLabel = tab.labelTranslationKey
+          ? t(tab.labelTranslationKey)
+          : (tab.label ?? tab.id);
 
         return (
           <button

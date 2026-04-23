@@ -16,7 +16,12 @@ export interface OrderFormProps {
   className?: string;
 }
 
-export const OrderForm: FC<OrderFormProps> = ({ onSubmit, onCancel, isLoading = false, className }) => {
+export const OrderForm: FC<OrderFormProps> = ({
+  onSubmit,
+  onCancel,
+  isLoading = false,
+  className,
+}) => {
   const { t } = useTranslation();
   const [fields, setFields] = React.useState<OrderFormFields>({ petId: '', quantity: '1' });
 
@@ -24,9 +29,8 @@ export const OrderForm: FC<OrderFormProps> = ({ onSubmit, onCancel, isLoading = 
     announceOnAction: t('petstore.orders.form.announceSubmit'),
   });
 
-  const set = (key: keyof OrderFormFields) =>
-    (e: React.ChangeEvent<HTMLInputElement>) =>
-      setFields((prev) => ({ ...prev, [key]: e.target.value }));
+  const set = (key: keyof OrderFormFields) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFields((prev) => ({ ...prev, [key]: e.target.value }));
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

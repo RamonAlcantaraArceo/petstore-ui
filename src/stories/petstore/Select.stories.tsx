@@ -33,11 +33,7 @@ function SelectTemplate(args: React.ComponentProps<typeof Select>) {
 
   return (
     <div style={{ minWidth: '20rem' }}>
-      <Select
-        {...args}
-        value={value}
-        onChange={setValue}
-      />
+      <Select {...args} value={value} onChange={setValue} />
     </div>
   );
 }

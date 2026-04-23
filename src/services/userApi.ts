@@ -16,10 +16,7 @@ import { get, post, put, del } from './apiClient';
  * @param password — User password
  * @returns ApiResult containing the raw ApiResponse (caller extracts token)
  */
-export function loginUser(
-  username: string,
-  password: string,
-): Promise<ApiResult<ApiResponse>> {
+export function loginUser(username: string, password: string): Promise<ApiResult<ApiResponse>> {
   return get<ApiResponse>('/user/login', { username, password });
 }
 

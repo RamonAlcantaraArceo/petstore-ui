@@ -4,8 +4,19 @@
  */
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
-import type { SupportedLocale, LocaleContextValue, LocaleProviderProps, TranslationFunction } from './types';
-import { getTranslation, getLocaleData, isRTLLocale, DEFAULT_LOCALE, isSupportedLocale } from './registry';
+import type {
+  SupportedLocale,
+  LocaleContextValue,
+  LocaleProviderProps,
+  TranslationFunction,
+} from './types';
+import {
+  getTranslation,
+  getLocaleData,
+  isRTLLocale,
+  DEFAULT_LOCALE,
+  isSupportedLocale,
+} from './registry';
 
 // Create the locale context
 const LocaleContext = createContext<LocaleContextValue | null>(null);
@@ -20,11 +31,11 @@ const LOCALE_STORAGE_KEY = 'petstore-ui-locale';
  */
 export function useLocaleContext(): LocaleContextValue {
   const context = useContext(LocaleContext);
-  
+
   if (!context) {
     throw new Error('useLocaleContext must be used within a LocaleProvider');
   }
-  
+
   return context;
 }
 
@@ -34,17 +45,20 @@ export function useLocaleContext(): LocaleContextValue {
  */
 export function useTranslation() {
   const { t, locale, setLocale, isRTL } = useLocaleContext();
-  
+
   // Create a stable reference for the translation function
-  const stableT = useCallback<TranslationFunction>((key, params) => {
-    return t(key, params);
-  }, [t]);
-  
+  const stableT = useCallback<TranslationFunction>(
+    (key, params) => {
+      return t(key, params);
+    },
+    [t],
+  );
+
   return {
     t: stableT,
     locale,
     setLocale,
-    isRTL
+    isRTL,
   };
 }
 
@@ -56,7 +70,7 @@ function getStoredLocale(): SupportedLocale {
   if (typeof window === 'undefined') {
     return DEFAULT_LOCALE;
   }
-  
+
   try {
     const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
     if (stored && isSupportedLocale(stored)) {
@@ -65,7 +79,7 @@ function getStoredLocale(): SupportedLocale {
   } catch (error) {
     console.warn('Failed to read locale from localStorage:', error);
   }
-  
+
   return DEFAULT_LOCALE;
 }
 
@@ -77,7 +91,7 @@ function storeLocale(locale: SupportedLocale): void {
   if (typeof window === 'undefined') {
     return;
   }
-  
+
   try {
     localStorage.setItem(LOCALE_STORAGE_KEY, locale);
   } catch (error) {
@@ -93,7 +107,7 @@ function announceLocaleChange(locale: SupportedLocale): void {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     return;
   }
-  
+
   try {
     // Create a live region announcement for screen readers
     const announcement = document.createElement('div');
@@ -104,18 +118,18 @@ function announceLocaleChange(locale: SupportedLocale): void {
     announcement.style.width = '1px';
     announcement.style.height = '1px';
     announcement.style.overflow = 'hidden';
-    
+
     // Get the localized announcement text
     const localeData = getLocaleData(locale);
     const announcementText = getTranslation(
-      localeData, 
-      'accessibility.announcements.localeChanged', 
-      { locale: locale }
+      localeData,
+      'accessibility.announcements.localeChanged',
+      { locale: locale },
     );
-    
+
     announcement.textContent = announcementText;
     document.body.appendChild(announcement);
-    
+
     // Remove after announcement
     setTimeout(() => {
       if (announcement.parentNode) {
@@ -131,10 +145,7 @@ function announceLocaleChange(locale: SupportedLocale): void {
  * Locale Provider Component
  * Provides locale context to all child components
  */
-export const LocaleProvider: React.FC<LocaleProviderProps> = ({ 
-  locale: propLocale,
-  children 
-}) => {
+export const LocaleProvider: React.FC<LocaleProviderProps> = ({ locale: propLocale, children }) => {
   // Initialize state with prop locale or stored locale
   const [currentLocale, setCurrentLocale] = useState<SupportedLocale>(() => {
     return propLocale || getStoredLocale();
@@ -148,30 +159,39 @@ export const LocaleProvider: React.FC<LocaleProviderProps> = ({
   }, [propLocale, currentLocale]);
 
   // Store locale changes in localStorage and announce to screen readers
-  const handleSetLocale = useCallback((newLocale: SupportedLocale) => {
-    if (newLocale !== currentLocale) {
-      setCurrentLocale(newLocale);
-      storeLocale(newLocale);
-      announceLocaleChange(newLocale);
-    }
-  }, [currentLocale]);
+  const handleSetLocale = useCallback(
+    (newLocale: SupportedLocale) => {
+      if (newLocale !== currentLocale) {
+        setCurrentLocale(newLocale);
+        storeLocale(newLocale);
+        announceLocaleChange(newLocale);
+      }
+    },
+    [currentLocale],
+  );
 
   // Create the translation function
-  const translate: TranslationFunction = useCallback((key, params) => {
-    const localeData = getLocaleData(currentLocale);
-    return getTranslation(localeData, key, params);
-  }, [currentLocale]);
+  const translate: TranslationFunction = useCallback(
+    (key, params) => {
+      const localeData = getLocaleData(currentLocale);
+      return getTranslation(localeData, key, params);
+    },
+    [currentLocale],
+  );
 
   // Check if current locale is RTL
   const isRTL = useMemo(() => isRTLLocale(currentLocale), [currentLocale]);
 
   // Create stable context value
-  const contextValue = useMemo<LocaleContextValue>(() => ({
-    locale: currentLocale,
-    setLocale: handleSetLocale,
-    t: translate,
-    isRTL
-  }), [currentLocale, handleSetLocale, translate, isRTL]);
+  const contextValue = useMemo<LocaleContextValue>(
+    () => ({
+      locale: currentLocale,
+      setLocale: handleSetLocale,
+      t: translate,
+      isRTL,
+    }),
+    [currentLocale, handleSetLocale, translate, isRTL],
+  );
 
   // Set document direction for RTL support
   useEffect(() => {
@@ -181,11 +201,7 @@ export const LocaleProvider: React.FC<LocaleProviderProps> = ({
     }
   }, [isRTL, currentLocale]);
 
-  return (
-    <LocaleContext.Provider value={contextValue}>
-      {children}
-    </LocaleContext.Provider>
-  );
+  return <LocaleContext.Provider value={contextValue}>{children}</LocaleContext.Provider>;
 };
 
 export default LocaleProvider;

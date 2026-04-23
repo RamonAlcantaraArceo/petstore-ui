@@ -56,11 +56,7 @@ export const AppNavigation: FC<AppNavigationProps> = ({
         gap: theme.spacing[3],
       }}
     >
-      <Tabs
-        tabs={tabs}
-        activeTab={activeApp}
-        onChange={(id) => onNavigate(id as AppId)}
-      />
+      <Tabs tabs={tabs} activeTab={activeApp} onChange={(id) => onNavigate(id as AppId)} />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: theme.spacing[3] }}>
         {isLoggedIn ? (

@@ -1,7 +1,6 @@
 name: Visual Report Publish
 
 on:
-
   push:
     branches: [reporter-to-s3]
 

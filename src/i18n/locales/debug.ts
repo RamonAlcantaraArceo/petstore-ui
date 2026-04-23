@@ -1,7 +1,6 @@
 // Debug locale: always returns the key as the translation value
 // Supports any key, any nesting, and param interpolation for debugging
 
-
 /**
  * Debug locale for i18n: always returns the key as the value.
  * Usage: t('some.key') => 'some.key'

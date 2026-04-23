@@ -10,63 +10,64 @@ const meta: Meta<typeof Card> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Flexible card component with elevation system, comprehensive accessibility features, and full internationalization support. Provides visual hierarchy through shadow levels and supports interactive states with keyboard navigation.'
-      }
+        component:
+          'Flexible card component with elevation system, comprehensive accessibility features, and full internationalization support. Provides visual hierarchy through shadow levels and supports interactive states with keyboard navigation.',
+      },
     },
     a11y: {
       config: {
         rules: [
           { id: 'color-contrast', enabled: true },
           { id: 'region', enabled: true },
-          { id: 'aria-allowed-attr', enabled: true }
-        ]
+          { id: 'aria-allowed-attr', enabled: true },
+        ],
       },
-      manual: false
-    }
+      manual: false,
+    },
   },
   argTypes: {
     elevation: {
       control: 'select',
       options: ['none', 'sm', 'base', 'md', 'lg', 'xl', '2xl'],
-      description: 'Shadow elevation level for visual hierarchy'
+      description: 'Shadow elevation level for visual hierarchy',
     },
     padding: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg', 'xl'],
-      description: 'Internal padding size'
+      description: 'Internal padding size',
     },
     rounded: {
       control: 'select',
       options: ['none', 'sm', 'base', 'md', 'lg', 'xl', '2xl', 'full'],
-      description: 'Border radius size'
+      description: 'Border radius size',
     },
     variant: {
       control: 'select',
       options: ['default', 'primary', 'secondary', 'success', 'warning', 'error'],
-      description: 'Background color variant'
+      description: 'Background color variant',
     },
     interactive: {
       control: 'boolean',
-      description: 'Whether the card is interactive (clickable/hoverable)'
+      description: 'Whether the card is interactive (clickable/hoverable)',
     },
     selected: {
       control: 'boolean',
-      description: 'Whether the card is currently selected/active'
+      description: 'Whether the card is currently selected/active',
     },
     border: {
       control: 'boolean',
-      description: 'Whether to show a border'
+      description: 'Whether to show a border',
     },
     fullWidth: {
       control: 'boolean',
-      description: 'Whether the card should take full width'
+      description: 'Whether the card should take full width',
     },
     onClick: {
       action: 'clicked',
-      description: 'Click event handler for interactive cards'
-    }
+      description: 'Click event handler for interactive cards',
+    },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -94,8 +95,8 @@ export const Default: Story = {
     elevation: 'base',
     padding: 'md',
     rounded: 'lg',
-    variant: 'default'
-  }
+    variant: 'default',
+  },
 };
 
 export const BasicCard: Story = {
@@ -116,8 +117,8 @@ export const BasicCard: Story = {
   args: {
     elevation: 'sm',
     padding: 'md',
-    rounded: 'lg'
-  }
+    rounded: 'lg',
+  },
 };
 
 export const PrimaryCard: Story = {
@@ -139,8 +140,8 @@ export const PrimaryCard: Story = {
     variant: 'primary',
     elevation: 'md',
     padding: 'lg',
-    rounded: 'lg'
-  }
+    rounded: 'lg',
+  },
 };
 
 export const SecondaryCard: Story = {
@@ -162,59 +163,53 @@ export const SecondaryCard: Story = {
     variant: 'secondary',
     elevation: 'md',
     padding: 'lg',
-    rounded: 'lg'
-  }
+    rounded: 'lg',
+  },
 };
 
 export const SuccessCard: Story = {
   name: 'Success Variant',
   render: () => (
     <Card variant="success" elevation="md" padding="lg" rounded="lg">
-      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem', color: '#065f46' }}>
-        Success!
-      </h3>
+      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem', color: '#065f46' }}>Success!</h3>
       <p style={{ margin: 0, color: '#047857', fontSize: '0.875rem' }}>
         Your action was completed successfully.
       </p>
     </Card>
   ),
   args: {
-    variant: 'success'
-  }
+    variant: 'success',
+  },
 };
 
 export const WarningCard: Story = {
   name: 'Warning Variant',
   render: () => (
     <Card variant="warning" elevation="md" padding="lg" rounded="lg">
-      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem', color: '#92400e' }}>
-        Warning
-      </h3>
+      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem', color: '#92400e' }}>Warning</h3>
       <p style={{ margin: 0, color: '#b45309', fontSize: '0.875rem' }}>
         Please review before proceeding.
       </p>
     </Card>
   ),
   args: {
-    variant: 'warning'
-  }
+    variant: 'warning',
+  },
 };
 
 export const ErrorCard: Story = {
   name: 'Error Variant',
   render: () => (
     <Card variant="error" elevation="md" padding="lg" rounded="lg">
-      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem', color: '#991b1b' }}>
-        Error
-      </h3>
+      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem', color: '#991b1b' }}>Error</h3>
       <p style={{ margin: 0, color: '#dc2626', fontSize: '0.875rem' }}>
         Something went wrong. Please try again.
       </p>
     </Card>
   ),
   args: {
-    variant: 'error'
-  }
+    variant: 'error',
+  },
 };
 
 // =============================================================================
@@ -235,8 +230,8 @@ export const NoElevation: Story = {
     elevation: 'none',
     border: true,
     padding: 'md',
-    rounded: 'lg'
-  }
+    rounded: 'lg',
+  },
 };
 
 export const SmallElevation: Story = {
@@ -252,8 +247,8 @@ export const SmallElevation: Story = {
   args: {
     elevation: 'sm',
     padding: 'md',
-    rounded: 'lg'
-  }
+    rounded: 'lg',
+  },
 };
 
 export const LargeElevation: Story = {
@@ -269,8 +264,8 @@ export const LargeElevation: Story = {
   args: {
     elevation: 'lg',
     padding: 'md',
-    rounded: 'lg'
-  }
+    rounded: 'lg',
+  },
 };
 
 export const ExtraLargeElevation: Story = {
@@ -286,8 +281,8 @@ export const ExtraLargeElevation: Story = {
   args: {
     elevation: 'xl',
     padding: 'lg',
-    rounded: 'xl'
-  }
+    rounded: 'xl',
+  },
 };
 
 // =============================================================================
@@ -314,8 +309,8 @@ export const Interactive: Story = {
     elevation: 'md',
     padding: 'lg',
     rounded: 'lg',
-    announceOnAction: 'Card selected'
-  }
+    announceOnAction: 'Card selected',
+  },
 };
 
 export const Selected: Story = {
@@ -336,8 +331,8 @@ export const Selected: Story = {
     elevation: 'md',
     padding: 'lg',
     rounded: 'lg',
-    variant: 'primary'
-  }
+    variant: 'primary',
+  },
 };
 
 export const WithBorder: Story = {
@@ -354,8 +349,8 @@ export const WithBorder: Story = {
     border: true,
     elevation: 'none',
     padding: 'md',
-    rounded: 'lg'
-  }
+    rounded: 'lg',
+  },
 };
 
 // =============================================================================
@@ -378,7 +373,7 @@ export const NoPadding: Story = {
         </p>
       </div>
     </Card>
-  )
+  ),
 };
 
 export const SmallPadding: Story = {
@@ -390,7 +385,7 @@ export const SmallPadding: Story = {
         Small padding for compact layouts.
       </p>
     </Card>
-  )
+  ),
 };
 
 export const LargePadding: Story = {
@@ -402,7 +397,7 @@ export const LargePadding: Story = {
         Large padding for prominent content areas.
       </p>
     </Card>
-  )
+  ),
 };
 
 export const ExtraLargePadding: Story = {
@@ -414,7 +409,7 @@ export const ExtraLargePadding: Story = {
         Extra large padding for hero sections and feature highlights.
       </p>
     </Card>
-  )
+  ),
 };
 
 // =============================================================================
@@ -424,7 +419,14 @@ export const ExtraLargePadding: Story = {
 export const AllElevations: Story = {
   name: 'All Elevations',
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', maxWidth: '800px' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: '1.5rem',
+        maxWidth: '800px',
+      }}
+    >
       <Card elevation="none" padding="md" rounded="lg" border>
         <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>None</h4>
         <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation="none"</p>
@@ -455,10 +457,10 @@ export const AllElevations: Story = {
     layout: 'padded',
     docs: {
       description: {
-        story: 'Demonstrates all available elevation levels for visual hierarchy comparison.'
-      }
-    }
-  }
+        story: 'Demonstrates all available elevation levels for visual hierarchy comparison.',
+      },
+    },
+  },
 };
 
 export const AllVariants: Story = {
@@ -466,10 +468,19 @@ export const AllVariants: Story = {
   render: () => {
     const { t } = useTranslation();
     return (
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', maxWidth: '800px' }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '1.5rem',
+          maxWidth: '800px',
+        }}
+      >
         <Card variant="default" elevation="md" padding="md" rounded="lg">
           <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Default</h4>
-          <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>{t('stories.card.examples.content')}</p>
+          <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>
+            {t('stories.card.examples.content')}
+          </p>
         </Card>
         <Card variant="primary" elevation="md" padding="md" rounded="lg">
           <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem', color: '#1e40af' }}>Primary</h4>
@@ -498,10 +509,10 @@ export const AllVariants: Story = {
     layout: 'padded',
     docs: {
       description: {
-        story: 'Shows all card color variants for different contexts and states.'
-      }
-    }
-  }
+        story: 'Shows all card color variants for different contexts and states.',
+      },
+    },
+  },
 };
 
 export const AllRoundedOptions: Story = {
@@ -520,10 +531,10 @@ export const AllRoundedOptions: Story = {
     layout: 'padded',
     docs: {
       description: {
-        story: 'Demonstrates all available border radius options.'
-      }
-    }
-  }
+        story: 'Demonstrates all available border radius options.',
+      },
+    },
+  },
 };
 
 // =============================================================================
@@ -537,31 +548,28 @@ export const AccessibilityShowcase: Story = {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '600px' }}>
         <div>
-          <h3 style={{ marginBottom: '1rem', fontSize: '1.125rem' }}>
-            Accessible Card Components
-          </h3>
+          <h3 style={{ marginBottom: '1rem', fontSize: '1.125rem' }}>Accessible Card Components</h3>
           <p style={{ marginBottom: '1rem', color: '#6b7280', fontSize: '0.875rem' }}>
-            Cards include proper ARIA roles, keyboard navigation for interactive cards, and screen reader support.
+            Cards include proper ARIA roles, keyboard navigation for interactive cards, and screen
+            reader support.
           </p>
         </div>
-        
-        <Card 
-          elevation="md" 
-          padding="lg" 
+
+        <Card
+          elevation="md"
+          padding="lg"
           rounded="lg"
           aria-label={t('components.card.ariaLabel', { title: 'Static Content' })}
         >
-          <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem' }}>
-            Static Card
-          </h3>
+          <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem' }}>Static Card</h3>
           <p style={{ margin: 0, color: '#6b7280', fontSize: '0.875rem' }}>
             Non-interactive card with proper ARIA labeling for screen readers.
           </p>
         </Card>
-        
-        <Card 
-          elevation="md" 
-          padding="lg" 
+
+        <Card
+          elevation="md"
+          padding="lg"
           rounded="lg"
           interactive
           announceOnAction="Interactive card selected"
@@ -574,10 +582,10 @@ export const AccessibilityShowcase: Story = {
             Click or use keyboard (Enter/Space) to select this card.
           </p>
         </Card>
-        
-        <Card 
-          elevation="md" 
-          padding="lg" 
+
+        <Card
+          elevation="md"
+          padding="lg"
           rounded="lg"
           interactive
           selected
@@ -592,8 +600,15 @@ export const AccessibilityShowcase: Story = {
             Visual and programmatic indication of selection state.
           </p>
         </Card>
-        
-        <div style={{ padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+
+        <div
+          style={{
+            padding: '1rem',
+            backgroundColor: '#f9fafb',
+            borderRadius: '6px',
+            border: '1px solid #e5e7eb',
+          }}
+        >
           <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Keyboard Navigation</h4>
           <ul style={{ margin: 0, paddingLeft: '1.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
             <li>Tab: Navigate between interactive cards</li>
@@ -609,18 +624,19 @@ export const AccessibilityShowcase: Story = {
     layout: 'padded',
     docs: {
       description: {
-        story: 'Demonstrates comprehensive accessibility features including ARIA labels, keyboard navigation, and screen reader support.'
-      }
+        story:
+          'Demonstrates comprehensive accessibility features including ARIA labels, keyboard navigation, and screen reader support.',
+      },
     },
     a11y: {
       config: {
         rules: [
           { id: 'color-contrast', enabled: true },
-          { id: 'aria-allowed-attr', enabled: true }
-        ]
-      }
-    }
-  }
+          { id: 'aria-allowed-attr', enabled: true },
+        ],
+      },
+    },
+  },
 };
 
 // =============================================================================
@@ -638,10 +654,11 @@ export const InternationalizationDemo: Story = {
             Current Locale: {locale === 'chef' ? 'Swedish Chef (Pseudo)' : 'English'}
           </h3>
           <p style={{ marginBottom: '1rem', color: '#6b7280', fontSize: '0.875rem' }}>
-            Switch the locale using the toolbar above to see text expansion and character set testing.
+            Switch the locale using the toolbar above to see text expansion and character set
+            testing.
           </p>
         </div>
-        
+
         <Card elevation="md" padding="lg" rounded="lg">
           <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem' }}>
             {t('stories.card.title')}
@@ -650,7 +667,7 @@ export const InternationalizationDemo: Story = {
             {t('stories.card.description')}
           </p>
         </Card>
-        
+
         <Card elevation="md" padding="lg" rounded="lg" variant="primary">
           <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem', color: '#1e40af' }}>
             {t('stories.card.variants.basic')}
@@ -659,11 +676,11 @@ export const InternationalizationDemo: Story = {
             {t('stories.card.examples.content')}
           </p>
         </Card>
-        
-        <Card 
-          elevation="md" 
-          padding="lg" 
-          rounded="lg" 
+
+        <Card
+          elevation="md"
+          padding="lg"
+          rounded="lg"
           interactive
           announceOnAction={locale === 'chef' ? 'Çärd sëlëçtëd - børk børk!' : 'Card selected'}
         >
@@ -671,19 +688,44 @@ export const InternationalizationDemo: Story = {
             {t('stories.card.variants.interactive')}
           </h3>
           <p style={{ margin: 0, color: '#6b7280', fontSize: '0.875rem' }}>
-            {locale === 'chef' ? 'Çlïçk ør prëss Éñtër/Späçë tø ïñtëräçt! Børk børk!' : 'Click or press Enter/Space to interact!'}
+            {locale === 'chef'
+              ? 'Çlïçk ør prëss Éñtër/Späçë tø ïñtëräçt! Børk børk!'
+              : 'Click or press Enter/Space to interact!'}
           </p>
         </Card>
-        
-        <div style={{ padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+
+        <div
+          style={{
+            padding: '1rem',
+            backgroundColor: '#f9fafb',
+            borderRadius: '6px',
+            border: '1px solid #e5e7eb',
+          }}
+        >
           <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>
             {locale === 'chef' ? 'Børk Børk Testing!' : 'Localization Testing'}
           </h4>
           <ul style={{ margin: 0, paddingLeft: '1.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
-            <li>{locale === 'chef' ? 'Çärd tïtlës äñd çøñtëñt trañslatëd' : 'Card titles and content translated'}</li>
-            <li>{locale === 'chef' ? 'ÄRIA läbëls äütø-üpdätë før äççëssïbïlïty' : 'ARIA labels auto-update for accessibility'}</li>
-            <li>{locale === 'chef' ? 'Äçtïøñ äññøüñçëmëñts løçälïzëd' : 'Action announcements localized'}</li>
-            <li>{locale === 'chef' ? 'Tëxt ëxpäñsïøñ (~30%) tëstïñg' : 'Text expansion (~30%) testing'}</li>
+            <li>
+              {locale === 'chef'
+                ? 'Çärd tïtlës äñd çøñtëñt trañslatëd'
+                : 'Card titles and content translated'}
+            </li>
+            <li>
+              {locale === 'chef'
+                ? 'ÄRIA läbëls äütø-üpdätë før äççëssïbïlïty'
+                : 'ARIA labels auto-update for accessibility'}
+            </li>
+            <li>
+              {locale === 'chef'
+                ? 'Äçtïøñ äññøüñçëmëñts løçälïzëd'
+                : 'Action announcements localized'}
+            </li>
+            <li>
+              {locale === 'chef'
+                ? 'Tëxt ëxpäñsïøñ (~30%) tëstïñg'
+                : 'Text expansion (~30%) testing'}
+            </li>
           </ul>
         </div>
       </div>
@@ -693,10 +735,11 @@ export const InternationalizationDemo: Story = {
     layout: 'padded',
     docs: {
       description: {
-        story: 'Demonstrates internationalization features with automatic text expansion testing and character set validation for card content.'
-      }
-    }
-  }
+        story:
+          'Demonstrates internationalization features with automatic text expansion testing and character set validation for card content.',
+      },
+    },
+  },
 };
 
 // =============================================================================
@@ -708,7 +751,14 @@ export const CardGrid: Story = {
   render: () => {
     const { t } = useTranslation();
     return (
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', maxWidth: '900px' }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '1.5rem',
+          maxWidth: '900px',
+        }}
+      >
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <Card key={i} elevation="md" padding="md" rounded="lg" interactive>
             <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>
@@ -726,10 +776,10 @@ export const CardGrid: Story = {
     layout: 'padded',
     docs: {
       description: {
-        story: 'Demonstrates cards in a responsive grid layout for dashboard-like interfaces.'
-      }
-    }
-  }
+        story: 'Demonstrates cards in a responsive grid layout for dashboard-like interfaces.',
+      },
+    },
+  },
 };
 
 export const FullWidthCard: Story = {
@@ -737,11 +787,10 @@ export const FullWidthCard: Story = {
   render: () => (
     <div style={{ width: '600px' }}>
       <Card elevation="lg" padding="xl" rounded="lg" fullWidth>
-        <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.5rem' }}>
-          Full Width Card
-        </h3>
+        <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1.5rem' }}>Full Width Card</h3>
         <p style={{ margin: 0, color: '#6b7280' }}>
-          This card expands to fill its container width, useful for feature sections and hero content.
+          This card expands to fill its container width, useful for feature sections and hero
+          content.
         </p>
       </Card>
     </div>
@@ -750,10 +799,10 @@ export const FullWidthCard: Story = {
     layout: 'padded',
     docs: {
       description: {
-        story: 'A card that takes the full width of its container.'
-      }
-    }
-  }
+        story: 'A card that takes the full width of its container.',
+      },
+    },
+  },
 };
 
 export const CardWithHeader: Story = {
@@ -762,11 +811,13 @@ export const CardWithHeader: Story = {
     const { t } = useTranslation();
     return (
       <Card elevation="md" padding="none" rounded="lg" style={{ width: '350px' }}>
-        <div style={{ 
-          padding: '1rem 1.5rem', 
-          borderBottom: '1px solid #e5e7eb',
-          backgroundColor: '#f9fafb'
-        }}>
+        <div
+          style={{
+            padding: '1rem 1.5rem',
+            borderBottom: '1px solid #e5e7eb',
+            backgroundColor: '#f9fafb',
+          }}
+        >
           <h3 style={{ margin: 0, fontSize: '1.125rem' }}>
             {t('stories.card.examples.headerTitle')}
           </h3>
@@ -783,7 +834,7 @@ export const CardWithHeader: Story = {
               border: 'none',
               borderRadius: '6px',
               cursor: 'pointer',
-              fontSize: '0.875rem'
+              fontSize: '0.875rem',
             }}
           >
             {t('components.button.submit')}
@@ -795,10 +846,10 @@ export const CardWithHeader: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Card with a distinct header section for titles and actions.'
-      }
-    }
-  }
+        story: 'Card with a distinct header section for titles and actions.',
+      },
+    },
+  },
 };
 
 export const CardWithFooter: Story = {
@@ -811,18 +862,18 @@ export const CardWithFooter: Story = {
           <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.125rem' }}>
             {t('stories.card.variants.withFooter')}
           </h3>
-          <p style={{ margin: 0, color: '#6b7280' }}>
-            {t('stories.card.examples.content')}
-          </p>
+          <p style={{ margin: 0, color: '#6b7280' }}>{t('stories.card.examples.content')}</p>
         </div>
-        <div style={{ 
-          padding: '1rem 1.5rem', 
-          borderTop: '1px solid #e5e7eb',
-          backgroundColor: '#f9fafb',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
+        <div
+          style={{
+            padding: '1rem 1.5rem',
+            borderTop: '1px solid #e5e7eb',
+            backgroundColor: '#f9fafb',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
             {t('stories.card.examples.footerText')}
           </span>
@@ -834,7 +885,7 @@ export const CardWithFooter: Story = {
               border: '1px solid #3b82f6',
               borderRadius: '6px',
               cursor: 'pointer',
-              fontSize: '0.875rem'
+              fontSize: '0.875rem',
             }}
           >
             {t('components.card.moreActions')}
@@ -846,8 +897,8 @@ export const CardWithFooter: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Card with a footer section for actions and metadata.'
-      }
-    }
-  }
+        story: 'Card with a footer section for actions and metadata.',
+      },
+    },
+  },
 };

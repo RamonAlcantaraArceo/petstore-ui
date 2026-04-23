@@ -10,8 +10,9 @@ const meta: Meta<typeof Input> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Form input component with validation states, comprehensive accessibility features, and full internationalization support. Supports text, email, password, and search input types with validation feedback.'
-      }
+        component:
+          'Form input component with validation states, comprehensive accessibility features, and full internationalization support. Supports text, email, password, and search input types with validation feedback.',
+      },
     },
     a11y: {
       config: {
@@ -19,58 +20,58 @@ const meta: Meta<typeof Input> = {
           { id: 'color-contrast', enabled: true },
           { id: 'label', enabled: true },
           { id: 'form-field-multiple-labels', enabled: true },
-          { id: 'aria-input-field-name', enabled: true }
-        ]
+          { id: 'aria-input-field-name', enabled: true },
+        ],
       },
-      manual: false
-    }
+      manual: false,
+    },
   },
   argTypes: {
     type: {
       control: 'select',
       options: ['text', 'email', 'password', 'search', 'number', 'tel', 'url'],
-      description: 'HTML input type'
+      description: 'HTML input type',
     },
     validationState: {
       control: 'select',
       options: ['default', 'success', 'warning', 'error'],
-      description: 'Visual validation state of the input'
+      description: 'Visual validation state of the input',
     },
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
-      description: 'Size variant of the input'
+      description: 'Size variant of the input',
     },
     label: {
       control: 'text',
-      description: 'Label text displayed above the input'
+      description: 'Label text displayed above the input',
     },
     placeholder: {
       control: 'text',
-      description: 'Placeholder text displayed when input is empty'
+      description: 'Placeholder text displayed when input is empty',
     },
     helperText: {
       control: 'text',
-      description: 'Helper text displayed below the input'
+      description: 'Helper text displayed below the input',
     },
     errorMessage: {
       control: 'text',
-      description: 'Error message displayed when validationState is error'
+      description: 'Error message displayed when validationState is error',
     },
     disabled: {
       control: 'boolean',
-      description: 'Whether the input is disabled'
+      description: 'Whether the input is disabled',
     },
     required: {
       control: 'boolean',
-      description: 'Whether the input is required'
+      description: 'Whether the input is required',
     },
     fullWidth: {
       control: 'boolean',
-      description: 'Whether the input should take full width'
-    }
+      description: 'Whether the input should take full width',
+    },
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -93,8 +94,8 @@ export const Default: Story = {
   },
   args: {
     type: 'text',
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 export const TextInput: Story = {
@@ -111,8 +112,8 @@ export const TextInput: Story = {
   },
   args: {
     type: 'text',
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 export const EmailInput: Story = {
@@ -129,8 +130,8 @@ export const EmailInput: Story = {
   },
   args: {
     type: 'email',
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 export const PasswordInput: Story = {
@@ -147,8 +148,8 @@ export const PasswordInput: Story = {
   },
   args: {
     type: 'password',
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 export const SearchInput: Story = {
@@ -165,8 +166,8 @@ export const SearchInput: Story = {
   },
   args: {
     type: 'search',
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 // =============================================================================
@@ -176,52 +177,34 @@ export const SearchInput: Story = {
 export const Small: Story = {
   render: (args) => {
     const { t } = useTranslation();
-    return (
-      <Input
-        {...args}
-        label="Small Input"
-        placeholder={t('components.input.placeholder')}
-      />
-    );
+    return <Input {...args} label="Small Input" placeholder={t('components.input.placeholder')} />;
   },
   args: {
     size: 'small',
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 export const Medium: Story = {
   render: (args) => {
     const { t } = useTranslation();
-    return (
-      <Input
-        {...args}
-        label="Medium Input"
-        placeholder={t('components.input.placeholder')}
-      />
-    );
+    return <Input {...args} label="Medium Input" placeholder={t('components.input.placeholder')} />;
   },
   args: {
     size: 'medium',
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 export const Large: Story = {
   render: (args) => {
     const { t } = useTranslation();
-    return (
-      <Input
-        {...args}
-        label="Large Input"
-        placeholder={t('components.input.placeholder')}
-      />
-    );
+    return <Input {...args} label="Large Input" placeholder={t('components.input.placeholder')} />;
   },
   args: {
     size: 'large',
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 // =============================================================================
@@ -244,8 +227,8 @@ export const SuccessState: Story = {
   },
   args: {
     type: 'email',
-    validationState: 'success'
-  }
+    validationState: 'success',
+  },
 };
 
 export const WarningState: Story = {
@@ -264,8 +247,8 @@ export const WarningState: Story = {
   },
   args: {
     type: 'password',
-    validationState: 'warning'
-  }
+    validationState: 'warning',
+  },
 };
 
 export const ErrorState: Story = {
@@ -284,8 +267,8 @@ export const ErrorState: Story = {
   },
   args: {
     type: 'email',
-    validationState: 'error'
-  }
+    validationState: 'error',
+  },
 };
 
 // =============================================================================
@@ -306,8 +289,8 @@ export const Required: Story = {
   },
   args: {
     required: true,
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 export const Disabled: Story = {
@@ -324,8 +307,8 @@ export const Disabled: Story = {
   },
   args: {
     disabled: true,
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 export const WithHelperText: Story = {
@@ -343,8 +326,8 @@ export const WithHelperText: Story = {
   },
   args: {
     type: 'password',
-    validationState: 'default'
-  }
+    validationState: 'default',
+  },
 };
 
 export const FullWidth: Story = {
@@ -364,11 +347,11 @@ export const FullWidth: Story = {
   args: {
     type: 'email',
     fullWidth: true,
-    validationState: 'default'
+    validationState: 'default',
   },
   parameters: {
-    layout: 'padded'
-  }
+    layout: 'padded',
+  },
 };
 
 // =============================================================================
@@ -381,31 +364,19 @@ export const AllSizes: Story = {
     const { t } = useTranslation();
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '300px' }}>
-        <Input
-          size="small"
-          label="Small Input"
-          placeholder={t('components.input.placeholder')}
-        />
-        <Input
-          size="medium"
-          label="Medium Input"
-          placeholder={t('components.input.placeholder')}
-        />
-        <Input
-          size="large"
-          label="Large Input"
-          placeholder={t('components.input.placeholder')}
-        />
+        <Input size="small" label="Small Input" placeholder={t('components.input.placeholder')} />
+        <Input size="medium" label="Medium Input" placeholder={t('components.input.placeholder')} />
+        <Input size="large" label="Large Input" placeholder={t('components.input.placeholder')} />
       </div>
     );
   },
   parameters: {
     docs: {
       description: {
-        story: 'Demonstrates all available input sizes for easy comparison.'
-      }
-    }
-  }
+        story: 'Demonstrates all available input sizes for easy comparison.',
+      },
+    },
+  },
 };
 
 export const AllValidationStates: Story = {
@@ -446,10 +417,10 @@ export const AllValidationStates: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Shows all validation states with appropriate feedback messages.'
-      }
-    }
-  }
+        story: 'Shows all validation states with appropriate feedback messages.',
+      },
+    },
+  },
 };
 
 export const AllInputTypes: Story = {
@@ -458,11 +429,7 @@ export const AllInputTypes: Story = {
     const { t } = useTranslation();
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '300px' }}>
-        <Input
-          type="text"
-          label={t('stories.input.variants.text')}
-          placeholder="Enter text..."
-        />
+        <Input type="text" label={t('stories.input.variants.text')} placeholder="Enter text..." />
         <Input
           type="email"
           label={t('stories.input.variants.email')}
@@ -478,21 +445,17 @@ export const AllInputTypes: Story = {
           label={t('stories.input.variants.search')}
           placeholder={t('components.input.searchPlaceholder')}
         />
-        <Input
-          type="number"
-          label="Number Input"
-          placeholder="Enter a number..."
-        />
+        <Input type="number" label="Number Input" placeholder="Enter a number..." />
       </div>
     );
   },
   parameters: {
     docs: {
       description: {
-        story: 'Demonstrates all supported input types.'
-      }
-    }
-  }
+        story: 'Demonstrates all supported input types.',
+      },
+    },
+  },
 };
 
 // =============================================================================
@@ -506,21 +469,20 @@ export const AccessibilityShowcase: Story = {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '400px' }}>
         <div>
-          <h3 style={{ marginBottom: '1rem', fontSize: '1.125rem' }}>
-            Accessible Form Inputs
-          </h3>
+          <h3 style={{ marginBottom: '1rem', fontSize: '1.125rem' }}>Accessible Form Inputs</h3>
           <p style={{ marginBottom: '1rem', color: '#6b7280', fontSize: '0.875rem' }}>
-            All inputs include proper ARIA labels, error announcements, and keyboard navigation support.
+            All inputs include proper ARIA labels, error announcements, and keyboard navigation
+            support.
           </p>
         </div>
-        
+
         <Input
           label={t('stories.input.examples.firstName')}
           placeholder="Enter your first name"
           helperText="Your given name as it appears on official documents"
           required
         />
-        
+
         <Input
           type="email"
           label={t('stories.input.examples.email')}
@@ -530,7 +492,7 @@ export const AccessibilityShowcase: Story = {
           defaultValue="not-an-email"
           aria-describedby="email-error"
         />
-        
+
         <Input
           type="password"
           label={t('stories.input.examples.password')}
@@ -539,8 +501,15 @@ export const AccessibilityShowcase: Story = {
           helperText="Password should contain at least 8 characters"
           required
         />
-        
-        <div style={{ padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+
+        <div
+          style={{
+            padding: '1rem',
+            backgroundColor: '#f9fafb',
+            borderRadius: '6px',
+            border: '1px solid #e5e7eb',
+          }}
+        >
           <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Keyboard Navigation</h4>
           <ul style={{ margin: 0, paddingLeft: '1.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
             <li>Tab: Navigate between input fields</li>
@@ -555,19 +524,20 @@ export const AccessibilityShowcase: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstrates comprehensive accessibility features including ARIA labels, error announcements, and proper form field associations.'
-      }
+        story:
+          'Demonstrates comprehensive accessibility features including ARIA labels, error announcements, and proper form field associations.',
+      },
     },
     a11y: {
       config: {
         rules: [
           { id: 'color-contrast', enabled: true },
           { id: 'label', enabled: true },
-          { id: 'aria-input-field-name', enabled: true }
-        ]
-      }
-    }
-  }
+          { id: 'aria-input-field-name', enabled: true },
+        ],
+      },
+    },
+  },
 };
 
 // =============================================================================
@@ -585,15 +555,16 @@ export const InternationalizationDemo: Story = {
             Current Locale: {locale === 'chef' ? 'Swedish Chef (Pseudo)' : 'English'}
           </h3>
           <p style={{ marginBottom: '1rem', color: '#6b7280', fontSize: '0.875rem' }}>
-            Switch the locale using the toolbar above to see text expansion and character set testing.
+            Switch the locale using the toolbar above to see text expansion and character set
+            testing.
           </p>
         </div>
-        
+
         <Input
           label={t('stories.input.variants.text')}
           placeholder={t('components.input.placeholder')}
         />
-        
+
         <Input
           type="email"
           label={t('stories.input.variants.email')}
@@ -601,7 +572,7 @@ export const InternationalizationDemo: Story = {
           helperText={t('components.form.fieldRequired')}
           required
         />
-        
+
         <Input
           type="password"
           label={t('stories.input.variants.password')}
@@ -609,19 +580,30 @@ export const InternationalizationDemo: Story = {
           validationState="error"
           errorMessage={t('components.input.invalid')}
         />
-        
+
         <Input
           type="search"
           label={t('stories.input.variants.search')}
           placeholder={t('components.input.searchPlaceholder')}
         />
-        
-        <div style={{ padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+
+        <div
+          style={{
+            padding: '1rem',
+            backgroundColor: '#f9fafb',
+            borderRadius: '6px',
+            border: '1px solid #e5e7eb',
+          }}
+        >
           <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>
             {locale === 'chef' ? 'Børk Børk Testing!' : 'Localization Testing'}
           </h4>
           <ul style={{ margin: 0, paddingLeft: '1.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
-            <li>{locale === 'chef' ? 'Läbëls äñd pläçëhøldërs trañslatëd' : 'Labels and placeholders translated'}</li>
+            <li>
+              {locale === 'chef'
+                ? 'Läbëls äñd pläçëhøldërs trañslatëd'
+                : 'Labels and placeholders translated'}
+            </li>
             <li>{locale === 'chef' ? 'Érrør mëssägës løçälïzëd' : 'Error messages localized'}</li>
             <li>{locale === 'chef' ? 'Hëlpër tëxt süppørt' : 'Helper text support'}</li>
             <li>{locale === 'chef' ? 'ÄRIA läbëls äütø-üpdätë' : 'ARIA labels auto-update'}</li>
@@ -633,10 +615,11 @@ export const InternationalizationDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstrates internationalization features with automatic text expansion testing and character set validation for form inputs.'
-      }
-    }
-  }
+        story:
+          'Demonstrates internationalization features with automatic text expansion testing and character set validation for form inputs.',
+      },
+    },
+  },
 };
 
 // =============================================================================
@@ -650,32 +633,28 @@ export const FormExample: Story = {
     return (
       <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', width: '350px' }}>
         <h3 style={{ margin: 0, fontSize: '1.25rem' }}>Contact Form</h3>
-        
+
         <Input
           label={t('stories.input.examples.firstName')}
           placeholder="Enter your first name"
           required
         />
-        
+
         <Input
           label={t('stories.input.examples.lastName')}
           placeholder="Enter your last name"
           required
         />
-        
+
         <Input
           type="email"
           label={t('stories.input.examples.email')}
           placeholder={t('components.input.emailPlaceholder')}
           required
         />
-        
-        <Input
-          type="tel"
-          label="Phone Number"
-          placeholder="(555) 123-4567"
-        />
-        
+
+        <Input type="tel" label="Phone Number" placeholder="(555) 123-4567" />
+
         <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
           <button
             type="submit"
@@ -687,7 +666,7 @@ export const FormExample: Story = {
               borderRadius: '6px',
               cursor: 'pointer',
               fontSize: '0.875rem',
-              fontWeight: 500
+              fontWeight: 500,
             }}
           >
             {t('components.button.submit')}
@@ -702,7 +681,7 @@ export const FormExample: Story = {
               borderRadius: '6px',
               cursor: 'pointer',
               fontSize: '0.875rem',
-              fontWeight: 500
+              fontWeight: 500,
             }}
           >
             {t('components.button.cancel')}
@@ -714,9 +693,10 @@ export const FormExample: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A complete form example demonstrating how Input components work together in a real-world scenario.'
-      }
+        story:
+          'A complete form example demonstrating how Input components work together in a real-world scenario.',
+      },
     },
-    layout: 'padded'
-  }
+    layout: 'padded',
+  },
 };

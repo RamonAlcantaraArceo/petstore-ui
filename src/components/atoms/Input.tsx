@@ -4,11 +4,10 @@ import { theme } from '../../tokens/theme';
 import { useTranslation } from '../../i18n';
 import { useAccessibility, generateAccessibilityId } from '../../accessibility';
 
-
 /**
  * Input component with validation states, comprehensive accessibility, and internationalization.
  * Supports various input types, validation states, helper text, and full a11y compliance.
- * 
+ *
  * @example
  * ```tsx
  * <Input
@@ -17,7 +16,7 @@ import { useAccessibility, generateAccessibilityId } from '../../accessibility';
  *   label={t('components.input.examples.email')}
  *   required
  * />
- * 
+ *
  * <Input
  *   type="text"
  *   value={value}
@@ -83,75 +82,72 @@ export const Input: FC<InputProps> = ({
   ...props
 }) => {
   const { t } = useTranslation();
-  
+
   // Generate stable IDs for accessibility relationships
   const inputId = id || generateAccessibilityId('input');
-  const helperId = (helperText || errorMessage || helperTextTranslationKey || errorTranslationKey) ? `${inputId}-helper` : undefined;
+  const helperId =
+    helperText || errorMessage || helperTextTranslationKey || errorTranslationKey
+      ? `${inputId}-helper`
+      : undefined;
   const labelId = label || labelTranslationKey ? `${inputId}-label` : undefined;
-  
+
   // Use accessibility hook for comprehensive a11y features
-  const {
-    ariaAttributes,
-    announceChange,
-    handleKeyDown
-  } = useAccessibility({
+  const { ariaAttributes, announceChange, handleKeyDown } = useAccessibility({
     id: inputId,
     announceOnChange: () => 'Input changed',
-    accessibilityError: validationState === 'error'
+    accessibilityError: validationState === 'error',
   });
-  
+
   // Get translated content
-  const displayLabel = labelTranslationKey 
-    ? t(labelTranslationKey, translationParams) 
-    : label;
-    
-  const displayPlaceholder = placeholderTranslationKey 
+  const displayLabel = labelTranslationKey ? t(labelTranslationKey, translationParams) : label;
+
+  const displayPlaceholder = placeholderTranslationKey
     ? t(placeholderTranslationKey, translationParams)
     : props.placeholder;
-    
-  const displayHelperText = helperTextTranslationKey 
+
+  const displayHelperText = helperTextTranslationKey
     ? t(helperTextTranslationKey, translationParams)
     : helperText;
-    
-  const displayErrorMessage = errorTranslationKey 
+
+  const displayErrorMessage = errorTranslationKey
     ? t(errorTranslationKey, translationParams)
     : errorMessage;
-  
+
   // Generate accessible aria-label
   const getAriaLabel = () => {
     if (ariaAttributes['aria-label']) {
       return ariaAttributes['aria-label'];
     }
-    
+
     if (!useDefaultAriaLabel) {
       return undefined;
     }
-    
+
     const labelText = displayLabel || 'input field';
-    
+
     if (validationState === 'error') {
       return t('components.input.ariaInvalid', { label: labelText });
     }
-    
+
     if (required) {
       return t('components.input.ariaRequired', { label: labelText });
     }
-    
+
     return t('components.input.ariaLabel', { label: labelText });
   };
-  
+
   // Enhanced change handler with announcements
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    
+
     // Announce changes for screen readers if configured
     if (announceChange) {
       announceChange(value);
     }
-    
+
     props.onChange?.(event);
   };
-  
+
   // Enhanced keyboard handler
   const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
     handleKeyDown(event as any);
@@ -163,14 +159,14 @@ export const Input: FC<InputProps> = ({
   const sizeClasses = `input--${size}`;
   const fullWidthClass = fullWidth ? 'input--full-width' : '';
   const disabledClass = disabled ? 'input--disabled' : '';
-  
+
   const inputClasses = [
     baseClasses,
     validationClasses,
     sizeClasses,
     fullWidthClass,
     disabledClass,
-    className
+    className,
   ]
     .filter(Boolean)
     .join(' ');
@@ -227,8 +223,12 @@ export const Input: FC<InputProps> = ({
   const inputStyles: React.CSSProperties = {
     // Base styles
     fontFamily: theme.typography.fontFamily.sans.join(', '),
-    fontSize: size === 'small' ? theme.typography.fontSize.sm : 
-              size === 'large' ? theme.typography.fontSize.lg : theme.typography.fontSize.base,
+    fontSize:
+      size === 'small'
+        ? theme.typography.fontSize.sm
+        : size === 'large'
+          ? theme.typography.fontSize.lg
+          : theme.typography.fontSize.base,
     lineHeight: theme.typography.lineHeight.normal,
     color: theme.colors.secondary[900],
     backgroundColor: disabled ? theme.colors.secondary[50] : getValidationBackgroundColor(),
@@ -241,32 +241,40 @@ export const Input: FC<InputProps> = ({
     // Size variants
     ...(size === 'small' && {
       padding: `${theme.spacing[2]} ${theme.spacing[3]}`,
-      minHeight: '2rem'
+      minHeight: '2rem',
     }),
     ...(size === 'medium' && {
       padding: `${theme.spacing[2.5]} ${theme.spacing[3]}`,
-      minHeight: '2.5rem'
+      minHeight: '2.5rem',
     }),
     ...(size === 'large' && {
       padding: `${theme.spacing[3]} ${theme.spacing[4]}`,
-      minHeight: '3rem'
+      minHeight: '3rem',
     }),
 
     // Icon padding adjustments
     ...(startIcon && {
-      paddingLeft: size === 'small' ? theme.spacing[8] : 
-                   size === 'large' ? theme.spacing[12] : theme.spacing[10]
+      paddingLeft:
+        size === 'small'
+          ? theme.spacing[8]
+          : size === 'large'
+            ? theme.spacing[12]
+            : theme.spacing[10],
     }),
     ...(endIcon && {
-      paddingRight: size === 'small' ? theme.spacing[8] : 
-                    size === 'large' ? theme.spacing[12] : theme.spacing[10]
+      paddingRight:
+        size === 'small'
+          ? theme.spacing[8]
+          : size === 'large'
+            ? theme.spacing[12]
+            : theme.spacing[10],
     }),
 
     // Disabled state
     ...(disabled && {
       cursor: 'not-allowed',
-      opacity: 0.6
-    })
+      opacity: 0.6,
+    }),
   };
 
   const iconWrapperStyles: React.CSSProperties = {
@@ -276,8 +284,12 @@ export const Input: FC<InputProps> = ({
     justifyContent: 'center',
     pointerEvents: 'none',
     color: theme.colors.secondary[400],
-    fontSize: size === 'small' ? theme.typography.fontSize.sm :
-              size === 'large' ? theme.typography.fontSize.xl : theme.typography.fontSize.base,
+    fontSize:
+      size === 'small'
+        ? theme.typography.fontSize.sm
+        : size === 'large'
+          ? theme.typography.fontSize.xl
+          : theme.typography.fontSize.base,
   };
 
   const startIconStyles: React.CSSProperties = {
@@ -297,21 +309,16 @@ export const Input: FC<InputProps> = ({
     fontFamily: theme.typography.fontFamily.sans.join(', '),
   };
 
-  const displayedHelperText = validationState === 'error' 
-    ? displayErrorMessage || displayHelperText 
-    : displayHelperText;
+  const displayedHelperText =
+    validationState === 'error' ? displayErrorMessage || displayHelperText : displayHelperText;
 
   return (
     <div style={containerStyles}>
       {displayLabel && (
-        <label 
-          htmlFor={inputId} 
-          id={labelId}
-          style={labelStyles}
-        >
+        <label htmlFor={inputId} id={labelId} style={labelStyles}>
           {displayLabel}
           {required && (
-            <span 
+            <span
               style={{ color: theme.colors.semantic.error, marginLeft: theme.spacing[1] }}
               aria-label={t('accessibility.labels.required')}
             >
@@ -322,11 +329,7 @@ export const Input: FC<InputProps> = ({
       )}
       <div style={inputWrapperStyles}>
         {startIcon && (
-          <span 
-            style={startIconStyles} 
-            aria-hidden="true"
-            role="img"
-          >
+          <span style={startIconStyles} aria-hidden="true" role="img">
             {startIcon}
           </span>
         )}
@@ -360,19 +363,15 @@ export const Input: FC<InputProps> = ({
           {...(props as any)} // Spread remaining props
         />
         {endIcon && (
-          <span 
-            style={endIconStyles} 
-            aria-hidden="true"
-            role="img"
-          >
+          <span style={endIconStyles} aria-hidden="true" role="img">
             {endIcon}
           </span>
         )}
       </div>
       {displayedHelperText && (
-        <span 
-          id={helperId} 
-          style={helperTextStyles} 
+        <span
+          id={helperId}
+          style={helperTextStyles}
           role={validationState === 'error' ? 'alert' : 'status'}
           aria-live={validationState === 'error' ? 'assertive' : 'polite'}
           aria-atomic="true"

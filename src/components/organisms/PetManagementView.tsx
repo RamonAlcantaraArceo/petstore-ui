@@ -193,7 +193,9 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
       <Modal
         isOpen={formOpen}
         onClose={() => setFormOpen(false)}
-        titleTranslationKey={editingPet ? 'petstore.pets.form.editTitle' : 'petstore.pets.form.createTitle'}
+        titleTranslationKey={
+          editingPet ? 'petstore.pets.form.editTitle' : 'petstore.pets.form.createTitle'
+        }
         size="medium"
       >
         <PetForm
@@ -208,7 +210,9 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
       <ConfirmDialog
         isOpen={!!deletingPet}
         titleTranslationKey="petstore.app.pets.deleteTitle"
-        message={deletingPet ? t('petstore.app.pets.deleteMessage', { name: deletingPet.name }) : ''}
+        message={
+          deletingPet ? t('petstore.app.pets.deleteMessage', { name: deletingPet.name }) : ''
+        }
         variant="danger"
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeletingPet(undefined)}

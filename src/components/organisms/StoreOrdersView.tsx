@@ -165,7 +165,13 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
     <section {...ariaAttributes} style={{ padding: theme.spacing[4] }}>
       {/* --- Inventory Section --- */}
       <div style={{ marginBottom: theme.spacing[6] }}>
-        <h2 style={{ fontSize: theme.typography.fontSize.lg, marginBottom: theme.spacing[3], fontWeight: theme.typography.fontWeight.semibold }}>
+        <h2
+          style={{
+            fontSize: theme.typography.fontSize.lg,
+            marginBottom: theme.spacing[3],
+            fontWeight: theme.typography.fontWeight.semibold,
+          }}
+        >
           {t('petstore.app.orders.inventoryTitle')}
         </h2>
         {inventoryLoading ? (
@@ -179,10 +185,24 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
 
       {/* --- Order Lookup Section --- */}
       <div style={{ marginBottom: theme.spacing[6] }}>
-        <h2 style={{ fontSize: theme.typography.fontSize.lg, marginBottom: theme.spacing[3], fontWeight: theme.typography.fontWeight.semibold }}>
+        <h2
+          style={{
+            fontSize: theme.typography.fontSize.lg,
+            marginBottom: theme.spacing[3],
+            fontWeight: theme.typography.fontWeight.semibold,
+          }}
+        >
           {t('petstore.app.orders.lookupTitle')}
         </h2>
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: theme.spacing[3], flexWrap: 'wrap', marginBottom: theme.spacing[3] }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            gap: theme.spacing[3],
+            flexWrap: 'wrap',
+            marginBottom: theme.spacing[3],
+          }}
+        >
           <Input
             name="orderId"
             type="number"

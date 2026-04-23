@@ -10,7 +10,10 @@ export interface SelectOption {
   labelTranslationKey?: string;
 }
 
-export interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'onChange'> {
+export interface SelectProps extends Omit<
+  React.SelectHTMLAttributes<HTMLSelectElement>,
+  'size' | 'onChange'
+> {
   options: SelectOption[];
   value: string;
   onChange: (value: string) => void;
@@ -46,7 +49,7 @@ export const Select: FC<SelectProps> = ({
   const { t } = useTranslation();
 
   const selectId = id || generateAccessibilityId('select');
-  const labelId = (label || labelTranslationKey) ? `${selectId}-label` : undefined;
+  const labelId = label || labelTranslationKey ? `${selectId}-label` : undefined;
   const displayLabel = labelTranslationKey ? t(labelTranslationKey, translationParams) : label;
 
   const { ariaAttributes, handleKeyDown, announceAction } = useAccessibility({
@@ -84,12 +87,18 @@ export const Select: FC<SelectProps> = ({
     backgroundColor: disabled ? theme.colors.secondary[50] : theme.colors.neutral.white,
     color: theme.colors.secondary[900],
     fontFamily: theme.typography.fontFamily.sans.join(', '),
-    fontSize: size === 'small' ? theme.typography.fontSize.sm : size === 'large' ? theme.typography.fontSize.lg : theme.typography.fontSize.base,
-    padding: size === 'small'
-      ? `${theme.spacing[2]} ${theme.spacing[3]}`
-      : size === 'large'
-        ? `${theme.spacing[3]} ${theme.spacing[4]}`
-        : `${theme.spacing[2.5]} ${theme.spacing[3]}`,
+    fontSize:
+      size === 'small'
+        ? theme.typography.fontSize.sm
+        : size === 'large'
+          ? theme.typography.fontSize.lg
+          : theme.typography.fontSize.base,
+    padding:
+      size === 'small'
+        ? `${theme.spacing[2]} ${theme.spacing[3]}`
+        : size === 'large'
+          ? `${theme.spacing[3]} ${theme.spacing[4]}`
+          : `${theme.spacing[2.5]} ${theme.spacing[3]}`,
     outline: 'none',
     cursor: disabled ? 'not-allowed' : 'pointer',
   };
@@ -120,7 +129,7 @@ export const Select: FC<SelectProps> = ({
           <option key={option.value} value={option.value}>
             {option.labelTranslationKey
               ? t(option.labelTranslationKey, translationParams)
-              : option.label ?? option.value}
+              : (option.label ?? option.value)}
           </option>
         ))}
       </select>

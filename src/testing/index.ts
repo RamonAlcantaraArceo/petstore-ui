@@ -1,11 +1,11 @@
 /**
  * Testing Utilities
  * Comprehensive testing helpers for i18n, a11y, and component functionality
- * 
+ *
  * @example
  * ```tsx
  * import { renderWithLocale, testKeyboardNavigation, auditAccessibility } from './testing';
- * 
+ *
  * test('Button is accessible in all locales', async () => {
  *   const { container } = renderWithLocale(<Button>Click me</Button>, { locale: 'chef' });
  *   const audit = await auditAccessibility(container.firstChild);
@@ -23,7 +23,7 @@ export {
   createMockUseTranslation,
   testWithAllLocales,
   validateTranslatedContent,
-  testParameterInterpolation
+  testParameterInterpolation,
 } from './i18n-utils';
 
 // a11y testing utilities
@@ -33,7 +33,7 @@ export {
   testColorContrast,
   testFocusManagement,
   auditAccessibility,
-  toBeAccessible
+  toBeAccessible,
 } from './a11y-utils';
 
 // Combined testing patterns

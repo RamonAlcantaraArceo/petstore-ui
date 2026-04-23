@@ -5,12 +5,12 @@
 
 // import { render, RenderOptions, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { 
-  calculateContrastRatio, 
+import {
+  calculateContrastRatio,
   hasKeyboardAccessibility,
   isTextReadable,
   // validateFormAccessibility,
-  meetsContrastRequirements
+  meetsContrastRequirements,
 } from '../accessibility';
 
 /**
@@ -76,7 +76,7 @@ export function testScreenReaderAccessibility(element: HTMLElement) {
     hasValidAriaAttributes: true,
     accessibleName: '',
     role: '',
-    ariaAttributes: {} as Record<string, string>
+    ariaAttributes: {} as Record<string, string>,
   };
 
   // Check for accessible name
@@ -98,7 +98,7 @@ export function testScreenReaderAccessibility(element: HTMLElement) {
   results.hasAriaDescribedBy = !!element.getAttribute('aria-describedby');
 
   // Collect all ARIA attributes
-  Array.from(element.attributes).forEach(attr => {
+  Array.from(element.attributes).forEach((attr) => {
     if (attr.name.startsWith('aria-')) {
       results.ariaAttributes[attr.name] = attr.value;
     }
@@ -141,10 +141,10 @@ export function testColorContrast(element: HTMLElement, wcagLevel: 'A' | 'AA' | 
   const backgroundColor = computedStyle.backgroundColor || '#ffffff';
 
   const contrastRatio = calculateContrastRatio(color, backgroundColor);
-  const meetsRequirements = meetsContrastRequirements({ 
-    wcagLevel, 
-    textColor: color, 
-    backgroundColor 
+  const meetsRequirements = meetsContrastRequirements({
+    wcagLevel,
+    textColor: color,
+    backgroundColor,
   });
 
   const fontSize = parseFloat(computedStyle.fontSize);
@@ -160,7 +160,7 @@ export function testColorContrast(element: HTMLElement, wcagLevel: 'A' | 'AA' | 
     fontSize,
     fontWeight,
     isLargeText,
-    minimumRequired: wcagLevel === 'AAA' ? (isLargeText ? 4.5 : 7) : (isLargeText ? 3 : 4.5)
+    minimumRequired: wcagLevel === 'AAA' ? (isLargeText ? 4.5 : 7) : isLargeText ? 3 : 4.5,
   };
 }
 
@@ -172,7 +172,7 @@ export function testColorContrast(element: HTMLElement, wcagLevel: 'A' | 'AA' | 
 export async function testFocusManagement(container: HTMLElement) {
   const user = userEvent.setup();
   const focusableElements = container.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
   );
 
   const results = {
@@ -180,7 +180,7 @@ export async function testFocusManagement(container: HTMLElement) {
     tabOrderIsLogical: true,
     focusTrappingWorks: false,
     initialFocusIsSet: false,
-    focusableElements: Array.from(focusableElements) as HTMLElement[]
+    focusableElements: Array.from(focusableElements) as HTMLElement[],
   };
 
   if (focusableElements.length === 0) {
@@ -191,7 +191,7 @@ export async function testFocusManagement(container: HTMLElement) {
     // Test tab order
     const tabOrder: HTMLElement[] = [];
     let currentElement = document.activeElement as HTMLElement;
-    
+
     // Test first few elements in tab order
     for (let i = 0; i < Math.min(focusableElements.length, 5); i++) {
       await user.tab();
@@ -208,7 +208,6 @@ export async function testFocusManagement(container: HTMLElement) {
     // Test initial focus (if auto-focus is enabled)
     const autoFocusElement = container.querySelector('[autofocus]');
     results.initialFocusIsSet = autoFocusElement === document.activeElement;
-
   } catch (error) {
     console.warn('Focus management test failed:', error);
   }
@@ -227,7 +226,7 @@ export async function auditAccessibility(element: HTMLElement) {
     canActivateWithEnter: false,
     canActivateWithSpace: false,
     hasVisibleFocus: false,
-    tabIndex: element.tabIndex
+    tabIndex: element.tabIndex,
   };
   // TODO: Replace with actual testKeyboardNavigation when testing library is available
   // const keyboardNav = await testKeyboardNavigation(element);
@@ -241,7 +240,7 @@ export async function auditAccessibility(element: HTMLElement) {
     screenReader,
     colorContrast,
     keyboardAccessibility,
-    textReadability
+    textReadability,
   });
 
   return {
@@ -257,8 +256,8 @@ export async function auditAccessibility(element: HTMLElement) {
       screenReader,
       colorContrast,
       keyboardAccessibility,
-      textReadability
-    })
+      textReadability,
+    }),
   };
 }
 
@@ -272,21 +271,21 @@ function calculateAccessibilityScore(results: any): number {
   let maxScore = 0;
 
   // Keyboard navigation (25% of score)
-  const keyboardScore = (
-    (results.keyboardNav.canFocus ? 1 : 0) +
-    (results.keyboardNav.canActivateWithEnter ? 1 : 0) +
-    (results.keyboardNav.canActivateWithSpace ? 1 : 0) +
-    (results.keyboardNav.hasVisibleFocus ? 1 : 0)
-  ) / 4;
+  const keyboardScore =
+    ((results.keyboardNav.canFocus ? 1 : 0) +
+      (results.keyboardNav.canActivateWithEnter ? 1 : 0) +
+      (results.keyboardNav.canActivateWithSpace ? 1 : 0) +
+      (results.keyboardNav.hasVisibleFocus ? 1 : 0)) /
+    4;
   score += keyboardScore * 0.25;
   maxScore += 0.25;
 
   // Screen reader (30% of score)
-  const screenReaderScore = (
-    (results.screenReader.hasAccessibleName ? 1 : 0) +
-    (results.screenReader.hasRole ? 1 : 0) +
-    (results.screenReader.hasValidAriaAttributes ? 1 : 0)
-  ) / 3;
+  const screenReaderScore =
+    ((results.screenReader.hasAccessibleName ? 1 : 0) +
+      (results.screenReader.hasRole ? 1 : 0) +
+      (results.screenReader.hasValidAriaAttributes ? 1 : 0)) /
+    3;
   score += screenReaderScore * 0.3;
   maxScore += 0.3;
 
@@ -296,10 +295,10 @@ function calculateAccessibilityScore(results: any): number {
   maxScore += 0.25;
 
   // General accessibility (20% of score)
-  const generalScore = (
-    (results.keyboardAccessibility.isAccessible ? 1 : 0) +
-    (results.textReadability.isReadable ? 1 : 0)
-  ) / 2;
+  const generalScore =
+    ((results.keyboardAccessibility.isAccessible ? 1 : 0) +
+      (results.textReadability.isReadable ? 1 : 0)) /
+    2;
   score += generalScore * 0.2;
   maxScore += 0.2;
 
@@ -315,7 +314,9 @@ function generateRecommendations(results: any): string[] {
   const recommendations: string[] = [];
 
   if (!results.keyboardNav.canFocus) {
-    recommendations.push('Make element focusable with tabindex or use a semantic interactive element');
+    recommendations.push(
+      'Make element focusable with tabindex or use a semantic interactive element',
+    );
   }
 
   if (!results.keyboardNav.hasVisibleFocus) {
@@ -327,7 +328,9 @@ function generateRecommendations(results: any): string[] {
   }
 
   if (!results.colorContrast.meetsRequirements) {
-    recommendations.push(`Improve color contrast ratio to at least ${results.colorContrast.minimumRequired}:1`);
+    recommendations.push(
+      `Improve color contrast ratio to at least ${results.colorContrast.minimumRequired}:1`,
+    );
   }
 
   if (!results.textReadability.isReadable) {
@@ -335,7 +338,9 @@ function generateRecommendations(results: any): string[] {
   }
 
   if (results.keyboardAccessibility.issues.length > 0) {
-    recommendations.push(...results.keyboardAccessibility.issues.map((issue: string) => `Fix: ${issue}`));
+    recommendations.push(
+      ...results.keyboardAccessibility.issues.map((issue: string) => `Fix: ${issue}`),
+    );
   }
 
   return recommendations;
@@ -348,14 +353,15 @@ function generateRecommendations(results: any): string[] {
  */
 export function toBeAccessible(element: HTMLElement) {
   const audit = auditAccessibility(element);
-  
+
   return {
-    pass: audit.then(result => result.isCompliant),
-    message: () => audit.then(result => 
-      result.isCompliant
-        ? `Expected element NOT to be accessible, but it passed with score ${result.overallScore}`
-        : `Expected element to be accessible, but it failed with score ${result.overallScore}. Issues: ${result.recommendations.join(', ')}`
-    )
+    pass: audit.then((result) => result.isCompliant),
+    message: () =>
+      audit.then((result) =>
+        result.isCompliant
+          ? `Expected element NOT to be accessible, but it passed with score ${result.overallScore}`
+          : `Expected element to be accessible, but it failed with score ${result.overallScore}. Issues: ${result.recommendations.join(', ')}`,
+      ),
   };
 }
 

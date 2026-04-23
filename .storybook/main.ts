@@ -1,20 +1,17 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-  stories: [
-    '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../src/**/*.stories.mdx'
-  ],
+  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)', '../src/**/*.stories.mdx'],
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-controls',
     '@storybook/addon-docs',
     '@storybook/addon-viewport',
-    '@storybook/addon-a11y'
+    '@storybook/addon-a11y',
   ],
   framework: {
     name: '@storybook/react-vite',
-    options: {}
+    options: {},
   },
   typescript: {
     check: false,
@@ -41,31 +38,31 @@ const config: StorybookConfig = {
         '@/components': new URL('../src/components', import.meta.url).pathname,
         '@/tokens': new URL('../src/tokens', import.meta.url).pathname,
         '@/stories': new URL('../src/stories', import.meta.url).pathname,
-        '@/types': new URL('../src/types', import.meta.url).pathname
+        '@/types': new URL('../src/types', import.meta.url).pathname,
       };
     }
-    
+
     // Configure Bun-compatible settings
     config.define = {
       ...config.define,
-      global: 'globalThis'
+      global: 'globalThis',
     };
-    
+
     // Fix Node.js compatibility issues in browser environment
     config.optimizeDeps = {
       ...config.optimizeDeps,
-      include: ['react', 'react-dom', '@storybook/blocks']
+      include: ['react', 'react-dom', '@storybook/blocks'],
     };
-    
+
     return config;
   },
   docs: {
     autodocs: 'tag',
-    defaultName: 'Documentation'
+    defaultName: 'Documentation',
   },
   features: {
-    buildStoriesJson: true
-  }
+    buildStoriesJson: true,
+  },
 };
 
 export default config;

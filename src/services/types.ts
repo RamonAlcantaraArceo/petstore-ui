@@ -69,6 +69,4 @@ export interface ApiResponse {
  * Result tuple for all API calls.
  * Exactly one of `data` or `error` will be present.
  */
-export type ApiResult<T> =
-  | { data: T; error: null }
-  | { data: null; error: string };
+export type ApiResult<T> = { data: T; error: null } | { data: null; error: string };

@@ -16,10 +16,10 @@ import type { SupportedLocale } from '../i18n';
  */
 export function renderWithLocale(
   _ui: React.ReactElement,
-  options: { locale?: SupportedLocale } = {}
+  options: { locale?: SupportedLocale } = {},
 ) {
   const { locale = 'en' } = options;
-  
+
   // TODO: Implement when testing library is available
   console.log(`Would render component with locale: ${locale}`);
   return null as any;
@@ -32,18 +32,17 @@ export function renderWithLocale(
  * @param locales Array of locales to check (optional, defaults to all)
  * @returns Validation results
  */
-export function validateTranslationCoverage(
+export function validateTranslationCoverage() {
   // TODO: Implement when testing is set up
   // requiredKeys: string[],
   // locales?: SupportedLocale[]
-) {
   // This would be implemented with the actual locale data
   // For now, we'll create a structure that can be extended
   const results: Record<string, { missing: string[]; present: string[] }> = {};
-  
+
   // TODO: Implement actual validation logic
   // This is a placeholder for the testing pattern
-  
+
   return results;
 }
 
@@ -59,24 +58,24 @@ export function testTextExpansion(component: React.ReactElement, maxWidthPx: num
   const enResult = renderWithLocale(component, { locale: 'en' });
   const enElement = enResult.container.firstElementChild as HTMLElement;
   const enWidth = enElement?.offsetWidth || 0;
-  
+
   // Render with Chef locale (expanded text)
   enResult.unmount();
   const chefResult = renderWithLocale(component, { locale: 'chef' });
   const chefElement = chefResult.container.firstElementChild as HTMLElement;
   const chefWidth = chefElement?.offsetWidth || 0;
-  
+
   const expansionRatio = chefWidth / enWidth;
   const exceedsMaxWidth = chefWidth > maxWidthPx;
-  
+
   chefResult.unmount();
-  
+
   return {
     englishWidth: enWidth,
     chefWidth: chefWidth,
     expansionRatio,
     exceedsMaxWidth,
-    isAcceptable: !exceedsMaxWidth && expansionRatio <= 1.5 // 50% max expansion
+    isAcceptable: !exceedsMaxWidth && expansionRatio <= 1.5, // 50% max expansion
   };
 }
 
@@ -104,7 +103,7 @@ export function createMockUseTranslation(locale: SupportedLocale = 'en') {
     t: mockTranslation,
     locale,
     // setLocale: jest.fn(),
-    isRTL: false
+    isRTL: false,
   };
 }
 
@@ -117,17 +116,17 @@ export function createMockUseTranslation(locale: SupportedLocale = 'en') {
 export function testWithAllLocales(component: React.ReactElement) {
   const locales: SupportedLocale[] = ['en', 'chef'];
   const results: Record<SupportedLocale, any> = {} as any;
-  
-  locales.forEach(locale => {
+
+  locales.forEach((locale) => {
     const result = renderWithLocale(component, { locale });
     results[locale] = {
       container: result.container,
       queries: result,
-      textContent: result.container.textContent
+      textContent: result.container.textContent,
     };
     result.unmount();
   });
-  
+
   return results;
 }
 
@@ -141,13 +140,13 @@ export function testWithAllLocales(component: React.ReactElement) {
 export function validateTranslatedContent(
   translatedText: string,
   expectedKeywords: string[],
-  locale: SupportedLocale
+  locale: SupportedLocale,
 ) {
   const lowerText = translatedText.toLowerCase();
   const missingKeywords: string[] = [];
   const presentKeywords: string[] = [];
-  
-  expectedKeywords.forEach(keyword => {
+
+  expectedKeywords.forEach((keyword) => {
     const lowerKeyword = keyword.toLowerCase();
     if (lowerText.includes(lowerKeyword)) {
       presentKeywords.push(keyword);
@@ -155,10 +154,11 @@ export function validateTranslatedContent(
       missingKeywords.push(keyword);
     }
   });
-  
+
   const hasExpansionCharacters = locale === 'chef' && /[üßñçøäéï]/.test(translatedText);
-  const hasExpectedLength = locale === 'chef' ? translatedText.length > 10 : translatedText.length > 0;
-  
+  const hasExpectedLength =
+    locale === 'chef' ? translatedText.length > 10 : translatedText.length > 0;
+
   return {
     isValid: missingKeywords.length === 0 && hasExpectedLength,
     missingKeywords,
@@ -166,7 +166,7 @@ export function validateTranslatedContent(
     hasExpansionCharacters,
     hasExpectedLength,
     textLength: translatedText.length,
-    locale
+    locale,
   };
 }
 
@@ -180,14 +180,14 @@ export function validateTranslatedContent(
 export function testParameterInterpolation(
   translationFunction: (key: string, params?: Record<string, any>) => string,
   key: string,
-  params: Record<string, string | number>
+  params: Record<string, string | number>,
 ) {
   const result = translationFunction(key, params);
   const parameterKeys = Object.keys(params);
   const interpolatedParameters: string[] = [];
   const missingParameters: string[] = [];
-  
-  parameterKeys.forEach(paramKey => {
+
+  parameterKeys.forEach((paramKey) => {
     const paramValue = String(params[paramKey]);
     if (result.includes(paramValue)) {
       interpolatedParameters.push(paramKey);
@@ -195,13 +195,13 @@ export function testParameterInterpolation(
       missingParameters.push(paramKey);
     }
   });
-  
+
   return {
     result,
     interpolatedParameters,
     missingParameters,
     isValid: missingParameters.length === 0,
     originalKey: key,
-    parameters: params
+    parameters: params,
   };
 }

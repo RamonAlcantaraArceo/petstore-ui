@@ -1,6 +1,6 @@
 /**
  * Component Library Exports
- * 
+ *
  * Organized by atomic design principles:
  * - Atoms: Basic building blocks
  * - Molecules: Combinations of atoms (future)

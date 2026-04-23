@@ -1,17 +1,17 @@
 /**
  * Accessibility (a11y) Module
  * Comprehensive accessibility utilities and components for petstore-ui
- * 
+ *
  * @example
  * ```tsx
  * import { useAccessibility, generateFocusStyles } from './accessibility';
- * 
+ *
  * function MyComponent() {
  *   const { ariaAttributes, handleKeyDown } = useAccessibility({
  *     enterActivation: true,
  *     announceOnMount: 'Component loaded'
  *   });
- *   
+ *
  *   return (
  *     <div {...ariaAttributes} onKeyDown={handleKeyDown}>
  *       Content
@@ -28,7 +28,7 @@ export {
   useKeyboardNavigation,
   useAnnouncements,
   useAccessibility,
-  validateAccessibility
+  validateAccessibility,
 } from './hooks';
 
 // Utility function exports
@@ -43,7 +43,7 @@ export {
   generateAccessibilityId,
   debounceAnnouncement,
   prefersReducedMotion,
-  hasHighContrastMode
+  hasHighContrastMode,
 } from './utils';
 
 // Type exports
@@ -60,5 +60,5 @@ export type {
   AnnouncementProps,
   ComprehensiveAccessibilityProps,
   WCAGLevel,
-  ColorContrastProps
+  ColorContrastProps,
 } from './types';
