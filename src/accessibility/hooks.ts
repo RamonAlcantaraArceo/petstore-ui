@@ -12,6 +12,15 @@ import type {
   ComprehensiveAccessibilityProps,
 } from './types';
 
+type AccessibilityAriaAttributes = {
+  id?: string | undefined;
+  'aria-label'?: string | undefined;
+  'aria-describedby'?: string | undefined;
+  'aria-labelledby'?: string | undefined;
+  'aria-invalid'?: boolean | undefined;
+  'aria-busy'?: boolean | undefined;
+};
+
 /**
  * Generate a unique ID for accessibility relationships
  * @param prefix Optional prefix for the ID
@@ -309,7 +318,7 @@ export function useAccessibility(props: ComprehensiveAccessibilityProps = {}) {
 
   // Generate ARIA attributes with localized labels
   const ariaAttributes = useMemo(() => {
-    const attributes: Record<string, string | boolean | undefined> = {
+    const attributes: AccessibilityAriaAttributes = {
       id: props.id || id,
       'aria-label': props['aria-label'],
       'aria-describedby': props['aria-describedby'],
@@ -330,7 +339,7 @@ export function useAccessibility(props: ComprehensiveAccessibilityProps = {}) {
     }
 
     // Remove undefined values
-    Object.keys(attributes).forEach((key) => {
+    (Object.keys(attributes) as Array<keyof AccessibilityAriaAttributes>).forEach((key) => {
       if (attributes[key] === undefined) {
         delete attributes[key];
       }
