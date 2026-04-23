@@ -9,66 +9,67 @@ Build a simplistic React SPA at `petstore/` showcasing Pet Management, Store Ord
 ## Progress
 
 - ✅ **Phase 0 completed** (2026-02-27)
-	- Added `src/services/types.ts`
-	- Added `src/services/apiClient.ts`
-	- Added `src/services/petApi.ts`
-	- Added `src/services/storeApi.ts`
-	- Added `src/services/userApi.ts`
+  - Added `src/services/types.ts`
+  - Added `src/services/apiClient.ts`
+  - Added `src/services/petApi.ts`
+  - Added `src/services/storeApi.ts`
+  - Added `src/services/userApi.ts`
 - ✅ **Phase 1 completed** (2026-02-27)
-	- Added `src/context/AuthContext.tsx`
-	- Added `src/context/index.ts`
-	- Updated `src/index.ts` exports to include context module
+  - Added `src/context/AuthContext.tsx`
+  - Added `src/context/index.ts`
+  - Updated `src/index.ts` exports to include context module
 - ✅ **Phase 2 completed** (2026-02-27)
-	- Added `src/components/atoms/Badge.tsx`
-	- Added `src/components/atoms/Select.tsx`
-	- Added `src/components/atoms/Modal.tsx`
-	- Added `src/components/atoms/Table.tsx`
-	- Added `src/components/atoms/Tabs.tsx`
-	- Added stories under `src/stories/petstore/*` for all new atoms
-	- Updated `src/components/atoms/index.ts` exports
-	- Refined all new atoms/stories for locale-aware text (`en`/`chef`) and improved a11y labels
-	- **Patch**: Fixed `Table.stories.tsx` — status cell values were rendering raw English strings instead of translated text when Chef locale was active. Added `InventoryTable` wrapper component that uses `useTranslation()` with a `render` function on the status column to call `t('petstore.common.status.' + row.status)`. This pattern must be followed for all stories that display translatable data values in cells/badges.
+  - Added `src/components/atoms/Badge.tsx`
+  - Added `src/components/atoms/Select.tsx`
+  - Added `src/components/atoms/Modal.tsx`
+  - Added `src/components/atoms/Table.tsx`
+  - Added `src/components/atoms/Tabs.tsx`
+  - Added stories under `src/stories/petstore/*` for all new atoms
+  - Updated `src/components/atoms/index.ts` exports
+  - Refined all new atoms/stories for locale-aware text (`en`/`chef`) and improved a11y labels
+  - **Patch**: Fixed `Table.stories.tsx` — status cell values were rendering raw English strings instead of translated text when Chef locale was active. Added `InventoryTable` wrapper component that uses `useTranslation()` with a `render` function on the status column to call `t('petstore.common.status.' + row.status)`. This pattern must be followed for all stories that display translatable data values in cells/badges.
 - ✅ **Verification completed**
-	- `bun run type-check` passes with strict TypeScript settings
+  - `bun run type-check` passes with strict TypeScript settings
 - ✅ **Phase 3 completed** (2025-07-18)
-	- Added 9 molecule components: `LoginForm`, `PetCard`, `PetForm`, `OrderCard`, `OrderForm`, `UserCard`, `UserForm`, `StatusFilter`, `ConfirmDialog`
-	- Added stories under `src/stories/petstore/*` for all molecules (36 stories)
-	- Updated i18n keys in both `en.ts` and `chef.ts`
+  - Added 9 molecule components: `LoginForm`, `PetCard`, `PetForm`, `OrderCard`, `OrderForm`, `UserCard`, `UserForm`, `StatusFilter`, `ConfirmDialog`
+  - Added stories under `src/stories/petstore/*` for all molecules (36 stories)
+  - Updated i18n keys in both `en.ts` and `chef.ts`
 - ✅ **Phase 4 completed** (2025-07-18)
-	- Added 4 organism components: `AppNavigation`, `PetManagementView`, `StoreOrdersView`, `UserManagementView`
-	- All organisms use `mockMode` prop pattern for story/testing isolation
-	- Added organism stories (14 stories across 4 files)
-	- Added `petstore.app.*` i18n keys (navigation, pets, orders, users) in both `en.ts` and `chef.ts`
-	- Created `organisms/index.ts` barrel and updated `components/index.ts` exports
-	- `bun run type-check` and `bun run build-storybook` pass
+  - Added 4 organism components: `AppNavigation`, `PetManagementView`, `StoreOrdersView`, `UserManagementView`
+  - All organisms use `mockMode` prop pattern for story/testing isolation
+  - Added organism stories (14 stories across 4 files)
+  - Added `petstore.app.*` i18n keys (navigation, pets, orders, users) in both `en.ts` and `chef.ts`
+  - Created `organisms/index.ts` barrel and updated `components/index.ts` exports
+  - `bun run type-check` and `bun run build-storybook` pass
 - ✅ **Phase 5 completed** (2026-02-27)
-	- Added `src/components/organisms/PetstoreApp.tsx` — top-level app shell with AuthProvider → LocaleProvider → hash routing
-	- Hash-based routing: `#/pets`, `#/orders`, `#/users` with `hashchange` listener
-	- Login modal opens via Sign In button, uses `LoginForm` in `Modal`
-	- Added `src/petstore/index.tsx` — React entry point with `ReactDOM.createRoot`
-	- Replaced `petstore/index.html` with minimal HTML shell loading bundled JS
-	- Added `build-petstore` script: `bun build src/petstore/index.tsx --outdir petstore/dist --minify`
-	- Updated `build` script to include `build-petstore`
-	- Updated preview server to serve `petstore/dist/` and SPA fallback
-	- Added `petstore.app.shell.*` i18n keys (loginTitle, loginFailed) in both `en.ts` and `chef.ts`
-	- Composite Storybook story under `Petstore/App/Full Application`
-	- `bun run type-check`, `bun run build-storybook`, and `bun run build-petstore` all pass
+  - Added `src/components/organisms/PetstoreApp.tsx` — top-level app shell with AuthProvider → LocaleProvider → hash routing
+  - Hash-based routing: `#/pets`, `#/orders`, `#/users` with `hashchange` listener
+  - Login modal opens via Sign In button, uses `LoginForm` in `Modal`
+  - Added `src/petstore/index.tsx` — React entry point with `ReactDOM.createRoot`
+  - Replaced `petstore/index.html` with minimal HTML shell loading bundled JS
+  - Added `build-petstore` script: `bun build src/petstore/index.tsx --outdir petstore/dist --minify`
+  - Updated `build` script to include `build-petstore`
+  - Updated preview server to serve `petstore/dist/` and SPA fallback
+  - Added `petstore.app.shell.*` i18n keys (loginTitle, loginFailed) in both `en.ts` and `chef.ts`
+  - Composite Storybook story under `Petstore/App/Full Application`
+  - `bun run type-check`, `bun run build-storybook`, and `bun run build-petstore` all pass
 - ✅ **Phase 6 completed** (2026-02-27)
-	- All translation keys in `en.ts` and `chef.ts` present and pseudo-localized
-	- All components use `useTranslation` and `useAccessibility`
-	- TypeScript strict type-check passes
-	- Storybook build passes with Chef locale rendering correctly
-	- No missing or extra translation keys
+  - All translation keys in `en.ts` and `chef.ts` present and pseudo-localized
+  - All components use `useTranslation` and `useAccessibility`
+  - TypeScript strict type-check passes
+  - Storybook build passes with Chef locale rendering correctly
+  - No missing or extra translation keys
 - ✅ **Phase 7 completed** (2026-02-27)
-	- Updated `.github/workflows/deploy.yml` to run `build-petstore` script
-	- Updated artifact assembly to copy `petstore/dist/` to `_site/petstore/`
-	- Deploy pipeline now builds and deploys both Storybook and Petstore app
+  - Updated `.github/workflows/deploy.yml` to run `build-petstore` script
+  - Updated artifact assembly to copy `petstore/dist/` to `_site/petstore/`
+  - Deploy pipeline now builds and deploys both Storybook and Petstore app
 
 ---
 
 ## Steps
 
 ### Phase 0 — API Service Layer
+
 Use a client generation tool for the petstore API. Generate TypeScript types and a thin fetch wrapper over the API.
 
 1. Create `src/services/apiClient.ts` — A thin `fetch` wrapper over `https://petstore.swagger.io/v2`. Injects `api_key` header from auth context. Exports `get`, `post`, `put`, `del` helpers with typed responses. All methods return `{ data, error }` tuples for clean error handling.
@@ -88,6 +89,7 @@ Use a client generation tool for the petstore API. Generate TypeScript types and
 ### Phase 2 — New Atom Components (each with story + i18n + a11y)
 
 > **i18n/a11y rule for ALL atoms and stories in this phase:**
+>
 > - Every atom must use `useTranslation()` for all visible text and `useAccessibility()` for ARIA labels, keyboard support, and screen-reader announcements.
 > - Column/header/label props must accept `*TranslationKey` variants (e.g. `headerTranslationKey`, `emptyMessageTranslationKey`) so the component calls `t(key)` internally.
 > - **Stories must translate data-level values too** — not just headers and labels. When a cell or badge displays an enum-like value (e.g. a pet status string `"available"`), the story must use a `render` function with `useTranslation()` to map it through existing translation keys (e.g. `t('petstore.common.status.' + row.status)`). Raw enum strings must never appear untranslated in Storybook.
@@ -159,9 +161,9 @@ Use a client generation tool for the petstore API. Generate TypeScript types and
 ### Phase 7 — Deploy Integration (COMPLETE)
 
 30. Updated `.github/workflows/deploy.yml` to:
-	- Run `bun run build-petstore` script in build job
-	- Copy `petstore/dist/` to `_site/petstore/` in the artifact assembly
-	- Deploy pipeline now automatically builds and deploys both Storybook and Petstore app
+    - Run `bun run build-petstore` script in build job
+    - Copy `petstore/dist/` to `_site/petstore/` in the artifact assembly
+    - Deploy pipeline now automatically builds and deploys both Storybook and Petstore app
 
 **Phase 7 is complete. All code is ready for GitHub Pages deployment.**
 
@@ -170,11 +172,13 @@ Use a client generation tool for the petstore API. Generate TypeScript types and
 # Deployment Status
 
 All phases are complete. The application is ready for production:
+
 - **Storybook** builds to `storybook-static/` and deploys to `https://ramonalcantaraarceo.github.io/petstore-ui/storybook/`
 - **Petstore App** builds to `petstore/dist/` and deploys to `https://ramonalcantaraarceo.github.io/petstore-ui/petstore/`
 - **GitHub Pages workflow** (`.github/workflows/deploy.yml`) automatically builds and deploys both on push to `main` or `deploy` branches
 
 The petstore application is fully functional with:
+
 - Hash-based SPA routing (`#/pets`, `#/orders`, `#/users`)
 - Authentication and authorization against Petstore Swagger API
 - Full CRUD operations when authenticated
@@ -185,6 +189,7 @@ The petstore application is fully functional with:
 ---
 
 # Next Steps (Optional)
+
 - [ ] Add ESLint config for future code quality enforcement
 - [ ] Final production review
 - [ ] Monitor GitHub Pages deployment
@@ -200,27 +205,27 @@ The petstore application is fully functional with:
 
 ## Component ↔ Story Matrix
 
-| Component | Storybook Path | Stories |
-|-----------|---------------|---------|
-| Badge | `Petstore/Atoms/Badge` | All variants, sizes |
-| Select | `Petstore/Atoms/Select` | Default, disabled, with options |
-| Modal | `Petstore/Atoms/Modal` | Open/closed, sizes, focus trap |
-| Table | `Petstore/Atoms/Table` | With data, empty state |
-| Tabs | `Petstore/Atoms/Tabs` | 3 tabs, keyboard nav |
-| LoginForm | `Petstore/Molecules/LoginForm` | Default, loading, error |
-| PetCard | `Petstore/Molecules/PetCard` | All statuses, readonly vs editable |
-| PetForm | `Petstore/Molecules/PetForm` | Create mode, edit mode |
-| OrderCard | `Petstore/Molecules/OrderCard` | All statuses |
-| OrderForm | `Petstore/Molecules/OrderForm` | Default, loading |
-| UserCard | `Petstore/Molecules/UserCard` | With full data, minimal data |
-| UserForm | `Petstore/Molecules/UserForm` | Create mode, edit mode |
-| StatusFilter | `Petstore/Molecules/StatusFilter` | With selections |
-| ConfirmDialog | `Petstore/Molecules/ConfirmDialog` | Default, danger variant |
-| AppNavigation | `Petstore/Organisms/AppNavigation` | Logged in, logged out, each tab active |
-| PetManagementView | `Petstore/Views/Pet Management` | With mock pets, empty state, with modal open |
-| StoreOrdersView | `Petstore/Views/Store Orders` | Inventory table, order lookup, place order |
-| UserManagementView | `Petstore/Views/User Management` | Lookup result, create form, edit form |
-| PetstoreApp | `Petstore/App/Full Application` | Interactive composite with mock API |
+| Component          | Storybook Path                     | Stories                                      |
+| ------------------ | ---------------------------------- | -------------------------------------------- |
+| Badge              | `Petstore/Atoms/Badge`             | All variants, sizes                          |
+| Select             | `Petstore/Atoms/Select`            | Default, disabled, with options              |
+| Modal              | `Petstore/Atoms/Modal`             | Open/closed, sizes, focus trap               |
+| Table              | `Petstore/Atoms/Table`             | With data, empty state                       |
+| Tabs               | `Petstore/Atoms/Tabs`              | 3 tabs, keyboard nav                         |
+| LoginForm          | `Petstore/Molecules/LoginForm`     | Default, loading, error                      |
+| PetCard            | `Petstore/Molecules/PetCard`       | All statuses, readonly vs editable           |
+| PetForm            | `Petstore/Molecules/PetForm`       | Create mode, edit mode                       |
+| OrderCard          | `Petstore/Molecules/OrderCard`     | All statuses                                 |
+| OrderForm          | `Petstore/Molecules/OrderForm`     | Default, loading                             |
+| UserCard           | `Petstore/Molecules/UserCard`      | With full data, minimal data                 |
+| UserForm           | `Petstore/Molecules/UserForm`      | Create mode, edit mode                       |
+| StatusFilter       | `Petstore/Molecules/StatusFilter`  | With selections                              |
+| ConfirmDialog      | `Petstore/Molecules/ConfirmDialog` | Default, danger variant                      |
+| AppNavigation      | `Petstore/Organisms/AppNavigation` | Logged in, logged out, each tab active       |
+| PetManagementView  | `Petstore/Views/Pet Management`    | With mock pets, empty state, with modal open |
+| StoreOrdersView    | `Petstore/Views/Store Orders`      | Inventory table, order lookup, place order   |
+| UserManagementView | `Petstore/Views/User Management`   | Lookup result, create form, edit form        |
+| PetstoreApp        | `Petstore/App/Full Application`    | Interactive composite with mock API          |
 
 ---
 

@@ -42,8 +42,7 @@ export const LoggedIn: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Authenticated state — displays the username and Sign Out button on the right.',
+        story: 'Authenticated state — displays the username and Sign Out button on the right.',
       },
     },
   },
@@ -61,8 +60,7 @@ export const LoggedOut: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Unauthenticated state — shows only the Sign In button.',
+        story: 'Unauthenticated state — shows only the Sign In button.',
       },
     },
   },

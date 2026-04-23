@@ -4,28 +4,26 @@ import { theme } from '../../tokens/theme';
 import { useTranslation } from '../../i18n';
 import { useAccessibility } from '../../accessibility';
 
-
 /**
  * Button component for user interactions with multiple variants, sizes, and comprehensive accessibility.
  * Supports primary, secondary, and danger color schemes with full i18n and a11y integration.
- * 
+ *
  * @example
  * ```tsx
  * <Button variant="primary" size="large" onClick={handleSubmit}>
  *   {t('components.button.submit')}
  * </Button>
- * 
- * <Button 
- *   variant="danger" 
- *   disabled 
+ *
+ * <Button
+ *   variant="danger"
+ *   disabled
  *   ariaLabel={t('components.button.ariaLabel', { content: 'Delete' })}
  * >
  *   {t('components.button.delete')}
  * </Button>
  * ```
  */
-interface ButtonProps extends 
-  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
+interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
   /** Visual style variant of the button */
   variant?: 'primary' | 'secondary' | 'danger';
   /** Size of the button */
@@ -74,37 +72,31 @@ export const Button: FC<ButtonProps> = ({
   ...props
 }) => {
   const { t } = useTranslation();
-  
+
   // Use accessibility hook for comprehensive a11y features
-  const {
-    ariaAttributes,
-    handleKeyDown,
-    announceAction
-  } = useAccessibility({
+  const { ariaAttributes, handleKeyDown, announceAction } = useAccessibility({
     enterActivation,
     spaceActivation,
     announceOnAction: announceOnAction || '',
     accessibilityLoading: loading,
-    accessibilityError: disabled
+    accessibilityError: disabled,
   });
-  
+
   // Get translated content if translation key provided
-  const displayContent = translationKey 
-    ? t(translationKey, translationParams)
-    : children;
+  const displayContent = translationKey ? t(translationKey, translationParams) : children;
   const baseClasses = 'btn';
   const variantClasses = `btn--${variant}`;
   const sizeClasses = `btn--${size}`;
   const fullWidthClass = fullWidth ? 'btn--full-width' : '';
   const loadingClass = loading ? 'btn--loading' : '';
-  
+
   const buttonClasses = [
     baseClasses,
     variantClasses,
     sizeClasses,
     fullWidthClass,
     loadingClass,
-    className
+    className,
   ]
     .filter(Boolean)
     .join(' ');
@@ -115,37 +107,37 @@ export const Button: FC<ButtonProps> = ({
       event.preventDefault();
       return;
     }
-    
+
     // Announce action to screen readers
     if (announceOnAction) {
       announceAction();
     }
-    
+
     onClick?.(event);
   };
-  
+
   // Combined keyboard and click handlers
   const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    handleKeyDown(event as any);
+    handleKeyDown(event);
     props.onKeyDown?.(event);
   };
-  
+
   // Generate accessible aria-label
   const getAriaLabel = () => {
     if (ariaAttributes['aria-label']) {
       return ariaAttributes['aria-label'];
     }
-    
+
     if (!useDefaultAriaLabel) {
       return undefined;
     }
-    
+
     const content = typeof displayContent === 'string' ? displayContent : 'button';
-    
+
     if (loading) {
       return t('components.button.ariaLabelLoading', { content });
     }
-    
+
     return t('components.button.ariaLabel', { content });
   };
 
@@ -164,57 +156,57 @@ export const Button: FC<ButtonProps> = ({
     transition: `all ${theme.animation.duration[200]} ${theme.animation.easing.inOut}`,
     opacity: disabled ? 0.6 : 1,
     width: fullWidth ? '100%' : 'auto',
-    
+
     // Size variants
     ...(size === 'small' && {
       padding: `${theme.spacing[2]} ${theme.spacing[3]}`,
       fontSize: theme.typography.fontSize.sm,
       lineHeight: theme.typography.lineHeight.tight,
-      minHeight: '2rem'
+      minHeight: '2rem',
     }),
     ...(size === 'medium' && {
       padding: `${theme.spacing[2.5]} ${theme.spacing[4]}`,
       fontSize: theme.typography.fontSize.base,
       lineHeight: theme.typography.lineHeight.normal,
-      minHeight: '2.5rem'
+      minHeight: '2.5rem',
     }),
     ...(size === 'large' && {
       padding: `${theme.spacing[3]} ${theme.spacing[6]}`,
       fontSize: theme.typography.fontSize.lg,
       lineHeight: theme.typography.lineHeight.normal,
-      minHeight: '3rem'
+      minHeight: '3rem',
     }),
-    
+
     // Variant styles
     ...(variant === 'primary' && {
       backgroundColor: theme.colors.primary[500],
       color: theme.colors.neutral.white,
-      boxShadow: theme.boxShadow.sm
+      boxShadow: theme.boxShadow.sm,
     }),
     ...(variant === 'secondary' && {
       backgroundColor: theme.colors.neutral.white,
       color: theme.colors.secondary[700],
       border: `1px solid ${theme.colors.secondary[300]}`,
-      boxShadow: theme.boxShadow.sm
+      boxShadow: theme.boxShadow.sm,
     }),
     ...(variant === 'danger' && {
       backgroundColor: theme.colors.semantic.error,
       color: theme.colors.neutral.white,
-      boxShadow: theme.boxShadow.sm
-    })
+      boxShadow: theme.boxShadow.sm,
+    }),
   };
 
   const hoverStyles: React.CSSProperties = {
     ...(variant === 'primary' && {
-      backgroundColor: theme.colors.primary[600]
+      backgroundColor: theme.colors.primary[600],
     }),
     ...(variant === 'secondary' && {
       backgroundColor: theme.colors.secondary[50],
-      borderColor: theme.colors.secondary[400]
+      borderColor: theme.colors.secondary[400],
     }),
     ...(variant === 'danger' && {
-      backgroundColor: theme.colors.semantic.errorDark
-    })
+      backgroundColor: theme.colors.semantic.errorDark,
+    }),
   };
 
   return (
@@ -251,7 +243,7 @@ export const Button: FC<ButtonProps> = ({
         e.currentTarget.style.outlineOffset = '0';
         props.onBlur?.(e);
       }}
-      {...(props as any)} // Spread remaining props, excluding ones we've handled
+      {...props} // Spread remaining props, excluding ones we've handled
     >
       {loading && (
         <span
@@ -261,16 +253,14 @@ export const Button: FC<ButtonProps> = ({
             border: '2px solid transparent',
             borderTop: '2px solid currentColor',
             borderRadius: '50%',
-            animation: 'spin 1s linear infinite'
+            animation: 'spin 1s linear infinite',
           }}
           aria-hidden="true"
           role="img"
           aria-label={t('components.loading.ariaLabel')}
         />
       )}
-      <span style={{ opacity: loading ? 0.7 : 1 }}>
-        {displayContent}
-      </span>
+      <span style={{ opacity: loading ? 0.7 : 1 }}>{displayContent}</span>
     </button>
   );
 };

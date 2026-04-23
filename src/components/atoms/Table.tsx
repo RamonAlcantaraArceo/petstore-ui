@@ -56,7 +56,9 @@ function TableInner<T>({
         <tr>
           {columns.map((column) => (
             <th key={String(column.key)} scope="col" style={headerCellStyles}>
-              {column.headerTranslationKey ? t(column.headerTranslationKey) : column.header ?? String(column.key)}
+              {column.headerTranslationKey
+                ? t(column.headerTranslationKey)
+                : (column.header ?? String(column.key))}
             </th>
           ))}
         </tr>
@@ -67,7 +69,9 @@ function TableInner<T>({
             <tr key={index}>
               {columns.map((column) => (
                 <td key={String(column.key)} style={bodyCellStyles}>
-                  {column.render ? column.render(row) : String((row as Record<string, unknown>)[String(column.key)] ?? '')}
+                  {column.render
+                    ? column.render(row)
+                    : String((row as Record<string, unknown>)[String(column.key)] ?? '')}
                 </td>
               ))}
             </tr>

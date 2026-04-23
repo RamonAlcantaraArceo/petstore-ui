@@ -12,7 +12,13 @@ export interface UserCardProps {
   className?: string;
 }
 
-export const UserCard: FC<UserCardProps> = ({ user, onEdit, onDelete, readonly = false, className }) => {
+export const UserCard: FC<UserCardProps> = ({
+  user,
+  onEdit,
+  onDelete,
+  readonly = false,
+  className,
+}) => {
   const { t } = useTranslation();
 
   const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username;
@@ -32,7 +38,16 @@ export const UserCard: FC<UserCardProps> = ({ user, onEdit, onDelete, readonly =
         <div style={{ fontSize: '0.875rem', color: '#64748b' }}>@{user.username}</div>
 
         {/* Details */}
-        <div style={{ fontSize: '0.875rem', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.25rem' }}>
+        <div
+          style={{
+            fontSize: '0.875rem',
+            color: '#64748b',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.25rem',
+            marginTop: '0.25rem',
+          }}
+        >
           {user.email && (
             <div>
               <span style={{ fontWeight: 500 }}>{t('petstore.users.card.emailLabel')}: </span>
@@ -55,7 +70,9 @@ export const UserCard: FC<UserCardProps> = ({ user, onEdit, onDelete, readonly =
                 size="small"
                 variant="secondary"
                 onClick={() => onEdit(user)}
-                announceOnAction={t('petstore.users.card.announceEdit', { username: user.username })}
+                announceOnAction={t('petstore.users.card.announceEdit', {
+                  username: user.username,
+                })}
               >
                 {t('petstore.users.card.edit')}
               </Button>
@@ -65,7 +82,9 @@ export const UserCard: FC<UserCardProps> = ({ user, onEdit, onDelete, readonly =
                 size="small"
                 variant="danger"
                 onClick={() => onDelete(user)}
-                announceOnAction={t('petstore.users.card.announceDelete', { username: user.username })}
+                announceOnAction={t('petstore.users.card.announceDelete', {
+                  username: user.username,
+                })}
               >
                 {t('petstore.users.card.delete')}
               </Button>

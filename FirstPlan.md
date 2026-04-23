@@ -4,7 +4,7 @@ TL;DR: Create a monorepo with shared component library, Storybook documentation,
 Implementation Units
 
 Unit 1: Initial Repository Structure
-Prompt: "Create the basic monorepo structure for a Storybook component library with static website. Create the following directory structure: /src/components, /src/stories, /src/tokens, /public, /docs, .storybook/, and .github/workflows/. Add a basic .gitignore file that excludes node_modules/, .bun/, dist/, build/, storybook-static/, .env*, and .DS_Store. Create placeholder README.md file with project title and description."
+Prompt: "Create the basic monorepo structure for a Storybook component library with static website. Create the following directory structure: /src/components, /src/stories, /src/tokens, /public, /docs, .storybook/, and .github/workflows/. Add a basic .gitignore file that excludes node_modules/, .bun/, dist/, build/, storybook-static/, .env\*, and .DS_Store. Create placeholder README.md file with project title and description."
 
 Unit 2: Bun Configuration & Package Setup
 Prompt: "Initialize a Bun project and configure the package.json for a React + TypeScript + Storybook setup. Run bun init and modify package.json to include React, TypeScript, Storybook dependencies (@storybook/react, @storybook/addon-essentials, @storybook/addon-docs). Install comprehensive TypeScript type dependencies including @types/react, @types/react-dom, @types/node, and @types/minimatch to prevent compilation errors. Create bunfig.toml with Bun configuration for module resolution and package management. Add .nvmrc file with Node 20 for fallback compatibility. Create tsconfig.json with strict TypeScript configuration for components and website. After setup, run 'bun install' to ensure all dependencies are properly installed, then verify the TypeScript configuration works with 'bun run tsc --noEmit' to catch any missing type definitions early."
@@ -38,7 +38,7 @@ Unit 11: Comprehensive Documentation
 Prompt: "Create comprehensive documentation for the project setup, development, and deployment. Update README.md with project overview, setup instructions for both Bun and Node.js, development workflow, and deployment process. Create CONTRIBUTING.md with guidelines for adding new components, writing stories, and contributing to the design system. Include troubleshooting section for common Bun compatibility issues and fallback procedures."
 
 Unit 12: Testing & Verification
-Prompt: "Set up testing framework and create initial test suite. Add testing dependencies (Jest, testing-library) compatible with Bun. Create basic unit tests for atomic components in /src/components/__tests__/. Add integration tests for petstore API functionality. Create test scripts in package.json and verify all tests pass with Bun runtime. Document testing strategy and add test coverage reporting."
+Prompt: "Set up testing framework and create initial test suite. Add testing dependencies (Jest, testing-library) compatible with Bun. Create basic unit tests for atomic components in /src/components/**tests**/. Add integration tests for petstore API functionality. Create test scripts in package.json and verify all tests pass with Bun runtime. Document testing strategy and add test coverage reporting."
 
 Execution Order: Units 1-3 can be done in parallel after Unit 1. Units 4-5 depend on Units 2-3. Units 6-7 depend on Units 2-3. Units 8-9 depend on all previous units being functional. Units 10-12 can be done in parallel once the core functionality is established.
 

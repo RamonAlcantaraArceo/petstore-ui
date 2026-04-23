@@ -1,16 +1,16 @@
 /**
  * Internationalization (i18n) Module
  * Complete i18n solution for petstore-ui component library
- * 
+ *
  * @example
  * ```tsx
  * import { LocaleProvider, useTranslation } from './i18n';
- * 
+ *
  * // Wrap your app with LocaleProvider
  * <LocaleProvider locale="en">
  *   <App />
  * </LocaleProvider>
- * 
+ *
  * // Use translations in components
  * function MyComponent() {
  *   const { t } = useTranslation();
@@ -22,7 +22,7 @@
 // Core exports
 export { LocaleProvider, useTranslation, useLocaleContext } from './context';
 
-// Registry and utilities 
+// Registry and utilities
 export {
   locales,
   localeMetadata,
@@ -35,7 +35,7 @@ export {
   getLocaleMetadata,
   validateTranslationKey,
   getTranslationKeysInNamespace,
-  DEFAULT_LOCALE
+  DEFAULT_LOCALE,
 } from './registry';
 
 // Type exports
@@ -50,7 +50,7 @@ export type {
   LocaleRegistry,
   ComponentTranslations,
   StoryTranslations,
-  A11yTranslations
+  A11yTranslations,
 } from './types';
 
 // Locale data exports

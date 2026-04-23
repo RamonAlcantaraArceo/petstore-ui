@@ -3,6 +3,7 @@
 This plan turns your Units 10–12 into sequential, runnable prompts with explicit layering for tests, PR/main GitHub Actions enforcement, Codecov integration, Allure as documented enhancement (not implemented now), changelog/versioning, and production Dockerization. It uses Bun as primary test/runtime, keeps scope aligned with existing repo structure, and stages risk so each step is independently verifiable before moving on.
 
 **Steps**
+
 1. **Unit 10A — Lint/format baseline**: Run a prompt to create/update linting and formatting configs in `.eslintrc.js`, `.prettierrc`, `package.json`, and pre-commit wiring in `.husky` so `lint`, `format`, and `type-check` are consistent with Bun.
 2. **Unit 10B — CI quality gate**: Run a prompt to add `.github/workflows/ci.yml` with triggers on `pull_request` and `push` to `main`, running `bun install`, `bun run lint`, `bun run type-check`, `bun run build-storybook`, and `bun run test`.
 3. **Unit 12A — Test foundation & runner setup**: Run a prompt to establish test scaffolding with Bun as primary runner, including required setup/preload files and config fixes in `bunfig.toml` (resolve missing `test-setup.ts` target).
@@ -16,6 +17,7 @@ This plan turns your Units 10–12 into sequential, runnable prompts with explic
 11. **Dockerization**: Run a prompt to add `Dockerfile`, `.dockerignore`, and `docker-compose.yml` for a single production image that serves the built app; include CI build validation step in `.github/workflows/ci.yml`.
 
 **Verification**
+
 - After each step:
   - run only the targeted command(s)
   - Commit changes with clear message
@@ -24,6 +26,7 @@ This plan turns your Units 10–12 into sequential, runnable prompts with explic
 - CI checks required on both PR and merge to `main`: lint, type-check, tests, build, coverage upload.
 
 **Decisions**
+
 - Test runner: Bun primary.
 - Test layers required: unit, integration, component interaction, accessibility/i18n.
 - Codecov: required now for coverage publishing.

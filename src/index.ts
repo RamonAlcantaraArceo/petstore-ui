@@ -1,6 +1,6 @@
 /**
  * Petstore UI Component Library
- * 
+ *
  * A modern React + TypeScript component library with design system foundation.
  * Built with accessibility, internationalization, performance, and developer experience in mind.
  */

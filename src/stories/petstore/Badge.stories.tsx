@@ -10,7 +10,16 @@ const meta: Meta<typeof Badge> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['available', 'pending', 'sold', 'placed', 'approved', 'delivered', 'info', 'default'],
+      options: [
+        'available',
+        'pending',
+        'sold',
+        'placed',
+        'approved',
+        'delivered',
+        'info',
+        'default',
+      ],
     },
     size: {
       control: 'select',

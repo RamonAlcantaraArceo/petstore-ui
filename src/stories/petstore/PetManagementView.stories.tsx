@@ -92,8 +92,7 @@ export const ReadOnly: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Unauthenticated view — no Add Pet button and cards hide Edit / Delete actions.',
+        story: 'Unauthenticated view — no Add Pet button and cards hide Edit / Delete actions.',
       },
     },
   },

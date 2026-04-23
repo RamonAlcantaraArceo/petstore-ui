@@ -20,11 +20,11 @@ bun run test        # run full test suite
 
 Place new components in the correct layer:
 
-| Layer | Path | Rules |
-|---|---|---|
-| Atom | `src/components/atoms/` | Single-responsibility, no business logic |
-| Molecule | `src/components/molecules/` | Composed from atoms, limited logic |
-| Organism | `src/components/organisms/` | May include API calls and context |
+| Layer    | Path                        | Rules                                    |
+| -------- | --------------------------- | ---------------------------------------- |
+| Atom     | `src/components/atoms/`     | Single-responsibility, no business logic |
+| Molecule | `src/components/molecules/` | Composed from atoms, limited logic       |
+| Organism | `src/components/organisms/` | May include API calls and context        |
 
 ### Required anatomy
 
@@ -41,12 +41,12 @@ Use design tokens from `src/tokens/theme.ts`; do not hardcode colors, spacing, o
 
 ### Naming
 
-| Thing | Convention |
-|---|---|
-| Component file | `PascalCase.tsx` |
-| Props interface | `ComponentNameProps` |
-| Utility / hook file | `camelCase.ts(x)` |
-| Constant | `SCREAMING_SNAKE_CASE` |
+| Thing               | Convention             |
+| ------------------- | ---------------------- |
+| Component file      | `PascalCase.tsx`       |
+| Props interface     | `ComponentNameProps`   |
+| Utility / hook file | `camelCase.ts(x)`      |
+| Constant            | `SCREAMING_SNAKE_CASE` |
 
 ---
 
@@ -68,15 +68,15 @@ Test files live alongside their component: `ComponentName.test.tsx`.
 
 ### Required test coverage
 
-| Scenario | Required |
-|---|---|
-| Renders without error | ✅ |
-| Applies correct CSS class for each variant | ✅ |
-| Calls event handlers on interaction | ✅ |
-| Renders translated content via `LocaleProvider` | ✅ |
-| Keyboard activation (Enter/Space) | ✅ for interactive elements |
-| ARIA attributes present | ✅ |
-| Works in `chef` locale | ✅ |
+| Scenario                                        | Required                    |
+| ----------------------------------------------- | --------------------------- |
+| Renders without error                           | ✅                          |
+| Applies correct CSS class for each variant      | ✅                          |
+| Calls event handlers on interaction             | ✅                          |
+| Renders translated content via `LocaleProvider` | ✅                          |
+| Keyboard activation (Enter/Space)               | ✅ for interactive elements |
+| ARIA attributes present                         | ✅                          |
+| Works in `chef` locale                          | ✅                          |
 
 ### Test utilities
 
@@ -113,13 +113,13 @@ Fix all errors before committing. Warnings are allowed but should be minimised.
 
 Every PR must pass:
 
-| Check | Command |
-|---|---|
-| Lint | `bun run lint` |
-| Type check | `bun run type-check` |
-| Tests + coverage | `bun run test:coverage` |
-| Storybook build | `bun run build-storybook` |
-| Docker build | `docker build --target builder .` |
+| Check            | Command                           |
+| ---------------- | --------------------------------- |
+| Lint             | `bun run lint`                    |
+| Type check       | `bun run type-check`              |
+| Tests + coverage | `bun run test:coverage`           |
+| Storybook build  | `bun run build-storybook`         |
+| Docker build     | `docker build --target builder .` |
 
 Coverage is uploaded to Codecov automatically; no manual action needed.
 

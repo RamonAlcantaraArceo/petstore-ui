@@ -25,11 +25,17 @@ export interface PetFormProps {
 
 const STATUS_OPTIONS = [
   { value: 'available', labelTranslationKey: 'petstore.common.status.available' },
-  { value: 'pending',   labelTranslationKey: 'petstore.common.status.pending' },
-  { value: 'sold',      labelTranslationKey: 'petstore.common.status.sold' },
+  { value: 'pending', labelTranslationKey: 'petstore.common.status.pending' },
+  { value: 'sold', labelTranslationKey: 'petstore.common.status.sold' },
 ];
 
-export const PetForm: FC<PetFormProps> = ({ pet, onSubmit, onCancel, isLoading = false, className }) => {
+export const PetForm: FC<PetFormProps> = ({
+  pet,
+  onSubmit,
+  onCancel,
+  isLoading = false,
+  className,
+}) => {
   const { t } = useTranslation();
   const [fields, setFields] = React.useState<PetFormFields>({
     name: pet?.name || '',
@@ -42,9 +48,8 @@ export const PetForm: FC<PetFormProps> = ({ pet, onSubmit, onCancel, isLoading =
     announceOnAction: t('petstore.pets.form.announceSubmit'),
   });
 
-  const set = (key: keyof PetFormFields) =>
-    (e: React.ChangeEvent<HTMLInputElement>) =>
-      setFields((prev) => ({ ...prev, [key]: e.target.value }));
+  const set = (key: keyof PetFormFields) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFields((prev) => ({ ...prev, [key]: e.target.value }));
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

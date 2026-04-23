@@ -29,7 +29,10 @@ const availablePet: Pet = {
   name: 'Buddy',
   category: { id: 1, name: 'Dogs' },
   photoUrls: [],
-  tags: [{ id: 1, name: 'friendly' }, { id: 2, name: 'vaccinated' }],
+  tags: [
+    { id: 1, name: 'friendly' },
+    { id: 2, name: 'vaccinated' },
+  ],
   status: 'available',
 };
 

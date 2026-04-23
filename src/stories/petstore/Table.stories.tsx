@@ -22,8 +22,7 @@ const InventoryTable: React.FC<{ data: InventoryRow[] }> = ({ data }) => {
     {
       key: 'status' as const,
       headerTranslationKey: 'petstore.table.headers.status',
-      render: (row: InventoryRow) =>
-        t(`petstore.common.status.${row.status}`),
+      render: (row: InventoryRow) => t(`petstore.common.status.${row.status}`),
     },
     {
       key: 'count' as const,

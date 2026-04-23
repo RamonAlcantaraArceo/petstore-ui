@@ -15,9 +15,7 @@ export interface OrderCardProps {
 export const OrderCard: FC<OrderCardProps> = ({ order, onDelete, readonly = false, className }) => {
   const { t } = useTranslation();
 
-  const formattedDate = order.shipDate
-    ? new Date(order.shipDate).toLocaleDateString()
-    : '—';
+  const formattedDate = order.shipDate ? new Date(order.shipDate).toLocaleDateString() : '—';
 
   return (
     <Card
@@ -30,7 +28,14 @@ export const OrderCard: FC<OrderCardProps> = ({ order, onDelete, readonly = fals
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '0.5rem',
+          }}
+        >
           <span style={{ fontWeight: 600, fontSize: '1rem' }}>
             {t('petstore.orders.card.orderId')}: #{order.id}
           </span>
@@ -38,7 +43,15 @@ export const OrderCard: FC<OrderCardProps> = ({ order, onDelete, readonly = fals
         </div>
 
         {/* Details */}
-        <div style={{ fontSize: '0.875rem', color: '#64748b', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+        <div
+          style={{
+            fontSize: '0.875rem',
+            color: '#64748b',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.25rem',
+          }}
+        >
           <div>
             <span style={{ fontWeight: 500 }}>{t('petstore.orders.card.petId')}: </span>
             {order.petId}

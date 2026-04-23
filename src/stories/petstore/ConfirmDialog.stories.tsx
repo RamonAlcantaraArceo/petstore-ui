@@ -61,7 +61,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Click the button to open the dialog. Switch locale to verify title and buttons translate.',
+        story:
+          'Click the button to open the dialog. Switch locale to verify title and buttons translate.',
       },
     },
   },
@@ -69,9 +70,7 @@ export const Default: Story = {
 
 export const DangerVariant: Story = {
   name: 'Danger Variant',
-  render: () => (
-    <WithTrigger variant="danger" message="This will permanently delete the record." />
-  ),
+  render: () => <WithTrigger variant="danger" message="This will permanently delete the record." />,
   parameters: {
     docs: {
       description: {
@@ -93,8 +92,14 @@ export const CustomTitle: Story = {
           title="Delete Pet?"
           message="Buddy will be permanently removed from the petstore."
           variant="danger"
-          onConfirm={() => { console.log('Confirmed'); setOpen(false); }}
-          onCancel={() => { console.log('Cancelled'); setOpen(false); }}
+          onConfirm={() => {
+            console.log('Confirmed');
+            setOpen(false);
+          }}
+          onCancel={() => {
+            console.log('Cancelled');
+            setOpen(false);
+          }}
         />
       </div>
     );

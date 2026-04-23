@@ -14,7 +14,13 @@ export interface PetCardProps {
   className?: string;
 }
 
-export const PetCard: FC<PetCardProps> = ({ pet, onEdit, onDelete, readonly = false, className }) => {
+export const PetCard: FC<PetCardProps> = ({
+  pet,
+  onEdit,
+  onDelete,
+  readonly = false,
+  className,
+}) => {
   const { t } = useTranslation();
 
   const labelText = t('petstore.pets.card.ariaLabel', { name: pet.name });
@@ -30,7 +36,14 @@ export const PetCard: FC<PetCardProps> = ({ pet, onEdit, onDelete, readonly = fa
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {/* Header row */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: '0.5rem',
+          }}
+        >
           <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600, flex: 1 }}>{pet.name}</h3>
           <Badge variant={pet.status} />
         </div>

@@ -21,7 +21,7 @@ export async function testAccessibilityAcrossLocales(
     wcagLevel?: 'A' | 'AA' | 'AAA';
     testKeyboard?: boolean;
     testContrast?: boolean;
-  } = {}
+  } = {},
 ) {
   const {
     locales = ['en', 'chef'],
@@ -38,7 +38,7 @@ export async function testAccessibilityAcrossLocales(
 
     if (element) {
       const audit = await auditAccessibility(element);
-      
+
       results[locale] = {
         locale,
         audit,
@@ -46,7 +46,7 @@ export async function testAccessibilityAcrossLocales(
         score: audit.overallScore,
         recommendations: audit.recommendations,
         textLength: element.textContent?.length || 0,
-        hasExpandedText: locale === 'chef' && (element.textContent?.length || 0) > 10
+        hasExpandedText: locale === 'chef' && (element.textContent?.length || 0) > 10,
       };
     }
 
@@ -55,7 +55,9 @@ export async function testAccessibilityAcrossLocales(
 
   // Calculate overall compliance
   const overallCompliance = Object.values(results).every((result: any) => result.isCompliant);
-  const averageScore = Object.values(results).reduce((sum: number, result: any) => sum + result.score, 0) / locales.length;
+  const averageScore =
+    Object.values(results).reduce((sum: number, result: any) => sum + result.score, 0) /
+    locales.length;
 
   return {
     results,
@@ -65,11 +67,12 @@ export async function testAccessibilityAcrossLocales(
       totalLocalesTested: locales.length,
       compliantLocales: Object.values(results).filter((result: any) => result.isCompliant).length,
       averageScore,
-      worstPerformingLocale: Object.entries(results).reduce((worst, [locale, result]: [string, any]) => 
-        (!worst || result.score < worst.score) ? { locale, score: result.score } : worst, 
-        null as any
-      )
-    }
+      worstPerformingLocale: Object.entries(results).reduce(
+        (worst, [locale, result]: [string, any]) =>
+          !worst || result.score < worst.score ? { locale, score: result.score } : worst,
+        null as any,
+      ),
+    },
   };
 }
 
@@ -81,20 +84,21 @@ export async function testAccessibilityAcrossLocales(
  */
 export function testInternationalizationLayout(
   component: React.ReactElement,
-  maxWidth: number = 400
+  maxWidth: number = 400,
 ) {
   const expansionTest = testTextExpansion(component, maxWidth);
-  
+
   // Additional layout tests
   const layoutTests = {
     textOverflow: false,
     layoutBreaks: false,
-    maintainsAlignment: true
+    maintainsAlignment: true,
   };
 
   // Test with very long text (simulated)
   const longTextComponent = React.cloneElement(component, {
-    children: 'Døes zee vëry løñg tëxt çäüsé zee låyøüt tø brëäk ør øvërflöw zee çøñtäïñër? Børk børk børk!'
+    children:
+      'Døes zee vëry løñg tëxt çäüsé zee låyøüt tø brëäk ør øvërflöw zee çøñtäïñër? Børk børk børk!',
   });
 
   const longTextResult = testTextExpansion(longTextComponent, maxWidth);
@@ -107,8 +111,8 @@ export function testInternationalizationLayout(
     recommendations: [
       ...(!expansionTest.isAcceptable ? ['Consider flexible layout design'] : []),
       ...(layoutTests.textOverflow ? ['Implement text truncation or responsive design'] : []),
-      ...(expansionTest.expansionRatio > 1.4 ? ['Consider shorter translation alternatives'] : [])
-    ]
+      ...(expansionTest.expansionRatio > 1.4 ? ['Consider shorter translation alternatives'] : []),
+    ],
   };
 }
 
@@ -127,7 +131,7 @@ export async function comprehensiveComponentTest(
     locales?: SupportedLocale[];
     wcagLevel?: 'A' | 'AA' | 'AAA';
     maxWidth?: number;
-  } = {}
+  } = {},
 ) {
   const {
     testI18n = true,
@@ -135,20 +139,21 @@ export async function comprehensiveComponentTest(
     testLayoutStability = true,
     locales = ['en', 'chef'],
     wcagLevel = 'AA',
-    maxWidth = 400
+    maxWidth = 400,
   } = options;
 
   const results: any = {
     timestamp: new Date().toISOString(),
-    component: typeof component === 'string' ? component : (component as any).type?.name || 'Unknown',
-    options
+    component:
+      typeof component === 'string' ? component : (component as any).type?.name || 'Unknown',
+    options,
   };
 
   // Accessibility testing across locales
   if (testA11y) {
     results.accessibility = await testAccessibilityAcrossLocales(component, {
       locales,
-      wcagLevel
+      wcagLevel,
     });
   }
 
@@ -177,12 +182,13 @@ export async function comprehensiveComponentTest(
 
   // Generate recommendations
   results.recommendations = [
-    ...(results.accessibility?.summary?.compliantLocales < locales.length ? 
-      ['Improve accessibility compliance across all locales'] : []),
-    ...(results.internationalization && !results.internationalization.isAcceptable ? 
-      results.internationalization.recommendations : []),
-    ...(results.overallScore < 0.8 ? 
-      ['Consider overall component design improvements'] : [])
+    ...(results.accessibility?.summary?.compliantLocales < locales.length
+      ? ['Improve accessibility compliance across all locales']
+      : []),
+    ...(results.internationalization && !results.internationalization.isAcceptable
+      ? results.internationalization.recommendations
+      : []),
+    ...(results.overallScore < 0.8 ? ['Consider overall component design improvements'] : []),
   ];
 
   return results;
@@ -217,6 +223,6 @@ export function createA11yI18nTestSuite(
     testComprehensive: () => {
       // TODO: Implement when testing library is available
       console.log(`Comprehensive test for ${componentName} would run here`);
-    }
+    },
   };
 }

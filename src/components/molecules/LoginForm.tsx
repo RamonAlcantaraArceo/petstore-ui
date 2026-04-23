@@ -16,12 +16,7 @@ export interface LoginFormProps {
   className?: string;
 }
 
-export const LoginForm: FC<LoginFormProps> = ({
-  onLogin,
-  isLoading = false,
-  error,
-  className,
-}) => {
+export const LoginForm: FC<LoginFormProps> = ({ onLogin, isLoading = false, error, className }) => {
   const { t } = useTranslation();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');

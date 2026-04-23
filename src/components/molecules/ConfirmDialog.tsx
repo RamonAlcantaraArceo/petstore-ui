@@ -43,7 +43,9 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({
       size="small"
     >
       {displayMessage && (
-        <p style={{ margin: '0 0 1.5rem', color: '#374151', fontSize: '0.9375rem', lineHeight: 1.6 }}>
+        <p
+          style={{ margin: '0 0 1.5rem', color: '#374151', fontSize: '0.9375rem', lineHeight: 1.6 }}
+        >
           {displayMessage}
         </p>
       )}

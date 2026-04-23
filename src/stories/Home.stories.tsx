@@ -53,8 +53,7 @@ const meta: Meta<typeof HomeNavigation> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          'Quick navigation helper to return from Storybook to the project landing page.',
+        component: 'Quick navigation helper to return from Storybook to the project landing page.',
       },
     },
   },
