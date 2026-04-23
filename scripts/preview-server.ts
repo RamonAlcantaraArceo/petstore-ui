@@ -98,10 +98,10 @@ function serveFromDir(dir: string, urlPath: string): Response | null {
 
 /**
  * Generate runtime configuration for the frontend.
- * Reads VITE_API_BASE_URL and API_KEY from environment.
+ * Reads API_BASE_URL and API_KEY from environment.
  */
 function generateConfigJs(): string {
-  const apiBaseUrl = process.env.VITE_API_BASE_URL || '/api/v1';
+  const apiBaseUrl = process.env.API_BASE_URL || '/api/v1';
   const apiKey = process.env.API_KEY || undefined;
   const config: Record<string, string> = { API_BASE_URL: apiBaseUrl };
   if (apiKey) {
@@ -191,7 +191,7 @@ Bun.serve({
   },
 });
 
-const effectiveApiUrl = process.env.VITE_API_BASE_URL || '/api/v1';
+const effectiveApiUrl = process.env.API_BASE_URL || '/api/v1';
 
 console.log(`\n  Petstore UI preview server running at:\n`);
 console.log(`    Homepage:        http://localhost:${PORT}/`);

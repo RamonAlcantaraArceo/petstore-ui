@@ -7,9 +7,12 @@ services:
       - "8080:80"
     restart: unless-stopped
     environment:
-      # Runtime API target — overridable without rebuilding the image.
-      # Set in a .env file: API_BASE_URL=https://your-api-url.com/api/v1
-      API_BASE_URL: "${VITE_API_BASE_URL:-}"
+      # Browser-facing API path written into config.js (keep relative to avoid CORS).
+      # Default: /api/v1
+      API_BASE_URL: "${API_BASE_URL:-/api/v1}"
+      # Full backend URL used by the nginx reverse proxy.
+      # Default: DEV deployment. Override to point at a different backend.
+      API_PROXY_TARGET: "${API_PROXY_TARGET:-}"
       # Optional API key — injected server-side by nginx (never sent to the browser).
       # Set in a .env file: API_KEY=your-key
       API_KEY: "${API_KEY:-}"

@@ -8,10 +8,11 @@ image = "ghcr.io/ramonalcantaraarceo/petstore-ui:latest"
 strategy = "immediate"
 
 [env]
-APP_ENV      = "dev"
-LOG_LEVEL    = "INFO"
-STORAGE_MODE = "memory"
-API_BASE_URL = "https://petstore-api-dev.ramon-alcantara.work/api/v1"
+APP_ENV          = "dev"
+LOG_LEVEL        = "INFO"
+STORAGE_MODE     = "memory"
+API_BASE_URL     = "/api/v1"
+API_PROXY_TARGET = "https://petstore-api-dev.ramon-alcantara.work"
 
 [http_service]
 auto_start_machines = true

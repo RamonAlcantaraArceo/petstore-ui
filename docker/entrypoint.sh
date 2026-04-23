@@ -5,11 +5,14 @@
 # at container startup, injecting runtime environment variables.
 #
 # Environment variables consumed:
-#   API_BASE_URL  — Full Petstore API base URL (default: DEV deployment).
-#                   Used by the nginx reverse proxy; the browser always sees
-#                   a relative /api/v1 path (same-origin, no CORS needed).
-#   API_KEY       — Optional. If set, injected as the api_key header on every
-#                   proxied request (server-side only — never sent to the browser).
+#   API_PROXY_TARGET — Full backend URL used by the nginx reverse proxy.
+#                      Default: DEV deployment. The browser always sees
+#                      a relative /api/v1 path (same-origin, no CORS needed).
+#                      Example: https://petstore-api-dev.ramon-alcantara.work/api/v1
+#   API_BASE_URL     — Browser-facing API path written into config.js.
+#                      Default: /api/v1. Keep this relative to avoid CORS.
+#   API_KEY          — Optional. If set, injected as the api_key header on every
+#                      proxied request (server-side only — never sent to the browser).
 #
 # Usage (Dockerfile CMD or compose entrypoint):
 #   entrypoint: ["/docker-entrypoint.sh"]
@@ -17,8 +20,15 @@
 set -e
 
 # Full backend URL used by nginx reverse-proxy (never sent to the browser).
-BACKEND="${API_BASE_URL:-https://petstore-api-dev.ramon-alcantara.work/api/v1}"
-BACKEND="${BACKEND%/}"  # strip any trailing slash
+BACKEND_RAW="${API_PROXY_TARGET:-https://petstore-api-dev.ramon-alcantara.work/api/v1}"
+BACKEND_RAW="${BACKEND_RAW%/}"  # strip any trailing slash
+
+# In containers, localhost/127.0.0.1 points to the container itself, not the host.
+# Rewrite those hosts so local host services remain reachable.
+BACKEND=$(echo "$BACKEND_RAW" | sed 's|://localhost|://host.docker.internal|; s|://127.0.0.1|://host.docker.internal|')
+if [ "$BACKEND" != "$BACKEND_RAW" ]; then
+  echo "[entrypoint] API_PROXY_TARGET used localhost/127.0.0.1; rewritten to ${BACKEND} for container networking"
+fi
 
 # Extract scheme://host (no path) for the nginx resolver+variable proxy trick.
 # When proxy_pass receives a variable with no URI path, nginx passes the original
@@ -28,8 +38,7 @@ API_HOSTNAME=$(echo "$API_HOST" | sed 's|https\{0,1\}://||')
 
 # 1. config.js — always relative so the browser hits nginx (avoids CORS).
 #    The actual backend target lives only in the nginx proxy conf below.
-#    Use VITE_API_BASE_URL if set, else API_BASE_URL, else default to /api/v1
-FRONTEND_API_BASE_URL="${VITE_API_BASE_URL:-${API_BASE_URL:-/api/v1}}"
+FRONTEND_API_BASE_URL="${API_BASE_URL:-/api/v1}"
 FRONTEND_API_BASE_URL="${FRONTEND_API_BASE_URL%/}" # strip trailing slash
 cat > /usr/share/nginx/html/config.js <<EOF
 /* Runtime configuration – generated at container startup. Do not edit. */

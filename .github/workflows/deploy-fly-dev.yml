@@ -1,6 +1,8 @@
 name: Deploy to Fly.io Dev
 
 on:
+  push:
+    branches: ['release-ghcr/*', 'deploy-to-fly']
   workflow_dispatch:
     inputs:
       version:

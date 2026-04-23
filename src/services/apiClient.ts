@@ -42,16 +42,7 @@ function resolveBaseUrl(): string {
     /* non-browser / SSR */
   }
 
-  // 2. Vite / Storybook build-time variable (.env.local)
-  try {
-    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) {
-      return import.meta.env.VITE_API_BASE_URL;
-    }
-  } catch {
-    /* not in Vite context */
-  }
-
-  // 3. HTML meta tag: <meta name="api-base-url" content="https://..." />
+  // 2. HTML meta tag: <meta name="api-base-url" content="https://..." />
   try {
     const meta =
       typeof document !== 'undefined' &&
@@ -63,7 +54,7 @@ function resolveBaseUrl(): string {
     /* SSR / non-browser */
   }
 
-  // 4. Default (DEV environment)
+  // 3. Default (DEV environment)
   return DEFAULT_BASE_URL;
 }
 
