@@ -13,10 +13,12 @@
     <!--
       Load runtime config before the app bundle so window.__RUNTIME_CONFIG__
       is populated when apiClient.resolveBaseUrl() runs.
-      onerror silently ignores a 404 in local dev (bun run preview serves
-      config.js from the preview-server's /api proxy, not from a file).
+      onerror silently ignores a 404 in local dev. Without config.js,
+      apiClient requires a meta tag fallback:
+      <meta name="api-base-url" content="..." />
+      bun run preview serves /config.js dynamically from environment variables.
     -->
-    <script src="/config.js" onerror=""></script>
+    <script src="/config.js" onerror="/* config.js absent in dev */"></script>
   </head>
   <body>
     <div id="root"></div>

@@ -143,29 +143,61 @@ docker compose up --build
 ```
 
 The app will be available at [http://localhost:8080](http://localhost:8080).  
-By default it targets the DEV API (`https://petstore-api-dev.ramon-alcantara.work/api/v1`).
+The app requires an API base URL at runtime. There is no hardcoded fallback.
 
 ### Runtime API configuration
 
-The container reads `API_BASE_URL` at startup (from `docker/entrypoint.sh`) and
-writes it into `/config.js`, which Storybook loads on every page via
-`.storybook/preview-head.html`. This means **you can switch API targets without
-rebuilding the image**:
+The container entrypoint reads environment variables at startup and writes
+runtime config into `/config.js`, which Storybook loads on every page via
+`.storybook/preview-head.html`.
+
+Current variable roles:
+
+1. `API_BASE_URL` = browser-facing API path used by the frontend (usually `/api/v1`)
+2. `API_PROXY_TARGET` = upstream backend origin used by nginx proxy
+
+In other words, the frontend should usually call `/api/v1` (same-origin), and
+you change backend targets by changing `API_PROXY_TARGET`.
+
+Resolution order:
+
+1. `window.__RUNTIME_CONFIG__.API_BASE_URL` (from `/config.js`)
+2. `<meta name="api-base-url" content="..." />`
+3. If both are missing, the app logs an error and fails fast on startup.
+
+Recommended DEV value:
+
+- API_BASE_URL: `/api/v1`
+- API_PROXY_TARGET: `https://petstore-api-dev.ramon-alcantara.work`
+
+Example with container runtime config:
 
 ```bash
-# Point at a different API without rebuilding
-API_BASE_URL=https://your-api/api/v1 docker compose up
+# Keep browser path same-origin; point proxy to selected backend
+API_BASE_URL=/api/v1 API_PROXY_TARGET=https://your-api-host docker compose up
 
 # Or create a .env file
-echo "API_BASE_URL=https://your-api/api/v1" > .env
+echo "API_BASE_URL=/api/v1" > .env
+echo "API_PROXY_TARGET=https://your-api-host" >> .env
 docker compose up
 ```
+
+Example with HTML meta tag:
+
+```html
+<meta name="api-base-url" content="https://petstore-api-dev.ramon-alcantara.work/api/v1" />
+```
+
+Use the meta tag mode when not using `/config.js` runtime injection.
 
 Single image build (no compose):
 
 ```bash
 docker build -t petstore-ui .
-docker run -p 8080:80 -e API_BASE_URL=https://petstore-api-dev.ramon-alcantara.work/api/v1 petstore-ui
+docker run -p 8080:80 \
+   -e API_BASE_URL=/api/v1 \
+   -e API_PROXY_TARGET=https://petstore-api-dev.ramon-alcantara.work \
+   petstore-ui
 ```
 
 ### Deploying to Fly.io (DEV)
@@ -173,7 +205,7 @@ docker run -p 8080:80 -e API_BASE_URL=https://petstore-api-dev.ramon-alcantara.w
 Deployment is a two-step process:
 
 1. **Push image to GHCR** — trigger the _"Create and publish a Docker image"_
-   workflow (runs on `main`, `release-ghcr/*`, or `deploy-to-fly` branches, or
+   workflow (runs on `release-ghcr/*` branches, or
    manually via `workflow_dispatch`). The workflow publishes:
    - `ghcr.io/ramonalcantaraarceo/petstore-ui:latest`
    - `ghcr.io/ramonalcantaraarceo/petstore-ui:sha-<short-sha>` (for rollback)
@@ -184,12 +216,13 @@ Deployment is a two-step process:
 
 The Fly config lives in `.fly/dev/fly.toml`. Key settings:
 
-| Setting         | Value                                                  |
-| --------------- | ------------------------------------------------------ |
-| `internal_port` | `80` (nginx)                                           |
-| `memory`        | `256mb`                                                |
-| `API_BASE_URL`  | `https://petstore-api-dev.ramon-alcantara.work/api/v1` |
-| Health check    | `GET /` every 15 s                                     |
+| Setting            | Value                                           |
+| ------------------ | ----------------------------------------------- |
+| `internal_port`    | `80` (nginx)                                    |
+| `memory`           | `256mb`                                         |
+| `API_BASE_URL`     | `/api/v1`                                       |
+| `API_PROXY_TARGET` | `https://petstore-api-dev.ramon-alcantara.work` |
+| Health check       | `GET /` every 15 s                              |
 
 **Rollback:** re-trigger the deploy workflow with a previous `sha-<short-sha>` tag.
 

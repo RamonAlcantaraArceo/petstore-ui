@@ -8,7 +8,8 @@
 #   API_PROXY_TARGET — Full backend URL used by the nginx reverse proxy.
 #                      Default: DEV deployment. The browser always sees
 #                      a relative /api/v1 path (same-origin, no CORS needed).
-#                      Example: https://petstore-api-dev.ramon-alcantara.work/api/v1
+#                      The API path is configurable via API_BASE_URL.
+#                      Example: https://petstore-api-dev.ramon-alcantara.work
 #   API_BASE_URL     — Browser-facing API path written into config.js.
 #                      Default: /api/v1. Keep this relative to avoid CORS.
 #   API_KEY          — Optional. If set, injected as the x-api-key header on every
@@ -45,10 +46,11 @@ API_HOSTNAME=$(echo "$API_HOST" | sed 's|https\{0,1\}://||')
 # 1. config.js — always relative so the browser hits nginx (avoids CORS).
 #    The actual backend target lives only in the nginx proxy conf below.
 FRONTEND_API_BASE_URL="${API_BASE_URL:-/api/v1}"
-FRONTEND_API_BASE_URL="${FRONTEND_API_BASE_URL%/}" # strip trailing slash
+JSON_ESCAPED_FRONTEND_API_BASE_URL=$(printf '%s' "$FRONTEND_API_BASE_URL" | awk 'BEGIN { ORS=""; first=1 } { if (!first) print "\\n"; first=0; gsub(/\\/,"\\\\"); gsub(/"/,"\\\""); gsub(/\r/,"\\r"); gsub(/\t/,"\\t"); print }')
 cat > /usr/share/nginx/html/config.js <<EOF
 /* Runtime configuration – generated at container startup. Do not edit. */
 window.__RUNTIME_CONFIG__ = {
+  API_BASE_URL: "${JSON_ESCAPED_FRONTEND_API_BASE_URL}"
   API_BASE_URL: "${FRONTEND_API_BASE_URL}"
 };
 EOF

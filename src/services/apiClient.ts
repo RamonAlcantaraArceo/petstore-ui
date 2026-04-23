@@ -29,11 +29,9 @@ declare global {
   }
 }
 
-const DEFAULT_BASE_URL = 'https://petstore-api-qa.ramon-alcantara.work/api/v1';
-
 function resolveBaseUrl(): string {
   // 1. Runtime-injected config (set by container entrypoint via /config.js).
-  //    Highest priority — allows switching API targets without rebuilding the image.
+  //    Highest priority - allows switching API targets without rebuilding the image.
   try {
     if (typeof window !== 'undefined' && window.__RUNTIME_CONFIG__?.API_BASE_URL) {
       return window.__RUNTIME_CONFIG__.API_BASE_URL;
@@ -54,8 +52,11 @@ function resolveBaseUrl(): string {
     /* SSR / non-browser */
   }
 
-  // 3. Default (DEV environment)
-  return DEFAULT_BASE_URL;
+  // 3. Hard fail if no API base URL is available from supported config sources.
+  const message =
+    'API base URL configuration missing. Set window.__RUNTIME_CONFIG__.API_BASE_URL or add <meta name="api-base-url" content="https://petstore-api-dev.ramon-alcantara.work/api/v1" />.';
+  console.error(message);
+  throw new Error(message);
 }
 
 let _baseUrl: string = resolveBaseUrl();
