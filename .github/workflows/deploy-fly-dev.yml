@@ -32,13 +32,23 @@ jobs:
             echo "tag=latest" >> $GITHUB_OUTPUT
           fi
 
-      # Deploy using the pre-built GHCR image
-      - name: Deploy to Fly.io
+      - name: Create Fly.io app if it doesn't exist
         run: |
-          flyctl deploy \
-            --config .fly/dev/fly.toml \
-            --image ghcr.io/ramonalcantaraarceo/petstore-ui:${{ steps.set_tag.outputs.tag }} \
-            --remote-only \
-            --verbose
+          if ! flyctl apps list | grep -q petstore-ui-dev; then
+            flyctl apps create --name petstore-ui-dev --auto-confirm
+          else
+            echo "App petstore-ui-dev already exists, skipping creation."
+          fi
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      # # Deploy using the pre-built GHCR image
+      # - name: Deploy to Fly.io
+      #   run: |
+      #     flyctl deploy \
+      #       --config .fly/dev/fly.toml \
+      #       --image ghcr.io/ramonalcantaraarceo/petstore-ui:${{ steps.set_tag.outputs.tag }} \
+      #       --remote-only \
+      #       --verbose
+      #   env:
+      #     FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
