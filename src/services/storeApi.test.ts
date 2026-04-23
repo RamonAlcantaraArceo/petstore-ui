@@ -1,3 +1,4 @@
+import './testSetup';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { getInventory, placeOrder, getOrderById, deleteOrder } from './storeApi';
 import { clearApiToken } from './apiClient';

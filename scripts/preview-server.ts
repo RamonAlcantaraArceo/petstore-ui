@@ -38,7 +38,10 @@ function loadEnvFile(filePath: string, overrideExisting = false): void {
   }
 }
 
-// Load environment: .env first, then .env.local (overrides .env)
+// Load environment from `.env` only.
+// `.env.local` loading is intentionally disabled for now so preview behavior stays
+// consistent across local setups until local override support is explicitly defined.
+// TODO: Re-enable `.env.local` once the expected precedence and developer workflow are documented.
 loadEnvFile(join(ROOT, '.env'), true);
 // loadEnvFile(join(ROOT, '.env.local'), true);
 

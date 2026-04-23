@@ -1,3 +1,4 @@
+import './testSetup';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { clearApiToken } from './apiClient';
 import { createUser } from './userApi';
