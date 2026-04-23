@@ -36,6 +36,7 @@ RUN rm -rf /usr/share/nginx/html/* /etc/nginx/conf.d/default.conf
 
 # Replace with the tracked, reviewed nginx config (includes security headers)
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/security-headers.conf /etc/nginx/conf.d/security-headers.conf
 
 # Copy built outputs into the nginx document root:
 #   /                  → public/ (homepage)
