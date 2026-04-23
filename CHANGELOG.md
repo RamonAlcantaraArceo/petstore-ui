@@ -9,6 +9,12 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+
+- Fly.io DEV deployment workflow and environment-specific Fly configuration for manual image rollouts
+- GitHub Container Registry image publish workflow with `latest` and `sha-<short-sha>` tags plus build attestations
+- Container runtime config injection via `docker/entrypoint.sh`, including generated `/config.js`, nginx API proxy wiring, and optional server-side `x-api-key` header injection
+- Hardened container serving with nginx security headers and Storybook runtime config loading via `.storybook/preview-head.html`
+- Shared setup for `src/services/*.test.ts` so service tests bootstrap runtime API configuration without affecting unrelated tests
 - Accessibility and i18n test layer (Unit 12D)
 - Integration/API test layer for petstore services (Unit 12C)
 - Unit and component interaction tests for atoms and molecules (Unit 12B)
@@ -19,6 +25,16 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - Comprehensive README and CONTRIBUTING.md (Unit 11A)
 - Dockerfile + docker-compose for production Storybook serving
 
+### Changed
+
+- Docker, local preview, and compose flows now use runtime-configured API routing with same-origin `/api/v1` frontend calls and a configurable upstream proxy target
+- `src/services/apiClient.ts` now resolves the API base URL from runtime config or a meta tag and fails fast when neither source is provided
+- README deployment and runtime configuration guidance now documents GHCR publishing, Fly.io DEV deployment, rollback flow, and runtime API variable usage
+
+### Fixed
+
+- Service-layer tests now get the required API base URL configuration from a shared setup module, preventing regressions after removing the hardcoded client fallback
+
 ---
 
 ## [1.0.0] - 2026-03-03
@@ -26,39 +42,46 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 ### Added
 
 #### Foundation
+
 - React 18 + TypeScript strict-mode project bootstrapped with Bun
 - Storybook 7 for component documentation and interactive demos
 - Atomic design folder structure (`atoms/`, `molecules/`, `organisms/`)
 
 #### Design System
+
 - Design token system in `src/tokens/theme.ts` (colors, spacing, typography, breakpoints)
 - `Button`, `Badge`, `Input` atom components
 - `PetCard`, `SearchBox` molecule components
 - `PetGrid`, `Header` organism components
 
 #### Petstore Integration
+
 - API client (`src/services/apiClient.ts`) with typed fetch wrapper
 - `petApi.ts` — pet resource endpoints (list, find by status, find by ID)
 - `storeApi.ts` — store/order endpoints
 - Petstore demo page at `src/petstore/`
 
 #### Internationalization
+
 - i18n infrastructure: `LocaleProvider`, `useTranslation`, `getTranslation`
 - `en` locale (production)
 - `chef` pseudo-locale for layout/text-expansion testing
 - Type-safe translation registry with parameter interpolation
 
 #### Accessibility
+
 - `useAccessibility` hook (ARIA attributes, keyboard activation, screen reader announcements)
 - WCAG 2.1 AA compliance helpers in `src/accessibility/`
 - Accessibility testing utilities in `src/testing/a11y-utils.ts`
 
 #### Testing Utilities
+
 - `src/testing/i18n-utils.tsx` — `renderWithLocale` helper
 - `src/testing/a11y-utils.ts` — `auditAccessibility`, `testKeyboardNavigation`
 - `src/testing/test-patterns.tsx` — comprehensive test pattern library
 
 #### Storybook Stories
+
 - Stories for all atoms, molecules, organisms
 - Petstore API demo stories
 - Locale-switching toolbar in Storybook for live i18n preview

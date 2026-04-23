@@ -1,3 +1,4 @@
+import './testSetup';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { findPetsByStatus, getPetById, addPet, updatePet, deletePet } from './petApi';
 import { clearApiToken } from './apiClient';

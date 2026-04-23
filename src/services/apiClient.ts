@@ -20,19 +20,27 @@ import type { ApiResult } from './types';
 // Environment configuration
 // ---------------------------------------------------------------------------
 
-const DEFAULT_BASE_URL = 'https://petstore.swagger.io/v2';
+// Allow TypeScript to see the optional runtime config object injected by the
+// container entrypoint (docker/entrypoint.sh writes /config.js at startup, and
+// scripts/preview-server.ts serves it dynamically in local dev mode).
+declare global {
+  interface Window {
+    __RUNTIME_CONFIG__?: { API_BASE_URL?: string; API_KEY?: string };
+  }
+}
 
 function resolveBaseUrl(): string {
-  // Vite / Storybook (.env.local)
+  // 1. Runtime-injected config (set by container entrypoint via /config.js).
+  //    Highest priority - allows switching API targets without rebuilding the image.
   try {
-    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) {
-      return import.meta.env.VITE_API_BASE_URL;
+    if (typeof window !== 'undefined' && window.__RUNTIME_CONFIG__?.API_BASE_URL) {
+      return window.__RUNTIME_CONFIG__.API_BASE_URL;
     }
   } catch {
-    /* not in Vite context */
+    /* non-browser / SSR */
   }
 
-  // HTML meta tag: <meta name="api-base-url" content="http://localhost:8000" />
+  // 2. HTML meta tag: <meta name="api-base-url" content="https://..." />
   try {
     const meta =
       typeof document !== 'undefined' &&
@@ -44,7 +52,11 @@ function resolveBaseUrl(): string {
     /* SSR / non-browser */
   }
 
-  return DEFAULT_BASE_URL;
+  // 3. Hard fail if no API base URL is available from supported config sources.
+  const message =
+    'API base URL configuration missing. Set window.__RUNTIME_CONFIG__.API_BASE_URL or add <meta name="api-base-url" content="https://petstore-api-dev.ramon-alcantara.work/api/v1" />.';
+  console.error(message);
+  throw new Error(message);
 }
 
 let _baseUrl: string = resolveBaseUrl();
@@ -63,7 +75,19 @@ export function getBaseUrl(): string {
 // Token management — AuthContext (Phase 1) will call these helpers.
 // ---------------------------------------------------------------------------
 
-let _token: string | null = null;
+function resolveDefaultToken(): string | null {
+  try {
+    if (typeof window !== 'undefined' && window.__RUNTIME_CONFIG__?.API_KEY) {
+      return window.__RUNTIME_CONFIG__.API_KEY;
+    }
+  } catch {
+    /* non-browser / SSR */
+  }
+  return null;
+}
+
+const _defaultToken: string | null = resolveDefaultToken();
+let _token: string | null = _defaultToken;
 
 /** Store the API session token (called by AuthContext on login). */
 export function setApiToken(token: string): void {
@@ -72,7 +96,8 @@ export function setApiToken(token: string): void {
 
 /** Clear the API session token (called by AuthContext on logout). */
 export function clearApiToken(): void {
-  _token = null;
+  // Revert to runtime default token so anonymous requests still work.
+  _token = _defaultToken;
 }
 
 /** Retrieve the current API session token. */
@@ -92,7 +117,7 @@ function buildHeaders(extra: Record<string, string> = {}): Record<string, string
   };
 
   if (_token) {
-    headers['api_key'] = _token;
+    headers['x-api-key'] = _token;
   }
 
   return headers;
