@@ -60,5 +60,12 @@ jobs:
             --verbose
 
           flyctl scale count 1 -y -c .fly/dev/fly.toml
+
+          if ! flyctl certs list -c .fly/dev/fly.toml | grep -q petstore-ui-dev.ramon-alcantara.work; then
+            flyctl certs create petstore-ui-dev.ramon-alcantara.work --app petstore-ui-dev
+
+          else
+            echo "App petstore-ui-dev already has certificate defined, skipping creation."
+          fi
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
