@@ -272,7 +272,7 @@ export function useAnnouncements(props: AnnouncementProps = {}) {
   }, [announceOnMount, announceText]);
 
   const announceChange = useCallback(
-    (value: any) => {
+    (value: unknown) => {
       if (announceOnChange) {
         const text = announceOnChange(value);
         announceText(text);
@@ -309,7 +309,7 @@ export function useAccessibility(props: ComprehensiveAccessibilityProps = {}) {
 
   // Generate ARIA attributes with localized labels
   const ariaAttributes = useMemo(() => {
-    const attributes: Record<string, any> = {
+    const attributes: Record<string, string | boolean | undefined> = {
       id: props.id || id,
       'aria-label': props['aria-label'],
       'aria-describedby': props['aria-describedby'],

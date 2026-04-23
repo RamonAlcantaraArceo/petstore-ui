@@ -308,13 +308,13 @@ export function generateAccessibilityId(prefix: string = 'a11y'): string {
  * @param delay Delay in milliseconds
  * @returns Debounced function
  */
-export function debounceAnnouncement<T extends (...args: any[]) => any>(
-  func: T,
+export function debounceAnnouncement<TArgs extends unknown[]>(
+  func: (...args: TArgs) => void,
   delay: number = 100,
-): (...args: Parameters<T>) => void {
+): (...args: TArgs) => void {
   let timeoutId: NodeJS.Timeout;
 
-  return (...args: Parameters<T>) => {
+  return (...args: TArgs) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func(...args), delay);
   };

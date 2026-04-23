@@ -218,7 +218,7 @@ export interface AnnouncementProps {
   announceOnMount?: string;
 
   /** Announcement on value change */
-  announceOnChange?: (value: any) => string;
+  announceOnChange?: (value: unknown) => string;
 
   /** Announcement on action completion */
   announceOnAction?: string;

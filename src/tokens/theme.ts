@@ -244,8 +244,14 @@ export type Theme = typeof theme;
  * @example
  * getThemeValue(theme, 'colors.primary.500') // returns '#3b82f6'
  */
-export const getThemeValue = (themeObj: Theme, path: string): any => {
-  return path.split('.').reduce((current, key) => current?.[key], themeObj as any);
+export const getThemeValue = (themeObj: Theme, path: string): unknown => {
+  return path.split('.').reduce<unknown>((current, key) => {
+    if (current && typeof current === 'object') {
+      return (current as Record<string, unknown>)[key];
+    }
+
+    return undefined;
+  }, themeObj as unknown);
 };
 
 /**

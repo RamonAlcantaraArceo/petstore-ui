@@ -150,7 +150,7 @@ export const Input: FC<InputProps> = ({
 
   // Enhanced keyboard handler
   const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    handleKeyDown(event as any);
+    handleKeyDown(event);
     props.onKeyDown?.(event);
   };
 
@@ -360,7 +360,7 @@ export const Input: FC<InputProps> = ({
             props.onBlur?.(e);
           }}
           {...ariaAttributes}
-          {...(props as any)} // Spread remaining props
+          {...props} // Spread remaining props
         />
         {endIcon && (
           <span style={endIconStyles} aria-hidden="true" role="img">

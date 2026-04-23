@@ -118,7 +118,7 @@ export const Button: FC<ButtonProps> = ({
 
   // Combined keyboard and click handlers
   const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    handleKeyDown(event as any);
+    handleKeyDown(event);
     props.onKeyDown?.(event);
   };
 
@@ -243,7 +243,7 @@ export const Button: FC<ButtonProps> = ({
         e.currentTarget.style.outlineOffset = '0';
         props.onBlur?.(e);
       }}
-      {...(props as any)} // Spread remaining props, excluding ones we've handled
+      {...props} // Spread remaining props, excluding ones we've handled
     >
       {loading && (
         <span

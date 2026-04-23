@@ -301,18 +301,12 @@ export const Card: FC<CardProps> = ({
   // Combined keyboard handler
   const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLDivElement>) => {
     // Handle accessibility keyboard events
-    accessibilityKeyDown(event as any);
+    accessibilityKeyDown(event);
 
     // Handle card-specific keyboard events
     if (interactive && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
-      if (onClick) {
-        // Announce action to screen readers
-        if (announceOnAction) {
-          announceAction();
-        }
-        onClick(event as any);
-      }
+      event.currentTarget.click();
     }
 
     onKeyDown?.(event);
@@ -358,7 +352,7 @@ export const Card: FC<CardProps> = ({
         }
         props.onBlur?.(e);
       }}
-      {...(props as any)} // Spread remaining props, excluding ones we've handled
+      {...props} // Spread remaining props, excluding ones we've handled
     >
       {displayTitle && (
         <div
