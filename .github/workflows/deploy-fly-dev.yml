@@ -36,8 +36,16 @@ jobs:
         run: |
           if ! flyctl apps list | grep -q petstore-ui-dev; then
             flyctl apps create --name petstore-ui-dev --auto-confirm
+
           else
             echo "App petstore-ui-dev already exists, skipping creation."
+          fi
+
+          if ! flyctl secrets list -c .fly/dev/fly.toml | grep -q API_KEY; then
+            flyctl secrets set --stage API_KEY=${{ secrets.API_KEY }} -c .fly/dev/fly.toml
+
+          else
+            echo "App petstore-ui-dev already has API_KEY secret defined, skipping creation."
           fi
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
