@@ -44,8 +44,8 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.54.2",
     "@codecov/vite-plugin": "1.9.1",
+    "@playwright/test": "^1.54.2",
     "@storybook/addon-a11y": "7.6.23",
     "@storybook/addon-controls": "^7.6.0",
     "@storybook/addon-docs": "^7.6.0",
@@ -60,8 +60,8 @@
     "@types/minimatch": "6.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "8.59.0",
+    "@typescript-eslint/parser": "8.59.0",
     "@vitest/coverage-istanbul": "^3.2.4",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.1.0",
