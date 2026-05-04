@@ -73,4 +73,4 @@ jobs:
         with:
           config: .fly/pr/fly.toml
           name: pr-${{ github.event.number }}-ramonalcantaraarceo-${{ github.event.repository.name }}
-          secrets: API_KEY=${{ secrets.PR_API_KEY }}
+          secrets: API_KEY=${{ secrets.API_KEY }}
