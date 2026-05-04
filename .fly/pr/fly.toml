@@ -1,0 +1,38 @@
+primary_region = "iad"
+
+[deploy]
+strategy = "immediate"
+
+[env]
+APP_ENV = "pr"
+LOG_LEVEL = "INFO"
+STORAGE_MODE = "memory"
+API_BASE_URL     = "/api/v1"
+API_PROXY_TARGET = "https://petstore-api-dev.ramon-alcantara.work"
+
+[http_service]
+auto_start_machines = true
+auto_stop_machines = true
+force_https = true
+internal_port = 80
+min_machines_running = 0
+processes = [ "app" ]
+
+[http_service.concurrency]
+type       = "requests"
+soft_limit = 200
+hard_limit = 250
+
+[[http_service.checks]]
+grace_period  = "5s"
+interval      = "15s"
+method        = "GET"
+path          = "/"
+protocol      = "http"
+timeout       = "5s"
+
+[[vm]]
+cpu_kind = "shared"
+cpus = 1
+memory = "1gb"
+memory_mb = 256
