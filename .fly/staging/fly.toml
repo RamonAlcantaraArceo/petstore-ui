@@ -1,4 +1,4 @@
-app = "petstore-ui-dev"
+app = "petstore-ui-staging"
 primary_region = "iad"
 
 [build]
