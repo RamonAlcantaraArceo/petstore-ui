@@ -1,12 +1,14 @@
 name: Deploy to Fly.io Staging
 
 on:
+  push:
+    branches: ['fly/deploy-staging']
   workflow_dispatch:
     inputs:
       version:
         description: "Image version to deploy (e.g. v1.2.3)"
         required: false
-        default: "latest"
+        default: latest
         type: string
 
 jobs:
