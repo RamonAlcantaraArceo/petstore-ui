@@ -1,4 +1,4 @@
-app = "petstore-ui-dev"
+app = "petstore-ui-staging"
 primary_region = "iad"
 
 [build]
@@ -8,11 +8,11 @@ image = "ghcr.io/ramonalcantaraarceo/petstore-ui:latest"
 strategy = "immediate"
 
 [env]
-APP_ENV          = "dev"
+APP_ENV          = "staging"
 LOG_LEVEL        = "INFO"
-STORAGE_MODE     = "memory"
+STORAGE_MODE     = "cloud"
 API_BASE_URL     = "/api/v1"
-API_PROXY_TARGET = "https://petstore-api-dev.ramon-alcantara.work"
+API_PROXY_TARGET = "https://petstore-api-staging.ramon-alcantara.work"
 
 [http_service]
 auto_start_machines = true
