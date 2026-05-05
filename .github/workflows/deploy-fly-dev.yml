@@ -6,6 +6,7 @@ on:
       version:
         description: "Image tag to deploy (e.g. v1.2.3); defaults to 'latest'"
         required: false
+        default: latest
         type: string
 
 jobs:
@@ -18,10 +19,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      # Install flyctl
-      - uses: superfly/flyctl-actions/setup-flyctl@v1
+      - name: Install flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@v1
 
-      # Determine image tag
       - name: Set image tag
         id: set_tag
         run: |
@@ -31,7 +31,8 @@ jobs:
             echo "tag=latest" >> $GITHUB_OUTPUT
           fi
 
-      - name: Create Fly.io app if it doesn't exist
+      # Create Fly.io app if it doesn't exist
+      - name: Create App and Set Secrets
         run: |
           if ! flyctl apps list | grep -q petstore-ui-dev; then
             flyctl apps create --name petstore-ui-dev --auto-confirm
@@ -41,14 +42,11 @@ jobs:
             echo "App petstore-ui-dev already exists, skipping creation."
           fi
 
-          if ! flyctl secrets list -c .fly/dev/fly.toml | grep -q API_KEY; then
-            flyctl secrets set --stage API_KEY=${{ secrets.API_KEY }} -c .fly/dev/fly.toml
+          flyctl secrets set --stage "API_KEY=$API_KEY" -c .fly/dev/fly.toml
 
-          else
-            echo "App petstore-ui-dev already has API_KEY secret defined, skipping creation."
-          fi
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          API_KEY: ${{ secrets.API_KEY }}
 
       # Deploy using the pre-built GHCR image
       - name: Deploy to Fly.io
@@ -56,8 +54,7 @@ jobs:
           flyctl deploy \
             --config .fly/dev/fly.toml \
             --image ghcr.io/ramonalcantaraarceo/petstore-ui:${{ steps.set_tag.outputs.tag }} \
-            --remote-only \
-            --verbose
+            --remote-only
 
           flyctl scale count 1 -y -c .fly/dev/fly.toml
 

@@ -13,7 +13,8 @@ env:
 jobs:
   remove_environment_app:
     name: Remove GH Environment
-    if: startsWith(github.head_ref, 'fly/') &&  github.event.action == 'closed'
+    
+    if: startsWith(github.head_ref, 'fly/') &&  github.event.action == 'closed' && github.event.repository.fork == false
     runs-on: ubuntu-latest
 
     # Only run one deployment at a time per PR.
@@ -48,7 +49,7 @@ jobs:
 
   review_app:
     name: Deploy PR App to Fly.io
-    if: startsWith(github.head_ref, 'fly/') &&  github.event.action != 'closed'
+    if: startsWith(github.head_ref, 'fly/') &&  github.event.action != 'closed' && github.event.repository.fork == false
     runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.deploy.outputs.url }}
@@ -73,4 +74,4 @@ jobs:
         with:
           config: .fly/pr/fly.toml
           name: pr-${{ github.event.number }}-ramonalcantaraarceo-${{ github.event.repository.name }}
-          secrets: API_KEY=${{ secrets.API_KEY }}
+          secrets: API_KEY=${{ secrets.PR_API_KEY }}
