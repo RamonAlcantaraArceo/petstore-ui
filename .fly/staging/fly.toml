@@ -31,7 +31,7 @@ hard_limit = 250
 grace_period  = "5s"
 interval      = "15s"
 method        = "GET"
-path          = "/petstore"
+path          = "/petstore/"
 protocol      = "http"
 timeout       = "5s"
 
