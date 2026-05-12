@@ -259,6 +259,8 @@ export const en = {
       headers: {
         status: 'Status',
         count: 'Count',
+        id: 'ID',
+        petId: 'Pet ID',
       },
     },
     users: {

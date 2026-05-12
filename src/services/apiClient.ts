@@ -117,7 +117,7 @@ function buildHeaders(extra: Record<string, string> = {}): Record<string, string
   };
 
   if (_token) {
-    headers['x-api-key'] = _token;
+    headers['x-api-key'] = 'dev-api-key'; //_token;
   }
 
   return headers;

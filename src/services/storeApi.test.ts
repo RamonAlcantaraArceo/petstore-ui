@@ -2,7 +2,7 @@ import './testSetup';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { getInventory, placeOrder, getOrderById, deleteOrder } from './storeApi';
 import { clearApiToken } from './apiClient';
-import type { Order, Inventory } from './types';
+import type { Order } from './types';
 
 // -------------------------------------------------------------------------
 // Helpers
@@ -28,11 +28,26 @@ const sampleOrder: Order = {
   complete: false,
 };
 
-const sampleInventory: Inventory = {
-  available: 10,
-  pending: 3,
-  sold: 7,
-};
+const sampleOrderApi = {
+  id: 1,
+  pet_id: 42,
+  quantity: 1,
+  ship_date: '2024-01-15T00:00:00.000Z',
+  status: 'placed',
+  complete: false,
+} as const;
+
+const sampleInventoryApi = [
+  sampleOrderApi,
+  {
+    id: 2,
+    pet_id: 7,
+    quantity: 2,
+    ship_date: null,
+    status: 'approved',
+    complete: false,
+  },
+] as const;
 
 // -------------------------------------------------------------------------
 // Tests
@@ -54,13 +69,14 @@ describe('storeApi', () => {
   // getInventory
   // -----------------------------------------------------------------------
   describe('getInventory()', () => {
-    it('returns inventory map on success', async () => {
-      globalThis.fetch = mockFetch(sampleInventory) as any;
+    it('returns orders array and maps snake_case fields on success', async () => {
+      globalThis.fetch = mockFetch(sampleInventoryApi) as any;
       const result = await getInventory();
       expect(result.error).toBeNull();
-      expect(result.data?.available).toBe(10);
-      expect(result.data?.pending).toBe(3);
-      expect(result.data?.sold).toBe(7);
+      expect(result.data).toHaveLength(2);
+      expect(result.data?.[0].petId).toBe(42);
+      expect(result.data?.[1].petId).toBe(7);
+      expect(result.data?.[1].shipDate).toBe('');
     });
 
     it('returns error on API failure', async () => {
@@ -76,7 +92,7 @@ describe('storeApi', () => {
   // -----------------------------------------------------------------------
   describe('placeOrder()', () => {
     it('places order and returns it with assigned id', async () => {
-      globalThis.fetch = mockFetch(sampleOrder) as any;
+      globalThis.fetch = mockFetch(sampleOrderApi) as any;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id: _id, ...orderWithoutId } = sampleOrder;
       const result = await placeOrder(orderWithoutId);
@@ -100,7 +116,7 @@ describe('storeApi', () => {
   // -----------------------------------------------------------------------
   describe('getOrderById()', () => {
     it('returns order for valid id', async () => {
-      globalThis.fetch = mockFetch(sampleOrder) as any;
+      globalThis.fetch = mockFetch(sampleOrderApi) as any;
       const result = await getOrderById(1);
       expect(result.error).toBeNull();
       expect(result.data?.petId).toBe(42);
