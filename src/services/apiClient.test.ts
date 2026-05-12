@@ -1,6 +1,15 @@
 import './testSetup';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { get, post, put, del, setApiToken, clearApiToken, getApiToken } from './apiClient';
+import {
+  get,
+  post,
+  put,
+  del,
+  setApiToken,
+  setYApiToken,
+  clearApiToken,
+  getApiToken,
+} from './apiClient';
 
 // -------------------------------------------------------------------------
 // Helpers
@@ -105,7 +114,7 @@ describe('apiClient', () => {
     });
 
     it('injects y-api-key header when token is set', async () => {
-      setApiToken('my-token');
+      setYApiToken('my-token');
       let capturedInit: RequestInit | undefined;
       globalThis.fetch = vi.fn(async (_url: string, init: RequestInit) => {
         capturedInit = init;
