@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo, useState, useEffect, useCallback } from 'react';
 import { loginUser, logoutUser } from '../services/userApi';
-import { setApiToken, clearApiToken } from '../services/apiClient';
+import { setYApiToken, clearYApiToken } from '../services/apiClient';
 
 interface AuthState {
   isLoggedIn: boolean;
@@ -118,9 +118,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
   useEffect(() => {
     if (authState.token) {
-      setApiToken(authState.token);
+      setYApiToken(authState.token);
     } else {
-      clearApiToken();
+      clearYApiToken();
     }
     persistAuthState(authState);
   }, [authState]);
