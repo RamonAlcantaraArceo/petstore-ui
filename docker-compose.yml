@@ -3,6 +3,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        VERSION: '${VERSION:-local}'
+        GIT_SHA: '${GIT_SHA:-beef}'
+        BUILD_DATE: '${BUILD_DATE:-N/A}'
     ports:
       - '8080:80'
     restart: unless-stopped
