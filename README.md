@@ -193,12 +193,18 @@ Use the meta tag mode when not using `/config.js` runtime injection.
 Single image build (no compose):
 
 ```bash
-docker build -t petstore-ui .
+docker build \
+   --build-arg VERSION=local \
+   --build-arg GIT_SHA=N/A \
+   --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+   -t petstore-ui .
 docker run -p 8080:80 \
    -e API_BASE_URL=/api/v1 \
    -e API_PROXY_TARGET=https://petstore-api-dev.ramon-alcantara.work \
    petstore-ui
 ```
+
+Build metadata (`VERSION`, `GIT_SHA`, `BUILD_DATE`) is injected into `/config.js` at container startup and surfaced in the Petstore app navigation info tooltip.
 
 ### Deploying to Fly.io (DEV)
 
