@@ -244,10 +244,20 @@ All navigation is now server-based for a production-like experience:
 
 ### Local Preview Workflow
 
-1. Build Storybook static output:
+For day-to-day UI work, start the petstore app in watch mode:
+
+```bash
+bun dev
+```
+
+This launches the Petstore demo on Vite with hot reload at `http://localhost:5173/petstore/`.
+
+Use the full preview server when you need the homepage, Storybook, or the static production-like routes:
+
+1. Build static output:
 
    ```bash
-   bun run build-storybook
+   bun run build
    ```
 
 2. Start the preview server:

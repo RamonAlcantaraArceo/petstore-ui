@@ -11,7 +11,7 @@
     "dist"
   ],
   "scripts": {
-    "dev": "bun run storybook",
+    "dev": "vite --config vite.petstore.config.ts --host",
     "prepare": "husky",
     "build": "bun run build-storybook && bun run build-petstore",
     "build:bundle-stats": "vite build --config vite.config.ts",
