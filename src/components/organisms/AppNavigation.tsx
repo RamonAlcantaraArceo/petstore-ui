@@ -7,6 +7,12 @@ import { theme } from '../../tokens/theme';
 
 export type AppId = 'pets' | 'orders' | 'users';
 
+interface RuntimeBuildConfig {
+  VERSION?: string;
+  GIT_SHA?: string;
+  BUILD_DATE?: string;
+}
+
 export interface AppNavigationProps {
   /** Currently active app tab */
   activeApp: AppId;
@@ -24,6 +30,28 @@ export interface AppNavigationProps {
 
 const TAB_IDS: AppId[] = ['pets', 'orders', 'users'];
 
+function getRuntimeBuildInfo(): { version: string; gitSha: string; buildDate: string } {
+  if (typeof window === 'undefined') {
+    return {
+      version: 'local',
+      gitSha: 'N/A',
+      buildDate: 'N/A',
+    };
+  }
+
+  const runtimeConfig = (
+    window as Window & {
+      __RUNTIME_CONFIG__?: RuntimeBuildConfig;
+    }
+  ).__RUNTIME_CONFIG__;
+
+  return {
+    version: runtimeConfig?.VERSION || 'local',
+    gitSha: runtimeConfig?.GIT_SHA || 'N/A',
+    buildDate: runtimeConfig?.BUILD_DATE || 'N/A',
+  };
+}
+
 export const AppNavigation: FC<AppNavigationProps> = ({
   activeApp,
   onNavigate,
@@ -36,6 +64,8 @@ export const AppNavigation: FC<AppNavigationProps> = ({
   const { ariaAttributes } = useAccessibility({
     'aria-label': t('petstore.app.navigation.ariaLabel'),
   });
+  const buildInfo = getRuntimeBuildInfo();
+  const buildInfoTooltip = `VERSION: ${buildInfo.version}\nGIT_SHA: ${buildInfo.gitSha}\nBUILD_DATE: ${buildInfo.buildDate}`;
 
   const tabs = TAB_IDS.map((id) => ({
     id,
@@ -59,6 +89,27 @@ export const AppNavigation: FC<AppNavigationProps> = ({
       <Tabs tabs={tabs} activeTab={activeApp} onChange={(id) => onNavigate(id as AppId)} />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: theme.spacing[3] }}>
+        <span
+          title={buildInfoTooltip}
+          aria-label={buildInfoTooltip}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '1.25rem',
+            height: '1.25rem',
+            borderRadius: theme.borderRadius.full,
+            border: `1px solid ${theme.colors.secondary[400]}`,
+            color: theme.colors.secondary[700],
+            fontSize: theme.typography.fontSize.xs,
+            fontWeight: theme.typography.fontWeight.bold,
+            cursor: 'help',
+            userSelect: 'none',
+            backgroundColor: theme.colors.background.secondary,
+          }}
+        >
+          i
+        </span>
         {isLoggedIn ? (
           <>
             <span

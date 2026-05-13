@@ -46,14 +46,28 @@ API_HOSTNAME=$(echo "$API_HOST" | sed 's|https\{0,1\}://||')
 # 1. config.js — always relative so the browser hits nginx (avoids CORS).
 #    The actual backend target lives only in the nginx proxy conf below.
 FRONTEND_API_BASE_URL="${API_BASE_URL:-/api/v1}"
-JSON_ESCAPED_FRONTEND_API_BASE_URL=$(printf '%s' "$FRONTEND_API_BASE_URL" | awk 'BEGIN { ORS=""; first=1 } { if (!first) print "\\n"; first=0; gsub(/\\/,"\\\\"); gsub(/"/,"\\\""); gsub(/\r/,"\\r"); gsub(/\t/,"\\t"); print }')
+VERSION_VALUE="${VERSION:-local}"
+GIT_SHA_VALUE="${GIT_SHA:-N/A}"
+BUILD_DATE_VALUE="${BUILD_DATE:-N/A}"
+
+json_escape() {
+  printf '%s' "$1" | awk 'BEGIN { ORS=""; first=1 } { if (!first) print "\\n"; first=0; gsub(/\\/,"\\\\"); gsub(/"/,"\\\""); gsub(/\r/,"\\r"); gsub(/\t/,"\\t"); print }'
+}
+
+JSON_ESCAPED_FRONTEND_API_BASE_URL=$(json_escape "$FRONTEND_API_BASE_URL")
+JSON_ESCAPED_VERSION=$(json_escape "$VERSION_VALUE")
+JSON_ESCAPED_GIT_SHA=$(json_escape "$GIT_SHA_VALUE")
+JSON_ESCAPED_BUILD_DATE=$(json_escape "$BUILD_DATE_VALUE")
 cat > /usr/share/nginx/html/config.js <<EOF
 /* Runtime configuration – generated at container startup. Do not edit. */
 window.__RUNTIME_CONFIG__ = {
-  API_BASE_URL: "${FRONTEND_API_BASE_URL}"
+  API_BASE_URL: "${JSON_ESCAPED_FRONTEND_API_BASE_URL}",
+  VERSION: "${JSON_ESCAPED_VERSION}",
+  GIT_SHA: "${JSON_ESCAPED_GIT_SHA}",
+  BUILD_DATE: "${JSON_ESCAPED_BUILD_DATE}"
 };
 EOF
-echo "[entrypoint] config.js written — API_BASE_URL=${FRONTEND_API_BASE_URL} (proxied -> ${BACKEND})"
+echo "[entrypoint] config.js written — API_BASE_URL=${FRONTEND_API_BASE_URL}, VERSION=${VERSION_VALUE}, GIT_SHA=${GIT_SHA_VALUE}, BUILD_DATE=${BUILD_DATE_VALUE} (proxied -> ${BACKEND})"
 
 # 2. nginx proxy location — generated with the runtime backend URL.
 #    For host.docker.internal / localhost we use a static proxy_pass because

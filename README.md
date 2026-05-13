@@ -193,12 +193,18 @@ Use the meta tag mode when not using `/config.js` runtime injection.
 Single image build (no compose):
 
 ```bash
-docker build -t petstore-ui .
+docker build \
+   --build-arg VERSION=local \
+   --build-arg GIT_SHA=N/A \
+   --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+   -t petstore-ui .
 docker run -p 8080:80 \
    -e API_BASE_URL=/api/v1 \
    -e API_PROXY_TARGET=https://petstore-api-dev.ramon-alcantara.work \
    petstore-ui
 ```
+
+Build metadata (`VERSION`, `GIT_SHA`, `BUILD_DATE`) is injected into `/config.js` at container startup and surfaced in the Petstore app navigation info tooltip.
 
 ### Deploying to Fly.io (DEV)
 
@@ -238,10 +244,20 @@ All navigation is now server-based for a production-like experience:
 
 ### Local Preview Workflow
 
-1. Build Storybook static output:
+For day-to-day UI work, start the petstore app in watch mode:
+
+```bash
+bun dev
+```
+
+This launches the Petstore demo on Vite with hot reload at `http://localhost:5173/petstore/`.
+
+Use the full preview server when you need the homepage, Storybook, or the static production-like routes:
+
+1. Build static output:
 
    ```bash
-   bun run build-storybook
+   bun run build
    ```
 
 2. Start the preview server:

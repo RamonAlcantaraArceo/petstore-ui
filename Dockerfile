@@ -31,6 +31,16 @@ RUN bun run build-storybook && bun run build-petstore
 # Pin to a specific nginx minor to keep the runtime image stable.
 FROM nginx:1.27-alpine AS runner
 
+ARG VERSION=local
+ARG BUILD_DATE=N/A
+ARG GIT_SHA=N/A
+
+
+# Environment variables
+ENV VERSION=${VERSION} \
+    GIT_SHA=${GIT_SHA} \
+    BUILD_DATE=${BUILD_DATE}
+
 # Remove default nginx welcome page and server config
 RUN rm -rf /usr/share/nginx/html/* /etc/nginx/conf.d/default.conf
 
