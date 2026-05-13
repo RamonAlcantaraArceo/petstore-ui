@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { StoreOrdersView } from '../../components/organisms/StoreOrdersView';
-import type { Order, Inventory } from '../../services/types';
+import type { Order } from '../../services/types';
 
 const meta: Meta<typeof StoreOrdersView> = {
   title: 'Petstore/Views/Store Orders',
@@ -25,11 +25,11 @@ const meta: Meta<typeof StoreOrdersView> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const sampleInventory: Inventory = {
-  available: 42,
-  pending: 7,
-  sold: 15,
-};
+const sampleOrders: Order[] = [
+  { id: 7, petId: 1, quantity: 1, shipDate: '', status: 'placed', complete: false },
+  { id: 8, petId: 3, quantity: 2, shipDate: '', status: 'approved', complete: false },
+  { id: 9, petId: 5, quantity: 1, shipDate: '', status: 'delivered', complete: true },
+];
 
 const sampleOrder: Order = {
   id: 101,
@@ -41,10 +41,10 @@ const sampleOrder: Order = {
 };
 
 export const WithInventory: Story = {
-  name: 'Inventory & Order (Logged In)',
+  name: 'Orders Table & Order (Logged In)',
   args: {
     isLoggedIn: true,
-    initialInventory: sampleInventory,
+    initialOrders: sampleOrders,
     initialOrder: sampleOrder,
     mockMode: true,
   },
@@ -52,7 +52,7 @@ export const WithInventory: Story = {
     docs: {
       description: {
         story:
-          'Authenticated view showing the inventory table with three statuses and a pre-loaded order card. ' +
+          'Authenticated view showing the orders table and a pre-loaded order card. ' +
           'The Place Order button is visible. Click it to open the order form modal.',
       },
     },
@@ -63,7 +63,7 @@ export const ReadOnly: Story = {
   name: 'Read-Only (Logged Out)',
   args: {
     isLoggedIn: false,
-    initialInventory: sampleInventory,
+    initialOrders: sampleOrders,
     initialOrder: sampleOrder,
     mockMode: true,
   },
@@ -78,17 +78,17 @@ export const ReadOnly: Story = {
 };
 
 export const InventoryOnly: Story = {
-  name: 'Inventory Only (No Order)',
+  name: 'Orders Table Only (No Order)',
   args: {
     isLoggedIn: true,
-    initialInventory: sampleInventory,
+    initialOrders: sampleOrders,
     mockMode: true,
   },
   parameters: {
     docs: {
       description: {
         story:
-          'Only the inventory table is populated. No order has been looked up yet. ' +
+          'Only the orders table is populated. No order has been looked up yet. ' +
           'Use the lookup input to search for an order ID.',
       },
     },
@@ -96,16 +96,16 @@ export const InventoryOnly: Story = {
 };
 
 export const EmptyInventory: Story = {
-  name: 'Empty Inventory',
+  name: 'Empty Orders Table',
   args: {
     isLoggedIn: false,
-    initialInventory: {},
+    initialOrders: [],
     mockMode: true,
   },
   parameters: {
     docs: {
       description: {
-        story: 'Empty inventory table shows the empty-message translation.',
+        story: 'Empty orders table shows the empty-message translation.',
       },
     },
   },

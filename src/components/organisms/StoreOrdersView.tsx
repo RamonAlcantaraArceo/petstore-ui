@@ -11,20 +11,15 @@ import type { OrderFormFields } from '../molecules/OrderForm';
 import { ConfirmDialog } from '../molecules/ConfirmDialog';
 import { useTranslation } from '../../i18n';
 import { useAccessibility } from '../../accessibility';
-import type { Order, Inventory } from '../../services/types';
+import type { Order } from '../../services/types';
 import { getInventory, placeOrder, getOrderById, deleteOrder } from '../../services/storeApi';
 import { theme } from '../../tokens/theme';
-
-interface InventoryRow {
-  status: string;
-  count: number;
-}
 
 export interface StoreOrdersViewProps {
   /** Whether user is authenticated */
   isLoggedIn?: boolean;
-  /** Override inventory data for stories */
-  initialInventory?: Inventory;
+  /** Override orders data for stories */
+  initialOrders?: Order[];
   /** Override order for stories */
   initialOrder?: Order;
   /** When true, skip API calls (story mode) */
@@ -32,23 +27,27 @@ export interface StoreOrdersViewProps {
 }
 
 /** Wrapper component so Table columns translate on locale switch */
-const InventoryTable: FC<{ data: InventoryRow[] }> = ({ data }) => {
+const OrdersTable: FC<{ data: Order[] }> = ({ data }) => {
   const { t } = useTranslation();
 
-  const columns: TableColumn<InventoryRow>[] = [
+  const columns: TableColumn<Order>[] = [
+    {
+      key: 'id',
+      headerTranslationKey: 'petstore.table.headers.id',
+    },
+    {
+      key: 'petId',
+      headerTranslationKey: 'petstore.table.headers.petId',
+    },
     {
       key: 'status',
       headerTranslationKey: 'petstore.table.headers.status',
       render: (row) => t(`petstore.common.status.${row.status}`),
     },
-    {
-      key: 'count',
-      headerTranslationKey: 'petstore.table.headers.count',
-    },
   ];
 
   return (
-    <Table<InventoryRow>
+    <Table<Order>
       columns={columns}
       data={data}
       emptyMessageTranslationKey="petstore.table.emptyInventory"
@@ -58,7 +57,7 @@ const InventoryTable: FC<{ data: InventoryRow[] }> = ({ data }) => {
 
 export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
   isLoggedIn = false,
-  initialInventory,
+  initialOrders,
   initialOrder,
   mockMode = false,
 }) => {
@@ -67,8 +66,8 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
     'aria-label': t('petstore.app.orders.ariaLabel'),
   });
 
-  // Inventory state
-  const [inventoryRows, setInventoryRows] = React.useState<InventoryRow[]>([]);
+  // Orders state
+  const [orders, setOrders] = React.useState<Order[]>([]);
   const [inventoryLoading, setInventoryLoading] = React.useState(false);
 
   // Order lookup state
@@ -84,24 +83,20 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
   // Delete confirmation
   const [deletingOrder, setDeletingOrder] = React.useState<Order | undefined>(undefined);
 
-  // Fetch inventory
+  // Fetch inventory orders
   const fetchInventory = React.useCallback(async () => {
-    if (mockMode && initialInventory) {
-      setInventoryRows(
-        Object.entries(initialInventory).map(([status, count]) => ({ status, count })),
-      );
+    if (mockMode && initialOrders) {
+      setOrders(initialOrders);
       return;
     }
     if (mockMode) return;
     setInventoryLoading(true);
     const result = await getInventory();
     if (result.data) {
-      setInventoryRows(
-        Object.entries(result.data).map(([status, count]) => ({ status, count: count as number })),
-      );
+      setOrders(result.data);
     }
     setInventoryLoading(false);
-  }, [mockMode, initialInventory]);
+  }, [mockMode, initialOrders]);
 
   React.useEffect(() => {
     fetchInventory();
@@ -179,7 +174,7 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
             {t('petstore.app.orders.loading')}
           </p>
         ) : (
-          <InventoryTable data={inventoryRows} />
+          <OrdersTable data={orders} />
         )}
       </div>
 

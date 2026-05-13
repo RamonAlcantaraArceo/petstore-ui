@@ -13,7 +13,7 @@ env:
 jobs:
   remove_environment_app:
     name: Remove GH Environment
-    
+
     if: startsWith(github.head_ref, 'fly/') &&  github.event.action == 'closed' && github.event.repository.fork == false
     runs-on: ubuntu-latest
 

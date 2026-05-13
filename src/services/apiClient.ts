@@ -88,10 +88,25 @@ function resolveDefaultToken(): string | null {
 
 const _defaultToken: string | null = resolveDefaultToken();
 let _token: string | null = _defaultToken;
+let _yToken: string | null = null;
 
 /** Store the API session token (called by AuthContext on login). */
 export function setApiToken(token: string): void {
   _token = token;
+}
+
+export function setYApiToken(token: string): void {
+  _yToken = token;
+}
+
+/** Retrieve the current API session token. */
+export function getYApiToken(): string | null {
+  return _yToken;
+}
+
+/** Clear the Y API session token. */
+export function clearYApiToken(): void {
+  _yToken = null;
 }
 
 /** Clear the API session token (called by AuthContext on logout). */
@@ -118,6 +133,10 @@ function buildHeaders(extra: Record<string, string> = {}): Record<string, string
 
   if (_token) {
     headers['x-api-key'] = _token;
+  }
+
+  if (_yToken) {
+    headers['y-api-key'] = _yToken;
   }
 
   return headers;

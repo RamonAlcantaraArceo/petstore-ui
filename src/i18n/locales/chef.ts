@@ -263,6 +263,8 @@ export const chef = {
       headers: {
         status: 'Stätüs-a',
         count: 'Cøüñt-a',
+        id: 'ÏD-a',
+        petId: 'Pët ÏD-a',
       },
     },
     users: {
