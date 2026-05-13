@@ -5,7 +5,7 @@
  *   /              → public/index.html  (homepage)
  *   /style.css     → public/style.css
  *   /app.js        → public/app.js
- *   /config.js     → dynamic runtime config (API_BASE_URL + API_KEY from .env)
+ *   /config.js     → dynamic runtime config (API_BASE_URL + API_KEY + build metadata)
  *   /api/*         → proxy to API_PROXY_TARGET
  *   /storybook/*   → storybook-static/* (real Storybook)
  *   /petstore/*    → petstore/*         (demo placeholder)
@@ -101,12 +101,20 @@ function serveFromDir(dir: string, urlPath: string): Response | null {
 
 /**
  * Generate runtime configuration for the frontend.
- * Reads API_BASE_URL and API_KEY from environment.
+ * Reads API_BASE_URL, API_KEY, and build metadata from environment.
  */
 function generateConfigJs(): string {
   const apiBaseUrl = process.env.API_BASE_URL || '/api/v1';
   const apiKey = process.env.API_KEY;
-  const config: Record<string, string> = { API_BASE_URL: apiBaseUrl };
+  const version = process.env.VERSION || 'local';
+  const gitSha = process.env.GIT_SHA || 'N/A';
+  const buildDate = process.env.BUILD_DATE || 'N/A';
+  const config: Record<string, string> = {
+    API_BASE_URL: apiBaseUrl,
+    VERSION: version,
+    GIT_SHA: gitSha,
+    BUILD_DATE: buildDate,
+  };
   if (apiKey) {
     config.API_KEY = apiKey;
   }
