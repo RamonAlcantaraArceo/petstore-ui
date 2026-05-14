@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import { Tabs } from '../atoms/Tabs';
 import { Button } from '../atoms/Button';
 import { useTranslation } from '../../i18n';
@@ -11,6 +11,18 @@ interface RuntimeBuildConfig {
   VERSION?: string;
   GIT_SHA?: string;
   BUILD_DATE?: string;
+}
+
+interface BuildDetails {
+  version: string;
+  build_date: string;
+  git_commit_sha: string;
+}
+
+interface ApiHealthResponse {
+  status: string;
+  mode: string;
+  details: BuildDetails;
 }
 
 export interface AppNavigationProps {
@@ -30,12 +42,12 @@ export interface AppNavigationProps {
 
 const TAB_IDS: AppId[] = ['pets', 'orders', 'users'];
 
-function getRuntimeBuildInfo(): { version: string; gitSha: string; buildDate: string } {
+function getRuntimeBuildInfo(): BuildDetails {
   if (typeof window === 'undefined') {
     return {
       version: 'local',
-      gitSha: 'N/A',
-      buildDate: 'N/A',
+      build_date: 'N/A',
+      git_commit_sha: 'N/A',
     };
   }
 
@@ -47,8 +59,20 @@ function getRuntimeBuildInfo(): { version: string; gitSha: string; buildDate: st
 
   return {
     version: runtimeConfig?.VERSION || 'local',
-    gitSha: runtimeConfig?.GIT_SHA || 'N/A',
-    buildDate: runtimeConfig?.BUILD_DATE || 'N/A',
+    build_date: runtimeConfig?.BUILD_DATE || 'N/A',
+    git_commit_sha: runtimeConfig?.GIT_SHA || 'N/A',
+  };
+}
+
+function getFallbackApiHealth(): ApiHealthResponse {
+  return {
+    status: 'unavailable',
+    mode: 'unknown',
+    details: {
+      version: 'N/A',
+      build_date: 'N/A',
+      git_commit_sha: 'N/A',
+    },
   };
 }
 
@@ -65,7 +89,44 @@ export const AppNavigation: FC<AppNavigationProps> = ({
     'aria-label': t('petstore.app.navigation.ariaLabel'),
   });
   const buildInfo = getRuntimeBuildInfo();
-  const buildInfoTooltip = `VERSION: ${buildInfo.version}\nGIT_SHA: ${buildInfo.gitSha}\nBUILD_DATE: ${buildInfo.buildDate}`;
+  const [apiHealth, setApiHealth] = useState<ApiHealthResponse>(getFallbackApiHealth());
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchApiHealth = async () => {
+      try {
+        const response = await fetch('/api/v1/health');
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data = (await response.json()) as ApiHealthResponse;
+
+        if (isMounted) {
+          setApiHealth(data);
+        }
+      } catch {
+        // Keep fallback health data when endpoint is unreachable.
+      }
+    };
+
+    void fetchApiHealth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const buildInfoTooltip = JSON.stringify(
+    {
+      ui: buildInfo,
+      api: apiHealth,
+    },
+    null,
+    2,
+  );
 
   const tabs = TAB_IDS.map((id) => ({
     id,

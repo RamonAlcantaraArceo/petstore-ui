@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 
-const API_PROXY_TARGET =
-  process.env.API_PROXY_TARGET || 'https://petstore-api-dev.ramon-alcantara.work';
+const API_PROXY_TARGET = process.env.API_PROXY_TARGET || 'http://localhost:8000'; //'https://petstore-api-dev.ramon-alcantara.work';
 
 function generateConfigJs(): string {
   const apiBaseUrl = process.env.API_BASE_URL || '/api/v1';
