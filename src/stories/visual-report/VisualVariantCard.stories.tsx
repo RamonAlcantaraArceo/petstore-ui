@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import type { ComparisonMode } from '../../visual-report/types';
 import { VisualVariantCard } from '../../components/organisms/VisualVariantCard';

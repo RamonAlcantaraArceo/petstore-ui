@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { VisualReportApp } from '../../components/organisms/VisualReportApp';
 import { visualReportFixture } from './fixtures';
 

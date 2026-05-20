@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Input } from '../../components/atoms/Input';
 import { useTranslation } from '../../i18n';

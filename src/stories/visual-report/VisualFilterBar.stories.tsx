@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import type { VisualStatus } from '../../visual-report/types';
 import { VisualFilterBar } from '../../components/molecules/VisualFilterBar';

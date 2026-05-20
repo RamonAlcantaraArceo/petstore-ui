@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { OrderForm } from '../../components/molecules/OrderForm';
 import type { OrderFormFields } from '../../components/molecules/OrderForm';
 

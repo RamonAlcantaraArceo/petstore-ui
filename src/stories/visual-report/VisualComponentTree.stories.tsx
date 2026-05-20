@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useMemo, useState } from 'react';
 import { toViewData } from '../../visual-report/model';
 import type { VisualStatus } from '../../visual-report/types';
