@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button } from '../components/atoms/Button';
-import { useTranslation } from '../i18n';
+import { Button } from '../../components/atoms/Button';
+import { useTranslation } from '../../i18n';
 
 const meta: Meta<typeof Button> = {
-  title: 'Atoms/Button',
+  title: 'Base/Atoms/Button',
   component: Button,
   parameters: {
     layout: 'centered',

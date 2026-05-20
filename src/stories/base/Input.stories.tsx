@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Input } from '../components/atoms/Input';
-import { useTranslation } from '../i18n';
+import { Input } from '../../components/atoms/Input';
+import { useTranslation } from '../../i18n';
 
 const meta: Meta<typeof Input> = {
-  title: 'Atoms/Input',
+  title: 'Base/Atoms/Input',
   component: Input,
   parameters: {
     layout: 'centered',

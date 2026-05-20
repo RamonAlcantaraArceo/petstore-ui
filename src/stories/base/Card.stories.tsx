@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Card } from '../components/atoms/Card';
-import { useTranslation } from '../i18n';
+import { Card } from '../../components/atoms/Card';
+import { useTranslation } from '../../i18n';
 
 const meta: Meta<typeof Card> = {
-  title: 'Atoms/Card',
+  title: 'Base/Atoms/Card',
   component: Card,
   parameters: {
     layout: 'centered',
