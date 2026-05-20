@@ -45,7 +45,7 @@ const config: StorybookConfig = {
     // Fix Node.js compatibility issues in browser environment
     config.optimizeDeps = {
       ...config.optimizeDeps,
-      include: ['react', 'react-dom', '@storybook/addon-docs/blocks'],
+      include: ['react', 'react-dom'],
     };
 
     return config;
