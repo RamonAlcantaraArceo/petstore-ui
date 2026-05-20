@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PetCard } from '../../components/molecules/PetCard';
 import type { Pet } from '../../services/types';
 

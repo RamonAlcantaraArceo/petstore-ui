@@ -2,13 +2,7 @@ import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)', '../src/**/*.stories.mdx'],
-  addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-controls',
-    '@storybook/addon-docs',
-    '@storybook/addon-viewport',
-    '@storybook/addon-a11y',
-  ],
+  addons: ['@storybook/addon-docs', '@storybook/addon-a11y'],
   framework: {
     name: '@storybook/react-vite',
     options: {},
@@ -51,17 +45,13 @@ const config: StorybookConfig = {
     // Fix Node.js compatibility issues in browser environment
     config.optimizeDeps = {
       ...config.optimizeDeps,
-      include: ['react', 'react-dom', '@storybook/blocks'],
+      include: ['react', 'react-dom'],
     };
 
     return config;
   },
   docs: {
-    autodocs: 'tag',
     defaultName: 'Documentation',
-  },
-  features: {
-    buildStoriesJson: true,
   },
 };
 

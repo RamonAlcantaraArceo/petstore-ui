@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StoreOrdersView } from '../../components/organisms/StoreOrdersView';
 import type { Order } from '../../services/types';
 

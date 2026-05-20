@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PetstoreApp } from '../../components/organisms/PetstoreApp';
 
 const meta: Meta<typeof PetstoreApp> = {

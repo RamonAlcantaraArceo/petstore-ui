@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/react';
+import type { Preview } from '@storybook/react-vite';
 import React from 'react';
 import { theme } from '../src/tokens/theme';
 import { LocaleProvider, localeMetadata, getAvailableLocales } from '../src/i18n';
@@ -42,24 +42,25 @@ const preview: Preview = {
       sort: 'requiredFirst',
     },
     backgrounds: {
-      default: 'light',
-      values: [
-        {
+      options: {
+        light: {
           name: 'light',
           value: theme.colors.background?.primary || theme.colors.secondary[50],
         },
-        {
+
+        dark: {
           name: 'dark',
           value: theme.colors.background?.secondary || theme.colors.secondary[900],
         },
-        {
+
+        primary: {
           name: 'primary',
           value: theme.colors.primary[50],
         },
-      ],
+      },
     },
     viewport: {
-      viewports: {
+      options: {
         mobile: {
           name: 'Mobile',
           styles: {
@@ -89,7 +90,6 @@ const preview: Preview = {
           },
         },
       },
-      defaultViewport: 'laptop',
     },
     layout: 'centered',
     docs: {
@@ -138,6 +138,7 @@ const preview: Preview = {
       manual: false
     } */
   },
+
   decorators: [
     (Story, context) => {
       const locale = (context.globals.locale as SupportedLocale) || 'en';
@@ -148,6 +149,7 @@ const preview: Preview = {
       );
     },
   ],
+
   globalTypes: {
     locale: {
       name: 'Locale',
@@ -160,7 +162,6 @@ const preview: Preview = {
           title: localeMetadata[locale].name,
           right: localeMetadata[locale].flag,
         })),
-        showName: true,
         dynamicTitle: true,
       },
     },
@@ -173,6 +174,17 @@ const preview: Preview = {
         items: ['light', 'dark'],
         dynamicTitle: true,
       },
+    },
+  },
+
+  initialGlobals: {
+    viewport: {
+      value: 'laptop',
+      isRotated: false,
+    },
+
+    backgrounds: {
+      value: 'light',
     },
   },
 };

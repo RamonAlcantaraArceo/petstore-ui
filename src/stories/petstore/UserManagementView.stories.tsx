@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UserManagementView } from '../../components/organisms/UserManagementView';
 import type { User } from '../../services/types';
 
