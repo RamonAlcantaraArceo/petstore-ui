@@ -5,6 +5,7 @@ import { LocaleProvider, localeMetadata, getAvailableLocales } from '../src/i18n
 import type { SupportedLocale } from '../src/i18n';
 import { AuthProvider } from '../src/context/AuthContext';
 import { initialize, mswLoader } from 'msw-storybook-addon';
+import { setBaseUrl } from '../src/services/apiClient';
 import { mswHandlers } from './msw-handlers';
 
 initialize({ onUnhandledRequest: 'bypass' });
@@ -223,6 +224,7 @@ const preview: Preview = {
   },
 
   async beforeEach() {
+    setBaseUrl('/api/v1');
     localStorage.setItem('petstore-ui-locale', 'en');
     window.location.hash = '#/pets';
   },
