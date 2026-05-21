@@ -73,7 +73,7 @@ export default defineConfig({
     ? [...baseProjects, ...additionalProjects]
     : baseProjects,
   webServer: {
-    command: 'bun run preview',
+    command: 'pnpm run preview',
     port: 4000,
     timeout: 120 * 1000,
     reuseExistingServer: !isCI,

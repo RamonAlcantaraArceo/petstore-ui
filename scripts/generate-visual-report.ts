@@ -379,19 +379,26 @@ const buildVariantAsset = (
 const buildVisualReportApp = async () => {
   mkdirSync(OUTPUT_DIR, { recursive: true });
 
-  const result = await Bun.build({
-    entrypoints: [VISUAL_APP_ENTRY],
-    outfile: resolve(OUTPUT_DIR, 'app.js'),
-    minify: true,
-    sourcemap: 'none',
-    target: 'browser',
-    format: 'esm',
+  const { build } = await import('vite');
+  await build({
+    configFile: false,
+    build: {
+      outDir: OUTPUT_DIR,
+      emptyOutDir: false,
+      rollupOptions: {
+        input: { app: VISUAL_APP_ENTRY },
+        output: {
+          entryFileNames: 'app.js',
+          format: 'es',
+        },
+      },
+      minify: true,
+    },
+    esbuild: {
+      jsx: 'automatic',
+    },
+    logLevel: 'warn',
   });
-
-  if (!result.success) {
-    const details = result.logs.map((log) => log.message).join('\n');
-    throw new Error(`Failed to bundle visual report app:\n${details}`);
-  }
 };
 
 const main = async () => {
@@ -399,7 +406,7 @@ const main = async () => {
 
   if (!existsSync(STORYBOOK_INDEX_PATH)) {
     throw new Error(
-      `Missing Storybook index at ${STORYBOOK_INDEX_PATH}. Run \"bun run build-storybook\" first.`,
+      `Missing Storybook index at ${STORYBOOK_INDEX_PATH}. Run \"pnpm run build-storybook\" first.`,
     );
   }
 

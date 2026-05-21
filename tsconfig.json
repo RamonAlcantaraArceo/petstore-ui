@@ -68,7 +68,6 @@
     "dist",
     "build",
     "storybook-static",
-    ".bun",
     "coverage",
     "**/*.test.ts",
     "**/*.test.tsx",

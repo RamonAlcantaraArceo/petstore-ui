@@ -1,3 +1,5 @@
+import { spawnSync } from 'node:child_process';
+
 const args = new Set(process.argv.slice(2));
 
 const shouldSkipBuild = args.has('--skip-build');
@@ -21,7 +23,7 @@ const steps: Step[] = [];
 if (!shouldSkipBuild) {
   steps.push({
     label: 'Build Storybook static output',
-    cmd: ['bun', 'run', 'build-storybook'],
+    cmd: ['pnpm', 'run', 'build-storybook'],
   });
 }
 
@@ -43,25 +45,24 @@ if (!shouldSkipTests) {
 
 steps.push({
   label: 'Generate custom visual report data',
-  cmd: ['bun', 'run', 'report:visual:build'],
+  cmd: ['pnpm', 'run', 'report:visual:build'],
 });
 
 const runStep = (step: Step): number => {
   console.log(`\n▶ ${step.label}`);
   console.log(`$ ${step.cmd.join(' ')}`);
 
-  const result = Bun.spawnSync({
-    cmd: step.cmd,
+  const result = spawnSync(step.cmd[0], step.cmd.slice(1), {
     cwd: process.cwd(),
     env: {
       ...process.env,
       ...step.env,
     },
-    stdout: 'inherit',
-    stderr: 'inherit',
+    stdio: 'inherit',
+    shell: false,
   });
 
-  return result.exitCode ?? 1;
+  return result.status ?? 1;
 };
 
 const failedSteps: FailedStep[] = [];
@@ -88,4 +89,4 @@ if (failedSteps.length === 0) {
   }
 }
 
-console.log('Run `bun run preview` then open http://localhost:4000/visual-report/ to triage.');
+console.log('Run `pnpm run preview` then open http://localhost:4000/visual-report/ to triage.');

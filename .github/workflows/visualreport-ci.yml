@@ -43,27 +43,33 @@ jobs:
           echo "TARGET_ENV=${{ inputs.target_env }}" >> $GITHUB_ENV
           echo "VISUAL_REPORT_BASE_PATH=${{ inputs.target_env }}/visual-report" >> $GITHUB_ENV
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
         with:
-          bun-version: latest
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browser
-        run: bunx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Run visual tests (baseline mode)
         if: ${{ inputs.update_baseline }}
-        run: bun run test:visual:update
+        run: pnpm run test:visual:update
 
       - name: Run visual tests (compare mode)
         if: ${{ !inputs.update_baseline }}
-        run: bun run test:visual
+        run: pnpm run test:visual
 
       - name: Build visual report assets
-        run: bun run report:visual:build
+        run: pnpm run report:visual:build
 
       - name: Publish visual report to immutable SHA path
         run: |

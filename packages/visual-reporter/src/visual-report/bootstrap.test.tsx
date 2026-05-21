@@ -28,7 +28,7 @@ describe('visual-report/bootstrap renderError behavior', () => {
     await loadBootstrapModule();
 
     const alert = await screen.findByRole('alert');
-    expect(alert.textContent).toContain('data.json not found. Run: bun run report:visual:build');
+    expect(alert.textContent).toContain('data.json not found. Run: pnpm run report:visual:build');
     expect(fetchMock).toHaveBeenCalledWith('/visual-report/data.json', { cache: 'no-store' });
   });
 

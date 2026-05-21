@@ -1,7 +1,10 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-  stories: ['../packages/**/src/**/*.stories.@(js|jsx|mjs|ts|tsx)', '../packages/**/src/**/*.stories.mdx'],
+  stories: [
+    '../packages/**/src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../packages/**/src/**/*.stories.mdx',
+  ],
   staticDirs: ['../public'],
   addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
   framework: {
@@ -25,7 +28,7 @@ const config: StorybookConfig = {
     // (public/ contains the static website, not Storybook assets)
     config.publicDir = false;
 
-    // Ensure compatibility with Bun's module resolution
+    // Ensure compatibility with pnpm module resolution
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
@@ -37,7 +40,7 @@ const config: StorybookConfig = {
       };
     }
 
-    // Configure Bun-compatible settings
+    // Configure pnpm-compatible settings
     config.define = {
       ...config.define,
       global: 'globalThis',

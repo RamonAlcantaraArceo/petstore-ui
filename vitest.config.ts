@@ -37,7 +37,7 @@ export default defineConfig({
             'packages/**/*.spec.ts',
             'packages/**/*.spec.tsx',
           ],
-          exclude: ['node_modules', 'dist', 'build', 'storybook-static', '.bun'],
+          exclude: ['node_modules', 'dist', 'build', 'storybook-static'],
           environment: 'happy-dom',
           globals: true,
           setupFiles: ['./test-setup.ts'],

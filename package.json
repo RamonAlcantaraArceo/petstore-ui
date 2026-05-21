@@ -13,25 +13,25 @@
   "scripts": {
     "dev": "vite --config vite.petstore.config.ts --host",
     "prepare": "husky",
-    "build": "bun run build-storybook && bun run build-petstore",
+    "build": "pnpm run build-storybook && pnpm run build-petstore",
     "build:bundle-stats": "vite build --config vite.config.ts",
     "build-storybook": "storybook build",
     "build-website": "echo 'Static website uses public/ assets (no build step required)'",
-    "build-petstore": "bun build packages/app/src/bootstrap.tsx --outdir petstore/dist --minify",
-    "preview": "bun run scripts/preview-server.ts",
+    "build-petstore": "vite build --config vite.bootstrap.config.ts",
+    "preview": "tsx scripts/preview-server.ts",
     "storybook": "storybook dev -p 6006",
     "lint": "eslint packages --ext .ts,.tsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
-    "test:visual": "bun run build-storybook && playwright test --config=playwright.config.ts",
-    "test:visual:atoms": "bun run build-storybook && STORY_FILTER=components-atoms- npx playwright test --config=playwright.config.ts",
-    "test:visual:petstore": "bun run build-storybook && STORY_FILTER=petstore- npx playwright test --config=playwright.config.ts",
-    "test:visual:update": "bun run build-storybook && playwright test --config=playwright.config.ts --update-snapshots",
-    "report:visual:build": "bun run scripts/generate-visual-report.ts",
-    "report:visual": "bun run test:visual && bun run report:visual:build",
-    "report:visual:triage:petstore-atoms": "bun run scripts/run-visual-atoms-triage.ts",
+    "test:visual": "pnpm run build-storybook && playwright test --config=playwright.config.ts",
+    "test:visual:atoms": "pnpm run build-storybook && STORY_FILTER=components-atoms- npx playwright test --config=playwright.config.ts",
+    "test:visual:petstore": "pnpm run build-storybook && STORY_FILTER=petstore- npx playwright test --config=playwright.config.ts",
+    "test:visual:update": "pnpm run build-storybook && playwright test --config=playwright.config.ts --update-snapshots",
+    "report:visual:build": "tsx scripts/generate-visual-report.ts",
+    "report:visual": "pnpm run test:visual && pnpm run report:visual:build",
+    "report:visual:triage:petstore-atoms": "tsx scripts/run-visual-atoms-triage.ts",
     "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run --coverage",
     "postinstall": "npx playwright install --with-deps"
@@ -56,7 +56,7 @@
     "@storybook/react-vite": "10.4.0",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
-    "@types/bun": "latest",
+    "tsx": "4.19.3",
     "@types/react": "18.3.28",
     "@types/react-dom": "18.3.7",
     "@typescript-eslint/eslint-plugin": "8.59.4",
@@ -90,7 +90,7 @@
   },
   "engines": {
     "node": ">=20.0.0",
-    "bun": ">=1.0.0"
+    "pnpm": ">=9.0.0"
   },
   "msw": {
     "workerDirectory": [

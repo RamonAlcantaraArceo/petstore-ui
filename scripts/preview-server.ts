@@ -10,15 +10,19 @@
  *   /storybook/*   → storybook-static/* (real Storybook)
  *   /petstore/*    → petstore/*         (demo placeholder)
  *
- * Usage:  bun run preview
- *         API_PROXY_TARGET=http://localhost:8000 bun run preview
+ * Usage:  pnpm run preview
+ *         API_PROXY_TARGET=http://localhost:8000 pnpm run preview
  */
 
+import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { existsSync, statSync, readFileSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import { join, extname, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const PORT = Number(process.env.PORT) || 4000;
-const ROOT = join(import.meta.dir, '..');
+const ROOT = join(__dirname, '..');
 
 /**
  * Load environment variables from a file.
@@ -73,30 +77,27 @@ function contentType(filePath: string): string {
   return MIME[extname(filePath).toLowerCase()] ?? 'application/octet-stream';
 }
 
-/** Try to serve a file, returning null when not found or when path is a directory. */
-function tryFile(filePath: string): Response | null {
-  if (!existsSync(filePath)) return null;
+/** Try to serve a file, returning false when not found or path is a directory. */
+function tryFile(filePath: string, res: ServerResponse): boolean {
+  if (!existsSync(filePath)) return false;
   try {
     const stat = statSync(filePath);
-    if (!stat.isFile()) return null;
+    if (!stat.isFile()) return false;
   } catch {
-    return null;
+    return false;
   }
-  return new Response(Bun.file(filePath), {
-    headers: { 'Content-Type': contentType(filePath) },
-  });
+  const data = readFileSync(filePath);
+  res.writeHead(200, { 'Content-Type': contentType(filePath) });
+  res.end(data);
+  return true;
 }
 
 /** Resolve a local path and serve it, with index.html fallback for directories. */
-function serveFromDir(dir: string, urlPath: string): Response | null {
-  // Exact file match
+function serveFromDir(dir: string, urlPath: string, res: ServerResponse): boolean {
   const exact = join(dir, urlPath);
-  const res = tryFile(exact);
-  if (res) return res;
-
-  // Directory → index.html
+  if (tryFile(exact, res)) return true;
   const index = join(dir, urlPath, 'index.html');
-  return tryFile(index);
+  return tryFile(index, res);
 }
 
 /**
@@ -121,86 +122,91 @@ function generateConfigJs(): string {
   return `window.__RUNTIME_CONFIG__ = ${JSON.stringify(config)};\n`;
 }
 
-Bun.serve({
-  port: PORT,
-  async fetch(req) {
-    const url = new URL(req.url);
-    let pathname = decodeURIComponent(url.pathname);
+const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
+  const url = new URL(req.url ?? '/', `http://localhost:${PORT}`);
+  let pathname = decodeURIComponent(url.pathname);
 
-    // --- /config.js → runtime configuration (allows dynamic API switching without rebuilding) ---
-    if (pathname === '/config.js') {
-      return new Response(generateConfigJs(), {
-        headers: { 'Content-Type': 'application/javascript; charset=utf-8' },
-      });
+  // --- /config.js → runtime configuration ---
+  if (pathname === '/config.js') {
+    res.writeHead(200, { 'Content-Type': 'application/javascript; charset=utf-8' });
+    res.end(generateConfigJs());
+    return;
+  }
+
+  // --- /api/* → proxy to API_PROXY_TARGET ---
+  if (pathname.startsWith('/api/')) {
+    const target = `${API_PROXY_TARGET}${pathname}${url.search}`;
+    const headers = new Headers();
+    for (const [key, value] of Object.entries(req.headers)) {
+      if (key.toLowerCase() === 'host') continue;
+      if (value) headers.set(key, Array.isArray(value) ? value.join(', ') : value);
     }
+    const allowsBody = req.method !== 'GET' && req.method !== 'HEAD' && req.method !== 'OPTIONS';
+    if (!allowsBody) headers.delete('content-length');
 
-    // --- /api/* → proxy to API_PROXY_TARGET ---
-    if (pathname.startsWith('/api/')) {
-      const target = `${API_PROXY_TARGET}${pathname}${url.search}`;
-      const headers = new Headers(req.headers);
-      const allowsBody = req.method !== 'GET' && req.method !== 'HEAD' && req.method !== 'OPTIONS';
+    try {
+      const body = allowsBody
+        ? await new Promise<Buffer>((resolve) => {
+            const chunks: Buffer[] = [];
+            req.on('data', (chunk: Buffer) => chunks.push(chunk));
+            req.on('end', () => resolve(Buffer.concat(chunks)));
+          })
+        : undefined;
 
-      headers.delete('host');
-      if (!allowsBody) {
-        headers.delete('content-length');
-      }
-
-      const response = await fetch(target, {
+      const upstream = await fetch(target, {
         method: req.method,
         headers,
-        ...(allowsBody ? { body: req.body } : {}),
+        ...(body !== undefined ? { body } : {}),
       });
 
-      // Remove Content-Encoding to prevent browser decompression issues
-      const responseHeaders = new Headers(response.headers);
-      responseHeaders.delete('content-encoding');
-
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: responseHeaders,
+      const resHeaders: Record<string, string> = {};
+      upstream.headers.forEach((value, key) => {
+        if (key.toLowerCase() !== 'content-encoding') resHeaders[key] = value;
       });
+      res.writeHead(upstream.status, resHeaders);
+      const buf = Buffer.from(await upstream.arrayBuffer());
+      res.end(buf);
+    } catch (err) {
+      res.writeHead(502);
+      res.end(`Proxy error: ${String(err)}`);
     }
+    return;
+  }
 
-    // --- /storybook/* → storybook-static/* ---
-    if (pathname === '/storybook') {
-      return Response.redirect('/storybook/', 301);
-    }
-    if (pathname.startsWith('/storybook/')) {
-      const sub = pathname.slice('/storybook'.length); // includes leading /
-      const res = serveFromDir(join(ROOT, 'storybook-static'), sub);
-      if (res) return res;
-    }
+  // --- /storybook/* → storybook-static/* ---
+  if (pathname === '/storybook') {
+    res.writeHead(301, { Location: '/storybook/' });
+    res.end();
+    return;
+  }
+  if (pathname.startsWith('/storybook/')) {
+    const sub = pathname.slice('/storybook'.length);
+    if (serveFromDir(join(ROOT, 'storybook-static'), sub, res)) return;
+  }
 
-    // --- /petstore/* → petstore/* (with dist/ bundled assets) ---
-    if (pathname === '/petstore') {
-      return Response.redirect('/petstore/', 301);
-    }
-    if (pathname.startsWith('/petstore/')) {
-      const sub = pathname.slice('/petstore'.length);
-      // First try petstore/ root (index.html, etc.)
-      const res = serveFromDir(join(ROOT, 'petstore'), sub);
-      if (res) return res;
-      // Then try petstore/dist/ for bundled JS
-      const distRes = serveFromDir(join(ROOT, 'petstore', 'dist'), sub);
-      if (distRes) return distRes;
-      // SPA fallback: serve index.html for unmatched routes (hash routing)
-      const spaFallback = tryFile(join(ROOT, 'petstore', 'index.html'));
-      if (spaFallback) return spaFallback;
-      // Fallback: serve shared assets from public/
-      const publicFallback = serveFromDir(join(ROOT, 'public'), sub);
-      if (publicFallback) return publicFallback;
-    }
+  // --- /petstore/* → petstore/* ---
+  if (pathname === '/petstore') {
+    res.writeHead(301, { Location: '/petstore/' });
+    res.end();
+    return;
+  }
+  if (pathname.startsWith('/petstore/')) {
+    const sub = pathname.slice('/petstore'.length);
+    if (serveFromDir(join(ROOT, 'petstore'), sub, res)) return;
+    if (serveFromDir(join(ROOT, 'petstore', 'dist'), sub, res)) return;
+    if (tryFile(join(ROOT, 'petstore', 'index.html'), res)) return;
+    if (serveFromDir(join(ROOT, 'public'), sub, res)) return;
+  }
 
-    // --- Everything else → public/ ---
-    if (pathname === '/') pathname = '/index.html';
-    const res = serveFromDir(join(ROOT, 'public'), pathname);
-    if (res) return res;
+  // --- Everything else → public/ ---
+  if (pathname === '/') pathname = '/index.html';
+  if (serveFromDir(join(ROOT, 'public'), pathname, res)) return;
 
-    // 404
-    return new Response('Not found', { status: 404 });
-  },
+  res.writeHead(404);
+  res.end('Not found');
 });
+
+server.listen(PORT);
 
 const effectiveApiUrl = process.env.API_BASE_URL || '/api/v1';
 

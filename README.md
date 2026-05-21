@@ -3,7 +3,7 @@
 [![CI](https://github.com/ramonalcantaraarceo/petstore-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/ramonalcantaraarceo/petstore-ui/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/ramonalcantaraarceo/petstore-ui/branch/main/graph/badge.svg)](https://codecov.io/gh/ramonalcantaraarceo/petstore-ui)
 
-A React + TypeScript component library for the Petstore UI, built with Bun and documented in Storybook.
+A React + TypeScript component library for the Petstore UI, built with pnpm and documented in Storybook.
 
 This project follows an i18n + accessibility-first approach from the component core.
 
@@ -27,25 +27,22 @@ incremental physical migration continues.
 ## Tech Stack
 
 - React 18 + TypeScript (strict mode)
-- Bun (runtime, package manager, scripts)
+- pnpm (package manager)
 - Storybook 7 (component docs and visual validation)
 - Vitest test runner with `@testing-library/react`
 
 ## Setup
 
-**Requirements:** [Bun ≥ 1.0](https://bun.sh) or Node ≥ 20 (Node requires `npx` in place of `bun run`)
+**Requirements:** Node ≥ 20 + [pnpm ≥ 9](https://pnpm.io)
 
 ```bash
-# Install Bun (if needed)
-curl -fsSL https://bun.sh/install | bash
-
 # Install project dependencies
-bun install
+pnpm install
 ```
 
 ### Node.js fallback
 
-All scripts are compatible with Node + npm/npx — replace `bun run` with `npm run`.
+pnpm is the only supported package manager for this project.
 
 ## Project Structure
 
@@ -78,19 +75,19 @@ petstore-ui/
 ## Development Workflow
 
 ```bash
-bun run lint           # ESLint — must pass before commit
-bun run format         # Prettier auto-format
-bun run format:check   # Prettier check (CI)
-bun run type-check     # TypeScript strict check
+pnpm run lint           # ESLint — must pass before commit
+pnpm run format         # Prettier auto-format
+pnpm run format:check   # Prettier check (CI)
+pnpm run type-check     # TypeScript strict check
 
-bun run test           # Run all tests
-bun run test:coverage  # Run tests with coverage report
-bun run report:visual:build  # Build custom visual diff report data/UI
-bun run report:visual  # Run visual tests then build custom visual diff report
-bun run report:visual:triage:petstore-atoms  # Build + run only Petstore atoms visual flow + report
+pnpm run test           # Run all tests
+pnpm run test:coverage  # Run tests with coverage report
+pnpm run report:visual:build  # Build custom visual diff report data/UI
+pnpm run report:visual  # Run visual tests then build custom visual diff report
+pnpm run report:visual:triage:petstore-atoms  # Build + run only Petstore atoms visual flow + report
 
-bun run storybook      # Interactive component dev (localhost:6006)
-bun run build-storybook  # Static Storybook build
+pnpm run storybook      # Interactive component dev (localhost:6006)
+pnpm run build-storybook  # Static Storybook build
 ```
 
 ## Testing Layers
@@ -140,10 +137,10 @@ const label = t('components.button.primary');
 
 Every PR and push to `main` runs the full CI pipeline:
 
-1. `bun run lint` — ESLint errors block merge
-2. `bun run type-check` — TypeScript errors block merge
-3. `bun run test:coverage` — test failures block merge; coverage uploaded to Codecov
-4. `bun run build-storybook` — build failures block merge
+1. `pnpm run lint` — ESLint errors block merge
+2. `pnpm run type-check` — TypeScript errors block merge
+3. `pnpm run test:coverage` — test failures block merge; coverage uploaded to Codecov
+4. `pnpm run build-storybook` — build failures block merge
 5. `docker build` — Docker build validation
 
 ## Storybook
@@ -268,7 +265,7 @@ All navigation is now server-based for a production-like experience:
 For day-to-day UI work, start the petstore app in watch mode:
 
 ```bash
-bun dev
+pnpm run dev
 ```
 
 This launches the Petstore demo on Vite with hot reload at `http://localhost:5173/petstore/`.
@@ -278,13 +275,13 @@ Use the full preview server when you need the homepage, Storybook, or the static
 1. Build static output:
 
    ```bash
-   bun run build
+   pnpm run build
    ```
 
 2. Start the preview server:
 
    ```bash
-   bun run preview
+   pnpm run preview
    ```
 
 3. Open [http://localhost:4000](http://localhost:4000) in your browser.
@@ -304,7 +301,7 @@ The custom visual report provides:
 To generate report data after visual tests:
 
 ```bash
-bun run report:visual:build
+pnpm run report:visual:build
 ```
 
 Data and copied image assets are generated under `public/visual-report/`.
@@ -315,13 +312,13 @@ Data and copied image assets are generated under `public/visual-report/`.
 — Ensure `vitest.config.ts` sets `test.environment = "happy-dom"` and `test.setupFiles = ["./test-setup.ts"]`.
 
 **`SyntaxError` or `GlobalWindow` errors in test-setup**
-— Use `happy-dom@14` (not v15+). Run `bun add --dev happy-dom@14`.
+— Use `happy-dom@14` (not v15+). Run `pnpm add -D happy-dom@14`.
 
 **Lint fails in CI but not locally**
-— Run `bun run format:check` locally; the CI checks formatting as well as lint errors.
+— Run `pnpm run format:check` locally; the CI checks formatting as well as lint errors.
 
 **Storybook build fails**
-— Run `bun run type-check` first; Storybook uses Vite which surface TypeScript errors during build.
+— Run `pnpm run type-check` first; Storybook uses Vite which surface TypeScript errors during build.
 
 ## Contributor Guidelines
 
