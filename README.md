@@ -7,12 +7,12 @@ A React + TypeScript component library for the Petstore UI, built with Bun and d
 
 This project follows an i18n + accessibility-first approach from the component core.
 
-## Migration status
+## Migration Status
 
 Repository split has started with workspace scaffolding for:
 
 - `@petstore-ui/atoms`
-- `@petstore-ui/petstore-ui`
+- `@petstore-ui/app`
 - `@petstore-ui/visual-reporter`
 
 ## Tech Stack
