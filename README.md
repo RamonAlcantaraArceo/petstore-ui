@@ -15,6 +15,9 @@ Repository split has started with workspace scaffolding for:
 - `@petstore-ui/app`
 - `@petstore-ui/visual-reporter`
 
+Current implementation is scaffold-only: existing source code remains in `src/` (for example
+`src/components/atoms/`) and will be migrated incrementally into `packages/` in follow-up steps.
+
 ## Tech Stack
 
 - React 18 + TypeScript (strict mode)
