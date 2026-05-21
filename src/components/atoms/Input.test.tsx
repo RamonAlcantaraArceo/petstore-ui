@@ -79,7 +79,7 @@ describe('Input', () => {
         labelTranslationKey="components.input.label"
         placeholderTranslationKey="components.input.placeholder"
         helperTextTranslationKey="components.input.helper"
-      />
+      />,
     );
 
     expect(screen.getByText('translated:components.input.label')).toBeDefined();
@@ -93,7 +93,7 @@ describe('Input', () => {
         validationState="error"
         helperTextTranslationKey="components.input.helper"
         errorTranslationKey="components.input.error"
-      />
+      />,
     );
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
@@ -176,7 +176,7 @@ describe('Input', () => {
       <Input
         startIcon={<span data-testid="start-icon">S</span>}
         endIcon={<span data-testid="end-icon">E</span>}
-      />
+      />,
     );
 
     const startIcon = getByTestId('start-icon');

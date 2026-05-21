@@ -33,17 +33,14 @@ describe('UserForm Integration Tests', () => {
 
   describe('Field Name Mapping', () => {
     it('submits form data with camelCase field names matching the TypeScript interface', async () => {
-      renderWithLocale(
-        <UserForm
-          onSubmit={mockOnSubmit}
-          onCancel={mockOnCancel}
-        />,
-      );
+      renderWithLocale(<UserForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
 
       const inputs = screen.getAllByRole('textbox');
       const [usernameInput, firstNameInput, lastNameInput, emailInput, phoneInput] = inputs;
       const passwordInputs = screen.getAllByDisplayValue('');
-      const passwordInput = passwordInputs.find((input) => (input as HTMLInputElement).type === 'password');
+      const passwordInput = passwordInputs.find(
+        (input) => (input as HTMLInputElement).type === 'password',
+      );
 
       await userEvent.type(usernameInput, 'testuser');
       await userEvent.type(firstNameInput, 'John');
@@ -71,12 +68,7 @@ describe('UserForm Integration Tests', () => {
     });
 
     it('validates required fields before submission', async () => {
-      renderWithLocale(
-        <UserForm
-          onSubmit={mockOnSubmit}
-          onCancel={mockOnCancel}
-        />,
-      );
+      renderWithLocale(<UserForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
 
       const buttons = screen.getAllByRole('button');
       const submitButton = buttons.find((btn) => btn.className.includes('btn--primary'));
@@ -90,17 +82,14 @@ describe('UserForm Integration Tests', () => {
     });
 
     it('handles empty optional fields correctly', async () => {
-      renderWithLocale(
-        <UserForm
-          onSubmit={mockOnSubmit}
-          onCancel={mockOnCancel}
-        />,
-      );
+      renderWithLocale(<UserForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
 
       const inputs = screen.getAllByRole('textbox');
       const [usernameInput] = inputs;
       const passwordInputs = screen.getAllByDisplayValue('');
-      const passwordInput = passwordInputs.find((input) => (input as HTMLInputElement).type === 'password');
+      const passwordInput = passwordInputs.find(
+        (input) => (input as HTMLInputElement).type === 'password',
+      );
 
       await userEvent.type(usernameInput, 'testuser');
       await userEvent.type(passwordInput!, 'password123');
@@ -133,11 +122,7 @@ describe('UserForm Integration Tests', () => {
       };
 
       renderWithLocale(
-        <UserForm
-          user={existingUser}
-          onSubmit={mockOnSubmit}
-          onCancel={mockOnCancel}
-        />,
+        <UserForm user={existingUser} onSubmit={mockOnSubmit} onCancel={mockOnCancel} />,
       );
 
       // Verify that existing values are loaded into the form
@@ -165,17 +150,14 @@ describe('UserForm Integration Tests', () => {
     });
 
     it('validates email format when provided', async () => {
-      renderWithLocale(
-        <UserForm
-          onSubmit={mockOnSubmit}
-          onCancel={mockOnCancel}
-        />,
-      );
+      renderWithLocale(<UserForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
 
       const inputs = screen.getAllByRole('textbox');
       const [usernameInput, , , emailInput] = inputs;
       const passwordInputs = screen.getAllByDisplayValue('');
-      const passwordInput = passwordInputs.find((input) => (input as HTMLInputElement).type === 'password');
+      const passwordInput = passwordInputs.find(
+        (input) => (input as HTMLInputElement).type === 'password',
+      );
 
       await userEvent.type(usernameInput, 'testuser');
       await userEvent.type(passwordInput!, 'password123');
@@ -193,12 +175,7 @@ describe('UserForm Integration Tests', () => {
     });
 
     it('calls onCancel when cancel button is clicked', async () => {
-      renderWithLocale(
-        <UserForm
-          onSubmit={mockOnSubmit}
-          onCancel={mockOnCancel}
-        />,
-      );
+      renderWithLocale(<UserForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
 
       const buttons = screen.getAllByRole('button');
       const cancelButton = buttons.find((btn) => btn.className.includes('btn--secondary'));
