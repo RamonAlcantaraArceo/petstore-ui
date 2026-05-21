@@ -67,5 +67,9 @@ export default defineConfig({
         },
       },
     ],
+    watch: false,
+    browser: {
+      headless: true,
+    },
   },
 });
