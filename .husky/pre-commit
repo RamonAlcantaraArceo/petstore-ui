@@ -1,9 +1,12 @@
+# Use Bun when available (project default), otherwise fall back to Node tooling.
+# This keeps hooks working in environments where Bun is not installed.
 if command -v bunx >/dev/null 2>&1; then
   bunx lint-staged
 else
   npx lint-staged
 fi
 
+# Run repo quality gates with the runtime that is available locally.
 if command -v bun >/dev/null 2>&1; then
   bun run lint
   bun run type-check
