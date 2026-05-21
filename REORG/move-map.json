@@ -1,0 +1,410 @@
+[
+  {
+    "from": "src/accessibility/hooks.ts",
+    "to": "packages/atoms/src/accessibility/hooks.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/accessibility",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/accessibility/index.ts",
+    "to": "packages/atoms/src/accessibility/index.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/accessibility",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/accessibility/types.ts",
+    "to": "packages/atoms/src/accessibility/types.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/accessibility",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/accessibility/utils.ts",
+    "to": "packages/atoms/src/accessibility/utils.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/accessibility",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Badge.test.tsx",
+    "to": "packages/atoms/src/components/atoms/Badge.test.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Badge",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Badge.tsx",
+    "to": "packages/atoms/src/components/atoms/Badge.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Badge",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Button.stories.tsx",
+    "to": "packages/atoms/src/components/atoms/Button.stories.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Button",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Button.test.tsx",
+    "to": "packages/atoms/src/components/atoms/Button.test.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Button",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Button.tsx",
+    "to": "packages/atoms/src/components/atoms/Button.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Button",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Card.tsx",
+    "to": "packages/atoms/src/components/atoms/Card.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Card",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Input.test.tsx",
+    "to": "packages/atoms/src/components/atoms/Input.test.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Input",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Input.tsx",
+    "to": "packages/atoms/src/components/atoms/Input.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Input",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Modal.stories.tsx",
+    "to": "packages/atoms/src/components/atoms/Modal.stories.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Modal",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Modal.test.tsx",
+    "to": "packages/atoms/src/components/atoms/Modal.test.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Modal",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Modal.tsx",
+    "to": "packages/atoms/src/components/atoms/Modal.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Modal",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Select.tsx",
+    "to": "packages/atoms/src/components/atoms/Select.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Select",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Table.tsx",
+    "to": "packages/atoms/src/components/atoms/Table.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Table",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/Tabs.tsx",
+    "to": "packages/atoms/src/components/atoms/Tabs.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/components/atoms/Tabs",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/components/atoms/VisualFilterButton.tsx",
+    "to": "packages/visual-reporter/src/components/atoms/VisualFilterButton.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/atoms/VisualFilterButton",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/atoms/VisualStatusBadge.tsx",
+    "to": "packages/visual-reporter/src/components/atoms/VisualStatusBadge.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/atoms/VisualStatusBadge",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/atoms/VisualStatusChip.tsx",
+    "to": "packages/visual-reporter/src/components/atoms/VisualStatusChip.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/atoms/VisualStatusChip",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/molecules/ConfirmDialog.tsx",
+    "to": "packages/app/src/components/molecules/ConfirmDialog.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/ConfirmDialog",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/LoginForm.tsx",
+    "to": "packages/app/src/components/molecules/LoginForm.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/LoginForm",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/OrderCard.tsx",
+    "to": "packages/app/src/components/molecules/OrderCard.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/OrderCard",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/OrderForm.tsx",
+    "to": "packages/app/src/components/molecules/OrderForm.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/OrderForm",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/PetCard.test.tsx",
+    "to": "packages/app/src/components/molecules/PetCard.test.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/PetCard",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/PetCard.tsx",
+    "to": "packages/app/src/components/molecules/PetCard.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/PetCard",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/PetForm.tsx",
+    "to": "packages/app/src/components/molecules/PetForm.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/PetForm",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/StatusFilter.tsx",
+    "to": "packages/app/src/components/molecules/StatusFilter.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/StatusFilter",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/UserCard.tsx",
+    "to": "packages/app/src/components/molecules/UserCard.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/UserCard",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/UserForm.test.tsx",
+    "to": "packages/app/src/components/molecules/UserForm.test.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/UserForm",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/UserForm.tsx",
+    "to": "packages/app/src/components/molecules/UserForm.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/molecules/UserForm",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/molecules/VisualComparisonPanel.tsx",
+    "to": "packages/visual-reporter/src/components/molecules/VisualComparisonPanel.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/molecules/VisualComparisonPanel",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/molecules/VisualFilterBar.tsx",
+    "to": "packages/visual-reporter/src/components/molecules/VisualFilterBar.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/molecules/VisualFilterBar",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/molecules/VisualImagePanel.tsx",
+    "to": "packages/visual-reporter/src/components/molecules/VisualImagePanel.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/molecules/VisualImagePanel",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/molecules/VisualModeControls.test.tsx",
+    "to": "packages/visual-reporter/src/components/molecules/VisualModeControls.test.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/molecules/VisualModeControls",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/molecules/VisualModeControls.tsx",
+    "to": "packages/visual-reporter/src/components/molecules/VisualModeControls.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/molecules/VisualModeControls",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/molecules/VisualSliderCompare.tsx",
+    "to": "packages/visual-reporter/src/components/molecules/VisualSliderCompare.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/molecules/VisualSliderCompare",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/molecules/VisualTreeLabel.tsx",
+    "to": "packages/visual-reporter/src/components/molecules/VisualTreeLabel.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/molecules/VisualTreeLabel",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/organisms/AppNavigation.test.tsx",
+    "to": "packages/app/src/components/organisms/AppNavigation.test.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/organisms/AppNavigation",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/organisms/AppNavigation.tsx",
+    "to": "packages/app/src/components/organisms/AppNavigation.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/organisms/AppNavigation",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/organisms/PetManagementView.stories.tsx",
+    "to": "packages/app/src/components/organisms/PetManagementView.stories.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/organisms/PetManagementView",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/organisms/PetManagementView.tsx",
+    "to": "packages/app/src/components/organisms/PetManagementView.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/organisms/PetManagementView",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/organisms/PetstoreApp.tsx",
+    "to": "packages/app/src/components/organisms/PetstoreApp.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/organisms/PetstoreApp",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/organisms/StoreOrdersView.stories.tsx",
+    "to": "packages/app/src/components/organisms/StoreOrdersView.stories.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/organisms/StoreOrdersView",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/organisms/StoreOrdersView.tsx",
+    "to": "packages/app/src/components/organisms/StoreOrdersView.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/organisms/StoreOrdersView",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/organisms/UserManagementView.stories.tsx",
+    "to": "packages/app/src/components/organisms/UserManagementView.stories.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/organisms/UserManagementView",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/organisms/UserManagementView.tsx",
+    "to": "packages/app/src/components/organisms/UserManagementView.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/components/organisms/UserManagementView",
+    "pkg": "app"
+  },
+  {
+    "from": "src/components/organisms/VisualComponentTree.tsx",
+    "to": "packages/visual-reporter/src/components/organisms/VisualComponentTree.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/organisms/VisualComponentTree",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/organisms/VisualReportApp.test.tsx",
+    "to": "packages/visual-reporter/src/components/organisms/VisualReportApp.test.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/organisms/VisualReportApp",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/organisms/VisualReportApp.tsx",
+    "to": "packages/visual-reporter/src/components/organisms/VisualReportApp.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/organisms/VisualReportApp",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/organisms/VisualVariantCard.test.tsx",
+    "to": "packages/visual-reporter/src/components/organisms/VisualVariantCard.test.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/organisms/VisualVariantCard",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/components/organisms/VisualVariantCard.tsx",
+    "to": "packages/visual-reporter/src/components/organisms/VisualVariantCard.tsx",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/components/organisms/VisualVariantCard",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/context/AuthContext.tsx",
+    "to": "packages/app/src/context/AuthContext.tsx",
+    "reason": "packages/app/src/index.ts -> ../../../src/context",
+    "pkg": "app"
+  },
+  {
+    "from": "src/context/index.ts",
+    "to": "packages/app/src/context/index.ts",
+    "reason": "packages/app/src/index.ts -> ../../../src/context",
+    "pkg": "app"
+  },
+  {
+    "from": "src/i18n/context.tsx",
+    "to": "packages/atoms/src/i18n/context.tsx",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/i18n",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/i18n/index.ts",
+    "to": "packages/atoms/src/i18n/index.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/i18n",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/i18n/locales/chef.ts",
+    "to": "packages/atoms/src/i18n/locales/chef.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/i18n",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/i18n/locales/debug.ts",
+    "to": "packages/atoms/src/i18n/locales/debug.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/i18n",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/i18n/locales/en.ts",
+    "to": "packages/atoms/src/i18n/locales/en.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/i18n",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/i18n/registry.ts",
+    "to": "packages/atoms/src/i18n/registry.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/i18n",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/i18n/types.ts",
+    "to": "packages/atoms/src/i18n/types.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/i18n",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/tokens/theme.ts",
+    "to": "packages/atoms/src/tokens/theme.ts",
+    "reason": "packages/atoms/src/index.ts -> ../../../src/tokens/theme",
+    "pkg": "atoms"
+  },
+  {
+    "from": "src/visual-report/assets.ts",
+    "to": "packages/visual-reporter/src/visual-report/assets.ts",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/visual-report/assets",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/visual-report/constants.ts",
+    "to": "packages/visual-reporter/src/visual-report/constants.ts",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/visual-report/constants",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/visual-report/model.test.ts",
+    "to": "packages/visual-reporter/src/visual-report/model.test.ts",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/visual-report/model",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/visual-report/model.ts",
+    "to": "packages/visual-reporter/src/visual-report/model.ts",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/visual-report/model",
+    "pkg": "visual-reporter"
+  },
+  {
+    "from": "src/visual-report/types.ts",
+    "to": "packages/visual-reporter/src/visual-report/types.ts",
+    "reason": "packages/visual-reporter/src/index.ts -> ../../../src/visual-report/types",
+    "pkg": "visual-reporter"
+  }
+]
