@@ -4,6 +4,9 @@
   "description": "A modern React + TypeScript component library with Storybook documentation and Petstore demo",
   "type": "module",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",

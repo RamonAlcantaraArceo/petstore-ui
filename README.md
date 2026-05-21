@@ -7,6 +7,14 @@ A React + TypeScript component library for the Petstore UI, built with Bun and d
 
 This project follows an i18n + accessibility-first approach from the component core.
 
+## Migration status
+
+Repository split has started with workspace scaffolding for:
+
+- `@petstore-ui/atoms`
+- `@petstore-ui/petstore-ui`
+- `@petstore-ui/visual-reporter`
+
 ## Tech Stack
 
 - React 18 + TypeScript (strict mode)
@@ -34,6 +42,10 @@ All scripts are compatible with Node + npm/npx — replace `bun run` with `npm r
 
 ```text
 petstore-ui/
+├── packages/
+│   ├── atoms/               # Shared React atoms package (scaffold)
+│   ├── petstore-ui/         # Petstore app package (scaffold)
+│   └── visual-reporter/     # Visual report package (scaffold)
 ├── src/
 │   ├── components/          # Atoms, molecules, organisms
 │   ├── i18n/                # Locale provider, translations, registry
