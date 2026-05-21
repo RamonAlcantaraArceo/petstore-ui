@@ -54,7 +54,7 @@
     "declarationMap": true,
     "outDir": "./dist"
   },
-  "include": ["src/**/*", ".storybook/**/*", "public/**/*"],
+  "include": ["src/**/*", "packages/**/*", ".storybook/**/*", "public/**/*"],
   "exclude": [
     "node_modules",
     "dist",
