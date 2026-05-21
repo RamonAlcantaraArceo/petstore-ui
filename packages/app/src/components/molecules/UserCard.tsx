@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import { Card } from '../atoms/Card';
-import { Button } from '../atoms/Button';
-import { useTranslation } from '../../i18n';
+import { Card } from '@petstore-ui/atoms';
+import { Button } from '@petstore-ui/atoms';
+import { useTranslation } from '@petstore-ui/atoms';
 import type { User } from '../../services/types';
 
 export interface UserCardProps {

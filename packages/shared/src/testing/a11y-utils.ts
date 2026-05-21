@@ -11,7 +11,7 @@ import {
   isTextReadable,
   // validateFormAccessibility,
   meetsContrastRequirements,
-} from '../accessibility';
+} from '@petstore-ui/atoms';
 
 /**
  * Test keyboard navigation for an interactive element

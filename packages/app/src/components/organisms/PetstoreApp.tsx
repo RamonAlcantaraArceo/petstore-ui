@@ -1,15 +1,15 @@
 import React from 'react';
 import type { FC } from 'react';
 import { AuthProvider, useAuthContext } from '../../context/AuthContext';
-import { LocaleProvider, useTranslation } from '../../i18n';
-import { Modal } from '../atoms/Modal';
+import { LocaleProvider, useTranslation } from '@petstore-ui/atoms';
+import { Modal } from '@petstore-ui/atoms';
 import { LoginForm } from '../molecules/LoginForm';
 import { AppNavigation } from './AppNavigation';
 import type { AppId } from './AppNavigation';
 import { PetManagementView } from './PetManagementView';
 import { StoreOrdersView } from './StoreOrdersView';
 import { UserManagementView } from './UserManagementView';
-import { theme } from '../../tokens/theme';
+import { theme } from '@petstore-ui/atoms';
 
 /** Map hash fragments to AppId values */
 function hashToApp(hash: string): AppId {

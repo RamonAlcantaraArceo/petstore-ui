@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import React from 'react';
-import { LocaleProvider } from '../../i18n';
+import { LocaleProvider } from '@petstore-ui/atoms';
 import type { UserFormFields } from './UserForm';
 import { UserForm } from './UserForm';
 import '../../services/testSetup';

@@ -1,6 +1,6 @@
 import type { CSSProperties, FC } from 'react';
 import { useMemo } from 'react';
-import { theme } from '../../tokens/theme';
+import { theme } from '@petstore-ui/atoms';
 import {
   buildTree,
   collectStatusCounts,

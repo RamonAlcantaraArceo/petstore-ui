@@ -7,7 +7,7 @@ export default defineConfig({
     outDir: 'dist/codecov',
     emptyOutDir: true,
     lib: {
-      entry: 'src/index.ts',
+      entry: 'packages/shared/src/index.ts',
       formats: ['es'],
       fileName: 'petstore-ui',
     },

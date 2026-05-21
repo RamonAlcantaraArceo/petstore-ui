@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import { Select } from '../atoms/Select';
-import { Button } from '../atoms/Button';
-import { useTranslation } from '../../i18n';
+import { Select } from '@petstore-ui/atoms';
+import { Button } from '@petstore-ui/atoms';
+import { useTranslation } from '@petstore-ui/atoms';
 import type { PetStatus } from '../../services/types';
 
 export interface StatusFilterProps {

@@ -1,8 +1,8 @@
 import type { FC } from 'react';
-import { Card } from '../atoms/Card';
-import { Badge } from '../atoms/Badge';
-import { Button } from '../atoms/Button';
-import { useTranslation } from '../../i18n';
+import { Card } from '@petstore-ui/atoms';
+import { Badge } from '@petstore-ui/atoms';
+import { Button } from '@petstore-ui/atoms';
+import { useTranslation } from '@petstore-ui/atoms';
 import type { Pet } from '../../services/types';
 
 export interface PetCardProps {

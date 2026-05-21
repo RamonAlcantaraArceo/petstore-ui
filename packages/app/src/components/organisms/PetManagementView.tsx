@@ -1,17 +1,17 @@
 import React from 'react';
 import type { FC } from 'react';
-import { Button } from '../atoms/Button';
-import { Modal } from '../atoms/Modal';
+import { Button } from '@petstore-ui/atoms';
+import { Modal } from '@petstore-ui/atoms';
 import { StatusFilter } from '../molecules/StatusFilter';
 import { PetCard } from '../molecules/PetCard';
 import { PetForm } from '../molecules/PetForm';
 import type { PetFormFields } from '../molecules/PetForm';
 import { ConfirmDialog } from '../molecules/ConfirmDialog';
-import { useTranslation } from '../../i18n';
-import { useAccessibility } from '../../accessibility';
+import { useTranslation } from '@petstore-ui/atoms';
+import { useAccessibility } from '@petstore-ui/atoms';
 import type { Pet, PetStatus } from '../../services/types';
 import { findPetsByStatus, addPet, updatePet, deletePet } from '../../services/petApi';
-import { theme } from '../../tokens/theme';
+import { theme } from '@petstore-ui/atoms';
 
 export interface PetManagementViewProps {
   /** Whether user is authenticated (shows CRUD buttons) */

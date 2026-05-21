@@ -1,6 +1,6 @@
 import type { CSSProperties, FC } from 'react';
-import { useTranslation } from '../../i18n';
-import { theme } from '../../tokens/theme';
+import { useTranslation } from '@petstore-ui/atoms';
+import { theme } from '@petstore-ui/atoms';
 import { FILTERS } from '../../visual-report/constants';
 import type { StatusFilter, VisualStatus } from '../../visual-report/types';
 import { VisualFilterButton } from '../atoms/VisualFilterButton';

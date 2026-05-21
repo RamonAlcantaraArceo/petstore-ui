@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from 'react';
-import { Modal } from '../../components/atoms/Modal';
-import { Button } from '../../components/atoms/Button';
-import { useTranslation } from '../../i18n';
+import { Modal } from '@petstore-ui/atoms';
+import { Button } from '@petstore-ui/atoms';
+import { useTranslation } from '@petstore-ui/atoms';
 
 const meta: Meta<typeof Modal> = {
   title: 'Petstore/Atoms/Modal',

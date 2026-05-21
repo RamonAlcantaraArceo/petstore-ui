@@ -5,8 +5,8 @@
 
 import React from 'react';
 // import { render, RenderOptions } from '@testing-library/react';
-// import { LocaleProvider } from '../i18n';
-import type { SupportedLocale } from '../i18n';
+// import { LocaleProvider } from '@petstore-ui/atoms';
+import type { SupportedLocale } from '@petstore-ui/atoms';
 
 /**
  * Custom render function with LocaleProvider wrapper

@@ -8,6 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@petstore-ui/app':
+        specifier: workspace:*
+        version: link:packages/app
+      '@petstore-ui/atoms':
+        specifier: workspace:*
+        version: link:packages/atoms
+      '@petstore-ui/shared':
+        specifier: workspace:*
+        version: link:packages/shared
+      '@petstore-ui/visual-reporter':
+        specifier: workspace:*
+        version: link:packages/visual-reporter
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -42,9 +54,6 @@ importers:
       '@types/bun':
         specifier: latest
         version: 1.3.14
-      '@types/minimatch':
-        specifier: 6.0.0
-        version: 6.0.0
       '@types/react':
         specifier: 18.3.28
         version: 18.3.28
@@ -127,6 +136,8 @@ importers:
   packages/app: {}
 
   packages/atoms: {}
+
+  packages/shared: {}
 
   packages/visual-reporter: {}
 
@@ -1321,10 +1332,6 @@ packages:
 
   '@types/mdx@2.0.13':
     resolution: {integrity: sha512-+OWZQfAYyio6YkJb3HLxDrvnx6SWWDbC0zVPfBRzUk0/nqoDyf6dNxQi3eArPe8rJ473nobTMQ/8Zk+LxJ+Yuw==}
-
-  '@types/minimatch@6.0.0':
-    resolution: {integrity: sha512-zmPitbQ8+6zNutpwgcQuLcsEpn/Cj54Kbn7L5pX0Os5kdWplB7xPgEh/g+SWOB/qmows2gpuCaPyduq8ZZRnxA==}
-    deprecated: This is a stub types definition. minimatch provides its own type definitions, so you do not need this installed.
 
   '@types/node@25.9.1':
     resolution: {integrity: sha512-xfrlY7UD5rMJk3ZVJP8BNzS28J36YJg+xp+LPXV1TdWxr8uMH5A860QNxYDGQe/ylDSgjxE52Q9VnO7p75tJxg==}
@@ -4384,10 +4391,6 @@ snapshots:
   '@types/estree@1.0.9': {}
 
   '@types/mdx@2.0.13': {}
-
-  '@types/minimatch@6.0.0':
-    dependencies:
-      minimatch: 10.2.5
 
   '@types/node@25.9.1':
     dependencies:

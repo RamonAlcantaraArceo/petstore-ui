@@ -1,9 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { LocaleProvider } from '../i18n';
+import { LocaleProvider } from '@petstore-ui/atoms';
 import { VisualReportApp } from '../components/organisms/VisualReportApp';
 import type { VisualReportData } from './types';
-import { theme } from '../tokens/theme';
+import { theme } from '@petstore-ui/atoms';
 
 const mountId = 'visual-report-root';
 

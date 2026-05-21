@@ -1,9 +1,9 @@
 import { useEffect, useState, type FC } from 'react';
-import { Tabs } from '../atoms/Tabs';
-import { Button } from '../atoms/Button';
-import { useTranslation } from '../../i18n';
-import { useAccessibility } from '../../accessibility';
-import { theme } from '../../tokens/theme';
+import { Tabs } from '@petstore-ui/atoms';
+import { Button } from '@petstore-ui/atoms';
+import { useTranslation } from '@petstore-ui/atoms';
+import { useAccessibility } from '@petstore-ui/atoms';
+import { theme } from '@petstore-ui/atoms';
 
 export type AppId = 'pets' | 'orders' | 'users';
 

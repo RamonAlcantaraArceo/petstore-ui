@@ -1,7 +1,7 @@
 import type { CSSProperties, FC } from 'react';
 import { FILTER_ICONS } from '../../visual-report/constants';
 import type { StatusFilter } from '../../visual-report/types';
-import { theme } from '../../tokens/theme';
+import { theme } from '@petstore-ui/atoms';
 
 export interface VisualFilterButtonProps {
   filter: StatusFilter;

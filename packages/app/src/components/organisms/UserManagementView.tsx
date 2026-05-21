@@ -1,17 +1,17 @@
 import React from 'react';
 import type { FC } from 'react';
-import { Input } from '../atoms/Input';
-import { Button } from '../atoms/Button';
-import { Modal } from '../atoms/Modal';
+import { Input } from '@petstore-ui/atoms';
+import { Button } from '@petstore-ui/atoms';
+import { Modal } from '@petstore-ui/atoms';
 import { UserCard } from '../molecules/UserCard';
 import { UserForm } from '../molecules/UserForm';
 import type { UserFormFields } from '../molecules/UserForm';
 import { ConfirmDialog } from '../molecules/ConfirmDialog';
-import { useTranslation } from '../../i18n';
-import { useAccessibility } from '../../accessibility';
+import { useTranslation } from '@petstore-ui/atoms';
+import { useAccessibility } from '@petstore-ui/atoms';
 import type { User } from '../../services/types';
 import { getUserByName, createUser, updateUser, deleteUser } from '../../services/userApi';
-import { theme } from '../../tokens/theme';
+import { theme } from '@petstore-ui/atoms';
 
 export interface UserManagementViewProps {
   /** Whether user is authenticated */

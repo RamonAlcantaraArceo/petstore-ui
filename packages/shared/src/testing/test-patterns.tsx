@@ -6,7 +6,7 @@
 import React from 'react';
 import { renderWithLocale, testTextExpansion } from './i18n-utils';
 import { auditAccessibility } from './a11y-utils';
-import type { SupportedLocale } from '../i18n';
+import type { SupportedLocale } from '@petstore-ui/atoms';
 
 /**
  * Test a component's accessibility across all locales

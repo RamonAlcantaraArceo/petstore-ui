@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { LocaleProvider } from '../../i18n';
-import { auditAccessibility } from '../../testing/a11y-utils';
+import { LocaleProvider } from '@petstore-ui/atoms';
+import { auditAccessibility } from '@petstore-ui/shared';
 import { visualReportFixture } from '../../stories/visual-report/fixtures';
 import { VisualVariantCard } from './VisualVariantCard';
 

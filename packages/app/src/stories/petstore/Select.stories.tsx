@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from 'react';
-import { Select } from '../../components/atoms/Select';
+import { Select } from '@petstore-ui/atoms';
 
 const statusOptions = [
   { value: 'available', labelTranslationKey: 'petstore.common.status.available' },

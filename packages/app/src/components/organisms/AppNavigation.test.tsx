@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
-import { LocaleProvider } from '../../i18n';
+import { LocaleProvider } from '@petstore-ui/atoms';
 import { AppNavigation } from './AppNavigation';
 
 function renderWithLocale(ui: React.ReactElement) {

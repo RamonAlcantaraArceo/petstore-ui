@@ -1,7 +1,7 @@
 import type { CSSProperties, FC, KeyboardEvent } from 'react';
 import { useMemo, useRef } from 'react';
-import { useTranslation } from '../../i18n';
-import { theme } from '../../tokens/theme';
+import { useTranslation } from '@petstore-ui/atoms';
+import { theme } from '@petstore-ui/atoms';
 import { COMPARISON_MODES, DEFAULT_COMPARISON_MODE } from '../../visual-report/constants';
 import { resolveSelectableMode } from '../../visual-report/model';
 import type { ComparisonMode, VisualVariant } from '../../visual-report/types';

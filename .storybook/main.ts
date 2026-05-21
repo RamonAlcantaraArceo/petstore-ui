@@ -1,7 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)', '../src/**/*.stories.mdx'],
+  stories: ['../packages/**/src/**/*.stories.@(js|jsx|mjs|ts|tsx)', '../packages/**/src/**/*.stories.mdx'],
   staticDirs: ['../public'],
   addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
   framework: {
@@ -29,11 +29,11 @@ const config: StorybookConfig = {
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        '@': new URL('../src', import.meta.url).pathname,
-        '@/components': new URL('../src/components', import.meta.url).pathname,
-        '@/tokens': new URL('../src/tokens', import.meta.url).pathname,
-        '@/stories': new URL('../src/stories', import.meta.url).pathname,
-        '@/types': new URL('../src/types', import.meta.url).pathname,
+        '@': new URL('../packages/shared/src', import.meta.url).pathname,
+        '@/components': new URL('../packages/shared/src/components', import.meta.url).pathname,
+        '@/tokens': new URL('../packages/atoms/src/tokens', import.meta.url).pathname,
+        '@/stories': new URL('../packages', import.meta.url).pathname,
+        '@/types': new URL('../packages/app/src/services', import.meta.url).pathname,
       };
     }
 

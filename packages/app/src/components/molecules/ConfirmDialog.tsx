@@ -1,7 +1,7 @@
 import type { FC } from 'react';
-import { Modal } from '../atoms/Modal';
-import { Button } from '../atoms/Button';
-import { useTranslation } from '../../i18n';
+import { Modal } from '@petstore-ui/atoms';
+import { Button } from '@petstore-ui/atoms';
+import { useTranslation } from '@petstore-ui/atoms';
 
 export interface ConfirmDialogProps {
   isOpen: boolean;

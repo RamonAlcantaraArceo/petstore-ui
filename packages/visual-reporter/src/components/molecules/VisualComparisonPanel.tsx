@@ -1,5 +1,5 @@
 import type { CSSProperties, FC } from 'react';
-import { useTranslation } from '../../i18n';
+import { useTranslation } from '@petstore-ui/atoms';
 import type { ComparisonMode } from '../../visual-report/types';
 import { getAssetUrl } from '../../visual-report/assets';
 import { VisualImagePanel } from './VisualImagePanel';

@@ -29,15 +29,6 @@ export type { TableProps, TableColumn } from './Table';
 export { Tabs } from './Tabs';
 export type { TabsProps, TabItem } from './Tabs';
 
-export { VisualStatusBadge } from './VisualStatusBadge';
-export type { VisualStatusBadgeProps } from './VisualStatusBadge';
-
-export { VisualStatusChip } from './VisualStatusChip';
-export type { VisualStatusChipProps } from './VisualStatusChip';
-
-export { VisualFilterButton } from './VisualFilterButton';
-export type { VisualFilterButtonProps } from './VisualFilterButton';
-
 // Re-export default exports for alternative import patterns
 export { default as ButtonComponent } from './Button';
 export { default as InputComponent } from './Input';

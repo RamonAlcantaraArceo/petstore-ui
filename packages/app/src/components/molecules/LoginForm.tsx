@@ -1,9 +1,9 @@
 import React from 'react';
 import type { FC, FormEvent } from 'react';
-import { Input } from '../atoms/Input';
-import { Button } from '../atoms/Button';
-import { useTranslation } from '../../i18n';
-import { useAccessibility } from '../../accessibility';
+import { Input } from '@petstore-ui/atoms';
+import { Button } from '@petstore-ui/atoms';
+import { useTranslation } from '@petstore-ui/atoms';
+import { useAccessibility } from '@petstore-ui/atoms';
 
 export interface LoginFormProps {
   /** Called with (username, password) on submit */

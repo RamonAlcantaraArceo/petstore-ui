@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { theme } from '../tokens/theme';
+import { theme } from '@petstore-ui/atoms';
 import type { VisualStatus } from './types';
 
 export const statusColorByKey: Record<VisualStatus, { border: string; text: string; bg: string }> =

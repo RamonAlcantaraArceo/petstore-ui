@@ -9,14 +9,11 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import React from 'react';
-import { LocaleProvider } from '../i18n';
-import { getTranslation, locales, DEFAULT_LOCALE } from '../i18n/registry';
-import { Button } from '../components/atoms/Button';
-import { Badge } from '../components/atoms/Badge';
-import { Input } from '../components/atoms/Input';
-import { PetCard } from '../components/molecules/PetCard';
-import { testScreenReaderAccessibility, testColorContrast } from '../testing/a11y-utils';
-import type { Pet } from '../services/types';
+import { LocaleProvider, getTranslation, locales, DEFAULT_LOCALE } from '@petstore-ui/atoms';
+import { Button, Badge, Input } from '@petstore-ui/atoms';
+import { PetCard } from '@petstore-ui/app';
+import { testScreenReaderAccessibility, testColorContrast } from './a11y-utils';
+import type { Pet } from '@petstore-ui/app';
 
 // ---------------------------------------------------------------------------
 // Helpers

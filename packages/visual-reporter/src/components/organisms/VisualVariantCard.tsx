@@ -1,6 +1,6 @@
 import type { CSSProperties, FC } from 'react';
 import { useMemo } from 'react';
-import { theme } from '../../tokens/theme';
+import { theme } from '@petstore-ui/atoms';
 import { DEFAULT_COMPARISON_MODE } from '../../visual-report/constants';
 import { resolveSelectableMode } from '../../visual-report/model';
 import type { ComparisonMode, VisualStory, VisualVariant } from '../../visual-report/types';

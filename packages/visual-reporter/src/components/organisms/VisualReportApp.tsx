@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from '../../i18n';
-import { theme } from '../../tokens/theme';
+import { useTranslation } from '@petstore-ui/atoms';
+import { theme } from '@petstore-ui/atoms';
 import {
   ensureSelectedKeyVisible,
   getFilterCounts,

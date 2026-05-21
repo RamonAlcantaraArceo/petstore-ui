@@ -1,19 +1,19 @@
 import React from 'react';
 import type { FC } from 'react';
-import { Table } from '../atoms/Table';
-import type { TableColumn } from '../atoms/Table';
-import { Input } from '../atoms/Input';
-import { Button } from '../atoms/Button';
-import { Modal } from '../atoms/Modal';
+import { Table } from '@petstore-ui/atoms';
+import type { TableColumn } from '@petstore-ui/atoms';
+import { Input } from '@petstore-ui/atoms';
+import { Button } from '@petstore-ui/atoms';
+import { Modal } from '@petstore-ui/atoms';
 import { OrderCard } from '../molecules/OrderCard';
 import { OrderForm } from '../molecules/OrderForm';
 import type { OrderFormFields } from '../molecules/OrderForm';
 import { ConfirmDialog } from '../molecules/ConfirmDialog';
-import { useTranslation } from '../../i18n';
-import { useAccessibility } from '../../accessibility';
+import { useTranslation } from '@petstore-ui/atoms';
+import { useAccessibility } from '@petstore-ui/atoms';
 import type { Order } from '../../services/types';
 import { getInventory, placeOrder, getOrderById, deleteOrder } from '../../services/storeApi';
-import { theme } from '../../tokens/theme';
+import { theme } from '@petstore-ui/atoms';
 
 export interface StoreOrdersViewProps {
   /** Whether user is authenticated */

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from 'react';
-import { Tabs } from '../../components/atoms/Tabs';
-import { useTranslation } from '../../i18n';
+import { Tabs } from '@petstore-ui/atoms';
+import { useTranslation } from '@petstore-ui/atoms';
 
 const tabs = [
   { id: 'pets', labelTranslationKey: 'petstore.navigation.pets' },

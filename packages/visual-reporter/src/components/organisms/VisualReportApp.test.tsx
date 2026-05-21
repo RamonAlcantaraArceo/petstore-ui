@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { LocaleProvider } from '../../i18n';
+import { LocaleProvider } from '@petstore-ui/atoms';
 import { visualReportFixture } from '../../stories/visual-report/fixtures';
 import { VisualReportApp } from './VisualReportApp';
 

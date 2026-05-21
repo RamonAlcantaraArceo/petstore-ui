@@ -1,11 +1,9 @@
 import type { Preview } from '@storybook/react-vite';
 import React from 'react';
-import { theme } from '../src/tokens/theme';
-import { LocaleProvider, localeMetadata, getAvailableLocales } from '../src/i18n';
-import type { SupportedLocale } from '../src/i18n';
-import { AuthProvider } from '../src/context/AuthContext';
+import { theme, LocaleProvider, localeMetadata, getAvailableLocales } from '@petstore-ui/atoms';
+import type { SupportedLocale } from '@petstore-ui/atoms';
+import { AuthProvider, setBaseUrl } from '@petstore-ui/app';
 import { initialize, mswLoader } from 'msw-storybook-addon';
-import { setBaseUrl } from '../src/services/apiClient';
 import { mswHandlers } from './msw-handlers';
 
 initialize({ onUnhandledRequest: 'bypass' });
