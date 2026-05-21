@@ -54,6 +54,7 @@ export default defineConfig({
         ],
         test: {
           name: 'storybook',
+          watch: false,
           browser: {
             enabled: true,
             headless: true,
@@ -67,9 +68,5 @@ export default defineConfig({
         },
       },
     ],
-    watch: false,
-    browser: {
-      headless: true,
-    },
   },
 });

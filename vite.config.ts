@@ -22,6 +22,6 @@ export default defineConfig({
     }),
   ],
   optimizeDeps: {
-    include: ['react/jsx-dev-runtime'],
+    include: ['react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client'],
   },
 });
