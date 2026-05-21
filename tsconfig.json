@@ -18,11 +18,16 @@
     // Path mapping for imports
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@/components/*": ["src/components/*"],
-      "@/tokens/*": ["src/tokens/*"],
-      "@/stories/*": ["src/stories/*"],
-      "@/types/*": ["src/types/*"]
+      "@/*": ["packages/shared/src/*"],
+      "@/components/*": ["packages/app/src/components/*"],
+      "@/tokens/*": ["packages/atoms/src/tokens/*"],
+      "@/stories/*": ["packages/app/src/stories/*"],
+      "@/types/*": ["packages/app/src/services/*"],
+      "@petstore-ui/atoms": ["packages/atoms/src/index.ts"],
+      "@petstore-ui/app": ["packages/app/src/index.ts"],
+      "@petstore-ui/visual-reporter": ["packages/visual-reporter/src/index.ts"],
+      "@petstore-ui/shared": ["packages/shared/src/index.ts"],
+      "@petstore-ui/shared/*": ["packages/shared/src/*"]
     },
 
     // Best practices & strict mode
@@ -54,7 +59,7 @@
     "declarationMap": true,
     "outDir": "./dist"
   },
-  "include": ["src/**/*", "packages/**/*", ".storybook/**/*", "public/**/*"],
+  "include": ["packages/**/*", ".storybook/**/*", "public/**/*"],
   "exclude": [
     "node_modules",
     "dist",

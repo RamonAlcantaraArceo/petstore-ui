@@ -34,22 +34,23 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['src/stories/**/*.tsx'],
+      files: ['packages/**/src/stories/**/*.tsx'],
       rules: {
         'react-hooks/rules-of-hooks': 'off',
         'react/no-unescaped-entities': 'off',
         'storybook/no-redundant-story-name': 'off',
+        'storybook/no-renderer-packages': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
       },
     },
     {
-      files: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+      files: ['packages/**/*.test.ts', 'packages/**/*.test.tsx'],
       rules: {
         '@typescript-eslint/no-explicit-any': 'off',
       },
     },
     {
-      files: ['src/testing/**/*.ts', 'src/testing/**/*.tsx'],
+      files: ['packages/shared/src/testing/**/*.ts', 'packages/shared/src/testing/**/*.tsx'],
       rules: {
         '@typescript-eslint/no-namespace': 'off',
         '@typescript-eslint/no-explicit-any': 'off',

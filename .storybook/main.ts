@@ -1,7 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)', '../src/**/*.stories.mdx'],
+  stories: ['../packages/**/*.stories.@(js|jsx|mjs|ts|tsx)', '../packages/**/*.stories.mdx'],
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-controls',
@@ -34,11 +34,18 @@ const config: StorybookConfig = {
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        '@': new URL('../src', import.meta.url).pathname,
-        '@/components': new URL('../src/components', import.meta.url).pathname,
-        '@/tokens': new URL('../src/tokens', import.meta.url).pathname,
-        '@/stories': new URL('../src/stories', import.meta.url).pathname,
-        '@/types': new URL('../src/types', import.meta.url).pathname,
+        '@': new URL('../packages/shared/src', import.meta.url).pathname,
+        '@/components': new URL('../packages/app/src/components', import.meta.url).pathname,
+        '@/tokens': new URL('../packages/atoms/src/tokens', import.meta.url).pathname,
+        '@/stories': new URL('../packages/app/src/stories', import.meta.url).pathname,
+        '@/types': new URL('../packages/app/src/services', import.meta.url).pathname,
+        '@petstore-ui/atoms': new URL('../packages/atoms/src/index.ts', import.meta.url).pathname,
+        '@petstore-ui/app': new URL('../packages/app/src/index.ts', import.meta.url).pathname,
+        '@petstore-ui/visual-reporter': new URL(
+          '../packages/visual-reporter/src/index.ts',
+          import.meta.url,
+        ).pathname,
+        '@petstore-ui/shared': new URL('../packages/shared/src/index.ts', import.meta.url).pathname,
       };
     }
 
@@ -57,11 +64,7 @@ const config: StorybookConfig = {
     return config;
   },
   docs: {
-    autodocs: 'tag',
     defaultName: 'Documentation',
-  },
-  features: {
-    buildStoriesJson: true,
   },
 };
 

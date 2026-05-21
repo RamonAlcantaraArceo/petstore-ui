@@ -1,26 +1,26 @@
-export { Button } from '../../../src/components/atoms/Button';
-export type { ButtonProps } from '../../../src/components/atoms/Button';
+export { Button } from './components/atoms/Button';
+export type { ButtonProps } from './components/atoms/Button';
 
-export { Input } from '../../../src/components/atoms/Input';
-export type { InputProps } from '../../../src/components/atoms/Input';
+export { Input } from './components/atoms/Input';
+export type { InputProps } from './components/atoms/Input';
 
-export { Card } from '../../../src/components/atoms/Card';
-export type { CardProps } from '../../../src/components/atoms/Card';
+export { Card } from './components/atoms/Card';
+export type { CardProps } from './components/atoms/Card';
 
-export { Badge } from '../../../src/components/atoms/Badge';
-export type { BadgeProps } from '../../../src/components/atoms/Badge';
+export { Badge } from './components/atoms/Badge';
+export type { BadgeProps } from './components/atoms/Badge';
 
-export { Select } from '../../../src/components/atoms/Select';
-export type { SelectProps, SelectOption } from '../../../src/components/atoms/Select';
+export { Select } from './components/atoms/Select';
+export type { SelectProps, SelectOption } from './components/atoms/Select';
 
-export { Modal } from '../../../src/components/atoms/Modal';
-export type { ModalProps } from '../../../src/components/atoms/Modal';
+export { Modal } from './components/atoms/Modal';
+export type { ModalProps } from './components/atoms/Modal';
 
-export { Table } from '../../../src/components/atoms/Table';
-export type { TableProps, TableColumn } from '../../../src/components/atoms/Table';
+export { Table } from './components/atoms/Table';
+export type { TableProps, TableColumn } from './components/atoms/Table';
 
-export { Tabs } from '../../../src/components/atoms/Tabs';
-export type { TabsProps, TabItem } from '../../../src/components/atoms/Tabs';
+export { Tabs } from './components/atoms/Tabs';
+export type { TabsProps, TabItem } from './components/atoms/Tabs';
 
 export {
   default as theme,
@@ -29,8 +29,8 @@ export {
   typography,
   breakpoints,
   getThemeValue,
-} from '../../../src/tokens/theme';
-export type { Theme } from '../../../src/tokens/theme';
+} from './tokens/theme';
+export type { Theme } from './tokens/theme';
 
-export * from '../../../src/i18n';
-export * from '../../../src/accessibility';
+export * from './i18n';
+export * from './accessibility';

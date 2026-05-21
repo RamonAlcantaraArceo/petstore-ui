@@ -1,8 +1,7 @@
 import type { Preview } from '@storybook/react';
 import React from 'react';
-import { theme } from '../src/tokens/theme';
-import { LocaleProvider, localeMetadata, getAvailableLocales } from '../src/i18n';
-import type { SupportedLocale } from '../src/i18n';
+import { theme, LocaleProvider, localeMetadata, getAvailableLocales } from '@petstore-ui/atoms';
+import type { SupportedLocale } from '@petstore-ui/atoms';
 
 // Theme Provider Context
 const ThemeContext = React.createContext(theme);
@@ -160,7 +159,6 @@ const preview: Preview = {
           title: localeMetadata[locale].name,
           right: localeMetadata[locale].flag,
         })),
-        showName: true,
         dynamicTitle: true,
       },
     },

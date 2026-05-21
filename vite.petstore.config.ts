@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import { fileURLToPath, URL } from 'node:url';
 
 const API_PROXY_TARGET = process.env.API_PROXY_TARGET || 'http://localhost:8000'; //'https://petstore-api-dev.ramon-alcantara.work';
 
@@ -25,6 +26,20 @@ function generateConfigJs(): string {
 }
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@petstore-ui/atoms': fileURLToPath(
+        new URL('./packages/atoms/src/index.ts', import.meta.url),
+      ),
+      '@petstore-ui/app': fileURLToPath(new URL('./packages/app/src/index.ts', import.meta.url)),
+      '@petstore-ui/visual-reporter': fileURLToPath(
+        new URL('./packages/visual-reporter/src/index.ts', import.meta.url),
+      ),
+      '@petstore-ui/shared': fileURLToPath(
+        new URL('./packages/shared/src/index.ts', import.meta.url),
+      ),
+    },
+  },
   server: {
     port: 5173,
     strictPort: true,
@@ -56,7 +71,7 @@ export default defineConfig({
           return html;
         }
 
-        return html.replace('src="dist/index.js"', 'src="/src/petstore/index.tsx"');
+        return html.replace('src="dist/index.js"', 'src="/packages/app/src/petstore/index.tsx"');
       },
     },
   ],
