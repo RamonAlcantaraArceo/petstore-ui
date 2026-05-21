@@ -41,7 +41,7 @@ const bootstrap = async () => {
 
   const response = await fetch('/visual-report/data.json', { cache: 'no-store' });
   if (!response.ok) {
-    renderError('data.json not found. Run: bun run report:visual:build');
+    renderError('data.json not found. Run: pnpm run report:visual:build');
     return;
   }
 

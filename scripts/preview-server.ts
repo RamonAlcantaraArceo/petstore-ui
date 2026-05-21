@@ -10,20 +10,19 @@
  *   /storybook/*   → storybook-static/* (real Storybook)
  *   /petstore/*    → petstore/*         (demo placeholder)
  *
- * Usage:  bun run preview
- *         API_PROXY_TARGET=http://localhost:8000 bun run preview
+ * Usage:  pnpm run preview
+ *         API_PROXY_TARGET=http://localhost:8000 pnpm run preview
  */
 
-import { existsSync, statSync, readFileSync } from 'node:fs';
-import { join, extname } from 'node:path';
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
+import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
+import { extname, join } from 'node:path';
+import { Readable } from 'node:stream';
+import { fileURLToPath } from 'node:url';
 
 const PORT = Number(process.env.PORT) || 4000;
-const ROOT = join(import.meta.dir, '..');
+const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..');
 
-/**
- * Load environment variables from a file.
- * When overrideExisting is true, will override already-set values (for .env.local).
- */
 function loadEnvFile(filePath: string, overrideExisting = false): void {
   if (!existsSync(filePath)) return;
   const content = readFileSync(filePath, 'utf-8');
@@ -38,17 +37,11 @@ function loadEnvFile(filePath: string, overrideExisting = false): void {
   }
 }
 
-// Load environment from `.env` only.
-// `.env.local` loading is intentionally disabled for now so preview behavior stays
-// consistent across local setups until local override support is explicitly defined.
-// TODO: Re-enable `.env.local` once the expected precedence and developer workflow are documented.
 loadEnvFile(join(ROOT, '.env'), true);
-// loadEnvFile(join(ROOT, '.env.local'), true);
 
 const API_PROXY_TARGET =
   process.env.API_PROXY_TARGET || 'https://petstore-api-dev.ramon-alcantara.work';
 
-/** Map file extensions to content types. */
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -73,143 +66,166 @@ function contentType(filePath: string): string {
   return MIME[extname(filePath).toLowerCase()] ?? 'application/octet-stream';
 }
 
-/** Try to serve a file, returning null when not found or when path is a directory. */
-function tryFile(filePath: string): Response | null {
-  if (!existsSync(filePath)) return null;
-  try {
-    const stat = statSync(filePath);
-    if (!stat.isFile()) return null;
-  } catch {
-    return null;
-  }
-  return new Response(Bun.file(filePath), {
-    headers: { 'Content-Type': contentType(filePath) },
-  });
-}
-
-/** Resolve a local path and serve it, with index.html fallback for directories. */
-function serveFromDir(dir: string, urlPath: string): Response | null {
-  // Exact file match
-  const exact = join(dir, urlPath);
-  const res = tryFile(exact);
-  if (res) return res;
-
-  // Directory → index.html
-  const index = join(dir, urlPath, 'index.html');
-  return tryFile(index);
-}
-
-/**
- * Generate runtime configuration for the frontend.
- * Reads API_BASE_URL, API_KEY, and build metadata from environment.
- */
 function generateConfigJs(): string {
   const apiBaseUrl = process.env.API_BASE_URL || '/api/v1';
   const apiKey = process.env.API_KEY;
   const version = process.env.VERSION || 'local';
   const gitSha = process.env.GIT_SHA || 'N/A';
   const buildDate = process.env.BUILD_DATE || 'N/A';
+
   const config: Record<string, string> = {
     API_BASE_URL: apiBaseUrl,
     VERSION: version,
     GIT_SHA: gitSha,
     BUILD_DATE: buildDate,
   };
+
   if (apiKey) {
     config.API_KEY = apiKey;
   }
+
   return `window.__RUNTIME_CONFIG__ = ${JSON.stringify(config)};\n`;
 }
 
-Bun.serve({
-  port: PORT,
-  async fetch(req) {
-    const url = new URL(req.url);
-    let pathname = decodeURIComponent(url.pathname);
+function serveFile(filePath: string, res: ServerResponse): boolean {
+  if (!existsSync(filePath)) return false;
+  try {
+    const stat = statSync(filePath);
+    if (!stat.isFile()) return false;
+  } catch {
+    return false;
+  }
 
-    // --- /config.js → runtime configuration (allows dynamic API switching without rebuilding) ---
-    if (pathname === '/config.js') {
-      return new Response(generateConfigJs(), {
-        headers: { 'Content-Type': 'application/javascript; charset=utf-8' },
-      });
+  res.statusCode = 200;
+  res.setHeader('Content-Type', contentType(filePath));
+  createReadStream(filePath).pipe(res);
+  return true;
+}
+
+function serveFromDir(dir: string, urlPath: string, res: ServerResponse): boolean {
+  if (serveFile(join(dir, urlPath), res)) {
+    return true;
+  }
+  return serveFile(join(dir, urlPath, 'index.html'), res);
+}
+
+function redirect(res: ServerResponse, location: string): void {
+  res.statusCode = 301;
+  res.setHeader('Location', location);
+  res.end();
+}
+
+async function proxyApiRequest(
+  req: IncomingMessage,
+  res: ServerResponse,
+  pathname: string,
+  search: string,
+): Promise<void> {
+  const target = `${API_PROXY_TARGET}${pathname}${search}`;
+  const headers = new Headers();
+
+  Object.entries(req.headers).forEach(([key, value]) => {
+    if (!value || key === 'host') return;
+    if (Array.isArray(value)) {
+      value.forEach((entry) => headers.append(key, entry));
+      return;
     }
+    headers.set(key, value);
+  });
 
-    // --- /api/* → proxy to API_PROXY_TARGET ---
-    if (pathname.startsWith('/api/')) {
-      const target = `${API_PROXY_TARGET}${pathname}${url.search}`;
-      const headers = new Headers(req.headers);
-      const allowsBody = req.method !== 'GET' && req.method !== 'HEAD' && req.method !== 'OPTIONS';
+  const method = req.method ?? 'GET';
+  const allowsBody = method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS';
+  if (!allowsBody) {
+    headers.delete('content-length');
+  }
 
-      headers.delete('host');
-      if (!allowsBody) {
-        headers.delete('content-length');
-      }
+  const response = await fetch(target, {
+    method,
+    headers,
+    ...(allowsBody ? { body: req, duplex: 'half' } : {}),
+  });
 
-      const response = await fetch(target, {
-        method: req.method,
-        headers,
-        ...(allowsBody ? { body: req.body } : {}),
-      });
+  res.statusCode = response.status;
+  response.headers.forEach((value, key) => {
+    if (key === 'content-encoding') return;
+    res.setHeader(key, value);
+  });
 
-      // Remove Content-Encoding to prevent browser decompression issues
-      const responseHeaders = new Headers(response.headers);
-      responseHeaders.delete('content-encoding');
+  if (!response.body) {
+    res.end();
+    return;
+  }
 
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: responseHeaders,
-      });
+  Readable.fromWeb(response.body as ReadableStream).pipe(res);
+}
+
+const server = createServer(async (req, res) => {
+  const requestUrl = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
+  let pathname = decodeURIComponent(requestUrl.pathname);
+
+  if (pathname === '/config.js') {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    res.end(generateConfigJs());
+    return;
+  }
+
+  if (pathname.startsWith('/api/')) {
+    await proxyApiRequest(req, res, pathname, requestUrl.search);
+    return;
+  }
+
+  if (pathname === '/storybook') {
+    redirect(res, '/storybook/');
+    return;
+  }
+
+  if (pathname.startsWith('/storybook/')) {
+    const sub = pathname.slice('/storybook'.length);
+    if (serveFromDir(join(ROOT, 'storybook-static'), sub, res)) {
+      return;
     }
+  }
 
-    // --- /storybook/* → storybook-static/* ---
-    if (pathname === '/storybook') {
-      return Response.redirect('/storybook/', 301);
-    }
-    if (pathname.startsWith('/storybook/')) {
-      const sub = pathname.slice('/storybook'.length); // includes leading /
-      const res = serveFromDir(join(ROOT, 'storybook-static'), sub);
-      if (res) return res;
-    }
+  if (pathname === '/petstore') {
+    redirect(res, '/petstore/');
+    return;
+  }
 
-    // --- /petstore/* → petstore/* (with dist/ bundled assets) ---
-    if (pathname === '/petstore') {
-      return Response.redirect('/petstore/', 301);
+  if (pathname.startsWith('/petstore/')) {
+    const sub = pathname.slice('/petstore'.length);
+    if (serveFromDir(join(ROOT, 'petstore'), sub, res)) {
+      return;
     }
-    if (pathname.startsWith('/petstore/')) {
-      const sub = pathname.slice('/petstore'.length);
-      // First try petstore/ root (index.html, etc.)
-      const res = serveFromDir(join(ROOT, 'petstore'), sub);
-      if (res) return res;
-      // Then try petstore/dist/ for bundled JS
-      const distRes = serveFromDir(join(ROOT, 'petstore', 'dist'), sub);
-      if (distRes) return distRes;
-      // SPA fallback: serve index.html for unmatched routes (hash routing)
-      const spaFallback = tryFile(join(ROOT, 'petstore', 'index.html'));
-      if (spaFallback) return spaFallback;
-      // Fallback: serve shared assets from public/
-      const publicFallback = serveFromDir(join(ROOT, 'public'), sub);
-      if (publicFallback) return publicFallback;
+    if (serveFromDir(join(ROOT, 'petstore', 'dist'), sub, res)) {
+      return;
     }
+    if (serveFile(join(ROOT, 'petstore', 'index.html'), res)) {
+      return;
+    }
+    if (serveFromDir(join(ROOT, 'public'), sub, res)) {
+      return;
+    }
+  }
 
-    // --- Everything else → public/ ---
-    if (pathname === '/') pathname = '/index.html';
-    const res = serveFromDir(join(ROOT, 'public'), pathname);
-    if (res) return res;
+  if (pathname === '/') pathname = '/index.html';
+  if (serveFromDir(join(ROOT, 'public'), pathname, res)) {
+    return;
+  }
 
-    // 404
-    return new Response('Not found', { status: 404 });
-  },
+  res.statusCode = 404;
+  res.end('Not found');
 });
 
-const effectiveApiUrl = process.env.API_BASE_URL || '/api/v1';
-
-console.log(`\n  Petstore UI preview server running at:\n`);
-console.log(`    Homepage:        http://localhost:${PORT}/`);
-console.log(`    Storybook:       http://localhost:${PORT}/storybook/`);
-console.log(`    Petstore Demo:   http://localhost:${PORT}/petstore/`);
-console.log(`    API proxy:       http://localhost:${PORT}/api/* → ${API_PROXY_TARGET}`);
-console.log(`    Config:          http://localhost:${PORT}/config.js`);
-console.log(`    API Base URL:    ${effectiveApiUrl}`);
-console.log(`    Visual Report:   http://localhost:${PORT}/visual-report/`);
-console.log();
+server.listen(PORT, () => {
+  const effectiveApiUrl = process.env.API_BASE_URL || '/api/v1';
+  console.log(`\n  Petstore UI preview server running at:\n`);
+  console.log(`    Homepage:        http://localhost:${PORT}/`);
+  console.log(`    Storybook:       http://localhost:${PORT}/storybook/`);
+  console.log(`    Petstore Demo:   http://localhost:${PORT}/petstore/`);
+  console.log(`    API proxy:       http://localhost:${PORT}/api/* → ${API_PROXY_TARGET}`);
+  console.log(`    Config:          http://localhost:${PORT}/config.js`);
+  console.log(`    API Base URL:    ${effectiveApiUrl}`);
+  console.log(`    Visual Report:   http://localhost:${PORT}/visual-report/`);
+  console.log();
+});

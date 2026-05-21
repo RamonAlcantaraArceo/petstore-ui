@@ -1,22 +1,21 @@
-# Use Bun when available (project default), otherwise fall back to Node tooling.
-# This keeps hooks working in environments where Bun is not installed.
-if command -v bunx >/dev/null 2>&1; then
-  bunx lint-staged
+# Use pnpm when available (project default), otherwise fall back to npm tooling.
+if command -v pnpm >/dev/null 2>&1; then
+  pnpm exec lint-staged
 elif command -v npx >/dev/null 2>&1; then
   npx lint-staged
 else
-  echo "Error: Neither bunx nor npx found in PATH."
+  echo "Error: Neither pnpm nor npx found in PATH."
   exit 1
 fi
 
 # Run repo quality gates with the runtime that is available locally.
-if command -v bun >/dev/null 2>&1; then
-  bun run lint
-  bun run type-check
+if command -v pnpm >/dev/null 2>&1; then
+  pnpm run lint
+  pnpm run type-check
 elif command -v npm >/dev/null 2>&1; then
   npm run lint
   npm run type-check
 else
-  echo "Error: Neither bun nor npm found in PATH."
+  echo "Error: Neither pnpm nor npm found in PATH."
   exit 1
 fi

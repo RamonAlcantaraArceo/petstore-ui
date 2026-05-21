@@ -30,7 +30,7 @@ const config: StorybookConfig = {
     // (public/ contains the static website, not Storybook assets)
     config.publicDir = false;
 
-    // Ensure compatibility with Bun's module resolution
+    // Ensure compatibility with workspace module resolution
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
@@ -49,7 +49,7 @@ const config: StorybookConfig = {
       };
     }
 
-    // Configure Bun-compatible settings
+    // Configure browser-safe globals
     config.define = {
       ...config.define,
       global: 'globalThis',

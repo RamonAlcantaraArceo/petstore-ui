@@ -29,7 +29,7 @@ Build a simplistic React SPA at `petstore/` showcasing Pet Management, Store Ord
   - Refined all new atoms/stories for locale-aware text (`en`/`chef`) and improved a11y labels
   - **Patch**: Fixed `Table.stories.tsx` — status cell values were rendering raw English strings instead of translated text when Chef locale was active. Added `InventoryTable` wrapper component that uses `useTranslation()` with a `render` function on the status column to call `t('petstore.common.status.' + row.status)`. This pattern must be followed for all stories that display translatable data values in cells/badges.
 - ✅ **Verification completed**
-  - `bun run type-check` passes with strict TypeScript settings
+  - `pnpm run type-check` passes with strict TypeScript settings
 - ✅ **Phase 3 completed** (2025-07-18)
   - Added 9 molecule components: `LoginForm`, `PetCard`, `PetForm`, `OrderCard`, `OrderForm`, `UserCard`, `UserForm`, `StatusFilter`, `ConfirmDialog`
   - Added stories under `src/stories/petstore/*` for all molecules (36 stories)
@@ -40,19 +40,19 @@ Build a simplistic React SPA at `petstore/` showcasing Pet Management, Store Ord
   - Added organism stories (14 stories across 4 files)
   - Added `petstore.app.*` i18n keys (navigation, pets, orders, users) in both `en.ts` and `chef.ts`
   - Created `organisms/index.ts` barrel and updated `components/index.ts` exports
-  - `bun run type-check` and `bun run build-storybook` pass
+  - `pnpm run type-check` and `pnpm run build-storybook` pass
 - ✅ **Phase 5 completed** (2026-02-27)
   - Added `src/components/organisms/PetstoreApp.tsx` — top-level app shell with AuthProvider → LocaleProvider → hash routing
   - Hash-based routing: `#/pets`, `#/orders`, `#/users` with `hashchange` listener
   - Login modal opens via Sign In button, uses `LoginForm` in `Modal`
   - Added `src/petstore/index.tsx` — React entry point with `ReactDOM.createRoot`
   - Replaced `petstore/index.html` with minimal HTML shell loading bundled JS
-  - Added `build-petstore` script: `bun build src/petstore/index.tsx --outdir petstore/dist --minify`
+  - Added `build-petstore` script: `vite build --config vite.petstore.config.ts`
   - Updated `build` script to include `build-petstore`
   - Updated preview server to serve `petstore/dist/` and SPA fallback
   - Added `petstore.app.shell.*` i18n keys (loginTitle, loginFailed) in both `en.ts` and `chef.ts`
   - Composite Storybook story under `Petstore/App/Full Application`
-  - `bun run type-check`, `bun run build-storybook`, and `bun run build-petstore` all pass
+  - `pnpm run type-check`, `pnpm run build-storybook`, and `pnpm run build-petstore` all pass
 - ✅ **Phase 6 completed** (2026-02-27)
   - All translation keys in `en.ts` and `chef.ts` present and pseudo-localized
   - All components use `useTranslation` and `useAccessibility`
@@ -142,7 +142,7 @@ Use a client generation tool for the petstore API. Generate TypeScript types and
 
 26. Create `src/petstore/index.tsx` — React entry point. Calls `ReactDOM.createRoot` to render `PetstoreApp` into the DOM. Replace `petstore/index.html` with a minimal HTML shell that loads this bundled script.
 
-27. Add a `build-petstore` script to `package.json`: `bun build src/petstore/index.tsx --outdir petstore/dist --minify`. Update the `build` script to include it. Update the preview server to serve the petstore dist.
+27. Add a `build-petstore` script to `package.json`: `vite build --config vite.petstore.config.ts`. Update the `build` script to include it. Update the preview server to serve the petstore dist.
 
 ### Phase 6 — i18n & Accessibility Audit (COMPLETE)
 
@@ -161,7 +161,7 @@ Use a client generation tool for the petstore API. Generate TypeScript types and
 ### Phase 7 — Deploy Integration (COMPLETE)
 
 30. Updated `.github/workflows/deploy.yml` to:
-    - Run `bun run build-petstore` script in build job
+    - Run `pnpm run build-petstore` script in build job
     - Copy `petstore/dist/` to `_site/petstore/` in the artifact assembly
     - Deploy pipeline now automatically builds and deploys both Storybook and Petstore app
 
@@ -231,11 +231,11 @@ The petstore application is fully functional with:
 
 ## Verification
 
-1. **Type check**: `bun run type-check` — all new files compile under strict mode
-2. **Lint**: `bun run lint` — no new warnings
-3. **Storybook**: `bun run storybook` — all new stories render, controls work, locale switching works
-4. **Build**: `bun run build` — Storybook static + petstore app build succeed
-5. **Preview**: `bun run preview` → navigate to `http://localhost:4000/petstore/` — app loads, tabs navigate, login/logout works, CRUD operations succeed against the live API
+1. **Type check**: `pnpm run type-check` — all new files compile under strict mode
+2. **Lint**: `pnpm run lint` — no new warnings
+3. **Storybook**: `pnpm run storybook` — all new stories render, controls work, locale switching works
+4. **Build**: `pnpm run build` — Storybook static + petstore app build succeed
+5. **Preview**: `pnpm run preview` → navigate to `http://localhost:4000/petstore/` — app loads, tabs navigate, login/logout works, CRUD operations succeed against the live API
 6. **a11y**: Tab through the entire app — all interactive elements reachable, screen reader announcements fire, modals trap focus, Escape closes modals
 7. **Auth gating**: Verify that without logging in, no Add/Edit/Delete buttons appear. After logging in (`user1`/`password` or any test user), CRUD buttons appear and mutations work
 

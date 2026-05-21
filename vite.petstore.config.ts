@@ -75,4 +75,14 @@ export default defineConfig({
       },
     },
   ],
+  build: {
+    outDir: 'petstore/dist',
+    emptyOutDir: true,
+    rollupOptions: {
+      input: fileURLToPath(new URL('./packages/app/src/bootstrap.tsx', import.meta.url)),
+      output: {
+        entryFileNames: 'index.js',
+      },
+    },
+  },
 });

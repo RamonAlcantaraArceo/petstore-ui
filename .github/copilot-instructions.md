@@ -6,12 +6,12 @@
 
 ### Tech Stack
 
-- **Runtime**: Bun (primary) with Node.js fallback compatibility
+- **Runtime**: Node.js with pnpm workspace tooling
 - **Framework**: React 18 + TypeScript (strict mode)
 - **Documentation**: Storybook with MDX stories
-- **Build**: Bun bundler + Storybook static generation
+- **Build**: Vite bundling + Storybook static generation
 - **Deployment**: GitHub Pages via GitHub Actions
-- **Testing**: Jest + Testing Library (Bun compatible)
+- **Testing**: Vitest + Testing Library
 - **Code Quality**: ESLint + Prettier + lint-staged
 
 ### Key Dependencies
@@ -767,11 +767,11 @@ Include:
 ### Validation Commands
 
 ```bash
-bun run type-check    # TypeScript validation (includes i18n and a11y types)
-bun run lint         # ESLint validation
-bun run test         # Unit test validation (includes i18n and a11y tests)
-bun run storybook    # Interactive component testing with locale switching
-bun run build-storybook  # Static build validation with i18n integration
+pnpm run type-check    # TypeScript validation (includes i18n and a11y types)
+pnpm run lint         # ESLint validation
+pnpm run test         # Unit test validation (includes i18n and a11y tests)
+pnpm run storybook    # Interactive component testing with locale switching
+pnpm run build-storybook  # Static build validation with i18n integration
 ```
 
 ### i18n and Accessibility Quick Reference

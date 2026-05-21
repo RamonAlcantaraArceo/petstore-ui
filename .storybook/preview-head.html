@@ -6,7 +6,7 @@
   window.__RUNTIME_CONFIG__ so apiClient.ts can pick up the right API base URL
   without a rebuild.
 
-  During local Storybook development (`bun run storybook`) the file is simply
+  During local Storybook development (`pnpm run storybook`) the file is simply
   absent and the browser silently ignores the 404. In that case, provide
   API configuration with a meta tag:
     <meta name="api-base-url" content="https://petstore3.swagger.io/api/v3" />

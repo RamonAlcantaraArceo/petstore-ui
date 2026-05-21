@@ -22,7 +22,7 @@ Prepare the existing Storybook static image for first Fly.io deployment while ma
 1. Phase 3: Dockerfile hardening and quality improvements (depends on Phase 2)
 1. Replace inline nginx `printf` config with tracked config file(s) under repository for readability/reviewability.
 1. Harden runtime image:
-1. Pin base image tags (`oven/bun`, `nginx`) to explicit versions
+1. Pin base image tags (`node`, `nginx`) to explicit versions
 1. Add nginx security headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`) and disable token leakage
 1. Keep SPA/static routing behavior intact for Storybook
 1. Add runtime entrypoint script for API URL injection using environment variable (for compose/Fly), with safe default to configured DEV URL.
@@ -77,7 +77,7 @@ Prepare the existing Storybook static image for first Fly.io deployment while ma
 4. Validate Fly config (`flyctl config validate --config .fly/dev/fly.toml`) and confirm `internal_port`/memory/env are consistent.
 5. Dry deploy to Fly using existing workflow path, then verify app health and logs (`flyctl logs --app petstore-ui-dev`).
 6. Confirm GHCR workflow publishes image and deploy workflow consumes a fresh tag.
-7. Run project quality checks relevant to changed files: `bun run lint`, `bun run type-check`, `bun run build-storybook`, and docker build sanity.
+7. Run project quality checks relevant to changed files: `pnpm run lint`, `pnpm run type-check`, `pnpm run build-storybook`, and docker build sanity.
 
 **Decisions**
 

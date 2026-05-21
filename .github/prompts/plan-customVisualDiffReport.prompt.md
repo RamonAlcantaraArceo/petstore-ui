@@ -27,7 +27,7 @@ Build a local static report generator that reads Storybook metadata plus Playwri
 
 6. Implement UI-only framing by using the captured screenshot region (current fullPage false behavior) and constraining viewer canvas to image bounds; no full document frame content.
 7. Wire local serving in [scripts/preview-server.ts](scripts/preview-server.ts) to expose the generated report route (for example /visual-report/), without changing existing homepage/storybook/petstore routes.
-8. Add npm/bun scripts in [package.json](package.json) for:
+8. Add pnpm/npm scripts in [package.json](package.json) for:
 
 - Build data only
 - Build report UI assets

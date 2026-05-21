@@ -2,7 +2,7 @@
  * Petstore Demo — React Entry Point
  *
  * Mounts the PetstoreApp shell into the #root element.
- * Built with: bun build packages/app/src/petstore/index.tsx --outdir petstore/dist --minify
+ * Built with: pnpm run build-petstore
  */
 import React from 'react';
 import ReactDOM from 'react-dom/client';

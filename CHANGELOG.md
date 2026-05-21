@@ -18,7 +18,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - Accessibility and i18n test layer (Unit 12D)
 - Integration/API test layer for petstore services (Unit 12C)
 - Unit and component interaction tests for atoms and molecules (Unit 12B)
-- Test foundation with Bun runner and happy-dom DOM setup (Unit 12A)
+- Test foundation with Vitest runner and happy-dom DOM setup (Unit 12A)
 - CI quality gate via GitHub Actions (`ci.yml`) with lint, type-check, test, and Storybook build (Unit 10B)
 - Lint, format, and type-check baseline with ESLint, Prettier, and Husky pre-commit (Unit 10A)
 - Coverage reporting with Codecov upload (Unit 12E)
@@ -43,7 +43,7 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 #### Foundation
 
-- React 18 + TypeScript strict-mode project bootstrapped with Bun
+- React 18 + TypeScript strict-mode project bootstrapped with Node.js + pnpm
 - Storybook 7 for component documentation and interactive demos
 - Atomic design folder structure (`atoms/`, `molecules/`, `organisms/`)
 

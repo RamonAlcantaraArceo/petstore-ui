@@ -7,9 +7,9 @@ Thank you for contributing! This document describes the standards for components
 ## Getting started
 
 ```bash
-bun install
-bun run storybook   # interactive component dev
-bun run test        # run full test suite
+pnpm install
+pnpm run storybook   # interactive component dev
+pnpm run test        # run full test suite
 ```
 
 ---
@@ -88,9 +88,9 @@ import { auditAccessibility, testKeyboardNavigation } from '../../testing/a11y-u
 ### Running tests
 
 ```bash
-bun run test               # all tests
-bun run test:coverage      # with coverage report
-bun run test -- src/components/atoms/Button.test.tsx  # single file
+pnpm run test               # all tests
+pnpm run test:coverage      # with coverage report
+pnpm run test -- src/components/atoms/Button.test.tsx  # single file
 ```
 
 Coverage target: **≥ 80% line coverage**.
@@ -115,10 +115,10 @@ Every PR must pass:
 
 | Check            | Command                           |
 | ---------------- | --------------------------------- |
-| Lint             | `bun run lint`                    |
-| Type check       | `bun run type-check`              |
-| Tests + coverage | `bun run test:coverage`           |
-| Storybook build  | `bun run build-storybook`         |
+| Lint             | `pnpm run lint`                   |
+| Type check       | `pnpm run type-check`             |
+| Tests + coverage | `pnpm run test:coverage`          |
+| Storybook build  | `pnpm run build-storybook`        |
 | Docker build     | `docker build --target builder .` |
 
 Coverage is uploaded to Codecov automatically; no manual action needed.
@@ -143,8 +143,8 @@ Types: `feat`, `fix`, `test`, `docs`, `refactor`, `chore`, `ci`
 
 - [ ] Tests added / updated
 - [ ] Story added / updated
-- [ ] `bun run lint` passes (0 errors)
-- [ ] `bun run type-check` passes
-- [ ] `bun run test` passes (all green)
+- [ ] `pnpm run lint` passes (0 errors)
+- [ ] `pnpm run type-check` passes
+- [ ] `pnpm run test` passes (all green)
 - [ ] Translation keys added to both `en.ts` and `chef.ts` if applicable
 - [ ] `CHANGELOG.md` updated under `[Unreleased]`

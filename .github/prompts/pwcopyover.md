@@ -19,11 +19,11 @@ The goal is to make the custom visual report match Playwright’s “Image misma
 
 **Verification**
 
-- Build report data/assets: `bun run report:visual:build`.
+- Build report data/assets: `pnpm run report:visual:build`.
 - Open generated report and validate each mode on failed and passed variants:
   - Failed variant shows all five with valid images.
   - Passed variant shows `Actual`/`Expected`/`Slider` and graceful empty `Diff`.
-- Run triage script end-to-end: `bun run report:visual:triage:petstore-atoms`.
+- Run triage script end-to-end: `pnpm run report:visual:triage:petstore-atoms`.
 - Spot-check keyboard behavior on mode controls (Tab focus, Arrow/Home/End switch).
 
 **Decisions**
@@ -67,7 +67,7 @@ Acceptance criteria
 
 Validation
 
-- Run: `bun run report:visual:build`
+- Run: `pnpm run report:visual:build`
 - Open the generated report and verify at least one mismatch card:
   - slider is constrained to image width
   - divider tracks correctly

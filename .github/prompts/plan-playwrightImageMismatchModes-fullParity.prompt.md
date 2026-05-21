@@ -68,7 +68,7 @@ Acceptance criteria
 
 Validation
 
-1. Run: bun run report:visual:build
+1. Run: pnpm run report:visual:build
 2. Open generated custom report and verify at least:
    - one failing variant
    - one passing variant

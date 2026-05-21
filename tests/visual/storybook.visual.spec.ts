@@ -26,7 +26,7 @@ if (existsSync(storybookIndexPath)) {
     storybookIndexError = `Failed to read or parse Storybook index at ${storybookIndexPath}: ${err}`;
   }
 } else {
-  storybookIndexError = `Storybook index not found at ${storybookIndexPath}. Run \"bun run build-storybook\" before visual tests.`;
+  storybookIndexError = `Storybook index not found at ${storybookIndexPath}. Run \"pnpm run build-storybook\" before visual tests.`;
 }
 
 const VISUAL_REPORT_ARTIFACTS_DIR = resolve(

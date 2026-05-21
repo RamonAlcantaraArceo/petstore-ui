@@ -2,8 +2,8 @@
 # ---------------------------------------------------------------------------
 # Stage 1 — build
 # ---------------------------------------------------------------------------
-# Pin to a specific bun minor so builds are reproducible; bump deliberately.
-FROM oven/bun:1.2-alpine AS builder
+# Pin to a specific Node LTS minor so builds are reproducible; bump deliberately.
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -15,15 +15,11 @@ ENV CI=${CI} \
     STORYBOOK_DISABLE_TELEMETRY=${STORYBOOK_DISABLE_TELEMETRY} \
     DO_NOT_TRACK=${DO_NOT_TRACK}
 
-# Install dependencies first (maximises layer cache re-use).
-# --ignore-scripts skips the postinstall that runs `playwright install --with-deps`
-# — Playwright browsers are not needed in the build container.
-COPY package.json bun.lock bunfig.toml ./
-RUN bun install --frozen-lockfile --ignore-scripts
-
-# Copy source and build all static outputs
 COPY . .
-RUN bun run build-storybook && bun run build-petstore
+RUN corepack enable \
+  && pnpm install --frozen-lockfile --ignore-scripts \
+  && pnpm run build-storybook \
+  && pnpm run build-petstore
 
 # ---------------------------------------------------------------------------
 # Stage 2 — serve

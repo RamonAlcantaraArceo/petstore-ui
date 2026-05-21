@@ -8,7 +8,7 @@ The visual report UI has been migrated from imperative DOM rendering in `public/
 - Molecules: filter bar, tree label, mode controls, image/slider panels
 - Organisms: component tree, variant card, report app shell
 
-The static route `/visual-report/` is now bootstrapped from `src/visual-report/bootstrap.tsx` and bundled during `bun run report:visual:build`.
+The static route `/visual-report/` is now bootstrapped from `src/visual-report/bootstrap.tsx` and bundled during `pnpm run report:visual:build`.
 
 ## Old-to-New Function Mapping
 

@@ -31,7 +31,7 @@ Acceptance criteria
 
 Validation
 
-- Run: `bun run report:visual:build`
+- Run: `pnpm run report:visual:build`
 - Open the generated report and verify at least one mismatch card:
   - slider is constrained to image width
   - divider tracks correctly

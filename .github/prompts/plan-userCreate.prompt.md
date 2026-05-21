@@ -77,10 +77,10 @@ Add a user creation feature to the Petstore UI, following atomic design, i18n, a
 
 **Verification**
 
-1. All new and updated tests pass (`bun run test`)
-2. TypeScript strict mode passes (`bun run type-check`)
-3. Lint passes (`bun run lint`)
-4. Storybook stories render correctly with locale switching and a11y features (`bun run storybook`)
+1. All new and updated tests pass (`pnpm run test`)
+2. TypeScript strict mode passes (`pnpm run type-check`)
+3. Lint passes (`pnpm run lint`)
+4. Storybook stories render correctly with locale switching and a11y features (`pnpm run storybook`)
 5. Manual UI test: user can create a new user, errors and success are handled, a11y and i18n work
 
 **Decisions**
