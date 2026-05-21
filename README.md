@@ -15,8 +15,14 @@ Repository split has started with workspace scaffolding for:
 - `@petstore-ui/app`
 - `@petstore-ui/visual-reporter`
 
-Current implementation is scaffold-only: existing source code remains in `src/` (for example
-`src/components/atoms/`) and will be migrated incrementally into `packages/` in follow-up steps.
+Workspace package entrypoints are now active:
+
+- `packages/atoms/src/index.ts` maps shared atoms + theme + i18n/a11y exports.
+- `packages/app/src/index.ts` maps petstore app views/forms/services/context exports.
+- `packages/visual-reporter/src/index.ts` maps visual regression UI + model exports.
+
+Current source files still remain under `src/` and are consumed by these package entrypoints while
+incremental physical migration continues.
 
 ## Tech Stack
 

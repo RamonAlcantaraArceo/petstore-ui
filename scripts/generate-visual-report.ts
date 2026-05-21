@@ -72,7 +72,7 @@ const OUTPUT_EXPECTED_DIR = resolve(OUTPUT_ASSETS_DIR, 'expected');
 const OUTPUT_ACTUAL_DIR = resolve(OUTPUT_ASSETS_DIR, 'actual');
 const OUTPUT_DIFF_DIR = resolve(OUTPUT_ASSETS_DIR, 'diff');
 const OUTPUT_JSON_PATH = resolve(OUTPUT_DIR, 'data.json');
-const VISUAL_APP_ENTRY = resolve(ROOT, 'src', 'visual-report', 'bootstrap.tsx');
+const VISUAL_APP_ENTRY = resolve(ROOT, 'packages', 'visual-reporter', 'src', 'bootstrap.tsx');
 
 const KNOWN_ATOMIC_LEVELS = new Set(['atoms', 'molecules', 'organisms']);
 
