@@ -21,4 +21,7 @@ export default defineConfig({
       dryRun: process.env.CODECOV_DRY_RUN === 'true',
     }),
   ],
+  optimizeDeps: {
+    include: ['react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client'],
+  },
 });

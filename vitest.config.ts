@@ -8,7 +8,7 @@ const currentDirname =
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   test: {
-    reporters: ['default', 'junit'],
+    reporters: ['dot', 'junit'],
     outputFile: {
       junit: './junit.xml',
     },
@@ -54,6 +54,7 @@ export default defineConfig({
         ],
         test: {
           name: 'storybook',
+          watch: false,
           browser: {
             enabled: true,
             headless: true,
