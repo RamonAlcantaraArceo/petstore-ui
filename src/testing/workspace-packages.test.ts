@@ -9,12 +9,12 @@ describe('workspace package exports', () => {
   });
 
   it('exports app package entrypoints', async () => {
-    const windowWithConfig = globalThis as typeof globalThis & {
+    const globalWithWindow = globalThis as typeof globalThis & {
       window?: { __RUNTIME_CONFIG__?: { API_BASE_URL?: string } };
     };
 
-    windowWithConfig.window = windowWithConfig.window ?? {};
-    windowWithConfig.window.__RUNTIME_CONFIG__ = {
+    globalWithWindow.window = globalWithWindow.window ?? {};
+    globalWithWindow.window.__RUNTIME_CONFIG__ = {
       API_BASE_URL: 'http://localhost:3000/api/v1',
     };
 
