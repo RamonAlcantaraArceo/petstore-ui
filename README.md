@@ -44,7 +44,7 @@ All scripts are compatible with Node + npm/npx — replace `bun run` with `npm r
 petstore-ui/
 ├── packages/
 │   ├── atoms/               # Shared React atoms package (scaffold)
-│   ├── petstore-ui/         # Petstore app package (scaffold)
+│   ├── app/                 # Petstore app package (scaffold)
 │   └── visual-reporter/     # Visual report package (scaffold)
 ├── src/
 │   ├── components/          # Atoms, molecules, organisms
