@@ -22,9 +22,15 @@ export type { TableProps, TableColumn } from '../../../src/components/atoms/Tabl
 export { Tabs } from '../../../src/components/atoms/Tabs';
 export type { TabsProps, TabItem } from '../../../src/components/atoms/Tabs';
 
-export { default as theme } from '../../../src/tokens/theme';
+export {
+  default as theme,
+  colors,
+  spacing,
+  typography,
+  breakpoints,
+  getThemeValue,
+} from '../../../src/tokens/theme';
 export type { Theme } from '../../../src/tokens/theme';
-export { colors, spacing, typography, breakpoints, getThemeValue } from '../../../src/tokens/theme';
 
 export * from '../../../src/i18n';
 export * from '../../../src/accessibility';
