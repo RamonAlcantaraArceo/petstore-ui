@@ -33,7 +33,7 @@
     "report:visual": "bun run test:visual && bun run report:visual:build",
     "report:visual:triage:petstore-atoms": "bun run scripts/run-visual-atoms-triage.ts",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "vitest run --coverage --reporter=default --reporter=junit --reporter=verbose",
+    "test:ci": "vitest run --coverage",
     "postinstall": "npx playwright install --with-deps"
   },
   "lint-staged": {
