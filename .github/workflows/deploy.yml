@@ -47,7 +47,7 @@ jobs:
       - name: Install dependencies
         env:
           PNPM_STORE_PATH: ~/.pnpm-store
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Build Storybook
         run: pnpm run build-storybook

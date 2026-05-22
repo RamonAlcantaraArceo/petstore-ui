@@ -68,7 +68,7 @@ jobs:
       - name: Install dependencies
         env:
           PNPM_STORE_PATH: ~/.pnpm-store
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
