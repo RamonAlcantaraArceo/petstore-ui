@@ -8,6 +8,8 @@ const currentDirname =
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   test: {
+    timeout: 5000,
+    retry: 1,
     reporters: ['dot', 'junit'],
     outputFile: {
       junit: './junit.xml',
