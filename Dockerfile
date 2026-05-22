@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 # Stage 1 — build
 # ---------------------------------------------------------------------------
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ ENV CI=${CI} \
     PATH="/pnpm:$PATH"
 
 # Install pnpm via corepack (ships with Node 20)
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@11 --activate
 
 # Install dependencies first (maximises layer cache re-use).
 # --ignore-scripts skips the postinstall that runs `playwright install --with-deps`
