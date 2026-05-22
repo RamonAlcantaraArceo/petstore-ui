@@ -7,7 +7,7 @@ export default defineConfig({
     outDir: 'dist/codecov',
     emptyOutDir: true,
     lib: {
-      entry: 'src/index.ts',
+      entry: 'packages/shared/src/index.ts',
       formats: ['es'],
       fileName: 'petstore-ui',
     },
@@ -21,4 +21,7 @@ export default defineConfig({
       dryRun: process.env.CODECOV_DRY_RUN === 'true',
     }),
   ],
+  optimizeDeps: {
+    include: ['react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client'],
+  },
 });

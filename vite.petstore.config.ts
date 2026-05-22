@@ -56,7 +56,7 @@ export default defineConfig({
           return html;
         }
 
-        return html.replace('src="dist/index.js"', 'src="/src/petstore/index.tsx"');
+        return html.replace('src="dist/index.js"', 'src="/packages/app/src/petstore/index.tsx"');
       },
     },
   ],

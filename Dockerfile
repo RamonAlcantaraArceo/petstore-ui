@@ -2,8 +2,7 @@
 # ---------------------------------------------------------------------------
 # Stage 1 — build
 # ---------------------------------------------------------------------------
-# Pin to a specific bun minor so builds are reproducible; bump deliberately.
-FROM oven/bun:1.2-alpine AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
@@ -13,17 +12,26 @@ ARG DO_NOT_TRACK=1
 
 ENV CI=${CI} \
     STORYBOOK_DISABLE_TELEMETRY=${STORYBOOK_DISABLE_TELEMETRY} \
-    DO_NOT_TRACK=${DO_NOT_TRACK}
+    DO_NOT_TRACK=${DO_NOT_TRACK} \
+    PNPM_HOME="/pnpm" \
+    PATH="/pnpm:$PATH"
+
+# Install pnpm via corepack (ships with Node 20)
+RUN corepack enable && corepack prepare pnpm@11 --activate
 
 # Install dependencies first (maximises layer cache re-use).
 # --ignore-scripts skips the postinstall that runs `playwright install --with-deps`
 # — Playwright browsers are not needed in the build container.
-COPY package.json bun.lock bunfig.toml ./
-RUN bun install --frozen-lockfile --ignore-scripts
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/atoms/package.json packages/atoms/
+COPY packages/app/package.json packages/app/
+COPY packages/visual-reporter/package.json packages/visual-reporter/
+COPY packages/shared/package.json packages/shared/
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Copy source and build all static outputs
 COPY . .
-RUN bun run build-storybook && bun run build-petstore
+RUN pnpm run build-storybook && pnpm run build-petstore
 
 # ---------------------------------------------------------------------------
 # Stage 2 — serve

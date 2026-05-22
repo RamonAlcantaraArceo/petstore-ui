@@ -22,19 +22,38 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
         with:
-          bun-version: latest
+          version: 11
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            ~/.local/share/pnpm/store
+            node_modules/.pnpm
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        env:
+          PNPM_STORE_PATH: ~/.pnpm-store
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Build Storybook
-        run: bun run build-storybook
+        run: pnpm run build-storybook
 
       - name: Build Petstore App
-        run: bun run build-petstore
+        run: pnpm run build-petstore
 
       - name: Assemble deployment artifact
         run: |

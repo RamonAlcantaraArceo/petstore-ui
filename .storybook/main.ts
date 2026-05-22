@@ -1,14 +1,12 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)', '../src/**/*.stories.mdx'],
-  addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-controls',
-    '@storybook/addon-docs',
-    '@storybook/addon-viewport',
-    '@storybook/addon-a11y',
+  stories: [
+    '../packages/**/src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../packages/**/src/**/*.stories.mdx',
   ],
+  staticDirs: ['../public'],
+  addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
   framework: {
     name: '@storybook/react-vite',
     options: {},
@@ -30,19 +28,19 @@ const config: StorybookConfig = {
     // (public/ contains the static website, not Storybook assets)
     config.publicDir = false;
 
-    // Ensure compatibility with Bun's module resolution
+    // Ensure compatibility with pnpm module resolution
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        '@': new URL('../src', import.meta.url).pathname,
-        '@/components': new URL('../src/components', import.meta.url).pathname,
-        '@/tokens': new URL('../src/tokens', import.meta.url).pathname,
-        '@/stories': new URL('../src/stories', import.meta.url).pathname,
-        '@/types': new URL('../src/types', import.meta.url).pathname,
+        '@': new URL('../packages/shared/src', import.meta.url).pathname,
+        '@/components': new URL('../packages/shared/src/components', import.meta.url).pathname,
+        '@/tokens': new URL('../packages/atoms/src/tokens', import.meta.url).pathname,
+        '@/stories': new URL('../packages', import.meta.url).pathname,
+        '@/types': new URL('../packages/app/src/services', import.meta.url).pathname,
       };
     }
 
-    // Configure Bun-compatible settings
+    // Configure pnpm-compatible settings
     config.define = {
       ...config.define,
       global: 'globalThis',
@@ -51,17 +49,13 @@ const config: StorybookConfig = {
     // Fix Node.js compatibility issues in browser environment
     config.optimizeDeps = {
       ...config.optimizeDeps,
-      include: ['react', 'react-dom', '@storybook/blocks'],
+      include: ['react', 'react-dom'],
     };
 
     return config;
   },
   docs: {
-    autodocs: 'tag',
     defaultName: 'Documentation',
-  },
-  features: {
-    buildStoriesJson: true,
   },
 };
 

@@ -1,8 +1,12 @@
-import type { Preview } from '@storybook/react';
+import type { Preview } from '@storybook/react-vite';
 import React from 'react';
-import { theme } from '../src/tokens/theme';
-import { LocaleProvider, localeMetadata, getAvailableLocales } from '../src/i18n';
-import type { SupportedLocale } from '../src/i18n';
+import { theme, LocaleProvider, localeMetadata, getAvailableLocales } from '@petstore-ui/atoms';
+import type { SupportedLocale } from '@petstore-ui/atoms';
+import { AuthProvider, setBaseUrl } from '@petstore-ui/app';
+import { initialize, mswLoader } from 'msw-storybook-addon';
+import { mswHandlers } from './msw-handlers';
+
+initialize({ onUnhandledRequest: 'bypass' });
 
 // Theme Provider Context
 const ThemeContext = React.createContext(theme);
@@ -13,26 +17,29 @@ export const StoryProvider: React.FC<{
   locale: SupportedLocale;
 }> = ({ children, locale }) => (
   <ThemeContext.Provider value={theme}>
-    <LocaleProvider locale={locale}>
-      <div
-        style={{
-          fontFamily: theme.typography.fontFamily.sans.join(', '),
-          fontSize: theme.typography.fontSize.base,
-          lineHeight: theme.typography.lineHeight.normal,
-          color: theme.colors.text?.primary || theme.colors.secondary[900],
-          backgroundColor: theme.colors.background?.primary || theme.colors.secondary[50],
-          padding: '1rem',
-        }}
-      >
-        {children}
-      </div>
-    </LocaleProvider>
+    <AuthProvider>
+      <LocaleProvider locale={locale}>
+        <div
+          style={{
+            fontFamily: theme.typography.fontFamily.sans.join(', '),
+            fontSize: theme.typography.fontSize.base,
+            lineHeight: theme.typography.lineHeight.normal,
+            color: theme.colors.text?.primary || theme.colors.secondary[900],
+            backgroundColor: theme.colors.background?.primary || theme.colors.secondary[50],
+            padding: '1rem',
+          }}
+        >
+          {children}
+        </div>
+      </LocaleProvider>
+    </AuthProvider>
   </ThemeContext.Provider>
 );
 
 const preview: Preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
+
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -41,25 +48,28 @@ const preview: Preview = {
       expanded: true,
       sort: 'requiredFirst',
     },
+
     backgrounds: {
-      default: 'light',
-      values: [
-        {
+      options: {
+        light: {
           name: 'light',
           value: theme.colors.background?.primary || theme.colors.secondary[50],
         },
-        {
+
+        dark: {
           name: 'dark',
           value: theme.colors.background?.secondary || theme.colors.secondary[900],
         },
-        {
+
+        primary: {
           name: 'primary',
           value: theme.colors.primary[50],
         },
-      ],
+      },
     },
+
     viewport: {
-      viewports: {
+      options: {
         mobile: {
           name: 'Mobile',
           styles: {
@@ -89,9 +99,10 @@ const preview: Preview = {
           },
         },
       },
-      defaultViewport: 'laptop',
     },
+
     layout: 'centered',
+
     docs: {
       theme: {
         base: 'light',
@@ -136,9 +147,32 @@ const preview: Preview = {
         disableOtherRules: false
       },
       manual: false
-    } */
+    } */ a11y: {
+      // 'todo' - show a11y violations in the test UI only
+      // 'error' - fail CI on a11y violations
+      // 'off' - skip a11y checks entirely
+      test: 'todo',
+    },
+    msw: {
+      handlers: mswHandlers,
+    },
   },
+  loaders: [mswLoader],
+
   decorators: [
+    (Story) => {
+      if (!document.getElementById('petstore-storybook-base-styles')) {
+        const style = document.createElement('style');
+        style.id = 'petstore-storybook-base-styles';
+        style.textContent = `
+          *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+          body { font-family: Inter, system-ui, -apple-system, sans-serif; }
+          #root { min-height: 100vh; }
+        `;
+        document.head.appendChild(style);
+      }
+      return <Story />;
+    },
     (Story, context) => {
       const locale = (context.globals.locale as SupportedLocale) || 'en';
       return (
@@ -148,6 +182,7 @@ const preview: Preview = {
       );
     },
   ],
+
   globalTypes: {
     locale: {
       name: 'Locale',
@@ -160,7 +195,6 @@ const preview: Preview = {
           title: localeMetadata[locale].name,
           right: localeMetadata[locale].flag,
         })),
-        showName: true,
         dynamicTitle: true,
       },
     },
@@ -174,6 +208,23 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+  },
+
+  initialGlobals: {
+    viewport: {
+      value: 'laptop',
+      isRotated: false,
+    },
+
+    backgrounds: {
+      value: 'light',
+    },
+  },
+
+  async beforeEach() {
+    setBaseUrl('/api/v1');
+    localStorage.setItem('petstore-ui-locale', 'en');
+    window.location.hash = '#/pets';
   },
 };
 
