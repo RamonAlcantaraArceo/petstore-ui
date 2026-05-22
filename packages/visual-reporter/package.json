@@ -8,6 +8,10 @@
   "module": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
+    "test": "pnpm --dir ../.. exec vitest run packages/visual-reporter",
+    "lint": "pnpm --dir ../.. exec eslint packages/visual-reporter --ext .ts,.tsx",
+    "format": "pnpm --dir ../.. exec prettier --write packages/visual-reporter",
+    "format:check": "pnpm --dir ../.. exec prettier --check packages/visual-reporter",
     "type-check": "tsc --noEmit -p ../../tsconfig.json"
   }
 }

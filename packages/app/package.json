@@ -8,6 +8,10 @@
   "module": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
+    "test": "pnpm --dir ../.. exec vitest run packages/app",
+    "lint": "pnpm --dir ../.. exec eslint packages/app --ext .ts,.tsx",
+    "format": "pnpm --dir ../.. exec prettier --write packages/app",
+    "format:check": "pnpm --dir ../.. exec prettier --check packages/app",
     "type-check": "tsc --noEmit -p ../../tsconfig.json"
   }
 }

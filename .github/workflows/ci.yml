@@ -67,16 +67,26 @@ jobs:
           PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
         run: npx playwright install --with-deps chromium
 
-      - name: Test with retry
+      - name: Test packages with retry
         run: |
-          for i in 1 2 3; do
-            echo "Attempt $i"
-            pnpm run test:ci && break
-            if [ $i -eq 3 ]; then
-              echo "Tests failed after 3 attempts"
-              exit 1
-            fi
-            echo "Retrying..."
+          rm -rf junit
+          mkdir -p junit
+          rm -rf coverage
+          mkdir -p coverage
+
+          for pkg in app atoms shared visual-reporter; do
+            echo "Running tests for packages/$pkg"
+            for i in 1 2 3; do
+              echo "Attempt $i for packages/$pkg"
+              pnpm exec vitest run "packages/$pkg" --coverage --coverage.reportsDirectory "coverage/$pkg" && break
+              if [ $i -eq 3 ]; then
+                echo "Tests failed for packages/$pkg after 3 attempts"
+                exit 1
+              fi
+              echo "Retrying packages/$pkg..."
+            done
+
+            cp junit.xml "junit/junit-${pkg}.xml"
           done
 
       - name: Upload JUnit report
@@ -84,13 +94,13 @@ jobs:
         if: always()
         with:
           name: junit-report
-          path: junit.xml
+          path: junit/*.xml
           if-no-files-found: warn
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          files: ./coverage/lcov.info
+          files: ./coverage/*/lcov.info
           flags: unittests
           fail_ci_if_error: false
         env:
@@ -100,7 +110,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./junit.xml
+          files: ./junit/*.xml
           flags: vitest-tests
           name: codecov-tests-vitest
           report_type: test_results
