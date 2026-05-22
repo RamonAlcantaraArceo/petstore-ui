@@ -54,6 +54,19 @@ jobs:
         continue-on-error: true
         run: pnpm run type-check
 
+      - name: Cache Playwright browser binaries
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright browser
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+        run: npx playwright install --with-deps chromium
+
       - name: Test with retry
         run: |
           for i in 1 2 3; do
@@ -96,19 +109,6 @@ jobs:
 
       - name: Build Storybook
         run: pnpm run build-storybook
-
-      - name: Cache Playwright browser binaries
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      - name: Install Playwright browser
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
-        run: npx playwright install --with-deps chromium
 
       # - name: Visual regression tests
       #   run: pnpm run test:visual
