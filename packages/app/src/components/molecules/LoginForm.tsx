@@ -32,6 +32,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isLoading = false, erro
 
   return (
     <form
+      data-component="LoginForm"
       className={`login-form ${className || ''}`.trim()}
       onSubmit={handleSubmit}
       aria-label={t('petstore.auth.form.ariaLabel')}

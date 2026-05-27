@@ -58,6 +58,7 @@ export const PetForm: FC<PetFormProps> = ({
 
   return (
     <form
+      data-component="PetForm"
       className={`pet-form ${className || ''}`.trim()}
       onSubmit={handleSubmit}
       aria-label={t(pet ? 'petstore.pets.form.editTitle' : 'petstore.pets.form.createTitle')}
