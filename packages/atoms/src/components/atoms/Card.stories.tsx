@@ -4,7 +4,7 @@ import { Card } from './Card';
 import { useTranslation } from '../../i18n';
 
 const meta: Meta<typeof Card> = {
-  title: 'Base/Atoms/Card',
+  title: 'Petstore/Atoms/Card',
   component: Card,
   parameters: {
     layout: 'centered',
