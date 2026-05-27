@@ -4,7 +4,7 @@ import { Input } from './Input';
 import { useTranslation } from '../../i18n';
 
 const meta: Meta<typeof Input> = {
-  title: 'Petstore/Atoms/Input',
+  title: 'Common/Atoms/Input',
   component: Input,
   parameters: {
     layout: 'centered',

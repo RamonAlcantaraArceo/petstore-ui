@@ -5,7 +5,7 @@ import { Button } from './Button';
 import { useTranslation } from '@petstore-ui/atoms';
 
 const meta: Meta<typeof Modal> = {
-  title: 'Petstore/Atoms/Modal',
+  title: 'Common/Atoms/Modal',
   component: Modal,
   parameters: {
     layout: 'centered',

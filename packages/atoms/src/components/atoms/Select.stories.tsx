@@ -9,7 +9,7 @@ const statusOptions = [
 ];
 
 const meta: Meta<typeof Select> = {
-  title: 'Petstore/Atoms/Select',
+  title: 'Common/Atoms/Select',
   component: Select,
   parameters: {
     layout: 'centered',

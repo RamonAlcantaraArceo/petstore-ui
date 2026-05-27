@@ -88,6 +88,10 @@ pnpm run report:visual:triage:petstore-atoms  # Build + run only Petstore atoms 
 
 pnpm run storybook      # Interactive component dev (localhost:6006)
 pnpm run build-storybook  # Static Storybook build
+pnpm run storybook:petstore      # Petstore + common atoms stories (localhost:6006)
+pnpm run storybook:visual-report # Visual report + common atoms stories (localhost:6007)
+pnpm run build-storybook:petstore      # Build Petstore + common atoms Storybook
+pnpm run build-storybook:visual-report # Build Visual report + common atoms Storybook
 ```
 
 ## Testing Layers
@@ -153,6 +157,10 @@ Every PR and push to `main` runs the full CI pipeline:
 
 ## Storybook
 
+- Storybook supports flavors via `STORYBOOK_FLAVOR`:
+  - `petstore` = app stories + common atoms stories
+  - `visual-report` = visual-reporter stories + common atoms stories
+  - default (`all`) = all stories in the monorepo
 - Keep each story next to its component and test file, e.g. `Button.tsx`, `Button.test.tsx`, `Button.stories.tsx`.
 - Stories are the primary component documentation surface.
 - Include stories that demonstrate:

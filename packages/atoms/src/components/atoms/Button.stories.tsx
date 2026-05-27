@@ -4,7 +4,7 @@ import { Button } from './Button';
 import { useTranslation } from '../../i18n';
 
 const meta: Meta<typeof Button> = {
-  title: 'Petstore/Atoms/Button',
+  title: 'Common/Atoms/Button',
   component: Button,
   parameters: {
     layout: 'centered',

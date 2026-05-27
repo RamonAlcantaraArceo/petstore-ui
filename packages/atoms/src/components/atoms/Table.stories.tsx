@@ -40,7 +40,7 @@ const InventoryTable: React.FC<{ data: InventoryRow[] }> = ({ data }) => {
 };
 
 const meta: Meta<typeof Table<InventoryRow>> = {
-  title: 'Petstore/Atoms/Table',
+  title: 'Common/Atoms/Table',
   component: Table,
   parameters: {
     layout: 'padded',
