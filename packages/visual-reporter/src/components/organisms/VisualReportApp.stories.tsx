@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { VisualReportApp } from '../../components/organisms/VisualReportApp';
-import { visualReportFixture } from './fixtures';
+import { VisualReportApp } from './VisualReportApp';
+import { visualReportFixture } from '../../stories/visual-report/fixtures';
 
 const meta: Meta<typeof VisualReportApp> = {
   title: 'Visual Report/Organisms/Report App',

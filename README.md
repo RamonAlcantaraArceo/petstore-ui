@@ -67,7 +67,7 @@ petstore-ui/
 │   │   ├── i18n-utils.tsx
 │   │   ├── a11y-utils.ts
 │   │   └── test-patterns.tsx
-│   ├── stories/             # Storybook stories
+│   ├── stories/             # Storybook fixtures and shared story assets
 │   └── tokens/              # Design tokens
 └── .storybook/              # Storybook config
 ```
@@ -153,6 +153,7 @@ Every PR and push to `main` runs the full CI pipeline:
 
 ## Storybook
 
+- Keep each story next to its component and test file, e.g. `Button.tsx`, `Button.test.tsx`, `Button.stories.tsx`.
 - Stories are the primary component documentation surface.
 - Include stories that demonstrate:
   - locale switching (`en` and `chef`)

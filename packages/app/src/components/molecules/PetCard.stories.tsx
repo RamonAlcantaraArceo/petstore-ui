@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { PetCard } from '../../components/molecules/PetCard';
+import { PetCard } from './PetCard';
 import type { Pet } from '../../services/types';
 
 const meta: Meta<typeof PetCard> = {

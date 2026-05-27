@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
+import { ConfirmDialog } from './ConfirmDialog';
 import { Button } from '@petstore-ui/atoms';
 
 const meta: Meta<typeof ConfirmDialog> = {

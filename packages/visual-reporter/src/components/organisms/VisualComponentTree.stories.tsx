@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useMemo, useState } from 'react';
 import { toViewData } from '../../visual-report/model';
 import type { VisualStatus } from '../../visual-report/types';
-import { VisualComponentTree } from '../../components/organisms/VisualComponentTree';
-import { visualReportFixture } from './fixtures';
+import { VisualComponentTree } from './VisualComponentTree';
+import { visualReportFixture } from '../../stories/visual-report/fixtures';
 
 const viewData = toViewData(visualReportFixture);
 

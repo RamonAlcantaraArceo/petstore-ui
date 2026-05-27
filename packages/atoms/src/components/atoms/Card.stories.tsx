@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Card } from '../../components/atoms/Card';
+import { Card } from './Card';
 import { useTranslation } from '../../i18n';
 
 const meta: Meta<typeof Card> = {
@@ -429,27 +429,31 @@ export const AllElevations: Story = {
     >
       <Card elevation="none" padding="md" rounded="lg" border>
         <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>None</h4>
-        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation="none"</p>
+        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>
+          elevation=&quot;none&quot;
+        </p>
       </Card>
       <Card elevation="sm" padding="md" rounded="lg">
         <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Small</h4>
-        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation="sm"</p>
+        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation=&quot;sm&quot;</p>
       </Card>
       <Card elevation="base" padding="md" rounded="lg">
         <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Base</h4>
-        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation="base"</p>
+        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>
+          elevation=&quot;base&quot;
+        </p>
       </Card>
       <Card elevation="md" padding="md" rounded="lg">
         <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Medium</h4>
-        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation="md"</p>
+        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation=&quot;md&quot;</p>
       </Card>
       <Card elevation="lg" padding="md" rounded="lg">
         <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Large</h4>
-        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation="lg"</p>
+        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation=&quot;lg&quot;</p>
       </Card>
       <Card elevation="xl" padding="md" rounded="lg">
         <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>Extra Large</h4>
-        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation="xl"</p>
+        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>elevation=&quot;xl&quot;</p>
       </Card>
     </div>
   ),
@@ -522,7 +526,9 @@ export const AllRoundedOptions: Story = {
       {(['none', 'sm', 'base', 'md', 'lg', 'xl', '2xl'] as const).map((rounded) => (
         <Card key={rounded} elevation="md" padding="md" rounded={rounded}>
           <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '0.875rem' }}>{rounded}</h4>
-          <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>rounded="{rounded}"</p>
+          <p style={{ margin: 0, color: '#6b7280', fontSize: '0.75rem' }}>
+            rounded=&quot;{rounded}&quot;
+          </p>
         </Card>
       ))}
     </div>

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import type { ComparisonMode } from '../../visual-report/types';
-import { VisualVariantCard } from '../../components/organisms/VisualVariantCard';
-import { visualReportFixture } from './fixtures';
+import { VisualVariantCard } from './VisualVariantCard';
+import { visualReportFixture } from '../../stories/visual-report/fixtures';
 
 const story = visualReportFixture.components[0]!;
 const variant = story.variants[0]!;

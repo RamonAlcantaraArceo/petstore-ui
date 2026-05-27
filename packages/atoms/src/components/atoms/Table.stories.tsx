@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Table } from '@petstore-ui/atoms';
+import { Table } from './Table';
 import { useTranslation } from '@petstore-ui/atoms';
 
 interface InventoryRow {

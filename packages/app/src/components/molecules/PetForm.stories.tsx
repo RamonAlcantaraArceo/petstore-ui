@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { PetForm } from '../../components/molecules/PetForm';
-import type { PetFormFields } from '../../components/molecules/PetForm';
+import { PetForm } from './PetForm';
+import type { PetFormFields } from './PetForm';
 import type { Pet } from '../../services/types';
 
 const meta: Meta<typeof PetForm> = {

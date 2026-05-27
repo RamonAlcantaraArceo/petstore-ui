@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { AppNavigation } from '../../components/organisms/AppNavigation';
+import { AppNavigation } from './AppNavigation';
 
 const meta: Meta<typeof AppNavigation> = {
   title: 'Petstore/Organisms/AppNavigation',

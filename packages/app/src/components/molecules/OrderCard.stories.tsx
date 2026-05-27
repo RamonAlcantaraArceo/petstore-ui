@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { OrderCard } from '../../components/molecules/OrderCard';
+import { OrderCard } from './OrderCard';
 import type { Order } from '../../services/types';
 
 const meta: Meta<typeof OrderCard> = {

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { OrderForm } from '../../components/molecules/OrderForm';
-import type { OrderFormFields } from '../../components/molecules/OrderForm';
+import { OrderForm } from './OrderForm';
+import type { OrderFormFields } from './OrderForm';
 
 const meta: Meta<typeof OrderForm> = {
   title: 'Petstore/Molecules/OrderForm',

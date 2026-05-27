@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { PetstoreApp } from '../../components/organisms/PetstoreApp';
+import { PetstoreApp } from './PetstoreApp';
 
 const meta: Meta<typeof PetstoreApp> = {
   title: 'Petstore/App/Full Application',

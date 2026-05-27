@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { LoginForm } from '../../components/molecules/LoginForm';
+import { LoginForm } from './LoginForm';
 
 const meta: Meta<typeof LoginForm> = {
   title: 'Petstore/Molecules/LoginForm',

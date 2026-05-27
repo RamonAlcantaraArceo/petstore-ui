@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { UserCard } from '../../components/molecules/UserCard';
+import { UserCard } from './UserCard';
 import type { User } from '../../services/types';
 
 const meta: Meta<typeof UserCard> = {

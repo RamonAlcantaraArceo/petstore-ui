@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { UserForm } from '../../components/molecules/UserForm';
-import type { UserFormFields } from '../../components/molecules/UserForm';
+import { UserForm } from './UserForm';
+import type { UserFormFields } from './UserForm';
 
 const meta: Meta<typeof UserForm> = {
   title: 'Petstore/Molecules/UserForm',

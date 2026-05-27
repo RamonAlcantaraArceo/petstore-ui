@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { StatusFilter } from '../../components/molecules/StatusFilter';
+import { StatusFilter } from './StatusFilter';
 import type { PetStatus } from '../../services/types';
 
 const meta: Meta<typeof StatusFilter> = {

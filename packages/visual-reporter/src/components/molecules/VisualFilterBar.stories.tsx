@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import type { VisualStatus } from '../../visual-report/types';
-import { VisualFilterBar } from '../../components/molecules/VisualFilterBar';
+import { VisualFilterBar } from './VisualFilterBar';
 
 const meta: Meta<typeof VisualFilterBar> = {
   title: 'Visual Report/Molecules/Filter Bar',
