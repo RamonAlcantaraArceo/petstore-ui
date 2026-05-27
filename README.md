@@ -133,6 +133,13 @@ const label = t('components.button.primary');
 - Follow WCAG 2.1 AA targets for keyboard navigation, semantics, focus behavior, and contrast.
 - Prefer semantic HTML first, then augment with ARIA when needed.
 
+## Selector conventions for atoms
+
+- Every atom root should expose `data-component="<ComponentName>"` using the component's PascalCase name.
+- If the atom has a primary variant prop, expose it as `data-variant="<variant>"` on the same root element.
+- Prefer selectors like `[data-component="Badge"][data-variant="available"]` in POMs and E2E tests.
+- If a component needs to distinguish other states such as size or validation, use a dedicated `data-*` attribute with the specific state name.
+
 ## CI Status Checks
 
 Every PR and push to `main` runs the full CI pipeline:

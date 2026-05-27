@@ -334,6 +334,7 @@ export const Input: FC<InputProps> = ({
           </span>
         )}
         <input
+          data-component="Input"
           id={inputId}
           className={inputClasses}
           style={inputStyles}

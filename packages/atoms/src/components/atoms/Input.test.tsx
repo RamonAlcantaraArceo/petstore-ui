@@ -50,6 +50,7 @@ describe('Input', () => {
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
 
+    expect(input.getAttribute('data-component')).toBe('Input');
     expect(screen.getByText('Email')).toBeDefined();
     expect(input.getAttribute('id')).toBe('generated-input-id');
     expect(input.getAttribute('aria-labelledby')).toBe('generated-input-id-label');

@@ -15,6 +15,18 @@ describe('Badge', () => {
       expect(getByText('custom label')).toBeDefined();
     });
 
+    it('exposes a stable component identifier', () => {
+      renderWithLocale(<Badge>custom label</Badge>);
+      expect(document.querySelector('[data-component="Badge"]')).toBeDefined();
+    });
+
+    it('exposes the badge variant for targeted selection', () => {
+      renderWithLocale(<Badge variant="available">custom label</Badge>);
+      expect(
+        document.querySelector('[data-component="Badge"][data-variant="available"]'),
+      ).toBeDefined();
+    });
+
     it('renders translated label for available variant', () => {
       renderWithLocale(<Badge variant="available" />);
       // The badge renders a span; just verify it exists and has content

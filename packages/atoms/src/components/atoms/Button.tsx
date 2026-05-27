@@ -211,6 +211,8 @@ export const Button: FC<ButtonProps> = ({
 
   return (
     <button
+      data-component="Button"
+      data-variant={variant}
       type={type}
       className={buttonClasses}
       style={buttonStyles}

@@ -51,7 +51,7 @@ function TableInner<T>({
   };
 
   return (
-    <table style={tableStyles} {...ariaAttributes}>
+    <table data-component="Table" style={tableStyles} {...ariaAttributes}>
       <thead>
         <tr>
           {columns.map((column) => (
