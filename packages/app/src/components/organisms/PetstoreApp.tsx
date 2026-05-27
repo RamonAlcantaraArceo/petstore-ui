@@ -91,6 +91,7 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
 
   return (
     <div
+      data-component="PetstoreApp"
       style={{
         minHeight: '100vh',
         fontFamily: theme.typography.fontFamily.sans.join(', '),
