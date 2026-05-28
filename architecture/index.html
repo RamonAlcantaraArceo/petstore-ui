@@ -1,0 +1,1593 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the Petstore UI project.">
+      
+      
+      
+        <link rel="canonical" href="https://ramonalcantaraarceo.github.io/petstore-ui/architecture/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../configuration/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Architecture - Petstore UI</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Petstore UI" class="md-header__button md-logo" aria-label="Petstore UI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Petstore UI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/RamonAlcantaraArceo/petstore-ui" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    petstore-ui
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Petstore UI" class="md-nav__button md-logo" aria-label="Petstore UI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Petstore UI
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/RamonAlcantaraArceo/petstore-ui" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    petstore-ui
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workspace-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workspace Packages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workspace Packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#package-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entry Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cicd-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technology-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technology Stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-system-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design System (Tokens)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internationalization-i18n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internationalization (i18n)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#accessibility-a11y" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accessibility (a11y)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State Management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker &amp; Deployment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-organization-convention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Organization Convention
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next Steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../badges_and_graphs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Badges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Other
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../loc_acc_prompt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Localization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-report-migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual Reporter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workspace-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workspace Packages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workspace Packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#package-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package Responsibilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entry Points
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cicd-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technology-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technology Stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-system-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design System (Tokens)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#internationalization-i18n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internationalization (i18n)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#accessibility-a11y" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accessibility (a11y)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State Management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker &amp; Deployment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-organization-convention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Organization Convention
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next Steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
+<p>This document describes the architecture of petstore-ui, including the monorepo structure, package dependencies, and deployment flow.</p>
+<h2 id="system-architecture">System Architecture<a class="headerlink" href="#system-architecture" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph TB
+    DEV["👤 Developer"]
+    SB["📖 Storybook&lt;br/&gt;Dev Server"]
+    APP["🛍️ Petstore&lt;br/&gt;Dev Server"]
+    BUILD["🔨 Build&lt;br/&gt;Process"]
+    DOCKER["🐳 Docker&lt;br/&gt;Image"]
+    GHCR["📦 GHCR&lt;br/&gt;Registry"]
+    FLYIO["☁️ Fly.io&lt;br/&gt;Production"]
+    API["🔌 Backend&lt;br/&gt;API"]
+
+    DEV --&gt;|pnpm run&lt;br/&gt;storybook| SB
+    DEV --&gt;|pnpm run&lt;br/&gt;dev| APP
+    DEV --&gt;|pnpm run&lt;br/&gt;build| BUILD
+    BUILD --&gt;|docker build| DOCKER
+    DOCKER --&gt;|GitHub&lt;br/&gt;Actions| GHCR
+    GHCR --&gt;|Fly.io&lt;br/&gt;Deploy| FLYIO
+    FLYIO --&gt;|HTTP&lt;br/&gt;Requests| API
+    APP --&gt;|HTTP| API</code></pre>
+<h2 id="workspace-packages">Workspace Packages<a class="headerlink" href="#workspace-packages" title="Permanent link">&para;</a></h2>
+<p>The petstore-ui project is organized as a monorepo with four main packages:</p>
+<pre class="mermaid"><code>graph LR
+    ATOMS["@petstore-ui/atoms&lt;br/&gt;(Leaf Package)&lt;br/&gt;────────────────&lt;br/&gt;• React atoms&lt;br/&gt;• Design tokens&lt;br/&gt;• i18n provider&lt;br/&gt;• a11y hooks&lt;br/&gt;• Utilities"]
+
+    SHARED["@petstore-ui/shared&lt;br/&gt;(Leaf Package)&lt;br/&gt;────────────────&lt;br/&gt;• Types&lt;br/&gt;• Interfaces&lt;br/&gt;• Utilities"]
+
+    APP["@petstore-ui/app&lt;br/&gt;(Consumer)&lt;br/&gt;────────────────&lt;br/&gt;• Views&lt;br/&gt;• Forms&lt;br/&gt;• Services&lt;br/&gt;• Context"]
+
+    VISUAL["@petstore-ui/visual-reporter&lt;br/&gt;(Consumer)&lt;br/&gt;────────────────&lt;br/&gt;• Report UI&lt;br/&gt;• Comparison tools&lt;br/&gt;• Status display"]
+
+    ATOMS --&gt;|exports to| APP
+    SHARED --&gt;|exports to| APP
+    ATOMS --&gt;|exports to| VISUAL
+    SHARED --&gt;|exports to| VISUAL</code></pre>
+<h3 id="package-responsibilities">Package Responsibilities<a class="headerlink" href="#package-responsibilities" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Location</th>
+<th>Purpose</th>
+<th>Dependencies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>atoms</strong></td>
+<td><code>packages/atoms/</code></td>
+<td>Reusable UI atoms, design system foundation</td>
+<td>None (leaf)</td>
+</tr>
+<tr>
+<td><strong>shared</strong></td>
+<td><code>packages/shared/</code></td>
+<td>Shared types, interfaces, utilities</td>
+<td>None (leaf)</td>
+</tr>
+<tr>
+<td><strong>app</strong></td>
+<td><code>packages/app/</code></td>
+<td>Petstore demo application, views, forms</td>
+<td>atoms, shared</td>
+</tr>
+<tr>
+<td><strong>visual-reporter</strong></td>
+<td><code>packages/visual-reporter/</code></td>
+<td>Visual regression report UI and tools</td>
+<td>atoms, shared</td>
+</tr>
+</tbody>
+</table>
+<h3 id="entry-points">Entry Points<a class="headerlink" href="#entry-points" title="Permanent link">&para;</a></h3>
+<p>Each package exports from <code>packages/*/src/index.ts</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// packages/atoms/src/index.ts</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">export</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Button</span><span class="p">,</span><span class="w"> </span><span class="nx">Badge</span><span class="p">,</span><span class="w"> </span><span class="nx">Input</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./components/atoms/&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">export</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">theme</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./tokens/theme&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">export</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useTranslation</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../i18n/context&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">export</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useAccessibility</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../accessibility/hooks&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1">// packages/shared/src/index.ts</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">export</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Pet</span><span class="p">,</span><span class="w"> </span><span class="nx">Order</span><span class="p">,</span><span class="w"> </span><span class="nx">ApiError</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./types/&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">export</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">formatDate</span><span class="p">,</span><span class="w"> </span><span class="nx">validateEmail</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./utils/&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1">// packages/app/src/index.ts</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">export</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">PetstoreApp</span><span class="p">,</span><span class="w"> </span><span class="nx">useAppContext</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./views/&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="k">export</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">PetService</span><span class="p">,</span><span class="w"> </span><span class="nx">OrderService</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./services/&#39;</span><span class="p">;</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="c1">// packages/visual-reporter/src/index.ts</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">export</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">VisualReportApp</span><span class="p">,</span><span class="w"> </span><span class="nx">VisualStatusBadge</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./components/&#39;</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="development-workflow">Development Workflow<a class="headerlink" href="#development-workflow" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph TD
+    START["Developer&lt;br/&gt;Starts Work"]
+
+    START --&gt;|pnpm run&lt;br/&gt;storybook| SB["Storybook&lt;br/&gt;Dev Server&lt;br/&gt;localhost:6006"]
+    START --&gt;|pnpm run&lt;br/&gt;dev| DEV_APP["Petstore App&lt;br/&gt;Dev Server&lt;br/&gt;localhost:5173/petstore"]
+    START --&gt;|pnpm run&lt;br/&gt;build| BUILD_STATIC["Build Static&lt;br/&gt;Assets"]
+
+    SB --&gt;|Hot Reload| SB
+    DEV_APP --&gt;|Hot Reload| DEV_APP
+    BUILD_STATIC --&gt;|pnpm run&lt;br/&gt;preview| PREVIEW["Preview Server&lt;br/&gt;localhost:4000"]
+
+    EDIT["Edit Components&lt;br/&gt;in packages/*/src/"]
+
+    SB --&gt;|View/Test| EDIT
+    DEV_APP --&gt;|View/Test| EDIT
+    EDIT --&gt;|Changes| SB
+    EDIT --&gt;|Changes| DEV_APP
+
+    TEST["Run Tests"]
+    EDIT --&gt;|pnpm run test| TEST
+    TEST --&gt;|Pass| COMMIT
+    TEST --&gt;|Fail| EDIT
+
+    COMMIT["Commit &amp;&lt;br/&gt;Push PR"]
+    COMMIT --&gt;|Husky&lt;br/&gt;Pre-commit| LINT["Format &amp; Lint"]
+    LINT --&gt;|Pass| GH_ACTIONS["GitHub&lt;br/&gt;Actions CI"]
+    LINT --&gt;|Fail| EDIT
+
+    GH_ACTIONS --&gt;|Type-check&lt;br/&gt;Lint&lt;br/&gt;Test&lt;br/&gt;Build| SUCCESS{Tests&lt;br/&gt;Pass?}
+    SUCCESS --&gt;|No| EDIT
+    SUCCESS --&gt;|Yes| MERGE["Merge to Main"]</code></pre>
+<h2 id="cicd-pipeline">CI/CD Pipeline<a class="headerlink" href="#cicd-pipeline" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph LR
+    PUSH["Push to&lt;br/&gt;main Branch"]
+
+    PUSH --&gt;|Trigger| CI["GitHub Actions&lt;br/&gt;CI Pipeline"]
+
+    CI --&gt;|pnpm run&lt;br/&gt;format:check| FORMAT["✓ Prettier"]
+    CI --&gt;|pnpm run&lt;br/&gt;lint| ESLINT["✓ ESLint"]
+    CI --&gt;|pnpm run&lt;br/&gt;type-check| TSC["✓ TypeScript"]
+    CI --&gt;|pnpm run&lt;br/&gt;test:coverage| TEST["✓ Tests +&lt;br/&gt;Coverage"]
+    CI --&gt;|pnpm run&lt;br/&gt;build-storybook| SB_BUILD["✓ Storybook&lt;br/&gt;Build"]
+    CI --&gt;|docker build| DOCKER_BUILD["✓ Docker&lt;br/&gt;Build"]
+
+    FORMAT --&gt;|All Pass| SUCCESS["✅ All&lt;br/&gt;Checks Pass"]
+    ESLINT --&gt;|All Pass| SUCCESS
+    TSC --&gt;|All Pass| SUCCESS
+    TEST --&gt;|All Pass| SUCCESS
+    SB_BUILD --&gt;|All Pass| SUCCESS
+    DOCKER_BUILD --&gt;|All Pass| SUCCESS
+
+    SUCCESS --&gt;|Upload| COVERAGE["Codecov"]
+    SUCCESS --&gt;|Ready| DEPLOY["Ready for&lt;br/&gt;Deployment"]
+
+    DEPLOY --&gt;|workflow_dispatch| GHCR_PUSH["Push Image&lt;br/&gt;to GHCR"]
+    GHCR_PUSH --&gt;|workflow_dispatch| FLY_DEPLOY["Deploy to&lt;br/&gt;Fly.io"]</code></pre>
+<h2 id="deployment-flow">Deployment Flow<a class="headerlink" href="#deployment-flow" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph LR
+    CODE["Source Code&lt;br/&gt;on GitHub"]
+
+    CODE --&gt;|Create&lt;br/&gt;release-ghcr/*&lt;br/&gt;branch| GIT_BRANCH["Git Branch"]
+    GIT_BRANCH --&gt;|Trigger| GHCR_WORKFLOW["GitHub Action:&lt;br/&gt;Create &amp; Publish&lt;br/&gt;Docker Image"]
+
+    GHCR_WORKFLOW --&gt;|Build| DOCKER_IMG["Docker Image&lt;br/&gt;petstore-ui:latest&lt;br/&gt;petstore-ui:sha-xxx"]
+    DOCKER_IMG --&gt;|Push| GHCR["GitHub Container&lt;br/&gt;Registry&lt;br/&gt;ghcr.io/..."]
+
+    GHCR --&gt;|Manual&lt;br/&gt;workflow_dispatch| FLY_WORKFLOW["GitHub Action:&lt;br/&gt;Deploy to&lt;br/&gt;Fly.io"]
+
+    FLY_WORKFLOW --&gt;|Deploy| FLYIO_APP["Fly.io App&lt;br/&gt;petstore-ui-dev"]
+    FLYIO_APP --&gt;|Receives| TRAFFIC["HTTP Traffic"]
+
+    TRAFFIC --&gt;|Same-origin| API_PROXY["/api/v1&lt;br/&gt;Proxy"]
+    API_PROXY --&gt;|Upstream| BACKEND["Petstore&lt;br/&gt;Backend API"]</code></pre>
+<h2 id="technology-stack">Technology Stack<a class="headerlink" href="#technology-stack" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Version</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Runtime</strong></td>
+<td>Node.js</td>
+<td>≥ 24</td>
+<td>Execution environment</td>
+</tr>
+<tr>
+<td><strong>Package Manager</strong></td>
+<td>pnpm</td>
+<td>≥ 11</td>
+<td>Dependency and workspace management</td>
+</tr>
+<tr>
+<td><strong>Framework</strong></td>
+<td>React</td>
+<td>18.3.1</td>
+<td>UI library</td>
+</tr>
+<tr>
+<td><strong>Language</strong></td>
+<td>TypeScript</td>
+<td>5.9.3</td>
+<td>Type-safe development</td>
+</tr>
+<tr>
+<td><strong>Build Tool</strong></td>
+<td>Vite</td>
+<td>6.4.2</td>
+<td>Fast bundling and dev server</td>
+</tr>
+<tr>
+<td><strong>Component Docs</strong></td>
+<td>Storybook</td>
+<td>10.4.0</td>
+<td>Interactive component documentation</td>
+</tr>
+<tr>
+<td><strong>Testing</strong></td>
+<td>Vitest</td>
+<td>3.2.4</td>
+<td>Unit test framework</td>
+</tr>
+<tr>
+<td><strong>Test Utilities</strong></td>
+<td>@testing-library/react</td>
+<td>16.3.2</td>
+<td>React component testing</td>
+</tr>
+<tr>
+<td><strong>DOM Environment</strong></td>
+<td>happy-dom</td>
+<td>14.12.3</td>
+<td>Lightweight DOM for testing</td>
+</tr>
+<tr>
+<td><strong>Linting</strong></td>
+<td>ESLint</td>
+<td>8.57.1</td>
+<td>Code quality</td>
+</tr>
+<tr>
+<td><strong>Formatting</strong></td>
+<td>Prettier</td>
+<td>3.8.3</td>
+<td>Code formatting</td>
+</tr>
+<tr>
+<td><strong>Pre-commit</strong></td>
+<td>Husky</td>
+<td>9.1.7</td>
+<td>Git hooks</td>
+</tr>
+<tr>
+<td><strong>E2E Testing</strong></td>
+<td>Playwright</td>
+<td>1.60.0</td>
+<td>Visual regression testing</td>
+</tr>
+<tr>
+<td><strong>Container</strong></td>
+<td>Docker</td>
+<td>Latest</td>
+<td>Production deployment</td>
+</tr>
+<tr>
+<td><strong>Hosting</strong></td>
+<td>Fly.io</td>
+<td>-</td>
+<td>Cloud deployment platform</td>
+</tr>
+</tbody>
+</table>
+<h2 id="design-system-tokens">Design System (Tokens)<a class="headerlink" href="#design-system-tokens" title="Permanent link">&para;</a></h2>
+<p>All components reference design system tokens from <code>packages/atoms/src/tokens/theme.ts</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">export</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">theme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nx">colors</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">primary</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mf">50</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#f0f9ff&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">500</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#3b82f6&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">900</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#1e3a8a&#39;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nx">semantic</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">success</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#10b981&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">warning</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#f59e0b&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#ef4444&#39;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nx">typography</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nx">fontFamily</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">sans</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;Inter&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;system-ui&#39;</span><span class="p">],</span><span class="w"> </span><span class="nx">mono</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;JetBrains Mono&#39;</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nx">fontSize</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">xs</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;0.75rem&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">sm</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;0.875rem&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">base</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1rem&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nx">spacing</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">xs</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;0.25rem&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">sm</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;0.5rem&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">md</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1rem&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">lg</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1.5rem&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">xl</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;2rem&#39;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nx">breakpoints</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">sm</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;640px&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">md</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;768px&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">lg</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1024px&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">xl</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1280px&#39;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">};</span>
+</code></pre></div>
+<p><strong>Rule:</strong> All components must use these tokens. No hardcoded colors, spacing, or font sizes.</p>
+<h2 id="internationalization-i18n">Internationalization (i18n)<a class="headerlink" href="#internationalization-i18n" title="Permanent link">&para;</a></h2>
+<p>The project supports multiple locales via <code>packages/atoms/src/i18n/</code>:</p>
+<ul>
+<li><strong>en</strong> — English (production)</li>
+<li><strong>chef</strong> — Swedish Chef pseudo-locale (text expansion testing)</li>
+</ul>
+<p><strong>Usage in components:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">t</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useTranslation</span><span class="p">();</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">t</span><span class="p">(</span><span class="s1">&#39;components.button.primary&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">param</span><span class="o">:</span><span class="w"> </span><span class="kt">value</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+<p><strong>Translation files:</strong> <code>packages/atoms/src/i18n/locales/{locale}.ts</code></p>
+<h2 id="accessibility-a11y">Accessibility (a11y)<a class="headerlink" href="#accessibility-a11y" title="Permanent link">&para;</a></h2>
+<p>All components must meet WCAG 2.1 AA compliance via <code>packages/atoms/src/accessibility/</code>:</p>
+<ul>
+<li><strong>Keyboard navigation</strong> — Tab, Enter, Space support</li>
+<li><strong>ARIA attributes</strong> — Semantic labels and roles</li>
+<li><strong>Screen readers</strong> — Announcements for state changes</li>
+<li><strong>Focus management</strong> — Visible focus indicators</li>
+<li><strong>Contrast</strong> — Minimum 4.5:1 ratio for text</li>
+</ul>
+<p><strong>Usage in components:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">ariaAttributes</span><span class="p">,</span><span class="w"> </span><span class="nx">handleKeyDown</span><span class="p">,</span><span class="w"> </span><span class="nx">announceAction</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useAccessibility</span><span class="p">({</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nx">enterActivation</span><span class="o">:</span><span class="w"> </span><span class="kt">true</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nx">spaceActivation</span><span class="o">:</span><span class="w"> </span><span class="kt">true</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nx">announceOnAction</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Action completed&#39;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">});</span>
+</code></pre></div>
+<h2 id="state-management">State Management<a class="headerlink" href="#state-management" title="Permanent link">&para;</a></h2>
+<p>The project uses <strong>React Context</strong> for app-level state (no Redux/Zustand):</p>
+<ul>
+<li><strong>Locale context</strong> — Global locale provider (<code>packages/atoms/src/i18n/context.tsx</code>)</li>
+<li><strong>App context</strong> — Application state (in <code>packages/app/src/context/</code>)</li>
+<li><strong>Local state</strong> — <code>useState</code> within components</li>
+</ul>
+<p><strong>Pattern:</strong> Context provides values, custom hooks expose selectors:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">useAppContext</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">usePetList</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h2 id="api-integration">API Integration<a class="headerlink" href="#api-integration" title="Permanent link">&para;</a></h2>
+<p>The <code>packages/app/src/services/</code> layer handles all API communication:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// packages/app/src/services/apiClient.ts</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">ApiClient</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">baseUrl</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">get</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">endpoint</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">post</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">endpoint</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="kt">unknown</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">}</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="c1">// packages/app/src/services/petService.ts</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">PetService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="k">private</span><span class="w"> </span><span class="nx">client</span><span class="o">:</span><span class="w"> </span><span class="kt">ApiClient</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">getPets</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">Pet</span><span class="p">[]</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">getPetById</span><span class="p">(</span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">Pet</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>Configuration:</strong> API base URL resolved from runtime config, meta tag, or environment:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// Resolution order:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="mf">1.</span><span class="w"> </span><span class="nb">window</span><span class="p">.</span><span class="nx">__RUNTIME_CONFIG__</span><span class="p">.</span><span class="nx">API_BASE_URL</span><span class="w"> </span><span class="p">(</span><span class="kr">from</span><span class="w"> </span><span class="o">/</span><span class="nx">config</span><span class="p">.</span><span class="nx">js</span><span class="p">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="mf">2.</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">meta</span><span class="w"> </span><span class="nx">name</span><span class="o">=</span><span class="s2">&quot;api-base-url&quot;</span><span class="w"> </span><span class="nx">content</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="w"> </span><span class="o">/&gt;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="mf">3.</span><span class="w"> </span><span class="nx">Error</span><span class="o">:</span><span class="w"> </span><span class="kt">API_BASE_URL</span><span class="w"> </span><span class="nx">not</span><span class="w"> </span><span class="nx">configured</span>
+</code></pre></div>
+<p>See <a href="../configuration/">Configuration</a> for details.</p>
+<h2 id="testing-architecture">Testing Architecture<a class="headerlink" href="#testing-architecture" title="Permanent link">&para;</a></h2>
+<p>Tests are organized by layer:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Location</th>
+<th>Runner</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Unit</strong></td>
+<td><code>**/*.test.ts(x)</code></td>
+<td>Vitest</td>
+<td>Testing Library, happy-dom</td>
+</tr>
+<tr>
+<td><strong>Visual</strong></td>
+<td>Playwright E2E</td>
+<td>Playwright</td>
+<td>Visual regression + image diff</td>
+</tr>
+<tr>
+<td><strong>i18n</strong></td>
+<td>i18n-utils test helpers</td>
+<td>Vitest</td>
+<td>Testing across locales</td>
+</tr>
+<tr>
+<td><strong>a11y</strong></td>
+<td>a11y-utils test helpers</td>
+<td>Vitest</td>
+<td>Accessibility validation</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../testing/">Testing</a> for comprehensive test patterns.</p>
+<h2 id="docker-deployment">Docker &amp; Deployment<a class="headerlink" href="#docker-deployment" title="Permanent link">&para;</a></h2>
+<p>The <code>Dockerfile</code> builds a production image with:</p>
+<ol>
+<li><strong>Build stage</strong> — Compile TypeScript, bundle assets, run tests</li>
+<li><strong>Runtime stage</strong> — Nginx server, runtime config injection, environment setup</li>
+</ol>
+<p><strong>Runtime config injection</strong> via <code>docker/entrypoint.sh</code>:</p>
+<ul>
+<li>Reads environment variables (<code>API_BASE_URL</code>, <code>API_KEY</code>, <code>VERSION</code>, etc.)</li>
+<li>Generates <code>/config.js</code> with configuration object</li>
+<li>Sets nginx proxy rules and security headers</li>
+</ul>
+<p>See <a href="../deployment/">Deployment</a> for complete Docker and Fly.io setup.</p>
+<h2 id="file-organization-convention">File Organization Convention<a class="headerlink" href="#file-organization-convention" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>packages/{package}/
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>├── src/
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>│   ├── components/
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>│   │   ├── atoms/           # Single-responsibility components
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>│   │   │   ├── Button.tsx
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>│   │   │   ├── Button.stories.tsx
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>│   │   │   ├── Button.test.tsx
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>│   │   │   └── types.ts      # Button-specific types (if needed)
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>│   │   ├── molecules/        # Composed from atoms
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>│   │   └── organisms/        # Complex compositions
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>│   ├── services/             # API integration
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>│   ├── context/              # React Context providers
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>│   ├── hooks/                # Custom React hooks
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>│   ├── utils/                # Utility functions
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>│   ├── types/                # TypeScript interfaces (shared)
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>│   ├── tokens/               # Design system tokens
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>│   ├── i18n/                 # Internationalization
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>│   ├── accessibility/        # a11y utilities and hooks
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>│   ├── testing/              # Test helpers and utilities
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>│   └── index.ts              # Package entry point
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>├── package.json
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>├── tsconfig.json
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>└── vitest.config.ts
+</code></pre></div>
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>See <a href="../getting_started/">Getting Started</a></strong> to set up your development environment</li>
+<li><strong>See <a href="../configuration/">Configuration</a></strong> to understand runtime and environment setup</li>
+<li><strong>See <a href="../testing/">Testing</a></strong> for test patterns and strategies</li>
+<li><strong>See <a href="../deployment/">Deployment</a></strong> for Docker and Fly.io deployment</li>
+</ul>
+<hr />
+<p><strong>Questions?</strong> See <a href="../CONTRIBUTING/">CONTRIBUTING.md</a> for contribution guidelines and component standards.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.top", "navigation.sections", "navigation.expand", "search.highlight", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

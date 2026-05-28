@@ -1,0 +1,2129 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the Petstore UI project.">
+      
+      
+      
+        <link rel="canonical" href="https://ramonalcantaraarceo.github.io/petstore-ui/deployment/">
+      
+      
+        <link rel="prev" href="../configuration/">
+      
+      
+        <link rel="next" href="../getting_started/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Deployment - Petstore UI</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#deployment" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Petstore UI" class="md-header__button md-logo" aria-label="Petstore UI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Petstore UI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Deployment
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/RamonAlcantaraArceo/petstore-ui" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    petstore-ui
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Petstore UI" class="md-nav__button md-logo" aria-label="Petstore UI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Petstore UI
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/RamonAlcantaraArceo/petstore-ui" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    petstore-ui
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-docker-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Docker Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Local Docker Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Start
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker Compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dockerfile-stages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dockerfile Stages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-configuration-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Configuration Injection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-container-registry-ghcr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub Container Registry (GHCR)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GitHub Container Registry (GHCR)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pushing-images-to-ghcr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pushing Images to GHCR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image Metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flyio-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fly.io Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fly.io Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-time-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-Time Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploying-to-flyio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploying to Fly.io
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flyio-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fly.io Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#managing-flyio-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing Fly.io Secrets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaling-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scaling &amp; Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback-to-previous-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rollback to Previous Version
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cicd-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD Workflows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CI/CD Workflows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#continuous-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-publishing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image Publishing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-specific-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment-Specific Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Environment-Specific Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development-flydevflytoml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development (.fly/dev/fly.toml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staging-flystagingflytoml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Staging (.fly/staging/fly.toml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-flyproductionflytoml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production (.fly/production/fly.toml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-deployment-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Deployment Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-fails-module-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build fails: "Module not found"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment-fails-docker-build-failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment fails: "Docker build failed"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-crashes-on-startup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App crashes on startup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-checks-failing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health checks failing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-proxy-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API proxy not working
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#safe-deployment-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safe Deployment Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rollback Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next Steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../badges_and_graphs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Badges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Other
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../loc_acc_prompt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Localization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../visual-report-migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visual Reporter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-docker-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local Docker Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Local Docker Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Start
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker Compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dockerfile-stages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dockerfile Stages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-configuration-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Configuration Injection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-container-registry-ghcr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub Container Registry (GHCR)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GitHub Container Registry (GHCR)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pushing-images-to-ghcr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pushing Images to GHCR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image Metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flyio-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fly.io Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fly.io Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#first-time-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-Time Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploying-to-flyio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploying to Fly.io
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flyio-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fly.io Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#managing-flyio-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing Fly.io Secrets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaling-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scaling &amp; Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback-to-previous-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rollback to Previous Version
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cicd-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD Workflows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CI/CD Workflows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#continuous-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#image-publishing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Image Publishing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-specific-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment-Specific Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Environment-Specific Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development-flydevflytoml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development (.fly/dev/fly.toml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staging-flystagingflytoml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Staging (.fly/staging/fly.toml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-flyproductionflytoml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production (.fly/production/fly.toml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-deployment-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Deployment Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Checks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-fails-module-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build fails: "Module not found"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment-fails-docker-build-failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment fails: "Docker build failed"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-crashes-on-startup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App crashes on startup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-checks-failing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health checks failing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-proxy-not-working" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API proxy not working
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#safe-deployment-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safe Deployment Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rollback Process
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next Steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="deployment">Deployment<a class="headerlink" href="#deployment" title="Permanent link">&para;</a></h1>
+<p>This document describes how to deploy petstore-ui to production using Docker and Fly.io.</p>
+<h2 id="deployment-architecture">Deployment Architecture<a class="headerlink" href="#deployment-architecture" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph LR
+    CODE["Source Code&lt;br/&gt;on GitHub&lt;br/&gt;main branch"]
+
+    CODE --&gt;|Create branch&lt;br/&gt;release-ghcr/*| GIT["Git Branch&lt;br/&gt;with version tag"]
+
+    GIT --&gt;|Trigger&lt;br/&gt;workflow| GHCR_WF["Workflow:&lt;br/&gt;Create &amp; Publish&lt;br/&gt;Docker Image"]
+
+    GHCR_WF --&gt;|Build image&lt;br/&gt;multi-stage| DOCKER["Docker&lt;br/&gt;Image&lt;br/&gt;Build"]
+
+    DOCKER --&gt;|Push to&lt;br/&gt;registry| GHCR["GitHub&lt;br/&gt;Container Registry&lt;br/&gt;ghcr.io/&lt;br/&gt;ramonalcantaraarceo/&lt;br/&gt;petstore-ui"]
+
+    GHCR --&gt;|workflow_dispatch&lt;br/&gt;manual trigger| FLY_WF["Workflow:&lt;br/&gt;Deploy to&lt;br/&gt;Fly.io"]
+
+    FLY_WF --&gt;|flyctl deploy| FLYIO["Fly.io&lt;br/&gt;Production App&lt;br/&gt;petstore-ui-dev"]
+
+    FLYIO --&gt;|Listens on&lt;br/&gt;port 80| NGINX["Nginx&lt;br/&gt;Reverse Proxy"]
+
+    NGINX --&gt;|Serve&lt;br/&gt;static assets| STORYBOOK["Storybook&lt;br/&gt;localhost:6006"]
+
+    NGINX --&gt;|Proxy to&lt;br/&gt;API_PROXY_TARGET| API["Petstore&lt;br/&gt;Backend API"]</code></pre>
+<h2 id="local-docker-setup">Local Docker Setup<a class="headerlink" href="#local-docker-setup" title="Permanent link">&para;</a></h2>
+<h3 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h3>
+<p>Build and run the Docker image locally:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Build image</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">VERSION</span><span class="o">=</span><span class="nb">local</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">GIT_SHA</span><span class="o">=</span>dev<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--build-arg<span class="w"> </span><span class="nv">BUILD_DATE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>date<span class="w"> </span>-u<span class="w"> </span>+<span class="s1">&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>-t<span class="w"> </span>petstore-ui<span class="w"> </span>.
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># Run container</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:80<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">API_BASE_URL</span><span class="o">=</span>/api/v1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">API_PROXY_TARGET</span><span class="o">=</span>https://petstore-api-dev.ramon-alcantara.work<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span>petstore-ui
+</code></pre></div>
+<p>Open http://localhost:8080 in your browser.</p>
+<h3 id="docker-compose">Docker Compose<a class="headerlink" href="#docker-compose" title="Permanent link">&para;</a></h3>
+<p>For a more complete local setup with environment variables:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Create .env file</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>.env<span class="w"> </span><span class="s">&lt;&lt; EOF</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s">API_BASE_URL=/api/v1</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s">API_PROXY_TARGET=https://petstore-api-dev.ramon-alcantara.work</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s">VERSION=local</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s">BUILD_DATE=$(date -u +&#39;%Y-%m-%dT%H:%M:%SZ&#39;)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s">EOF</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># Build and start</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--build
+</code></pre></div>
+<p>Open http://localhost:8080 in your browser.</p>
+<p><strong>Container services:</strong></p>
+<ul>
+<li>Port 80: Nginx (Storybook + API proxy)</li>
+<li>Port 9090: (reserved for future health checks)</li>
+</ul>
+<h3 id="dockerfile-stages">Dockerfile Stages<a class="headerlink" href="#dockerfile-stages" title="Permanent link">&para;</a></h3>
+<p>The Dockerfile has two stages:</p>
+<p><strong>Stage 1: Builder</strong></p>
+<ul>
+<li>Install dependencies</li>
+<li>Run TypeScript compilation</li>
+<li>Run linting and tests</li>
+<li>Build Storybook static assets</li>
+<li>Build Petstore app bundle</li>
+</ul>
+<p><strong>Stage 2: Runtime</strong></p>
+<ul>
+<li>Copy built assets from builder</li>
+<li>Install Nginx</li>
+<li>Configure Nginx with proxy rules</li>
+<li>Copy entrypoint script</li>
+<li>Expose port 80</li>
+</ul>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li>Final image is smaller (only runtime dependencies)</li>
+<li>Build failures fail fast before creating large images</li>
+<li>Tests run in build process (fail if tests fail)</li>
+</ul>
+<h3 id="runtime-configuration-injection">Runtime Configuration Injection<a class="headerlink" href="#runtime-configuration-injection" title="Permanent link">&para;</a></h3>
+<p>The entrypoint script (<code>docker/entrypoint.sh</code>) runs at container startup:</p>
+<ol>
+<li>Reads environment variables</li>
+<li>Generates <code>/config.js</code> with runtime configuration</li>
+<li>Configures Nginx API proxy rules</li>
+<li>Optionally injects <code>API_KEY</code> header into proxied requests</li>
+<li>Starts Nginx</li>
+</ol>
+<p><strong>Generated <code>/config.js</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">window</span><span class="p">.</span><span class="nx">__RUNTIME_CONFIG__</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nx">API_BASE_URL</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;/api/v1&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nx">API_KEY</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;from environment&gt;&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nx">VERSION</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nx">GIT_SHA</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;abc1234&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nx">BUILD_DATE</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;2026-05-28T10:00:00Z&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">};</span>
+</code></pre></div>
+<p><strong>Key insight:</strong> <code>API_KEY</code> is never exposed to the browser. It's only used server-side by Nginx for proxied requests.</p>
+<h2 id="github-container-registry-ghcr">GitHub Container Registry (GHCR)<a class="headerlink" href="#github-container-registry-ghcr" title="Permanent link">&para;</a></h2>
+<h3 id="pushing-images-to-ghcr">Pushing Images to GHCR<a class="headerlink" href="#pushing-images-to-ghcr" title="Permanent link">&para;</a></h3>
+<p>The workflow automatically publishes images when you push to a <code>release-ghcr/*</code> branch:</p>
+<p><strong>Step 1: Create release branch</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>release-ghcr/v1.0.0
+</code></pre></div>
+<p><strong>Step 2: Push to GitHub</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>release-ghcr/v1.0.0
+</code></pre></div>
+<p><strong>Step 3: GitHub Actions</strong></p>
+<ul>
+<li>Workflow triggers automatically</li>
+<li>Builds Docker image</li>
+<li>Pushes to GHCR with two tags:</li>
+<li><code>ghcr.io/ramonalcantaraarceo/petstore-ui:latest</code></li>
+<li><code>ghcr.io/ramonalcantaraarceo/petstore-ui:sha-&lt;commit-short&gt;</code></li>
+</ul>
+<p><strong>Step 4: Verify publication</strong>
+Go to <a href="https://github.com/ramonalcantaraarceo/petstore-ui/pkgs/container/petstore-ui">Packages</a> to see published images.</p>
+<h3 id="image-metadata">Image Metadata<a class="headerlink" href="#image-metadata" title="Permanent link">&para;</a></h3>
+<p>Each published image includes build metadata:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>docker<span class="w"> </span>inspect<span class="w"> </span>ghcr.io/ramonalcantaraarceo/petstore-ui:latest
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Example output:</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># &quot;Labels&quot;: {</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1">#   &quot;org.opencontainers.image.title&quot;: &quot;petstore-ui&quot;,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1">#   &quot;org.opencontainers.image.version&quot;: &quot;1.0.0&quot;,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1">#   &quot;org.opencontainers.image.revision&quot;: &quot;abc1234&quot;,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="c1">#   &quot;org.opencontainers.image.created&quot;: &quot;2026-05-28T10:00:00Z&quot;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c1"># }</span>
+</code></pre></div>
+<h2 id="flyio-deployment">Fly.io Deployment<a class="headerlink" href="#flyio-deployment" title="Permanent link">&para;</a></h2>
+<h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Fly.io account</strong> — <a href="https://fly.io">Create account</a></li>
+<li><strong>Flyctl CLI</strong> — <code>brew install flyctl</code> or <a href="https://fly.io/docs/getting-started/installing-flyctl/">install flyctl</a></li>
+<li><strong>Authentication</strong> — <code>flyctl auth login</code></li>
+<li><strong>GitHub secret</strong> — Set <code>FLY_API_TOKEN</code> in repository secrets</li>
+</ol>
+<h3 id="first-time-setup">First-Time Setup<a class="headerlink" href="#first-time-setup" title="Permanent link">&para;</a></h3>
+<p>The Fly.io deployment workflow creates the app if it doesn't exist:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>flyctl<span class="w"> </span>auth<span class="w"> </span>login
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>flyctl<span class="w"> </span>apps<span class="w"> </span>list<span class="w">  </span><span class="c1"># View existing apps</span>
+</code></pre></div>
+<p>If <code>petstore-ui-dev</code> doesn't exist, the workflow will create it:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create App and Set Secrets</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="no">if ! flyctl apps list | grep -q petstore-ui-dev; then</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">      </span><span class="no">flyctl apps create --name petstore-ui-dev --auto-confirm</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="no">fi</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="no">flyctl secrets set API_KEY=$API_KEY</span>
+</code></pre></div>
+<h3 id="deploying-to-flyio">Deploying to Fly.io<a class="headerlink" href="#deploying-to-flyio" title="Permanent link">&para;</a></h3>
+<p><strong>Step 1: Ensure image is published to GHCR</strong></p>
+<p>Follow the GHCR steps above or trigger the build:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>release-ghcr/v1.0.0
+</code></pre></div>
+<p>Wait for the publish workflow to complete.</p>
+<p><strong>Step 2: Trigger deployment workflow</strong></p>
+<p>Go to <strong>Actions</strong> → <strong>Deploy to Fly.io Dev</strong> → <strong>Run workflow</strong></p>
+<p><strong>Options:</strong></p>
+<ul>
+<li><strong>version:</strong> Leave blank for <code>latest</code>, or specify <code>sha-&lt;commit&gt;</code> for rollback</li>
+<li><strong>Leave other fields as defaults</strong></li>
+</ul>
+<p><strong>Step 3: Wait for deployment</strong></p>
+<p>Workflow will:</p>
+<ol>
+<li>Authenticate with Fly.io</li>
+<li>Deploy image to <code>petstore-ui-dev</code> app</li>
+<li>Wait for health checks to pass</li>
+<li>Return app URL</li>
+</ol>
+<p><strong>Step 4: Verify deployment</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># View deployment logs</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>flyctl<span class="w"> </span>logs<span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Test app</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>curl<span class="w"> </span>https://petstore-ui-dev.fly.dev
+</code></pre></div>
+<h3 id="flyio-configuration">Fly.io Configuration<a class="headerlink" href="#flyio-configuration" title="Permanent link">&para;</a></h3>
+<p>App configuration is in <code>.fly/dev/fly.toml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;petstore-ui-dev&quot;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">primary_region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;iad&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">[build]</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ghcr.io/ramonalcantaraarceo/petstore-ui:latest&quot;</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="k">[env]</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span><span class="n">API_BASE_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/api/v1&quot;</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">  </span><span class="n">API_PROXY_TARGET</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://petstore-api-dev.ramon-alcantara.work&quot;</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="k">[http_service]</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">  </span><span class="n">internal_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">  </span><span class="n">force_https</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="k">[checks]</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">  </span><span class="k">[checks.alive]</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">    </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http&quot;</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">    </span><span class="n">interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;15s&quot;</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">    </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;5s&quot;</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">    </span><span class="n">grace_period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;30s&quot;</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">    </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">    </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/&quot;</span>
+</code></pre></div>
+<h3 id="managing-flyio-secrets">Managing Fly.io Secrets<a class="headerlink" href="#managing-flyio-secrets" title="Permanent link">&para;</a></h3>
+<p>Store sensitive values as Fly.io secrets (not in <code>fly.toml</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Set secret</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>flyctl<span class="w"> </span>secrets<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev<span class="w"> </span><span class="nv">API_KEY</span><span class="o">=</span><span class="s2">&quot;your-token-here&quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># View secrets (names only, not values)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>flyctl<span class="w"> </span>secrets<span class="w"> </span>list<span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># Remove secret</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>flyctl<span class="w"> </span>secrets<span class="w"> </span><span class="nb">unset</span><span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev<span class="w"> </span>API_KEY
+</code></pre></div>
+<p>Secrets are available as environment variables inside the container.</p>
+<h3 id="scaling-configuration">Scaling &amp; Configuration<a class="headerlink" href="#scaling-configuration" title="Permanent link">&para;</a></h3>
+<p>Adjust resources in <code>fly.toml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">[vm]</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;256mb&quot;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="n">cpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">[[services]]</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="n">internal_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">  </span><span class="n">protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tcp&quot;</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">  </span><span class="k">[services.concurrency]</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">    </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;requests&quot;</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">    </span><span class="n">hard_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">    </span><span class="n">soft_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span>
+</code></pre></div>
+<p>Apply changes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>flyctl<span class="w"> </span>deploy<span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev
+</code></pre></div>
+<h3 id="monitoring-deployment">Monitoring Deployment<a class="headerlink" href="#monitoring-deployment" title="Permanent link">&para;</a></h3>
+<p>View app status and metrics:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Current status</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>flyctl<span class="w"> </span>status<span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Recent logs</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>flyctl<span class="w"> </span>logs<span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev<span class="w"> </span>--lines<span class="w"> </span><span class="m">100</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># Detailed metrics</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>flyctl<span class="w"> </span>metrics<span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev
+</code></pre></div>
+<h3 id="rollback-to-previous-version">Rollback to Previous Version<a class="headerlink" href="#rollback-to-previous-version" title="Permanent link">&para;</a></h3>
+<p>If deployment has issues, rollback to a previous image:</p>
+<p><strong>Step 1: Get previous image tag</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>docker<span class="w"> </span>images<span class="w"> </span>ghcr.io/ramonalcantaraarceo/petstore-ui
+</code></pre></div>
+<p><strong>Step 2: Trigger deploy workflow with previous tag</strong></p>
+<p>Go to <strong>Actions</strong> → <strong>Deploy to Fly.io Dev</strong> → <strong>Run workflow</strong></p>
+<p>Enter <strong>version:</strong> <code>sha-&lt;previous-commit&gt;</code> (without <code>ghcr.io/...</code> prefix, just the tag)</p>
+<p>This will deploy the previous image without rebuilding.</p>
+<h2 id="cicd-workflows">CI/CD Workflows<a class="headerlink" href="#cicd-workflows" title="Permanent link">&para;</a></h2>
+<h3 id="continuous-integration">Continuous Integration<a class="headerlink" href="#continuous-integration" title="Permanent link">&para;</a></h3>
+<p>Triggered on every PR and push to main (<code>.github/workflows/ci.yml</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">lint</span><span class="p">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pnpm/action-setup@v2</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-node@v4</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">          </span><span class="nt">node-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;24&#39;</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">          </span><span class="nt">cache</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;pnpm&#39;</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pnpm install</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pnpm run format:check</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pnpm run lint</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pnpm run type-check</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pnpm/action-setup@v2</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-node@v4</span>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pnpm install</span>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pnpm run test:coverage</span>
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">codecov/codecov-action@v3</span>
+<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a><span class="w">          </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.CODECOV_TOKEN }}</span>
+</code></pre></div>
+<p><strong>All must pass</strong> before PR can be merged.</p>
+<h3 id="image-publishing">Image Publishing<a class="headerlink" href="#image-publishing" title="Permanent link">&para;</a></h3>
+<p>Triggered when pushing to <code>release-ghcr/*</code> branch (<code>.github/workflows/push-ghcr.yml</code>):</p>
+<ul>
+<li>Builds multi-stage Docker image</li>
+<li>Runs tests in build stage (fail fast)</li>
+<li>Pushes to GHCR with <code>latest</code> and <code>sha-&lt;commit&gt;</code> tags</li>
+</ul>
+<h3 id="deployment_1">Deployment<a class="headerlink" href="#deployment_1" title="Permanent link">&para;</a></h3>
+<p>Manual workflow in (<code>.github/workflows/deploy-fly-dev.yml</code>):</p>
+<ul>
+<li>Triggered via <code>workflow_dispatch</code> in Actions tab</li>
+<li>Deploys image from GHCR to Fly.io</li>
+<li>Can optionally specify version tag for rollback</li>
+</ul>
+<h2 id="environment-specific-deployment">Environment-Specific Deployment<a class="headerlink" href="#environment-specific-deployment" title="Permanent link">&para;</a></h2>
+<p>The project has multiple deployment environments:</p>
+<h3 id="development-flydevflytoml">Development (<code>.fly/dev/fly.toml</code>)<a class="headerlink" href="#development-flydevflytoml" title="Permanent link">&para;</a></h3>
+<ul>
+<li>App name: <code>petstore-ui-dev</code></li>
+<li>Memory: 256MB</li>
+<li>Backend: <code>https://petstore-api-dev.ramon-alcantara.work</code></li>
+<li>Public: Yes</li>
+</ul>
+<h3 id="staging-flystagingflytoml">Staging (<code>.fly/staging/fly.toml</code>)<a class="headerlink" href="#staging-flystagingflytoml" title="Permanent link">&para;</a></h3>
+<ul>
+<li>App name: <code>petstore-ui-staging</code></li>
+<li>Memory: 512MB</li>
+<li>Backend: <code>https://petstore-api-staging.ramon-alcantara.work</code></li>
+<li>Public: Yes</li>
+</ul>
+<h3 id="production-flyproductionflytoml">Production (<code>.fly/production/fly.toml</code>)<a class="headerlink" href="#production-flyproductionflytoml" title="Permanent link">&para;</a></h3>
+<ul>
+<li>App name: <code>petstore-ui</code></li>
+<li>Memory: 1GB</li>
+<li>Backend: <code>https://petstore-api.ramon-alcantara.work</code></li>
+<li>Public: Yes</li>
+</ul>
+<p>To deploy to different environments, update the workflow to use the correct config:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>flyctl<span class="w"> </span>deploy<span class="w"> </span>--config<span class="w"> </span>.fly/staging/fly.toml
+</code></pre></div>
+<h2 id="pre-deployment-checklist">Pre-Deployment Checklist<a class="headerlink" href="#pre-deployment-checklist" title="Permanent link">&para;</a></h2>
+<p>Before deploying, verify:</p>
+<ul>
+<li>[ ] Image builds locally without errors: <code>docker build .</code></li>
+<li>[ ] Tests pass: <code>pnpm run test</code></li>
+<li>[ ] TypeScript compiles: <code>pnpm run type-check</code></li>
+<li>[ ] Linting passes: <code>pnpm run lint</code></li>
+<li>[ ] Storybook builds: <code>pnpm run build-storybook</code></li>
+<li>[ ] Image published to GHCR</li>
+<li>[ ] Deployment workflow shows "success"</li>
+<li>[ ] App responds to health checks: <code>curl https://petstore-ui-dev.fly.dev</code></li>
+<li>[ ] API proxy is working: <code>curl https://petstore-ui-dev.fly.dev/api/v1/...</code></li>
+</ul>
+<h2 id="health-checks">Health Checks<a class="headerlink" href="#health-checks" title="Permanent link">&para;</a></h2>
+<p>Fly.io continuously monitors app health with health checks defined in <code>fly.toml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">[checks]</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="k">[checks.alive]</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http&quot;</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="n">interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;15s&quot;</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">    </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;5s&quot;</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">    </span><span class="n">grace_period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;30s&quot;</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">    </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;GET&quot;</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">    </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/&quot;</span>
+</code></pre></div>
+<p><strong>Health check details:</strong></p>
+<ul>
+<li><strong>Frequency:</strong> Every 15 seconds</li>
+<li><strong>Timeout:</strong> 5 seconds max</li>
+<li><strong>Grace period:</strong> 30 seconds before first check</li>
+<li><strong>Path:</strong> <code>/</code> (homepage)</li>
+<li><strong>Expected:</strong> HTTP 200 response</li>
+</ul>
+<p>If app fails health checks, Fly.io restarts the instance.</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="build-fails-module-not-found">Build fails: "Module not found"<a class="headerlink" href="#build-fails-module-not-found" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Verify dependencies locally</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>pnpm<span class="w"> </span>install
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Check for TypeScript errors</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>pnpm<span class="w"> </span>run<span class="w"> </span>type-check
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># Verify workspace configuration</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>cat<span class="w"> </span>pnpm-workspace.yaml
+</code></pre></div>
+<h3 id="deployment-fails-docker-build-failed">Deployment fails: "Docker build failed"<a class="headerlink" href="#deployment-fails-docker-build-failed" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Test build locally</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>docker<span class="w"> </span>build<span class="w"> </span>.<span class="w"> </span>--progress<span class="o">=</span>plain
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># Check Dockerfile for issues</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>cat<span class="w"> </span>Dockerfile
+</code></pre></div>
+<h3 id="app-crashes-on-startup">App crashes on startup<a class="headerlink" href="#app-crashes-on-startup" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># View logs</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>flyctl<span class="w"> </span>logs<span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># Check entrypoint script</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>cat<span class="w"> </span>docker/entrypoint.sh
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="c1"># Verify environment variables</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>flyctl<span class="w"> </span>secrets<span class="w"> </span>list<span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev
+</code></pre></div>
+<h3 id="health-checks-failing">Health checks failing<a class="headerlink" href="#health-checks-failing" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Test health endpoint locally</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>curl<span class="w"> </span>-i<span class="w"> </span>http://localhost:8080/
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="c1"># View health check logs</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>flyctl<span class="w"> </span>logs<span class="w"> </span>--app<span class="w"> </span>petstore-ui-dev<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>health
+</code></pre></div>
+<h3 id="api-proxy-not-working">API proxy not working<a class="headerlink" href="#api-proxy-not-working" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Test backend connectivity</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>curl<span class="w"> </span>-i<span class="w"> </span>https://petstore-api-dev.ramon-alcantara.work/api/v1/pet
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># Check Nginx configuration</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>flyctl<span class="w"> </span>ssh<span class="w"> </span>console<span class="w"> </span>-a<span class="w"> </span>petstore-ui-dev
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="c1"># Then: cat /etc/nginx/nginx.conf</span>
+</code></pre></div>
+<h2 id="deployment-strategy">Deployment Strategy<a class="headerlink" href="#deployment-strategy" title="Permanent link">&para;</a></h2>
+<h3 id="safe-deployment-process">Safe Deployment Process<a class="headerlink" href="#safe-deployment-process" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Create feature branch</strong> — <code>git checkout -b feature/my-feature</code></li>
+<li><strong>Make changes</strong> — Update components, tests, etc.</li>
+<li><strong>PR and merge</strong> — All CI checks must pass</li>
+<li><strong>Tag release</strong> — Create git tag with semantic version</li>
+<li><strong>Push release branch</strong> — <code>git push origin release-ghcr/v1.0.0</code></li>
+<li><strong>Wait for publish</strong> — Image builds and publishes to GHCR (5-10 minutes)</li>
+<li><strong>Manual deployment</strong> — Trigger deploy workflow in Actions tab</li>
+<li><strong>Verify</strong> — Check logs and test deployed app</li>
+<li><strong>Monitor</strong> — Watch metrics for 24 hours</li>
+</ol>
+<h3 id="rollback-process">Rollback Process<a class="headerlink" href="#rollback-process" title="Permanent link">&para;</a></h3>
+<p>If deployment has issues:</p>
+<ol>
+<li>Go to <strong>Actions</strong> → <strong>Deploy to Fly.io Dev</strong></li>
+<li>Click <strong>Run workflow</strong></li>
+<li>Enter previous <code>sha-xxx</code> tag in version field</li>
+<li>Workflow redeploys previous image (no rebuild)</li>
+<li>Verify app is stable</li>
+</ol>
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>See <a href="../getting_started/">Getting Started</a></strong> for local development</li>
+<li><strong>See <a href="../configuration/">Configuration</a></strong> for environment variables</li>
+<li><strong>See <a href="../architecture/">Architecture</a></strong> for deployment architecture diagrams</li>
+</ul>
+<hr />
+<p><strong>Have questions?</strong> Check the <a href="https://fly.io/docs/">Fly.io docs</a> or create a GitHub issue.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.top", "navigation.sections", "navigation.expand", "search.highlight", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
