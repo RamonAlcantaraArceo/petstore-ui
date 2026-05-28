@@ -7,9 +7,12 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
-  quality:
-    name: Quality Gate
+  lint:
+    name: Lint & Type Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -47,61 +50,89 @@ jobs:
         run: pnpm run format:check
 
       - name: Lint
-        continue-on-error: true
         run: pnpm run lint
 
       - name: Type check
-        continue-on-error: true
         run: pnpm run type-check
 
-      - name: Cache Playwright browser binaries
-        uses: actions/cache@v5
+  test:
+    name: Test ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: [app, atoms, shared, visual-reporter]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
         with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          version: 11
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            ~/.local/share/pnpm/store
+            node_modules/.pnpm
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-playwright-
+            ${{ runner.os }}-pnpm-
 
-      - name: Install Playwright browser
+      - name: Install dependencies
         env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
-        run: npx playwright install --with-deps chromium
+          PNPM_STORE_PATH: ~/.pnpm-store
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Test packages with retry
+      - name: Run unit tests (packages/${{ matrix.package }}) with retry
         run: |
-          rm -rf junit
-          mkdir -p junit
-          rm -rf coverage
-          mkdir -p coverage
+          rm -rf junit coverage
+          mkdir -p junit coverage
 
-          for pkg in app atoms shared visual-reporter; do
-            echo "Running tests for packages/$pkg"
-            for i in 1 2 3; do
-              echo "Attempt $i for packages/$pkg"
-              pnpm exec vitest run "packages/$pkg" --coverage --coverage.reportsDirectory "coverage/$pkg" && break
-              if [ $i -eq 3 ]; then
-                echo "Tests failed for packages/$pkg after 3 attempts"
-                exit 1
-              fi
-              echo "Retrying packages/$pkg..."
-            done
-
-            cp junit.xml "junit/junit-${pkg}.xml"
+          for i in 1 2 3; do
+            echo "Attempt $i for packages/${{ matrix.package }}"
+            pnpm exec vitest run --project unit "packages/${{ matrix.package }}" \
+              --coverage \
+              --coverage.reportsDirectory "coverage/${{ matrix.package }}" && break
+            if [ $i -eq 3 ]; then
+              echo "Tests failed for packages/${{ matrix.package }} after 3 attempts"
+              exit 1
+            fi
+            echo "Retrying packages/${{ matrix.package }}..."
           done
+
+          cp junit.xml "junit/junit-${{ matrix.package }}.xml"
 
       - name: Upload JUnit report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: junit-report
-          path: junit/*.xml
+          name: junit-report-${{ matrix.package }}
+          path: junit/junit-${{ matrix.package }}.xml
+          if-no-files-found: warn
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-${{ matrix.package }}
+          path: coverage/${{ matrix.package }}
           if-no-files-found: warn
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          files: ./coverage/*/lcov.info
-          flags: unittests
+          files: ./coverage/${{ matrix.package }}/lcov.info
+          flags: unittests,${{ matrix.package }}
           fail_ci_if_error: false
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -110,18 +141,49 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./junit/*.xml
-          flags: vitest-tests
-          name: codecov-tests-vitest
+          files: ./junit/junit-${{ matrix.package }}.xml
+          flags: vitest-tests,${{ matrix.package }}
+          name: codecov-tests-${{ matrix.package }}
           report_type: test_results
           verbose: true
           fail_ci_if_error: false
 
+  storybook:
+    name: Storybook Build & Bundle Stats
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            ~/.local/share/pnpm/store
+            node_modules/.pnpm
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        env:
+          PNPM_STORE_PATH: ~/.pnpm-store
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
       - name: Build Storybook
         run: pnpm run build-storybook
-
-      # - name: Visual regression tests
-      #   run: pnpm run test:visual
 
       - name: Emit bundle stats (Vite + Codecov plugin)
         env:
@@ -138,6 +200,13 @@ jobs:
           flags: bundle-analysis
           name: codecov-bundle-analysis
           fail_ci_if_error: false
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
       - name: Docker build validation
         timeout-minutes: 15
