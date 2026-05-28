@@ -185,6 +185,12 @@ jobs:
       - name: Build Storybook
         run: pnpm run build-storybook
 
+      - name: Run Chromatic visual regression tests
+        # if: startsWith(github.head_ref, 'chromatic/')
+        env:
+          CHROMATIC_TOKEN: ${{ secrets.CHROMATIC_TOKEN }}
+        run: pnpm run chromatic --exit-zero-on-changes
+
       - name: Emit bundle stats (Vite + Codecov plugin)
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
