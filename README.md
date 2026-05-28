@@ -2,6 +2,15 @@
 
 [![CI](https://github.com/ramonalcantaraarceo/petstore-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/ramonalcantaraarceo/petstore-ui/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/ramonalcantaraarceo/petstore-ui/branch/main/graph/badge.svg)](https://codecov.io/gh/ramonalcantaraarceo/petstore-ui)
+[![Node Version](https://img.shields.io/badge/node-%3E%3D24.0.0-brightgreen)](https://nodejs.org/)
+[![pnpm Version](https://img.shields.io/badge/pnpm-%3E%3D11.0.0-blue)](https://pnpm.io/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/RamonAlcantaraArceo/petstore-ui/LICENSE)
+
+[![Storybook](https://img.shields.io/badge/storybook-interactive_docs_dev-ff6ee4)](https://petstore-ui-dev.ramon-alcantara.work/storybook/)
+[![Storybook](https://img.shields.io/badge/storybook-interactive_docs_staging-ff69b4)](https://petstore-ui-staging.ramon-alcantara.work/storybook/)
+
+[![Dev Deployment](https://github.com/RamonAlcantaraArceo/petstore-ui/actions/workflows/deploy-fly-dev.yml/badge.svg)](https://petstore-ui-dev.ramon-alcantara.work/petstore/)
+[![Staging Deployment](https://github.com/RamonAlcantaraArceo/petstore-ui/actions/workflows/deploy-fly-staging.yml/badge.svg)](https://petstore-ui-staging.ramon-alcantara.work/petstore/)
 
 A React + TypeScript component library for the Petstore UI, built with pnpm and documented in Storybook.
 
