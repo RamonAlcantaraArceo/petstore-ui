@@ -4,12 +4,22 @@ All notable changes to **petstore-ui** are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+No changes yet.
+
 ---
 
 ## [1.0.1] - 2026-05-28
 
 ### Added
 
+- User API field mapping updates for payload compatibility with backend expectations (#18)
+- `data-component` and `data-variant` selector coverage standardized across atom and organism components
+- Storybook flavor support via `STORYBOOK_FLAVOR` (`all`, `petstore`, `visual-report`)
+- Chromatic integration in CI for visual regression checks (non-blocking mode)
+- Dedicated release deployment workflow for publishing and rolling out release images
+- New documentation suite under `/docs` for getting started, architecture, configuration, testing, deployment, and badges
 - Fly.io DEV deployment workflow and environment-specific Fly configuration for manual image rollouts
 - GitHub Container Registry image publish workflow with `latest` and `sha-<short-sha>` tags plus build attestations
 - Container runtime config injection via `docker/entrypoint.sh`, including generated `/config.js`, nginx API proxy wiring, and optional server-side `x-api-key` header injection
@@ -27,6 +37,11 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `AppNavigation` now surfaces build metadata and improved API health-fetch behavior (#17)
+- Repository structure migrated from root `src/` into workspace packages for clearer monorepo boundaries (#26)
+- CI quality checks split into independent vertical jobs (lint, per-package tests, Storybook, Docker) for better signal and retries (#27)
+- Story files colocated with components and atom story groups aligned for cleaner Storybook organization
+- Tooling alignment updates for latest pnpm version and formatter ignore rules
 - Docker, local preview, and compose flows now use runtime-configured API routing with same-origin `/api/v1` frontend calls and a configurable upstream proxy target
 - `src/services/apiClient.ts` now resolves the API base URL from runtime config or a meta tag and fails fast when neither source is provided
 - README deployment and runtime configuration guidance now documents GHCR publishing, Fly.io DEV deployment, rollback flow, and runtime API variable usage
@@ -96,5 +111,6 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 New entries go under `[Unreleased]`. On release, the `[Unreleased]` section is renamed to the new version with today's date, and a new empty `[Unreleased]` section is added.
 
-[Unreleased]: https://github.com/ramonalcantaraarceo/petstore-ui/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/ramonalcantaraarceo/petstore-ui/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/ramonalcantaraarceo/petstore-ui/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/ramonalcantaraarceo/petstore-ui/releases/tag/v1.0.0
