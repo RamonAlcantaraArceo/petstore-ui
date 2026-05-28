@@ -4,4 +4,9 @@ petstore/dist
 public/dist
 coverage
 .bun
+.venv
 dist
+
+docs/CHANGELOG.md
+docs/CONTRIBUTING.md
+docs/README.md
