@@ -115,7 +115,11 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
   };
 
   return (
-    <section {...ariaAttributes} style={{ padding: theme.spacing[4] }}>
+    <section
+      data-component="PetManagementView"
+      {...ariaAttributes}
+      style={{ padding: theme.spacing[4] }}
+    >
       {/* Toolbar */}
       <div
         style={{

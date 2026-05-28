@@ -104,7 +104,11 @@ export const Select: FC<SelectProps> = ({
   };
 
   return (
-    <div className={`select select--${size} ${className}`.trim()} style={containerStyles}>
+    <div
+      data-component="Select"
+      className={`select select--${size} ${className}`.trim()}
+      style={containerStyles}
+    >
       {displayLabel ? (
         <label id={labelId} htmlFor={selectId} style={labelStyles}>
           {displayLabel}

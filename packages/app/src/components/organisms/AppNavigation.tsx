@@ -135,6 +135,7 @@ export const AppNavigation: FC<AppNavigationProps> = ({
 
   return (
     <nav
+      data-component="AppNavigation"
       {...ariaAttributes}
       style={{
         display: 'flex',

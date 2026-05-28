@@ -25,6 +25,7 @@ export const UserCard: FC<UserCardProps> = ({
 
   return (
     <Card
+      data-component="UserCard"
       elevation="base"
       padding="md"
       border

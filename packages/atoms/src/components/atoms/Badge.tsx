@@ -94,6 +94,8 @@ export const Badge: FC<BadgeProps> = ({
 
   return (
     <span
+      data-component="Badge"
+      data-variant={variant}
       className={`badge badge--${variant} badge--${size} ${className}`.trim()}
       style={badgeStyles}
       {...ariaAttributes}

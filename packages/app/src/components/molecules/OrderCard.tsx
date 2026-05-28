@@ -19,6 +19,7 @@ export const OrderCard: FC<OrderCardProps> = ({ order, onDelete, readonly = fals
 
   return (
     <Card
+      data-component="OrderCard"
       elevation="base"
       padding="md"
       border

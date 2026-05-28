@@ -21,3 +21,5 @@ public/visual-report/data.json
 public/visual-report/assets/.env
 # vitest report
 html/ 
+
+build-storybook.log

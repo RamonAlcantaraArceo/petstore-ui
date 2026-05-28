@@ -1,12 +1,4 @@
-export type {
-  Pet,
-  Category,
-  Tag,
-  Order,
-  User,
-  ApiResponse,
-  ApiResult,
-} from './services/types';
+export type { Pet, Category, Tag, Order, User, ApiResponse, ApiResult } from './services/types';
 export {
   setBaseUrl,
   getBaseUrl,
@@ -21,19 +13,8 @@ export {
   put,
   del,
 } from './services/apiClient';
-export {
-  findPetsByStatus,
-  getPetById,
-  addPet,
-  updatePet,
-  deletePet,
-} from './services/petApi';
-export {
-  getInventory,
-  placeOrder,
-  getOrderById,
-  deleteOrder,
-} from './services/storeApi';
+export { findPetsByStatus, getPetById, addPet, updatePet, deletePet } from './services/petApi';
+export { getInventory, placeOrder, getOrderById, deleteOrder } from './services/storeApi';
 export {
   loginUser,
   logoutUser,

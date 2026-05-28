@@ -157,7 +157,11 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
   };
 
   return (
-    <section {...ariaAttributes} style={{ padding: theme.spacing[4] }}>
+    <section
+      data-component="StoreOrdersView"
+      {...ariaAttributes}
+      style={{ padding: theme.spacing[4] }}
+    >
       {/* --- Inventory Section --- */}
       <div style={{ marginBottom: theme.spacing[6] }}>
         <h2

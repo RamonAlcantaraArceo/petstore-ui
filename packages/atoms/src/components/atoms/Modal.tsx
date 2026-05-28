@@ -93,6 +93,7 @@ export const Modal: FC<ModalProps> = ({
   return ReactDOM.createPortal(
     <div style={overlayStyles} onClick={onClose} role="presentation">
       <div
+        data-component="Modal"
         ref={elementRef as React.RefObject<HTMLDivElement>}
         style={modalStyles}
         onClick={(event) => event.stopPropagation()}

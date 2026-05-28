@@ -30,6 +30,7 @@ export const StatusFilter: FC<StatusFilterProps> = ({
 
   return (
     <div
+      data-component="StatusFilter"
       className={`status-filter ${className || ''}`.trim()}
       aria-label={t('petstore.pets.filter.ariaLabel')}
       style={{ display: 'flex', alignItems: 'flex-end', gap: '0.75rem', flexWrap: 'wrap' }}

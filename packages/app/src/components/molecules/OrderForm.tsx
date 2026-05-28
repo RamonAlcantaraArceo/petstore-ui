@@ -39,6 +39,7 @@ export const OrderForm: FC<OrderFormProps> = ({
 
   return (
     <form
+      data-component="OrderForm"
       className={`order-form ${className || ''}`.trim()}
       onSubmit={handleSubmit}
       aria-label={t('petstore.orders.form.ariaLabel')}

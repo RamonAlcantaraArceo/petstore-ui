@@ -27,6 +27,7 @@ export const PetCard: FC<PetCardProps> = ({
 
   return (
     <Card
+      data-component="PetCard"
       elevation="base"
       padding="md"
       border

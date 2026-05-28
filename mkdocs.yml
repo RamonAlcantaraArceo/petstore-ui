@@ -1,0 +1,78 @@
+site_name: Petstore UI
+site_description: Documentation for the Petstore UI project.
+site_url: https://ramonalcantaraarceo.github.io/petstore-ui/
+repo_url: https://github.com/RamonAlcantaraArceo/petstore-ui
+repo_name: petstore-ui
+edit_uri: edit/main/ui/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.top
+    # - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.highlight
+    - content.code.copy
+    - search.suggest
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - .
+            - ../petstore-api
+            - ../petstore-test-python
+            - ../petstore-openapi-client-pydantic
+            - ../petstore-mcp
+          options:
+            show_source: true
+
+markdown_extensions:
+  - codehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: README.md
+  - Architecture: architecture.md
+  - Configuration: configuration.md
+  - Deployment: deployment.md
+  - Getting Started: getting_started.md
+  - Testing: testing.md
+  - Contributing: CONTRIBUTING.md
+  - Badges: badges_and_graphs.md
+  - Changelog: CHANGELOG.md
+  - Other:
+      - Localization: loc_acc_prompt.md
+      - Visual Reporter: visual-report-migration.md

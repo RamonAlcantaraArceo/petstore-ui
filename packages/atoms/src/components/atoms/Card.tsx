@@ -316,6 +316,8 @@ export const Card: FC<CardProps> = ({
 
   return (
     <div
+      data-component="Card"
+      data-variant={variant}
       className={cardClasses}
       style={cardStyles}
       onClick={handleClick}

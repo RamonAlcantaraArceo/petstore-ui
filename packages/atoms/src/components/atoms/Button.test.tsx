@@ -17,6 +17,13 @@ describe('Button', () => {
       expect(getByText('Click me')).toBeDefined();
     });
 
+    it('exposes a stable component identifier and variant selector', () => {
+      const { container } = renderWithLocale(<Button variant="secondary">Click me</Button>);
+      const button = container.querySelector('[data-component="Button"]');
+      expect(button).toBeDefined();
+      expect(button?.getAttribute('data-variant')).toBe('secondary');
+    });
+
     it('applies primary variant class by default', () => {
       const { container } = renderWithLocale(<Button>Primary</Button>);
       const btn = container.querySelector('button')!;

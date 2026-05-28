@@ -115,7 +115,13 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
   });
 
   return (
-    <div role="tablist" aria-orientation="horizontal" style={containerStyles} {...ariaAttributes}>
+    <div
+      data-component="Tabs"
+      role="tablist"
+      aria-orientation="horizontal"
+      style={containerStyles}
+      {...ariaAttributes}
+    >
       {tabs.map((tab, index) => {
         const isActive = tab.id === activeTab;
         const tabId = `tab-${tab.id}`;

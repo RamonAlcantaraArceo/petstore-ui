@@ -123,6 +123,7 @@ export const UserForm: FC<UserFormProps> = ({
 
   return (
     <form
+      data-component="UserForm"
       className={`user-form ${className || ''}`}
       onSubmit={handleSubmit}
       {...ariaAttributes}

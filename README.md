@@ -2,6 +2,15 @@
 
 [![CI](https://github.com/ramonalcantaraarceo/petstore-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/ramonalcantaraarceo/petstore-ui/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/ramonalcantaraarceo/petstore-ui/branch/main/graph/badge.svg)](https://codecov.io/gh/ramonalcantaraarceo/petstore-ui)
+[![Node Version](https://img.shields.io/badge/node-%3E%3D24.0.0-brightgreen)](https://nodejs.org/)
+[![pnpm Version](https://img.shields.io/badge/pnpm-%3E%3D11.0.0-blue)](https://pnpm.io/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/RamonAlcantaraArceo/petstore-ui/LICENSE)
+
+[![Storybook](https://img.shields.io/badge/storybook-interactive_docs_dev-ff6ee4)](https://petstore-ui-dev.ramon-alcantara.work/storybook/)
+[![Storybook](https://img.shields.io/badge/storybook-interactive_docs_staging-ff69b4)](https://petstore-ui-staging.ramon-alcantara.work/storybook/)
+
+[![Dev Deployment](https://github.com/RamonAlcantaraArceo/petstore-ui/actions/workflows/deploy-fly-dev.yml/badge.svg)](https://petstore-ui-dev.ramon-alcantara.work/petstore/)
+[![Staging Deployment](https://github.com/RamonAlcantaraArceo/petstore-ui/actions/workflows/deploy-fly-staging.yml/badge.svg)](https://petstore-ui-staging.ramon-alcantara.work/petstore/)
 
 A React + TypeScript component library for the Petstore UI, built with pnpm and documented in Storybook.
 
@@ -67,7 +76,7 @@ petstore-ui/
 │   │   ├── i18n-utils.tsx
 │   │   ├── a11y-utils.ts
 │   │   └── test-patterns.tsx
-│   ├── stories/             # Storybook stories
+│   ├── stories/             # Storybook fixtures and shared story assets
 │   └── tokens/              # Design tokens
 └── .storybook/              # Storybook config
 ```
@@ -88,6 +97,10 @@ pnpm run report:visual:triage:petstore-atoms  # Build + run only Petstore atoms 
 
 pnpm run storybook      # Interactive component dev (localhost:6006)
 pnpm run build-storybook  # Static Storybook build
+pnpm run storybook:petstore      # Petstore + common atoms stories (localhost:6006)
+pnpm run storybook:visual-report # Visual report + common atoms stories (localhost:6007)
+pnpm run build-storybook:petstore      # Build Petstore + common atoms Storybook
+pnpm run build-storybook:visual-report # Build Visual report + common atoms Storybook
 ```
 
 ## Testing Layers
@@ -133,6 +146,14 @@ const label = t('components.button.primary');
 - Follow WCAG 2.1 AA targets for keyboard navigation, semantics, focus behavior, and contrast.
 - Prefer semantic HTML first, then augment with ARIA when needed.
 
+## Selector conventions for atoms, molecules, and organisms
+
+- Every atom, molecule, and organism root should expose `data-component="<ComponentName>"` using the component's PascalCase name.
+- If the component has a primary variant prop, expose it as `data-variant="<variant>"` on the same root element.
+- Prefer selectors like `[data-component="Badge"][data-variant="available"]` in POMs and E2E tests.
+- If a component needs to distinguish other states such as size or validation, use a dedicated `data-*` attribute with the specific state name.
+- **Organisms scope**: Organisms (e.g., `PetstoreApp`, `AppNavigation`, `PetManagementView`, `StoreOrdersView`, `UserManagementView`) expose selectors for E2E testing of complex compositions.
+
 ## CI Status Checks
 
 Every PR and push to `main` runs the full CI pipeline:
@@ -145,6 +166,11 @@ Every PR and push to `main` runs the full CI pipeline:
 
 ## Storybook
 
+- Storybook supports flavors via `STORYBOOK_FLAVOR`:
+  - `petstore` = app stories + common atoms stories
+  - `visual-report` = visual-reporter stories + common atoms stories
+  - default (`all`) = all stories in the monorepo
+- Keep each story next to its component and test file, e.g. `Button.tsx`, `Button.test.tsx`, `Button.stories.tsx`.
 - Stories are the primary component documentation surface.
 - Include stories that demonstrate:
   - locale switching (`en` and `chef`)

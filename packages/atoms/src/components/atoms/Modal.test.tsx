@@ -53,7 +53,9 @@ describe('Modal', () => {
           <p>content</p>
         </Modal>,
       );
-      expect(screen.getByRole('dialog')).toBeDefined();
+      const dialog = screen.getByRole('dialog');
+      expect(dialog).toBeDefined();
+      expect(dialog.getAttribute('data-component')).toBe('Modal');
     });
   });
 

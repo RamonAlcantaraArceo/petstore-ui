@@ -16,10 +16,14 @@
     "build": "pnpm run build-storybook && pnpm run build-petstore",
     "build:bundle-stats": "vite build --config vite.config.ts",
     "build-storybook": "storybook build",
+    "build-storybook:petstore": "STORYBOOK_FLAVOR=petstore storybook build",
+    "build-storybook:visual-report": "STORYBOOK_FLAVOR=visual-report storybook build",
     "build-website": "echo 'Static website uses public/ assets (no build step required)'",
     "build-petstore": "vite build --config vite.bootstrap.config.ts",
     "preview": "tsx scripts/preview-server.ts",
     "storybook": "storybook dev -p 6006",
+    "storybook:petstore": "STORYBOOK_FLAVOR=petstore storybook dev -p 6006",
+    "storybook:visual-report": "STORYBOOK_FLAVOR=visual-report storybook dev -p 6007",
     "lint": "eslint packages --ext .ts,.tsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -34,7 +38,8 @@
     "report:visual:triage:petstore-atoms": "tsx scripts/run-visual-atoms-triage.ts",
     "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run --coverage",
-    "postinstall": "npx playwright install --with-deps"
+    "postinstall": "npx playwright install --with-deps",
+    "chromatic": "npx chromatic --project-token=${CHROMATIC_TOKEN}"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,md,css}": "prettier --write"
@@ -56,7 +61,6 @@
     "@storybook/react-vite": "10.4.0",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
-    "tsx": "4.19.3",
     "@types/react": "18.3.28",
     "@types/react-dom": "18.3.7",
     "@typescript-eslint/eslint-plugin": "8.59.4",
@@ -65,6 +69,7 @@
     "@vitest/coverage-istanbul": "3.2.4",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "3.2.4",
+    "chromatic": "^17.1.0",
     "eslint": "8.57.1",
     "eslint-config-prettier": "9.1.2",
     "eslint-plugin-react": "7.37.5",
@@ -80,6 +85,7 @@
     "playwright": "^1.60.0",
     "prettier": "3.8.3",
     "storybook": "10.4.0",
+    "tsx": "4.19.3",
     "typescript": "5.9.3",
     "vite": "^6.4.2",
     "vitest": "3.2.4"

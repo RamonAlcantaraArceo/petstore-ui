@@ -1,10 +1,36 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
-const config: StorybookConfig = {
-  stories: [
+type StorybookFlavor = 'all' | 'petstore' | 'visual-report';
+
+const flavor = (process.env.STORYBOOK_FLAVOR || 'all') as StorybookFlavor;
+
+const storiesByFlavor: Record<StorybookFlavor, string[]> = {
+  all: [
     '../packages/**/src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../packages/**/src/**/*.stories.mdx',
   ],
+  petstore: [
+    '../packages/atoms/src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../packages/atoms/src/components/**/*.stories.mdx',
+    '../packages/app/src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../packages/app/src/components/**/*.stories.mdx',
+  ],
+  'visual-report': [
+    '../packages/atoms/src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../packages/atoms/src/components/**/*.stories.mdx',
+    '../packages/visual-reporter/src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../packages/visual-reporter/src/components/**/*.stories.mdx',
+  ],
+};
+
+if (!Object.prototype.hasOwnProperty.call(storiesByFlavor, flavor)) {
+  throw new Error(
+    `Invalid STORYBOOK_FLAVOR "${process.env.STORYBOOK_FLAVOR}". Valid values: all, petstore, visual-report`,
+  );
+}
+
+const config: StorybookConfig = {
+  stories: storiesByFlavor[flavor],
   staticDirs: ['../public'],
   addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
   framework: {
