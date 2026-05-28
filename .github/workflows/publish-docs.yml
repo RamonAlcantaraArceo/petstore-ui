@@ -1,0 +1,42 @@
+name: Publish Docs
+
+on:
+  push:
+    branches: [main, docs]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  build-and-publish-docs:
+    name: Build and publish MkDocs site
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Install Python deps for docs
+        run: |
+          uv venv --seed --python 3.14 .venv
+          uv pip install --requirements requirements.txt
+
+      - name: Deploy to GitHub Pages
+        run: uv run mkdocs gh-deploy --force
