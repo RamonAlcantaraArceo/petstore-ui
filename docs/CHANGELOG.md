@@ -1,1 +1,116 @@
-../CHANGELOG.md
+# Changelog
+
+All notable changes to **petstore-ui** are documented here.
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+Versioning follows [Semantic Versioning](https://semver.org/).
+
+## [Unreleased]
+
+No changes yet.
+
+---
+
+## [1.0.1] - 2026-05-28
+
+### Added
+
+- User API field mapping updates for payload compatibility with backend expectations (#18)
+- `data-component` and `data-variant` selector coverage standardized across atom and organism components
+- Storybook flavor support via `STORYBOOK_FLAVOR` (`all`, `petstore`, `visual-report`)
+- Chromatic integration in CI for visual regression checks (non-blocking mode)
+- Dedicated release deployment workflow for publishing and rolling out release images
+- New documentation suite under `/docs` for getting started, architecture, configuration, testing, deployment, and badges
+- Fly.io DEV deployment workflow and environment-specific Fly configuration for manual image rollouts
+- GitHub Container Registry image publish workflow with `latest` and `sha-<short-sha>` tags plus build attestations
+- Container runtime config injection via `docker/entrypoint.sh`, including generated `/config.js`, nginx API proxy wiring, and optional server-side `x-api-key` header injection
+- Hardened container serving with nginx security headers and Storybook runtime config loading via `.storybook/preview-head.html`
+- Shared setup for `src/services/*.test.ts` so service tests bootstrap runtime API configuration without affecting unrelated tests
+- Accessibility and i18n test layer (Unit 12D)
+- Integration/API test layer for petstore services (Unit 12C)
+- Unit and component interaction tests for atoms and molecules (Unit 12B)
+- Test foundation with Vitest runner and happy-dom DOM setup (Unit 12A)
+- CI quality gate via GitHub Actions (`ci.yml`) with lint, type-check, test, and Storybook build (Unit 10B)
+- Lint, format, and type-check baseline with ESLint, Prettier, and Husky pre-commit (Unit 10A)
+- Coverage reporting with Codecov upload (Unit 12E)
+- Comprehensive README and CONTRIBUTING.md (Unit 11A)
+- Dockerfile + docker-compose for production Storybook serving
+
+### Changed
+
+- `AppNavigation` now surfaces build metadata and improved API health-fetch behavior (#17)
+- Repository structure migrated from root `src/` into workspace packages for clearer monorepo boundaries (#26)
+- CI quality checks split into independent vertical jobs (lint, per-package tests, Storybook, Docker) for better signal and retries (#27)
+- Story files colocated with components and atom story groups aligned for cleaner Storybook organization
+- Tooling alignment updates for latest pnpm version and formatter ignore rules
+- Docker, local preview, and compose flows now use runtime-configured API routing with same-origin `/api/v1` frontend calls and a configurable upstream proxy target
+- `src/services/apiClient.ts` now resolves the API base URL from runtime config or a meta tag and fails fast when neither source is provided
+- README deployment and runtime configuration guidance now documents GHCR publishing, Fly.io DEV deployment, rollback flow, and runtime API variable usage
+
+### Fixed
+
+- Service-layer tests now get the required API base URL configuration from a shared setup module, preventing regressions after removing the hardcoded client fallback
+
+---
+
+## [1.0.0] - 2026-03-03
+
+### Added
+
+#### Foundation
+
+- React 18 + TypeScript strict-mode project bootstrapped with pnpm
+- Storybook 7 for component documentation and interactive demos
+- Atomic design folder structure (`atoms/`, `molecules/`, `organisms/`)
+
+#### Design System
+
+- Design token system in `src/tokens/theme.ts` (colors, spacing, typography, breakpoints)
+- `Button`, `Badge`, `Input` atom components
+- `PetCard`, `SearchBox` molecule components
+- `PetGrid`, `Header` organism components
+
+#### Petstore Integration
+
+- API client (`src/services/apiClient.ts`) with typed fetch wrapper
+- `petApi.ts` — pet resource endpoints (list, find by status, find by ID)
+- `storeApi.ts` — store/order endpoints
+- Petstore demo page at `src/petstore/`
+
+#### Internationalization
+
+- i18n infrastructure: `LocaleProvider`, `useTranslation`, `getTranslation`
+- `en` locale (production)
+- `chef` pseudo-locale for layout/text-expansion testing
+- Type-safe translation registry with parameter interpolation
+
+#### Accessibility
+
+- `useAccessibility` hook (ARIA attributes, keyboard activation, screen reader announcements)
+- WCAG 2.1 AA compliance helpers in `src/accessibility/`
+- Accessibility testing utilities in `src/testing/a11y-utils.ts`
+
+#### Testing Utilities
+
+- `src/testing/i18n-utils.tsx` — `renderWithLocale` helper
+- `src/testing/a11y-utils.ts` — `auditAccessibility`, `testKeyboardNavigation`
+- `src/testing/test-patterns.tsx` — comprehensive test pattern library
+
+#### Storybook Stories
+
+- Stories for all atoms, molecules, organisms
+- Petstore API demo stories
+- Locale-switching toolbar in Storybook for live i18n preview
+
+---
+
+## Changelog Policy
+
+- **MAJOR** version — breaking changes to public component APIs or token structure
+- **MINOR** version — new components, new locale, new CI feature
+- **PATCH** version — bug fixes, test additions, documentation updates
+
+New entries go under `[Unreleased]`. On release, the `[Unreleased]` section is renamed to the new version with today's date, and a new empty `[Unreleased]` section is added.
+
+[Unreleased]: https://github.com/ramonalcantaraarceo/petstore-ui/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/ramonalcantaraarceo/petstore-ui/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/ramonalcantaraarceo/petstore-ui/releases/tag/v1.0.0
