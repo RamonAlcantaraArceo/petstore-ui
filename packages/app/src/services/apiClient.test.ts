@@ -129,6 +129,7 @@ describe('apiClient', () => {
       const headers = capturedInit?.headers as Record<string, string>;
       expect(headers?.['y-api-key']).toBe('my-token');
       expect(headers?.['y-api-key']).toBeTruthy();
+      expect(headers?.['Authorization']).toBe('Bearer my-token');
     });
   });
 

@@ -43,11 +43,13 @@ function parseTokenFromLoginPayload(payload: unknown): string | null {
           accessToken?: unknown;
           sessionToken?: unknown;
           api_key?: unknown;
+          access_token?: unknown;
         }
       ).token ??
       (payload as { accessToken?: unknown }).accessToken ??
       (payload as { sessionToken?: unknown }).sessionToken ??
-      (payload as { api_key?: unknown }).api_key;
+      (payload as { api_key?: unknown }).api_key ??
+      (payload as { access_token?: unknown }).access_token;
 
     if (typeof directToken === 'string' && directToken.trim()) {
       return directToken.trim();
