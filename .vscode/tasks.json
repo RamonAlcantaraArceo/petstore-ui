@@ -1,0 +1,45 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Petstore UI Dev",
+      "type": "shell",
+      "command": "pnpm",
+      "problemMatcher": [],
+      "args": ["run", "dev"],
+      "icon": { "id": "browser", "color": "terminal.ansiBlue" },
+      "isBackground": true,
+      "promptOnClose": false,
+      "detail": "Run the Petstore UI in Dev mode",
+      "group": "build",
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "Storybook",
+      "type": "shell",
+      "command": "pnpm",
+      "problemMatcher": [],
+      "args": ["storybook"],
+      "icon": { "id": "paintcan", "color": "terminal.ansiGreen" },
+      "isBackground": true,
+      "promptOnClose": false,
+      "detail": "Run the Storybook",
+      "group": { "kind": "build", "isDefault": true },
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "Launch Dev",
+      "detail": "Launch storybook and petstore ui",
+      "dependsOn": ["Storybook", "Petstore UI Dev"],
+      "group": "build",
+      "dependsOrder": "parallel",
+      "icon": { "id": "beaker", "color": "terminal.ansiMagenta" }
+    }
+  ]
+}

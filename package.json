@@ -21,7 +21,7 @@
     "build-website": "echo 'Static website uses public/ assets (no build step required)'",
     "build-petstore": "vite build --config vite.bootstrap.config.ts",
     "preview": "tsx scripts/preview-server.ts",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --no-open",
     "storybook:petstore": "STORYBOOK_FLAVOR=petstore storybook dev -p 6006",
     "storybook:visual-report": "STORYBOOK_FLAVOR=visual-report storybook dev -p 6007",
     "lint": "eslint packages --ext .ts,.tsx",
