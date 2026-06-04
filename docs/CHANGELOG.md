@@ -6,7 +6,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-No changes yet.
+---
+
+## [1.1.0] - 2026-06-03
+
+### Changed
+
+- Updated Auth flow to use pseudo auth flow with a JWT token provided after a successful login, which is then stored in localStorage and sent as an `Authorization` header in API requests. At this time its all in memory and not actually validating against a backend, but it sets up the structure for future integration with a real auth service.
 
 ---
 
@@ -111,6 +117,8 @@ No changes yet.
 
 New entries go under `[Unreleased]`. On release, the `[Unreleased]` section is renamed to the new version with today's date, and a new empty `[Unreleased]` section is added.
 
-[Unreleased]: https://github.com/ramonalcantaraarceo/petstore-ui/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/ramonalcantaraarceo/petstore-ui/compare/v1.1.0...HEAD
+
+[1.1.0]: https://github.com/ramonalcantaraarceo/petstore-ui/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/ramonalcantaraarceo/petstore-ui/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/ramonalcantaraarceo/petstore-ui/releases/tag/v1.0.0

@@ -140,6 +140,7 @@ function buildHeaders(extra: Record<string, string> = {}): Record<string, string
 
   if (_yToken) {
     headers['y-api-key'] = _yToken;
+    headers['Authorization'] = `Bearer ${_yToken}`;
   }
 
   return headers;

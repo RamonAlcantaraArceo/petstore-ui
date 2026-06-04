@@ -12,6 +12,8 @@ storybook-static/
 !petstore/dist/index.html
 !petstore/dist/index.js
 
+*.log
+
 coverage/
 junit.xml
 test-results/
