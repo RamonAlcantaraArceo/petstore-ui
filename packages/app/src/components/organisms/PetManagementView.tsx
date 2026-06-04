@@ -82,18 +82,19 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
       return;
     }
     setFormLoading(true);
+    const randomCategoryId = Math.floor(Math.random() * 1000) + 1;
     if (editingPet) {
       await updatePet({
         ...editingPet,
         name: fields.name,
-        category: { id: editingPet.category?.id || 0, name: fields.categoryName },
+        category: { id: editingPet.category?.id || randomCategoryId, name: fields.categoryName },
         photoUrls: fields.photoUrl ? [fields.photoUrl] : editingPet.photoUrls,
         status: fields.status,
       });
     } else {
       await addPet({
         name: fields.name,
-        category: { id: 0, name: fields.categoryName },
+        category: { id: randomCategoryId, name: fields.categoryName },
         photoUrls: fields.photoUrl ? [fields.photoUrl] : [],
         tags: [],
         status: fields.status,
