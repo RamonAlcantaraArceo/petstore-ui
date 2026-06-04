@@ -1,8 +1,8 @@
-name: Release 
+name: Release
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
 
 permissions:
   contents: write
@@ -11,27 +11,41 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v6
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
         with:
-          fetch-depth: 0
+          version: 11
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: "3.14"
+          node-version: '24'
+          cache: 'pnpm'
 
-      - name: Install build tooling
-        run: python -m pip install --upgrade pip build hatchling hatch-vcs
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            ~/.local/share/pnpm/store
+            node_modules/.pnpm
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
-      - name: Build wheel and sdist
-        run: python -m build
+      - name: Install dependencies
+        env:
+          PNPM_STORE_PATH: ~/.pnpm-store
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build package
+        run: pnpm run build
 
       - name: Publish GitHub release with artifacts
         uses: softprops/action-gh-release@v3
         with:
-          files: |
-            dist/*.whl
-            dist/*.tar.gz
           generate_release_notes: true
           prerelease: ${{ contains(github.ref_name, '-') }}
