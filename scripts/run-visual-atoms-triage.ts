@@ -34,12 +34,10 @@ if (!shouldSkipTests) {
       'npx',
       'playwright',
       'test',
-      '--config=playwright.config.ts',
+      '--config=playwright.config.reuse.ts',
       ...(shouldUpdateSnapshots ? ['--update-snapshots'] : []),
     ],
-    env: {
-      STORY_FILTER: 'petstore-atoms-',
-    },
+    env: {},
   });
 }
 

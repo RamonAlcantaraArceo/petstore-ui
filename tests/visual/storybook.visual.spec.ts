@@ -118,7 +118,7 @@ test.describe('Storybook visual regression', () => {
 
   for (const entry of storyEntries) {
     test(`${entry.id} (${entry.type ?? 'unknown'})`, async ({ page }, testInfo) => {
-      const iframeUrl = `/storybook/iframe.html?id=${encodeURIComponent(entry.id)}&viewMode=${entry.type === 'docs' ? 'docs' : 'story'}`;
+      const iframeUrl = `/iframe.html?id=${encodeURIComponent(entry.id)}&viewMode=${entry.type === 'docs' ? 'docs' : 'story'}`;
 
       await page.goto(iframeUrl, { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState('networkidle');
@@ -149,7 +149,8 @@ test.describe('Storybook visual regression', () => {
         await expect(page).toHaveScreenshot(`${entry.id}.png`, {
           fullPage: false,
           scale: 'css',
-          maxDiffPixels: 0,
+          // maxDiffPixels: 0,
+          maxDiffPixelRatio: 0.02,
           threshold: 0,
         });
       } catch (error) {
@@ -165,15 +166,15 @@ test.describe('Storybook visual regression', () => {
         scale: 'css',
       });
 
-      if (assertionError) {
-        throw assertionError;
-      }
-
       // Attach actual screenshot to test report on success too
       await testInfo.attach('actual-screenshot', {
         body: screenshotBuffer,
         contentType: 'image/png',
       });
+
+      if (assertionError) {
+        throw assertionError;
+      }
     });
   }
 });

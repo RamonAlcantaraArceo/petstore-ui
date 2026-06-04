@@ -21,6 +21,10 @@ tests/visual/storybook.visual.spec.ts-snapshots/
 playwright-report/
 public/visual-report/data.json
 public/visual-report/assets/.env
+public/visual-report/assets/actual/
+public/visual-report/assets/diff/
+public/visual-report/assets/expected/
+
 # vitest report
 html/ 
 
