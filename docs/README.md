@@ -16,51 +16,33 @@ A React + TypeScript component library for the Petstore UI, built with pnpm and 
 
 This project follows an i18n + accessibility-first approach from the component core.
 
-## Migration Status
-
-Repository split has started with workspace scaffolding for:
-
-- `@petstore-ui/atoms`
-- `@petstore-ui/app`
-- `@petstore-ui/visual-reporter`
-
-Workspace package entrypoints are now active:
-
-- `packages/atoms/src/index.ts` maps shared atoms + theme + i18n/a11y exports.
-- `packages/app/src/index.ts` maps petstore app views/forms/services/context exports.
-- `packages/visual-reporter/src/index.ts` maps visual regression UI + model exports.
-
-Current source files still remain under `src/` and are consumed by these package entrypoints while
-incremental physical migration continues.
-
 ## Tech Stack
 
-- React 18 + TypeScript (strict mode)
+- React + TypeScript (strict mode)
 - pnpm (package manager)
-- Storybook 7 (component docs and visual validation)
+- Storybook (component docs and visual validation)
 - Vitest test runner with `@testing-library/react`
 
 ## Setup
 
-**Requirements:** Node ≥ 20 + [pnpm ≥ 9](https://pnpm.io)
+**Requirements:** 
+
+   - [Node ≥ 20](https://nodejs.org)
+   - [pnpm ≥ 11](https://pnpm.io)
 
 ```bash
 # Install project dependencies
 pnpm install
 ```
 
-### Node.js fallback
-
-pnpm is the only supported package manager for this project.
-
 ## Project Structure
 
 ```text
 petstore-ui/
 ├── packages/
-│   ├── atoms/               # Shared React atoms package (scaffold)
-│   ├── app/                 # Petstore app package (scaffold)
-│   └── visual-reporter/     # Visual report package (scaffold)
+│   ├── atoms/               # Shared React atoms package
+│   ├── app/                 # Petstore app package
+│   └── visual-reporter/     # Visual report package
 ├── src/
 │   ├── components/          # Atoms, molecules, organisms
 │   ├── i18n/                # Locale provider, translations, registry
