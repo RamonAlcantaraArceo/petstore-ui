@@ -19,6 +19,7 @@ import type {
   VisualStatus,
 } from '../../visual-report/types';
 import { VisualFilterBar } from '../molecules/VisualFilterBar';
+import { VisualThemeToggle } from '../atoms/VisualThemeToggle';
 import { VisualComponentTree } from './VisualComponentTree';
 import { VisualVariantCard } from './VisualVariantCard';
 
@@ -113,7 +114,14 @@ export const VisualReportApp: FC<VisualReportAppProps> = ({ data }) => {
       </aside>
 
       <section style={reportLayoutStyles.content}>
-        <div style={reportLayoutStyles.toolbar}>
+        <div
+          style={{
+            ...reportLayoutStyles.toolbar,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <VisualFilterBar
             counts={counts}
             selectedStatusFilters={selectedStatusFilters}
@@ -121,6 +129,7 @@ export const VisualReportApp: FC<VisualReportAppProps> = ({ data }) => {
               setSelectedStatusFilters((prev) => toggleStatusFilter(filter, prev));
             }}
           />
+          <VisualThemeToggle />
         </div>
 
         <header>

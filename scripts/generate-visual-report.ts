@@ -9,6 +9,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { basename, resolve } from 'node:path';
+import { build } from 'vite';
 
 interface StorybookIndexEntry {
   id: string;
@@ -377,19 +378,17 @@ const buildVariantAsset = (
 };
 
 const buildVisualReportApp = async () => {
-  mkdirSync(OUTPUT_DIR, { recursive: true });
+  // Build React app using Vite
+  await build({
+    configFile: resolve(ROOT, 'vite.visual-reporter.config.ts'),
+  });
 
-  // Copy pre-built assets from packages/visual-reporter/public
-  // This includes app.js (vanilla JS UI), HTML template, styles, and theme toggle
+  // Copy supporting files from packages/visual-reporter/public
+  // These include styles, mock service worker, and HTML template
+  // (Theme toggle is now handled by the React component)
   const sourceDir = resolve(ROOT, 'packages', 'visual-reporter', 'public');
 
-  const supportingFiles = [
-    'app.js',
-    'index.html',
-    'style.css',
-    'theme-toggle.js',
-    'mockServiceWorker.js',
-  ];
+  const supportingFiles = ['style.css', 'mockServiceWorker.js', 'index.html'];
   for (const file of supportingFiles) {
     const sourcePath = resolve(sourceDir, file);
     const targetPath = resolve(OUTPUT_DIR, file);
