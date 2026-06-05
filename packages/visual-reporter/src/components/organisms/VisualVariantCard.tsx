@@ -39,9 +39,9 @@ export const VisualVariantCard: FC<VisualVariantCardProps> = ({
     resolveSelectableMode(activeMode, selectableModes) ?? DEFAULT_COMPARISON_MODE;
 
   const cardStyle: CSSProperties = {
-    border: `1px solid ${theme.colors.secondary[800]}`,
+    border: '1px solid var(--color-border)',
     borderRadius: theme.borderRadius.xl,
-    background: theme.colors.secondary[900],
+    background: 'var(--color-surface)',
     padding: theme.spacing[3],
   };
 

@@ -94,7 +94,7 @@ export const VisualReportApp: FC<VisualReportAppProps> = ({ data }) => {
           <p
             style={{
               margin: '6px 0 0',
-              color: theme.colors.neutral.gray[400],
+              color: 'var(--color-text-muted)',
               fontSize: '0.85rem',
             }}
           >
@@ -138,7 +138,7 @@ export const VisualReportApp: FC<VisualReportAppProps> = ({ data }) => {
               ? `${selectedGroup.namespace} / ${selectedGroup.atomicLevel} / ${selectedGroup.component}`
               : t('visualReport.selection.noMatchingComponents')}
           </h2>
-          <p style={{ margin: '6px 0 0', color: theme.colors.neutral.gray[400] }}>{subtitle}</p>
+          <p style={{ margin: '6px 0 0', color: 'var(--color-text-muted)' }}>{subtitle}</p>
         </header>
 
         <div style={{ marginTop: theme.spacing[4], display: 'grid', gap: theme.spacing[3.5] }}>

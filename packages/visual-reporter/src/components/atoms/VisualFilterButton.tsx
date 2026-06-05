@@ -23,9 +23,9 @@ export const VisualFilterButton: FC<VisualFilterButtonProps> = ({
     alignItems: 'center',
     gap: theme.spacing[2],
     border: 'none',
-    borderRight: `1px solid ${theme.colors.secondary[600]}`,
-    background: active ? theme.colors.primary[700] : theme.colors.secondary[900],
-    color: theme.colors.neutral.gray[100],
+    borderRight: '1px solid var(--color-border-strong)',
+    background: active ? 'var(--color-primary)' : 'var(--color-surface)',
+    color: 'var(--color-text)',
     padding: `${theme.spacing[2.5]} ${theme.spacing[3.5]}`,
     cursor: 'pointer',
     fontSize: theme.typography.fontSize.sm,
@@ -37,8 +37,8 @@ export const VisualFilterButton: FC<VisualFilterButtonProps> = ({
     fontSize: theme.typography.fontSize.xs,
     borderRadius: '999px',
     padding: '2px 8px',
-    background: active ? theme.colors.primary[800] : theme.colors.secondary[600],
-    color: active ? theme.colors.primary[100] : theme.colors.neutral.gray[200],
+    background: active ? 'var(--color-primary-strong)' : 'var(--color-count-bg)',
+    color: 'var(--color-text)',
   };
 
   return (

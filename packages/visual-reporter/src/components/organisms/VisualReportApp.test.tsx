@@ -35,4 +35,17 @@ describe('VisualReportApp', () => {
 
     expect(screen.getAllByText(/failed/i).length).toBeGreaterThan(0);
   });
+
+  it('wires app surfaces to CSS theme variables and toggles document theme', () => {
+    renderWithLocale(<VisualReportApp data={visualReportFixture} />);
+
+    const main = screen.getByRole('main');
+    expect(main.getAttribute('style')).toContain('var(--color-bg)');
+
+    const themeToggle = screen.getByRole('button', { name: /switch to light mode/i });
+    fireEvent.click(themeToggle);
+
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    expect(themeToggle.getAttribute('aria-label')).toBe('Switch to dark mode');
+  });
 });
