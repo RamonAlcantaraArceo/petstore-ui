@@ -132,42 +132,46 @@ export const VisualReportApp: FC<VisualReportAppProps> = ({ data }) => {
           <VisualThemeToggle />
         </div>
 
-        <header>
-          <h2 style={{ margin: 0, fontSize: '1.2rem' }}>
-            {selectedGroup
-              ? `${selectedGroup.namespace} / ${selectedGroup.atomicLevel} / ${selectedGroup.component}`
-              : t('visualReport.selection.noMatchingComponents')}
-          </h2>
-          <p style={{ margin: '6px 0 0', color: 'var(--color-text-muted)' }}>{subtitle}</p>
-        </header>
+        <div style={reportLayoutStyles.results}>
+          <header>
+            <h2 style={{ margin: 0, fontSize: '1.2rem' }}>
+              {selectedGroup
+                ? `${selectedGroup.namespace} / ${selectedGroup.atomicLevel} / ${selectedGroup.component}`
+                : t('visualReport.selection.noMatchingComponents')}
+            </h2>
+            <p style={{ margin: '6px 0 0', color: 'var(--color-text-muted)' }}>{subtitle}</p>
+          </header>
 
-        <div style={{ marginTop: theme.spacing[4], display: 'grid', gap: theme.spacing[3.5] }}>
-          {selectedGroup?.stories
-            .slice()
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .flatMap((story) =>
-              story.variants
-                .filter((variant) => variantMatchesStatusSelection(variant, selectedStatusFilters))
-                .map((variant) => {
-                  const variantKey = `${story.id}::${variant.viewport}`;
-                  return (
-                    <VisualVariantCard
-                      key={variantKey}
-                      story={story}
-                      variant={variant}
-                      generatedAt={data.generatedAt}
-                      activeMode={getVariantMode(variantModes, variantKey)}
-                      onModeChange={(key, mode) => {
-                        setVariantModes((prev) => {
-                          const next = new Map(prev);
-                          next.set(key, mode);
-                          return next;
-                        });
-                      }}
-                    />
-                  );
-                }),
-            )}
+          <div style={{ marginTop: theme.spacing[4], display: 'grid', gap: theme.spacing[3.5] }}>
+            {selectedGroup?.stories
+              .slice()
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .flatMap((story) =>
+                story.variants
+                  .filter((variant) =>
+                    variantMatchesStatusSelection(variant, selectedStatusFilters),
+                  )
+                  .map((variant) => {
+                    const variantKey = `${story.id}::${variant.viewport}`;
+                    return (
+                      <VisualVariantCard
+                        key={variantKey}
+                        story={story}
+                        variant={variant}
+                        generatedAt={data.generatedAt}
+                        activeMode={getVariantMode(variantModes, variantKey)}
+                        onModeChange={(key, mode) => {
+                          setVariantModes((prev) => {
+                            const next = new Map(prev);
+                            next.set(key, mode);
+                            return next;
+                          });
+                        }}
+                      />
+                    );
+                  }),
+              )}
+          </div>
         </div>
       </section>
     </main>
