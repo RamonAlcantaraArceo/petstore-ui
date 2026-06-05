@@ -14,7 +14,8 @@ ENV CI=${CI} \
     STORYBOOK_DISABLE_TELEMETRY=${STORYBOOK_DISABLE_TELEMETRY} \
     DO_NOT_TRACK=${DO_NOT_TRACK} \
     PNPM_HOME="/pnpm" \
-    PATH="/pnpm:$PATH"
+    PATH="/pnpm:$PATH" \
+    STORYBOOK_FLAVOR='petstore'
 
 # Install pnpm via corepack (ships with Node 20)
 RUN corepack enable && corepack prepare pnpm@11 --activate
@@ -47,7 +48,8 @@ ARG GIT_SHA=N/A
 # Environment variables
 ENV VERSION=${VERSION} \
     GIT_SHA=${GIT_SHA} \
-    BUILD_DATE=${BUILD_DATE}
+    BUILD_DATE=${BUILD_DATE} \
+    STORYBOOK_FLAVOR='petstore'
 
 # Remove default nginx welcome page and server config
 RUN rm -rf /usr/share/nginx/html/* /etc/nginx/conf.d/default.conf

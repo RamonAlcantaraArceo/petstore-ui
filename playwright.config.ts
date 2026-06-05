@@ -45,6 +45,7 @@ export default defineConfig({
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
   workers: isCI ? 2 : undefined,
+  quiet: true,
   reporter: isCI
     ? [
         ['github'],
@@ -52,8 +53,8 @@ export default defineConfig({
         ['json', { outputFile: 'test-results/playwright-report.json' }],
       ]
     : [
-        ['list'],
-        ['html', { open: 'always' }],
+        ['dot', { stdout: 'never' }],
+        ['html', { open: 'never' }],
         ['json', { outputFile: 'test-results/playwright-report.json' }],
       ],
   use: {
