@@ -379,12 +379,24 @@ const buildVariantAsset = (
 const buildVisualReportApp = async () => {
   mkdirSync(OUTPUT_DIR, { recursive: true });
 
-  const { build } = await import('vite');
-  const configFile = resolve(ROOT, 'vite.visual-reporter.config.ts');
-  await build({
-    configFile,
-    logLevel: 'warn',
-  });
+  // Copy pre-built assets from packages/visual-reporter/public
+  // This includes app.js (vanilla JS UI), HTML template, styles, and theme toggle
+  const sourceDir = resolve(ROOT, 'packages', 'visual-reporter', 'public');
+
+  const supportingFiles = [
+    'app.js',
+    'index.html',
+    'style.css',
+    'theme-toggle.js',
+    'mockServiceWorker.js',
+  ];
+  for (const file of supportingFiles) {
+    const sourcePath = resolve(sourceDir, file);
+    const targetPath = resolve(OUTPUT_DIR, file);
+    if (existsSync(sourcePath)) {
+      copyFileSync(sourcePath, targetPath);
+    }
+  }
 };
 
 const main = async () => {
