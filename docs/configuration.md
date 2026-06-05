@@ -54,7 +54,7 @@ The Storybook preview loads this file in `.storybook/preview-head.html`:
 
 ### 2. HTML Meta Tag
 
-Fallback: configuration via HTML meta tag in `public/index.html`:
+Fallback: configuration via HTML meta tag in `petstore/index.html`:
 
 ```html
 <meta name="api-base-url" content="https://petstore-api-dev.ramon-alcantara.work/api/v1" />

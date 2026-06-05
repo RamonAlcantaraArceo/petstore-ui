@@ -105,9 +105,9 @@ export const VisualModeControls: FC<VisualModeControlsProps> = ({
         const disabled = disabledModes.has(mode.value);
         const selected = activeMode === mode.value;
         const style: CSSProperties = {
-          border: `1px solid ${selected ? theme.colors.primary[400] : theme.colors.secondary[600]}`,
-          background: selected ? theme.colors.primary[950] : theme.colors.secondary[900],
-          color: theme.colors.neutral.gray[100],
+          border: `1px solid ${selected ? 'var(--color-primary)' : 'var(--color-border-strong)'}`,
+          background: selected ? 'var(--color-primary-soft)' : 'var(--color-surface)',
+          color: 'var(--color-text)',
           borderRadius: theme.borderRadius.md,
           padding: '6px 10px',
           fontSize: theme.typography.fontSize.xs,

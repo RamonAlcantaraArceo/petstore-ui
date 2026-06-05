@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { LocaleProvider } from '@petstore-ui/atoms';
 import { VisualReportApp } from '../components/organisms/VisualReportApp';
 import type { VisualReportData } from './types';
-import { theme } from '@petstore-ui/atoms';
 
 const mountId = 'visual-report-root';
 
@@ -19,11 +18,11 @@ const renderError = (message: string) => {
     <div
       style={{
         padding: '16px',
-        color: theme.colors.semantic.errorLight,
-        background: theme.colors.secondary[900],
-        border: `1px solid ${theme.colors.semantic.errorDark}`,
-        borderRadius: theme.borderRadius.lg,
-        fontFamily: theme.typography.fontFamily.sans.join(','),
+        color: 'var(--color-danger-soft)',
+        background: 'var(--color-surface)',
+        border: '1px solid var(--color-danger)',
+        borderRadius: '12px',
+        fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
       }}
       role="alert"
       aria-live="assertive"

@@ -24,6 +24,9 @@ if (!shouldSkipBuild) {
   steps.push({
     label: 'Build Storybook static output',
     cmd: ['pnpm', 'run', 'build-storybook'],
+    env: {
+      STORYBOOK_FLAVOR: 'petstore',
+    },
   });
 }
 
@@ -34,16 +37,21 @@ if (!shouldSkipTests) {
       'npx',
       'playwright',
       'test',
-      '--config=playwright.config.reuse.ts',
+      '--config=playwright.config.ts',
       ...(shouldUpdateSnapshots ? ['--update-snapshots'] : []),
     ],
-    env: {},
+    env: {
+      STORYBOOK_FLAVOR: 'petstore',
+    },
   });
 }
 
 steps.push({
   label: 'Generate custom visual report data',
   cmd: ['pnpm', 'run', 'report:visual:build'],
+  env: {
+    STORYBOOK_FLAVOR: 'petstore',
+  },
 });
 
 const runStep = (step: Step): number => {

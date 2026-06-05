@@ -21,7 +21,7 @@ export const VisualFilterBar: FC<VisualFilterBarProps> = ({
   const wrapStyle: CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    border: `1px solid ${theme.colors.secondary[600]}`,
+    border: '1px solid var(--color-border-strong)',
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
   };

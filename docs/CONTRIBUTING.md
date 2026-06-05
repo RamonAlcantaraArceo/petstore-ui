@@ -22,9 +22,9 @@ Place new components in the correct layer:
 
 | Layer    | Path                        | Rules                                    |
 | -------- | --------------------------- | ---------------------------------------- |
-| Atom     | `src/components/atoms/`     | Single-responsibility, no business logic |
-| Molecule | `src/components/molecules/` | Composed from atoms, limited logic       |
-| Organism | `src/components/organisms/` | May include API calls and context        |
+| Atom     | `packages/atoms/src/components/atoms/` | Single-responsibility, no business logic |
+| Molecule | `packages/app/src/components/molecules/` | Composed from atoms, limited logic       |
+| Organism | `packages/app/src/components/organisms/` | May include API calls and context        |
 
 ### Required anatomy
 
@@ -37,7 +37,7 @@ Every component must have:
 5. **`className` prop** for external style overrides
 6. **`...props` spread** onto the root element
 
-Use design tokens from `src/tokens/theme.ts`; do not hardcode colors, spacing, or font sizes.
+Use design tokens from `packages/atoms/src/tokens/theme.ts`; do not hardcode colors, spacing, or font sizes.
 
 ### Naming
 
@@ -90,7 +90,7 @@ import { auditAccessibility, testKeyboardNavigation } from '../../testing/a11y-u
 ```bash
 pnpm run test               # all tests
 pnpm run test:coverage      # with coverage report
-pnpm run test -- src/components/atoms/Button.test.tsx  # single file
+pnpm run test -- packages/atoms/src/components/atoms/Button.test.tsx  # single file
 ```
 
 Coverage target: **≥ 80% line coverage**.
@@ -102,8 +102,8 @@ Coverage target: **≥ 80% line coverage**.
 Husky runs on every commit:
 
 1. `prettier --write` (lint-staged)
-2. `eslint src --ext .ts,.tsx` — must exit 0
-3. `tsc --noEmit` — must exit 0
+2. `pnpm run lint` — must exit 0
+3. `pnpm run type-check` — must exit 0
 
 Fix all errors before committing. Warnings are allowed but should be minimised.
 
@@ -117,7 +117,7 @@ Every PR must pass:
 | ---------------- | --------------------------------- |
 | Lint             | `pnpm run lint`                   |
 | Type check       | `pnpm run type-check`             |
-| Tests + coverage | `pnpm run test:coverage`          |
+| Tests + coverage | `pnpm exec vitest run --project unit "packages/<package>" --coverage` |
 | Storybook build  | `pnpm run build-storybook`        |
 | Docker build     | `docker build --target builder .` |
 

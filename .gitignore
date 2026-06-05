@@ -4,13 +4,13 @@ dist/
 build/
 storybook-static/
 .env*
+!.env.example
 .DS_Store
 
-# Do NOT ignore built petstore app for deploy
-# petstore/dist/ must be committed for GitHub Pages deploy
-!petstore/dist/
-!petstore/dist/index.html
-!petstore/dist/index.js
+petstore/
+!petstore/index.html
+!petstore/petstore.ico
+!petstore/petstore.png
 
 *.log
 
@@ -19,11 +19,7 @@ junit.xml
 test-results/
 tests/visual/storybook.visual.spec.ts-snapshots/
 playwright-report/
-public/visual-report/data.json
-public/visual-report/assets/.env
-public/visual-report/assets/actual/
-public/visual-report/assets/diff/
-public/visual-report/assets/expected/
+/public/*
 
 # vitest report
 html/ 

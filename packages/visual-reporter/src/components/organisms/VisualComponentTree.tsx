@@ -33,10 +33,10 @@ export const VisualComponentTree: FC<VisualComponentTreeProps> = ({
   };
 
   const detailsStyle: CSSProperties = {
-    border: `1px solid ${theme.colors.secondary[800]}`,
+    border: '1px solid var(--color-border)',
     borderRadius: theme.borderRadius.lg,
     padding: theme.spacing[2],
-    background: theme.colors.secondary[900],
+    background: 'var(--color-surface)',
   };
 
   const listStyle: CSSProperties = {
@@ -48,9 +48,9 @@ export const VisualComponentTree: FC<VisualComponentTreeProps> = ({
   const buttonBaseStyle: CSSProperties = {
     textAlign: 'left',
     width: '100%',
-    border: `1px solid ${theme.colors.secondary[700]}`,
-    background: theme.colors.secondary[900],
-    color: theme.colors.neutral.gray[200],
+    border: '1px solid var(--color-border-strong)',
+    background: 'var(--color-surface)',
+    color: 'var(--color-text)',
     borderRadius: theme.borderRadius.md,
     padding: '6px 8px',
     cursor: 'pointer',
@@ -128,12 +128,12 @@ export const VisualComponentTree: FC<VisualComponentTreeProps> = ({
                             ...buttonBaseStyle,
                             borderColor:
                               selectedKey === group.key
-                                ? theme.colors.primary[400]
-                                : theme.colors.secondary[700],
+                                ? 'var(--color-primary)'
+                                : 'var(--color-border-strong)',
                             background:
                               selectedKey === group.key
-                                ? theme.colors.primary[950]
-                                : theme.colors.secondary[900],
+                                ? 'var(--color-primary-soft)'
+                                : 'var(--color-surface)',
                           }}
                           aria-label={groupBreakdown ? `${label}. ${groupBreakdown}` : label}
                           onClick={() => onSelect(group.key)}

@@ -15,17 +15,17 @@ export const VisualImagePanel: FC<VisualImagePanelProps> = ({ imageUrl, altText,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: `1px solid ${theme.colors.secondary[800]}`,
+    border: '1px solid var(--color-border)',
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
-    background: theme.colors.secondary[950],
+    background: 'var(--color-main)',
     padding: theme.spacing[3],
     minHeight: '120px',
   };
 
   const emptyStyle: CSSProperties = {
-    color: theme.colors.neutral.gray[400],
-    border: `1px dashed ${theme.colors.secondary[600]}`,
+    color: 'var(--color-text-muted)',
+    border: '1px dashed var(--color-border-strong)',
     borderRadius: theme.borderRadius.lg,
     padding: theme.spacing[3],
   };

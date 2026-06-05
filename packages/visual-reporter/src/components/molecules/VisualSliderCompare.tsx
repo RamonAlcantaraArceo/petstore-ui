@@ -27,8 +27,8 @@ export const VisualSliderCompare: FC<VisualSliderCompareProps> = ({
   }, [orientation, expectedUrl, actualUrl]);
 
   const emptyStyle: CSSProperties = {
-    color: theme.colors.neutral.gray[400],
-    border: `1px dashed ${theme.colors.secondary[600]}`,
+    color: 'var(--color-text-muted)',
+    border: '1px dashed var(--color-border-strong)',
     borderRadius: theme.borderRadius.lg,
     padding: theme.spacing[3],
   };
@@ -37,7 +37,7 @@ export const VisualSliderCompare: FC<VisualSliderCompareProps> = ({
     return (
       <div
         style={{
-          border: `1px solid ${theme.colors.secondary[800]}`,
+          border: '1px solid var(--color-border)',
           borderRadius: theme.borderRadius.lg,
           padding: theme.spacing[3],
         }}
@@ -55,10 +55,10 @@ export const VisualSliderCompare: FC<VisualSliderCompareProps> = ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    border: `1px solid ${theme.colors.secondary[800]}`,
+    border: '1px solid var(--color-border)',
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
-    background: theme.colors.secondary[950],
+    background: 'var(--color-main)',
     padding: theme.spacing[3],
     width: '100%',
   };
@@ -93,7 +93,7 @@ export const VisualSliderCompare: FC<VisualSliderCompareProps> = ({
           right: 0,
           top: dividerPosition,
           height: '2px',
-          background: theme.colors.primary[400],
+          background: 'var(--color-slider-track)',
         }
       : {
           position: 'absolute',
@@ -101,7 +101,7 @@ export const VisualSliderCompare: FC<VisualSliderCompareProps> = ({
           bottom: 0,
           left: dividerPosition,
           width: '2px',
-          background: theme.colors.primary[400],
+          background: 'var(--color-slider-track)',
         };
 
   const updateFromPointer = (clientX: number, clientY: number) => {
@@ -157,16 +157,16 @@ export const VisualSliderCompare: FC<VisualSliderCompareProps> = ({
       >
         <label
           htmlFor={rangeId}
-          style={{ color: theme.colors.neutral.gray[400], fontSize: theme.typography.fontSize.xs }}
+          style={{ color: 'var(--color-text-muted)', fontSize: theme.typography.fontSize.xs }}
         >
           {t('visualReport.modes.slider')}
         </label>
         <button
           type="button"
           style={{
-            border: `1px solid ${theme.colors.secondary[600]}`,
-            background: theme.colors.secondary[900],
-            color: theme.colors.neutral.gray[200],
+            border: '1px solid var(--color-border-strong)',
+            background: 'var(--color-surface)',
+            color: 'var(--color-text)',
             borderRadius: theme.borderRadius.md,
             padding: '4px 8px',
             cursor: 'pointer',

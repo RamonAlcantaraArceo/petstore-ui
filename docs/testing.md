@@ -8,9 +8,9 @@ Tests are organized into multiple layers, each with specific responsibilities:
 
 ```mermaid
 graph TD
-    UNIT["Unit Tests<br/>(Vitest)<br/>────────────────<br/>• Individual components<br/>• Utility functions<br/>• Hooks<br/>Location: **/*.test.ts(x)<br/>Tools: Testing Library, happy-dom"]
+    UNIT["Unit Tests<br/>(Vitest)<br/>────────────────<br/>• Individual components<br/>• Utility functions<br/>• Hooks<br/>Location: packages/**/*.test.ts(x)<br/>Tools: Testing Library, happy-dom"]
 
-    INTEGRATION["Integration Tests<br/>(Vitest)<br/>────────────────<br/>• API services<br/>• Context providers<br/>• Multi-component workflows<br/>Location: **/*.integration.test.ts<br/>Tools: MSW (mocking)"]
+    INTEGRATION["Integration Tests<br/>(Vitest)<br/>────────────────<br/>• API services<br/>• Context providers<br/>• Multi-component workflows<br/>Location: packages/**/*.integration.test.ts<br/>Tools: vi.fn() fetch mocks"]
 
     I18N["i18n Tests<br/>(Vitest)<br/>────────────────<br/>• Multi-locale rendering<br/>• Translation key resolution<br/>• Text expansion<br/>Location: **/*.i18n.test.ts<br/>Tools: i18n-utils helpers"]
 
@@ -31,7 +31,8 @@ graph TD
 Unit tests follow this pattern:
 
 ```typescript
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import { Button } from './Button';
 
 describe('Button', () => {
@@ -49,14 +50,14 @@ describe('Button', () => {
 
   describe('Interactions', () => {
     it('calls onClick handler', () => {
-      const handleClick = jest.fn();
+      const handleClick = vi.fn();
       render(<Button onClick={handleClick}>Click</Button>);
       fireEvent.click(screen.getByRole('button'));
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
     it('does not call onClick when disabled', () => {
-      const handleClick = jest.fn();
+      const handleClick = vi.fn();
       render(<Button disabled onClick={handleClick}>Click</Button>);
       fireEvent.click(screen.getByRole('button'));
       expect(handleClick).not.toHaveBeenCalled();
@@ -96,48 +97,56 @@ Reports are written to `./coverage/` and uploaded to Codecov on CI.
 Integration tests verify API service layers and context providers:
 
 ```typescript
-import { ApiClient } from './apiClient';
-import { server } from '../mocks/server';
-import { HttpResponse, http } from 'msw';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
+import { get } from './apiClient';
 
-describe('ApiClient', () => {
-  beforeAll(() => server.listen());
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+describe('apiClient', () => {
+  let originalFetch: typeof globalThis.fetch;
+
+  beforeEach(() => {
+    originalFetch = globalThis.fetch;
+  });
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+  });
 
   it('fetches pet data', async () => {
-    server.use(
-      http.get('*/api/v1/pet/1', () => {
-        return HttpResponse.json({ id: '1', name: 'Fluffy' });
-      }),
-    );
+    globalThis.fetch = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      headers: { get: () => 'application/json' },
+      json: async () => ({ id: 1, name: 'Fluffy' }),
+    })) as any;
 
-    const client = new ApiClient('/api/v1');
-    const pet = await client.get('/pet/1');
-    expect(pet).toEqual({ id: '1', name: 'Fluffy' });
+    const pet = await get<{ id: number; name: string }>('/pet/1');
+    expect(pet.error).toBeNull();
+    expect(pet.data).toEqual({ id: 1, name: 'Fluffy' });
   });
 
   it('handles API errors', async () => {
-    server.use(
-      http.get('*/api/v1/pet/999', () => {
-        return HttpResponse.json({ error: 'Not found' }, { status: 404 });
-      }),
-    );
+    globalThis.fetch = vi.fn(async () => ({
+      ok: false,
+      status: 404,
+      headers: { get: () => 'text/plain' },
+      text: async () => 'Not Found',
+    })) as any;
 
-    const client = new ApiClient('/api/v1');
-    await expect(client.get('/pet/999')).rejects.toThrow('404');
+    const pet = await get('/pet/999');
+    expect(pet.data).toBeNull();
+    expect(pet.error).toContain('404');
   });
 });
 ```
 
-**MSW Setup:** Mock Service Workers are configured in `test-setup.ts` and `packages/app/src/mocks/server.ts`.
+**Runtime setup:** Shared test setup is configured in `test-setup.ts`; service tests mock `globalThis.fetch` with `vi.fn()`.
 
 ## Internationalization Tests
 
 Use `renderWithLocale` helper to test multi-locale rendering:
 
 ```typescript
-import { renderWithLocale } from '../../testing/i18n-utils';
+import { renderWithLocale } from '@petstore-ui/shared';
 
 describe('Button - i18n', () => {
   it('renders translated content', () => {
@@ -171,32 +180,31 @@ describe('Button - i18n', () => {
 });
 ```
 
-**Helper:** `packages/atoms/src/testing/i18n-utils.tsx`
+**Helper:** `packages/shared/src/testing/i18n-utils.tsx`
 
 ## Accessibility Tests
 
-Use `testKeyboardNavigation` and `auditAccessibility` helpers:
+Use `auditAccessibility` with Testing Library interactions:
 
 ```typescript
-import {
-  testKeyboardNavigation,
-  auditAccessibility,
-} from '../../testing/a11y-utils';
+import { vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { auditAccessibility } from '@petstore-ui/shared';
 
 describe('Button - a11y', () => {
   it('supports keyboard activation', async () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(
       <Button onClick={handleClick} enterActivation spaceActivation>
         Click me
       </Button>
     );
 
-    await testKeyboardNavigation({
-      element: screen.getByRole('button'),
-      keys: ['{Enter}', ' '], // Test Enter and Space
-      onTrigger: handleClick,
-    });
+    const user = userEvent.setup();
+    const button = screen.getByRole('button');
+    await user.tab();
+    await user.keyboard('{Enter}');
+    await user.keyboard(' ');
 
     expect(handleClick).toHaveBeenCalledTimes(2);
   });
@@ -215,19 +223,20 @@ describe('Button - a11y', () => {
     expect(button).toHaveAttribute('aria-label');
   });
 
-  it('meets WCAG 2.1 AA compliance', async () => {
+  it('returns a WCAG 2.1 AA compliance audit', async () => {
     render(<Button>Accessible Button</Button>);
     const audit = await auditAccessibility(screen.getByRole('button'));
 
-    expect(audit.isCompliant).toBe(true);
-    expect(audit.violations).toHaveLength(0);
+    expect(typeof audit.isCompliant).toBe('boolean');
+    expect(Array.isArray(audit.recommendations)).toBe(true);
   });
 
-  it('has visible focus indicator', () => {
+  it('has visible focus indicator', async () => {
     render(<Button>Focus Test</Button>);
     const button = screen.getByRole('button');
+    const user = userEvent.setup();
 
-    userEvent.tab();
+    await user.tab();
     expect(button).toHaveFocus();
 
     const focusStyle = window.getComputedStyle(button, ':focus');
@@ -236,7 +245,7 @@ describe('Button - a11y', () => {
 });
 ```
 
-**Helpers:** `packages/atoms/src/testing/a11y-utils.ts`
+**Helper:** `packages/shared/src/testing/a11y-utils.ts`
 
 ## Running Tests
 
@@ -247,13 +256,13 @@ describe('Button - a11y', () => {
 pnpm run test
 
 # Run tests in watch mode
-pnpm run test -- --watch
+pnpm exec vitest --watch
 
 # Run with coverage report
 pnpm run test:coverage
 
 # Run tests with UI
-pnpm run test -- --ui
+pnpm exec vitest --ui
 ```
 
 ### Specific Package
@@ -273,20 +282,20 @@ pnpm -F @petstore-ui/visual-reporter run test
 
 ```bash
 # Test a specific file
-pnpm run test -- packages/atoms/src/components/Button.test.tsx
+pnpm run test -- packages/atoms/src/components/atoms/Button.test.tsx
 
 # Test matching pattern
-pnpm run test -- Button
+pnpm run test -- packages/atoms/src/components/atoms/Button.test.tsx -t "rendering"
 ```
 
 ### Test Filtering
 
 ```bash
 # Run only specific test suite
-pnpm run test -- --grep "Button.*Rendering"
+pnpm run test -- -t "Button.*rendering"
 
-# Skip specific tests
-pnpm run test -- --grep "!slow"
+# Run only unit project tests
+pnpm exec vitest run --project unit
 ```
 
 ## Visual Regression Testing
@@ -305,8 +314,8 @@ pnpm run report:visual
 # Test only atoms stories
 pnpm run test:visual:atoms
 
-# Test only petstore app stories
-pnpm run test:visual:petstore
+# Run Playwright in reuse mode (faster local iteration)
+pnpm run test:visual:reuse
 
 # Update visual snapshots
 pnpm run test:visual:update
@@ -319,7 +328,7 @@ pnpm run test:visual:update
 3. **Pixel comparison** — Compares new screenshots against baselines
 4. **Report generation** — Creates visual diff report in `public/visual-report/`
 
-**Configuration:** `playwright.config.ts` and `tests/visual/**`
+**Configuration:** `playwright.config.ts`, `playwright.config.reuse.ts`, and `tests/visual/**`
 
 ### Viewing Visual Reports
 
@@ -366,17 +375,18 @@ describe('useCounter', () => {
 ### Testing Context
 
 ```typescript
-import { renderWithContext } from '../../testing/context-utils';
+import { renderHook } from '@testing-library/react';
+import type { ReactNode } from 'react';
+import { LocaleProvider, useTranslation } from '@petstore-ui/atoms';
 
-describe('AppContext', () => {
-  it('provides app state', () => {
-    const { result } = renderHook(() => useAppContext(), {
-      wrapper: ({ children }) => (
-        <AppProvider>{children}</AppProvider>
-      ),
-    });
+describe('LocaleProvider', () => {
+  it('provides translated labels through context', () => {
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <LocaleProvider locale="en">{children}</LocaleProvider>
+    );
 
-    expect(result.current.isLoading).toBe(false);
+    const { result } = renderHook(() => useTranslation(), { wrapper });
+    expect(result.current.t('components.button.primary')).toBeTruthy();
   });
 });
 ```
@@ -384,11 +394,11 @@ describe('AppContext', () => {
 ### Testing Event Handlers
 
 ```typescript
-import { userEvent } from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 
 describe('Form', () => {
   it('submits form data', async () => {
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
     const user = userEvent.setup();
 
     render(<Form onSubmit={handleSubmit} />);
@@ -406,12 +416,11 @@ describe('Form', () => {
 ### Mocking Modules
 
 ```typescript
-jest.mock('@petstore-ui/app/services/petService', () => ({
-  PetService: {
-    getPets: jest.fn().mockResolvedValue([
-      { id: '1', name: 'Fluffy' },
-    ]),
-  },
+vi.mock('./apiClient', () => ({
+  get: vi.fn().mockResolvedValue({
+    data: [{ id: '1', name: 'Fluffy' }],
+    error: null,
+  }),
 }));
 
 describe('PetList', () => {
@@ -424,16 +433,16 @@ describe('PetList', () => {
 
 ## CI/CD Testing
 
-Tests run automatically on every PR and push to main:
+Tests run automatically on every PR and push to `main`:
 
-1. **Format check** — `pnpm run format:check`
+1. **Format check** — `pnpm run format:check` (non-blocking)
 2. **Lint** — `pnpm run lint`
 3. **Type-check** — `pnpm run type-check`
-4. **Unit + integration tests** — `pnpm run test:coverage`
+4. **Unit tests per package (with retries + coverage)** — `pnpm exec vitest run --project unit "packages/<package>" --coverage`
 5. **Storybook build** — `pnpm run build-storybook`
-6. **Visual regression** — `pnpm run test:visual` (on main only)
+6. **Docker build validation** — `docker build --target builder .`
 
-**All must pass** before PR can be merged.
+**Required checks must pass** before PR can be merged.
 
 Coverage reports are uploaded to Codecov:
 
@@ -462,7 +471,7 @@ Before committing component tests, verify:
 ### View Test UI
 
 ```bash
-pnpm run test -- --ui
+pnpm exec vitest --ui
 ```
 
 Opens interactive test runner showing:
@@ -475,7 +484,7 @@ Opens interactive test runner showing:
 ### Debug Single Test
 
 ```bash
-pnpm run test -- --inspect-brk packages/atoms/src/components/Button.test.tsx
+pnpm run test -- --inspect-brk packages/atoms/src/components/atoms/Button.test.tsx
 ```
 
 Then open `chrome://inspect` in Chrome DevTools.
