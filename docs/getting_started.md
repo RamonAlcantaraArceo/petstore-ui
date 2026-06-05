@@ -186,7 +186,7 @@ pnpm -F @petstore-ui/atoms run test
 pnpm -F @petstore-ui/app run test
 
 # Test a single file
-pnpm run test -- packages/atoms/src/components/Button.test.tsx
+pnpm run test -- packages/atoms/src/components/atoms/Button.test.tsx
 ```
 
 See [Testing](./testing.md) for comprehensive test documentation.
@@ -323,7 +323,7 @@ pnpm add -D happy-dom@14
 
 ## Next Steps
 
-1. **Explore the codebase:** Open `packages/atoms/src/components/` to see existing component examples
+1. **Explore the codebase:** Open `packages/atoms/src/components/atoms/` to see existing component examples
 2. **Read [CONTRIBUTING.md](CONTRIBUTING.md)** for component and story standards
 3. **Review [Architecture](./architecture.md)** to understand the monorepo design
 4. **Check [Testing](./testing.md)** for test patterns and best practices

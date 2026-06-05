@@ -20,7 +20,7 @@ Integrate **localization (i18n) and accessibility (a11y) capabilities from the c
 #### 1. Translation Infrastructure
 
 ```typescript
-// src/i18n/locales/en.ts
+// packages/atoms/src/i18n/locales/en.ts
 export const en = {
   components: {
     button: {
@@ -48,7 +48,7 @@ export const en = {
   },
 } as const;
 
-// src/i18n/locales/chef.ts - Pseudo-localization with character expansion
+// packages/atoms/src/i18n/locales/chef.ts - Pseudo-localization with character expansion
 export const chef = {
   components: {
     button: {
@@ -65,7 +65,7 @@ export const chef = {
 #### 2. Translation Hook with TypeScript Safety
 
 ```typescript
-// src/hooks/useTranslation.ts
+// packages/atoms/src/i18n/context.tsx
 export const useTranslation = () => {
   const { locale, setLocale } = useLocaleContext();
 

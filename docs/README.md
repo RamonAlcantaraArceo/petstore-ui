@@ -27,7 +27,7 @@ This project follows an i18n + accessibility-first approach from the component c
 
 **Requirements:** 
 
-   - [Node ≥ 20](https://nodejs.org)
+   - [Node ≥ 24](https://nodejs.org)
    - [pnpm ≥ 11](https://pnpm.io)
 
 ```bash
@@ -40,26 +40,10 @@ pnpm install
 ```text
 petstore-ui/
 ├── packages/
-│   ├── atoms/               # Shared React atoms package
-│   ├── app/                 # Petstore app package
+│   ├── atoms/               # Shared atoms package (tokens, i18n, a11y)
+│   ├── app/                 # Petstore app package (molecules/organisms/services)
+│   ├── shared/              # Shared test utilities and cross-package helpers
 │   └── visual-reporter/     # Visual report package
-├── src/
-│   ├── components/          # Atoms, molecules, organisms
-│   ├── i18n/                # Locale provider, translations, registry
-│   │   ├── locales/         # en.ts, chef.ts
-│   │   ├── context.tsx
-│   │   ├── registry.ts
-│   │   └── types.ts
-│   ├── accessibility/       # useAccessibility hook, utils, types
-│   │   ├── hooks.ts
-│   │   ├── utils.ts
-│   │   └── types.ts
-│   ├── testing/             # i18n/a11y testing utilities
-│   │   ├── i18n-utils.tsx
-│   │   ├── a11y-utils.ts
-│   │   └── test-patterns.tsx
-│   ├── stories/             # Storybook fixtures and shared story assets
-│   └── tokens/              # Design tokens
 └── .storybook/              # Storybook config
 ```
 
@@ -89,9 +73,9 @@ pnpm run build-storybook:visual-report # Build Visual report + common atoms Stor
 
 | Layer                | Location                         | Runner   |
 | -------------------- | -------------------------------- | -------- |
-| Unit/component       | `src/components/**/*.test.tsx`   | `vitest` |
-| Integration/API      | `src/services/**/*.test.ts`      | `vitest` |
-| Accessibility + i18n | `src/testing/a11y-i18n.test.tsx` | `vitest` |
+| Unit/component       | `packages/**/*.test.tsx`         | `vitest` |
+| Integration/API      | `packages/**/*.test.ts`          | `vitest` |
+| Accessibility + i18n | `packages/shared/src/testing/a11y-i18n.test.tsx` | `vitest` |
 
 All test files use `@testing-library/react` with happy-dom (set up in `test-setup.ts`).
 
@@ -108,7 +92,7 @@ Coverage reports are written to `./coverage/` and uploaded to Codecov on every C
 - Supported locales:
   - `en` (English)
   - `chef` (pseudo-localization for layout/text expansion testing)
-- Use `useTranslation()` from `src/i18n/context.tsx` in components.
+- Use `useTranslation()` from `packages/atoms/src/i18n/context.tsx` in components.
 - Prefer translation keys over hardcoded strings.
 - Provide static/fallback labels when translation keys are not provided.
 
@@ -121,7 +105,7 @@ const label = t('components.button.primary');
 
 ## Accessibility (a11y)
 
-- Use `useAccessibility()` from `src/accessibility/hooks.ts` for:
+- Use `useAccessibility()` from `packages/atoms/src/accessibility/hooks.ts` for:
   - keyboard activation (Enter/Space)
   - ARIA attribute support
   - screen reader announcements
