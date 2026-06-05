@@ -32,7 +32,7 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Copy source and build all static outputs
 COPY . .
-RUN pnpm run build-storybook && pnpm run build-petstore
+RUN pnpm run build
 
 # ---------------------------------------------------------------------------
 # Stage 2 — serve
