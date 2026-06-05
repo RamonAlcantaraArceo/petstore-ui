@@ -59,7 +59,7 @@ COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker/security-headers.conf /etc/nginx/conf.d/security-headers.conf
 
 # Copy built outputs into the nginx document root:
-#   /                  → public/ (homepage)
+#   /                  → nginx redirect to /petstore/ (configured in docker/nginx.conf)
 #   /storybook/        → storybook-static/
 #   /petstore/         → petstore/ + petstore/dist/ (React SPA)
 COPY --from=builder /app/public          /usr/share/nginx/html

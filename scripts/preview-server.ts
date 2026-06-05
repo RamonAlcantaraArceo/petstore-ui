@@ -2,13 +2,11 @@
  * Local preview server for the full Petstore UI experience.
  *
  * Routes:
- *   /              → public/index.html  (homepage)
- *   /style.css     → public/style.css
- *   /app.js        → public/app.js
+ *   /              → redirect to /petstore/
  *   /config.js     → dynamic runtime config (API_BASE_URL + API_KEY + build metadata)
  *   /api/*         → proxy to API_PROXY_TARGET
  *   /storybook/*   → storybook-static/* (real Storybook)
- *   /petstore/*    → petstore/*         (demo placeholder)
+ *   /petstore/*    → petstore/*         (Petstore SPA shell + bundle)
  *
  * Usage:  pnpm run preview
  *         API_PROXY_TARGET=http://localhost:8000 pnpm run preview
@@ -193,13 +191,17 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
   if (pathname.startsWith('/petstore/')) {
     const sub = pathname.slice('/petstore'.length);
     if (serveFromDir(join(ROOT, 'petstore'), sub, res)) return;
-    if (serveFromDir(join(ROOT, 'petstore', 'dist'), sub, res)) return;
     if (tryFile(join(ROOT, 'petstore', 'index.html'), res)) return;
-    if (serveFromDir(join(ROOT, 'public'), sub, res)) return;
+  }
+
+  // --- Bare root redirects to /petstore/ ---
+  if (pathname === '/') {
+    res.writeHead(302, { Location: '/petstore/' });
+    res.end();
+    return;
   }
 
   // --- Everything else → public/ ---
-  if (pathname === '/') pathname = '/index.html';
   if (serveFromDir(join(ROOT, 'public'), pathname, res)) return;
 
   res.writeHead(404);
@@ -211,7 +213,7 @@ server.listen(PORT);
 const effectiveApiUrl = process.env.API_BASE_URL || '/api/v1';
 
 console.log(`\n  Petstore UI preview server running at:\n`);
-console.log(`    Homepage:        http://localhost:${PORT}/`);
+console.log(`    Root redirect:   http://localhost:${PORT}/ → /petstore/`);
 console.log(`    Storybook:       http://localhost:${PORT}/storybook/`);
 console.log(`    Petstore Demo:   http://localhost:${PORT}/petstore/`);
 console.log(`    API proxy:       http://localhost:${PORT}/api/* → ${API_PROXY_TARGET}`);

@@ -5,6 +5,9 @@ import { defineConfig } from 'vite';
  * Outputs petstore/dist/index.js consumed by petstore/index.html.
  */
 export default defineConfig({
+  // Keep petstore/dist focused on compiled app bundles only.
+  // Static assets for preview/reporting are served from repo-level public/.
+  publicDir: false,
   build: {
     outDir: 'petstore/dist',
     emptyOutDir: true,

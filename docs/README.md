@@ -248,9 +248,9 @@ The Fly config lives in `.fly/dev/fly.toml`. Key settings:
 
 All navigation is now server-based for a production-like experience:
 
-- `/` → Homepage (public/index.html)
+- `/` → Redirects to `/petstore/`
 - `/storybook/` → Full Storybook UI (served from storybook-static/)
-- `/petstore/` → Petstore demo placeholder (petstore/index.html)
+- `/petstore/` → Petstore demo shell (petstore/index.html + petstore/dist/index.js)
 
 ### Local Preview Workflow
 
@@ -262,7 +262,7 @@ pnpm run dev
 
 This launches the Petstore demo on Vite with hot reload at `http://localhost:5173/petstore/`.
 
-Use the full preview server when you need the homepage, Storybook, or the static production-like routes:
+Use the full preview server when you need Storybook or the static production-like routes:
 
 1. Build static output:
 
