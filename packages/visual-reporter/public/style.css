@@ -492,7 +492,7 @@ body {
   left: 0;
   display: block;
   max-width: none;
-  user-select: none;
+  /* user-select: none; */
   pointer-events: none;
 }
 
