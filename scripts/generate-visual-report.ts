@@ -380,23 +380,9 @@ const buildVisualReportApp = async () => {
   mkdirSync(OUTPUT_DIR, { recursive: true });
 
   const { build } = await import('vite');
+  const configFile = resolve(ROOT, 'vite.visual-reporter.config.ts');
   await build({
-    configFile: false,
-    build: {
-      outDir: OUTPUT_DIR,
-      emptyOutDir: false,
-      rollupOptions: {
-        input: { app: VISUAL_APP_ENTRY },
-        output: {
-          entryFileNames: 'app.js',
-          format: 'es',
-        },
-      },
-      minify: true,
-    },
-    esbuild: {
-      jsx: 'automatic',
-    },
+    configFile,
     logLevel: 'warn',
   });
 };
