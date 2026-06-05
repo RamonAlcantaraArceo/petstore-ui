@@ -16,6 +16,9 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { existsSync, statSync, readFileSync } from 'node:fs';
 import { join, extname, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -47,8 +50,7 @@ function loadEnvFile(filePath: string, overrideExisting = false): void {
 loadEnvFile(join(ROOT, '.env'), true);
 // loadEnvFile(join(ROOT, '.env.local'), true);
 
-const API_PROXY_TARGET =
-  process.env.API_PROXY_TARGET || 'https://petstore-api-dev.ramon-alcantara.work';
+const API_PROXY_TARGET = process.env.API_PROXY_TARGET || 'http://localhost:8000';
 
 /** Map file extensions to content types. */
 const MIME: Record<string, string> = {
