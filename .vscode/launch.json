@@ -30,6 +30,27 @@
         "/*": "${workspaceFolder}/*"
       },
       "skipFiles": ["**/node_modules/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Petstore UI",
+      "runtimeExecutable": "vite",
+      "cwd": "${workspaceFolder}",
+      "args": ["--config", "vite.petstore.config.ts", "--host"],
+      "serverReadyAction": {
+        "name": "Petstore: Integrated",
+        "pattern": "http://localhost:5173/",
+        // "uriFormat": "http://localhost:5173/petstore/",
+        "action": "startDebugging"
+      }
+    },
+    {
+      "type": "editor-browser",
+      "request": "launch",
+      "name": "Launch Browser @ localhost:5173",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }
