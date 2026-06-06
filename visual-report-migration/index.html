@@ -848,7 +848,7 @@
 <li>Molecules: filter bar, tree label, mode controls, image/slider panels</li>
 <li>Organisms: component tree, variant card, report app shell</li>
 </ul>
-<p>The static route <code>/visual-report/</code> is now bootstrapped from <code>src/visual-report/bootstrap.tsx</code> and bundled during <code>bun run report:visual:build</code>.</p>
+<p>The static route <code>/visual-report/</code> is now bootstrapped from <code>packages/visual-reporter/src/visual-report/bootstrap.tsx</code> and bundled during <code>pnpm run report:visual:build</code>.</p>
 <h2 id="old-to-new-function-mapping">Old-to-New Function Mapping<a class="headerlink" href="#old-to-new-function-mapping" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>renderFilters</code> -&gt; <code>VisualFilterBar</code></li>
@@ -860,7 +860,7 @@
 <li><code>renderVariants</code> -&gt; <code>VisualReportApp</code> + <code>VisualVariantCard</code></li>
 </ul>
 <h2 id="data-contract">Data Contract<a class="headerlink" href="#data-contract" title="Permanent link">&para;</a></h2>
-<p><code>public/visual-report/data.json</code> contract remains unchanged. New model helpers in <code>src/visual-report/model.ts</code> adapt and group data without changing incoming shape.</p>
+<p><code>public/visual-report/data.json</code> contract remains unchanged. New model helpers in <code>packages/visual-reporter/src/visual-report/model.ts</code> adapt and group data without changing incoming shape.</p>
 <h2 id="behavior-parity-notes">Behavior Parity Notes<a class="headerlink" href="#behavior-parity-notes" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Status filtering keeps <code>All</code> reset + multi-select semantics.</li>

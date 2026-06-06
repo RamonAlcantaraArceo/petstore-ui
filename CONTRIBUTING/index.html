@@ -1065,17 +1065,17 @@
 <tbody>
 <tr>
 <td>Atom</td>
-<td><code>src/components/atoms/</code></td>
+<td><code>packages/atoms/src/components/atoms/</code></td>
 <td>Single-responsibility, no business logic</td>
 </tr>
 <tr>
 <td>Molecule</td>
-<td><code>src/components/molecules/</code></td>
+<td><code>packages/app/src/components/molecules/</code></td>
 <td>Composed from atoms, limited logic</td>
 </tr>
 <tr>
 <td>Organism</td>
-<td><code>src/components/organisms/</code></td>
+<td><code>packages/app/src/components/organisms/</code></td>
 <td>May include API calls and context</td>
 </tr>
 </tbody>
@@ -1090,7 +1090,7 @@
 <li><strong><code>className</code> prop</strong> for external style overrides</li>
 <li><strong><code>...props</code> spread</strong> onto the root element</li>
 </ol>
-<p>Use design tokens from <code>src/tokens/theme.ts</code>; do not hardcode colors, spacing, or font sizes.</p>
+<p>Use design tokens from <code>packages/atoms/src/tokens/theme.ts</code>; do not hardcode colors, spacing, or font sizes.</p>
 <h3 id="naming">Naming<a class="headerlink" href="#naming" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1177,7 +1177,7 @@
 <h3 id="running-tests">Running tests<a class="headerlink" href="#running-tests" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w">               </span><span class="c1"># all tests</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pnpm<span class="w"> </span>run<span class="w"> </span>test:coverage<span class="w">      </span><span class="c1"># with coverage report</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pnpm<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--<span class="w"> </span>src/components/atoms/Button.test.tsx<span class="w">  </span><span class="c1"># single file</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pnpm<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--<span class="w"> </span>packages/atoms/src/components/atoms/Button.test.tsx<span class="w">  </span><span class="c1"># single file</span>
 </code></pre></div>
 <p>Coverage target: <strong>≥ 80% line coverage</strong>.</p>
 <hr />
@@ -1185,8 +1185,8 @@
 <p>Husky runs on every commit:</p>
 <ol>
 <li><code>prettier --write</code> (lint-staged)</li>
-<li><code>eslint src --ext .ts,.tsx</code> — must exit 0</li>
-<li><code>tsc --noEmit</code> — must exit 0</li>
+<li><code>pnpm run lint</code> — must exit 0</li>
+<li><code>pnpm run type-check</code> — must exit 0</li>
 </ol>
 <p>Fix all errors before committing. Warnings are allowed but should be minimised.</p>
 <hr />
@@ -1210,7 +1210,7 @@
 </tr>
 <tr>
 <td>Tests + coverage</td>
-<td><code>pnpm run test:coverage</code></td>
+<td><code>pnpm exec vitest run --project unit "packages/&lt;package&gt;" --coverage</code></td>
 </tr>
 <tr>
 <td>Storybook build</td>

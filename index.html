@@ -322,17 +322,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#migration-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Migration Status
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#tech-stack" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -351,23 +340,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Setup">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nodejs-fallback" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Node.js fallback
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -955,17 +927,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#migration-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Migration Status
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#tech-stack" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -984,23 +945,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Setup">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nodejs-fallback" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Node.js fallback
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1252,59 +1196,30 @@
 <a href="https://petstore-ui-staging.ramon-alcantara.work/petstore/"><img alt="Staging Deployment" src="https://github.com/RamonAlcantaraArceo/petstore-ui/actions/workflows/deploy-fly-staging.yml/badge.svg" /></a></p>
 <p>A React + TypeScript component library for the Petstore UI, built with pnpm and documented in Storybook.</p>
 <p>This project follows an i18n + accessibility-first approach from the component core.</p>
-<h2 id="migration-status">Migration Status<a class="headerlink" href="#migration-status" title="Permanent link">&para;</a></h2>
-<p>Repository split has started with workspace scaffolding for:</p>
-<ul>
-<li><code>@petstore-ui/atoms</code></li>
-<li><code>@petstore-ui/app</code></li>
-<li><code>@petstore-ui/visual-reporter</code></li>
-</ul>
-<p>Workspace package entrypoints are now active:</p>
-<ul>
-<li><code>packages/atoms/src/index.ts</code> maps shared atoms + theme + i18n/a11y exports.</li>
-<li><code>packages/app/src/index.ts</code> maps petstore app views/forms/services/context exports.</li>
-<li><code>packages/visual-reporter/src/index.ts</code> maps visual regression UI + model exports.</li>
-</ul>
-<p>Current source files still remain under <code>src/</code> and are consumed by these package entrypoints while
-incremental physical migration continues.</p>
 <h2 id="tech-stack">Tech Stack<a class="headerlink" href="#tech-stack" title="Permanent link">&para;</a></h2>
 <ul>
-<li>React 18 + TypeScript (strict mode)</li>
+<li>React + TypeScript (strict mode)</li>
 <li>pnpm (package manager)</li>
-<li>Storybook 7 (component docs and visual validation)</li>
+<li>Storybook (component docs and visual validation)</li>
 <li>Vitest test runner with <code>@testing-library/react</code></li>
 </ul>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
-<p><strong>Requirements:</strong> Node ≥ 20 + <a href="https://pnpm.io">pnpm ≥ 9</a></p>
+<p><strong>Requirements:</strong> </p>
+<ul>
+<li><a href="https://nodejs.org">Node ≥ 24</a></li>
+<li><a href="https://pnpm.io">pnpm ≥ 11</a></li>
+</ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install project dependencies</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pnpm<span class="w"> </span>install
 </code></pre></div>
-<h3 id="nodejs-fallback">Node.js fallback<a class="headerlink" href="#nodejs-fallback" title="Permanent link">&para;</a></h3>
-<p>pnpm is the only supported package manager for this project.</p>
 <h2 id="project-structure">Project Structure<a class="headerlink" href="#project-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>petstore-ui/
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── packages/
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   ├── atoms/               # Shared React atoms package (scaffold)
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── app/                 # Petstore app package (scaffold)
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   └── visual-reporter/     # Visual report package (scaffold)
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>├── src/
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│   ├── components/          # Atoms, molecules, organisms
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│   ├── i18n/                # Locale provider, translations, registry
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│   │   ├── locales/         # en.ts, chef.ts
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│   │   ├── context.tsx
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│   │   ├── registry.ts
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│   │   └── types.ts
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│   ├── accessibility/       # useAccessibility hook, utils, types
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│   │   ├── hooks.ts
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│   │   ├── utils.ts
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│   │   └── types.ts
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│   ├── testing/             # i18n/a11y testing utilities
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│   │   ├── i18n-utils.tsx
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│   │   ├── a11y-utils.ts
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│   │   └── test-patterns.tsx
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│   ├── stories/             # Storybook fixtures and shared story assets
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│   └── tokens/              # Design tokens
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>└── .storybook/              # Storybook config
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   ├── atoms/               # Shared atoms package (tokens, i18n, a11y)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── app/                 # Petstore app package (molecules/organisms/services)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   ├── shared/              # Shared test utilities and cross-package helpers
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   └── visual-reporter/     # Visual report package
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>└── .storybook/              # Storybook config
 </code></pre></div>
 <h2 id="development-workflow">Development Workflow<a class="headerlink" href="#development-workflow" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>lint<span class="w">           </span><span class="c1"># ESLint — must pass before commit</span>
@@ -1337,17 +1252,17 @@ incremental physical migration continues.</p>
 <tbody>
 <tr>
 <td>Unit/component</td>
-<td><code>src/components/**/*.test.tsx</code></td>
+<td><code>packages/**/*.test.tsx</code></td>
 <td><code>vitest</code></td>
 </tr>
 <tr>
 <td>Integration/API</td>
-<td><code>src/services/**/*.test.ts</code></td>
+<td><code>packages/**/*.test.ts</code></td>
 <td><code>vitest</code></td>
 </tr>
 <tr>
 <td>Accessibility + i18n</td>
-<td><code>src/testing/a11y-i18n.test.tsx</code></td>
+<td><code>packages/shared/src/testing/a11y-i18n.test.tsx</code></td>
 <td><code>vitest</code></td>
 </tr>
 </tbody>
@@ -1365,7 +1280,7 @@ incremental physical migration continues.</p>
 <li>Supported locales:</li>
 <li><code>en</code> (English)</li>
 <li><code>chef</code> (pseudo-localization for layout/text expansion testing)</li>
-<li>Use <code>useTranslation()</code> from <code>src/i18n/context.tsx</code> in components.</li>
+<li>Use <code>useTranslation()</code> from <code>packages/atoms/src/i18n/context.tsx</code> in components.</li>
 <li>Prefer translation keys over hardcoded strings.</li>
 <li>Provide static/fallback labels when translation keys are not provided.</li>
 </ul>
@@ -1375,7 +1290,7 @@ incremental physical migration continues.</p>
 </code></pre></div>
 <h2 id="accessibility-a11y">Accessibility (a11y)<a class="headerlink" href="#accessibility-a11y" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Use <code>useAccessibility()</code> from <code>src/accessibility/hooks.ts</code> for:</li>
+<li>Use <code>useAccessibility()</code> from <code>packages/atoms/src/accessibility/hooks.ts</code> for:</li>
 <li>keyboard activation (Enter/Space)</li>
 <li>ARIA attribute support</li>
 <li>screen reader announcements</li>
@@ -1518,16 +1433,16 @@ you change backend targets by changing <code>API_PROXY_TARGET</code>.</p>
 <h2 id="static-website-preview-navigation">Static Website Preview &amp; Navigation<a class="headerlink" href="#static-website-preview-navigation" title="Permanent link">&para;</a></h2>
 <p>All navigation is now server-based for a production-like experience:</p>
 <ul>
-<li><code>/</code> → Homepage (public/index.html)</li>
+<li><code>/</code> → Redirects to <code>/petstore/</code></li>
 <li><code>/storybook/</code> → Full Storybook UI (served from storybook-static/)</li>
-<li><code>/petstore/</code> → Petstore demo placeholder (petstore/index.html)</li>
+<li><code>/petstore/</code> → Petstore demo shell (petstore/index.html + petstore/dist/index.js)</li>
 </ul>
 <h3 id="local-preview-workflow">Local Preview Workflow<a class="headerlink" href="#local-preview-workflow" title="Permanent link">&para;</a></h3>
 <p>For day-to-day UI work, start the petstore app in watch mode:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dev
 </code></pre></div>
 <p>This launches the Petstore demo on Vite with hot reload at <code>http://localhost:5173/petstore/</code>.</p>
-<p>Use the full preview server when you need the homepage, Storybook, or the static production-like routes:</p>
+<p>Use the full preview server when you need Storybook or the static production-like routes:</p>
 <ol>
 <li>Build static output:</li>
 </ol>
