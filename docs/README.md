@@ -16,68 +16,34 @@ A React + TypeScript component library for the Petstore UI, built with pnpm and 
 
 This project follows an i18n + accessibility-first approach from the component core.
 
-## Migration Status
-
-Repository split has started with workspace scaffolding for:
-
-- `@petstore-ui/atoms`
-- `@petstore-ui/app`
-- `@petstore-ui/visual-reporter`
-
-Workspace package entrypoints are now active:
-
-- `packages/atoms/src/index.ts` maps shared atoms + theme + i18n/a11y exports.
-- `packages/app/src/index.ts` maps petstore app views/forms/services/context exports.
-- `packages/visual-reporter/src/index.ts` maps visual regression UI + model exports.
-
-Current source files still remain under `src/` and are consumed by these package entrypoints while
-incremental physical migration continues.
-
 ## Tech Stack
 
-- React 18 + TypeScript (strict mode)
+- React + TypeScript (strict mode)
 - pnpm (package manager)
-- Storybook 7 (component docs and visual validation)
+- Storybook (component docs and visual validation)
 - Vitest test runner with `@testing-library/react`
 
 ## Setup
 
-**Requirements:** Node ≥ 20 + [pnpm ≥ 9](https://pnpm.io)
+**Requirements:** 
+
+   - [Node ≥ 24](https://nodejs.org)
+   - [pnpm ≥ 11](https://pnpm.io)
 
 ```bash
 # Install project dependencies
 pnpm install
 ```
 
-### Node.js fallback
-
-pnpm is the only supported package manager for this project.
-
 ## Project Structure
 
 ```text
 petstore-ui/
 ├── packages/
-│   ├── atoms/               # Shared React atoms package (scaffold)
-│   ├── app/                 # Petstore app package (scaffold)
-│   └── visual-reporter/     # Visual report package (scaffold)
-├── src/
-│   ├── components/          # Atoms, molecules, organisms
-│   ├── i18n/                # Locale provider, translations, registry
-│   │   ├── locales/         # en.ts, chef.ts
-│   │   ├── context.tsx
-│   │   ├── registry.ts
-│   │   └── types.ts
-│   ├── accessibility/       # useAccessibility hook, utils, types
-│   │   ├── hooks.ts
-│   │   ├── utils.ts
-│   │   └── types.ts
-│   ├── testing/             # i18n/a11y testing utilities
-│   │   ├── i18n-utils.tsx
-│   │   ├── a11y-utils.ts
-│   │   └── test-patterns.tsx
-│   ├── stories/             # Storybook fixtures and shared story assets
-│   └── tokens/              # Design tokens
+│   ├── atoms/               # Shared atoms package (tokens, i18n, a11y)
+│   ├── app/                 # Petstore app package (molecules/organisms/services)
+│   ├── shared/              # Shared test utilities and cross-package helpers
+│   └── visual-reporter/     # Visual report package
 └── .storybook/              # Storybook config
 ```
 
@@ -107,9 +73,9 @@ pnpm run build-storybook:visual-report # Build Visual report + common atoms Stor
 
 | Layer                | Location                         | Runner   |
 | -------------------- | -------------------------------- | -------- |
-| Unit/component       | `src/components/**/*.test.tsx`   | `vitest` |
-| Integration/API      | `src/services/**/*.test.ts`      | `vitest` |
-| Accessibility + i18n | `src/testing/a11y-i18n.test.tsx` | `vitest` |
+| Unit/component       | `packages/**/*.test.tsx`         | `vitest` |
+| Integration/API      | `packages/**/*.test.ts`          | `vitest` |
+| Accessibility + i18n | `packages/shared/src/testing/a11y-i18n.test.tsx` | `vitest` |
 
 All test files use `@testing-library/react` with happy-dom (set up in `test-setup.ts`).
 
@@ -126,7 +92,7 @@ Coverage reports are written to `./coverage/` and uploaded to Codecov on every C
 - Supported locales:
   - `en` (English)
   - `chef` (pseudo-localization for layout/text expansion testing)
-- Use `useTranslation()` from `src/i18n/context.tsx` in components.
+- Use `useTranslation()` from `packages/atoms/src/i18n/context.tsx` in components.
 - Prefer translation keys over hardcoded strings.
 - Provide static/fallback labels when translation keys are not provided.
 
@@ -139,7 +105,7 @@ const label = t('components.button.primary');
 
 ## Accessibility (a11y)
 
-- Use `useAccessibility()` from `src/accessibility/hooks.ts` for:
+- Use `useAccessibility()` from `packages/atoms/src/accessibility/hooks.ts` for:
   - keyboard activation (Enter/Space)
   - ARIA attribute support
   - screen reader announcements
@@ -282,9 +248,9 @@ The Fly config lives in `.fly/dev/fly.toml`. Key settings:
 
 All navigation is now server-based for a production-like experience:
 
-- `/` → Homepage (public/index.html)
+- `/` → Redirects to `/petstore/`
 - `/storybook/` → Full Storybook UI (served from storybook-static/)
-- `/petstore/` → Petstore demo placeholder (petstore/index.html)
+- `/petstore/` → Petstore demo shell (petstore/index.html + petstore/dist/index.js)
 
 ### Local Preview Workflow
 
@@ -296,7 +262,7 @@ pnpm run dev
 
 This launches the Petstore demo on Vite with hot reload at `http://localhost:5173/petstore/`.
 
-Use the full preview server when you need the homepage, Storybook, or the static production-like routes:
+Use the full preview server when you need Storybook or the static production-like routes:
 
 1. Build static output:
 

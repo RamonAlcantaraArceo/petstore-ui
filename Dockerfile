@@ -14,7 +14,8 @@ ENV CI=${CI} \
     STORYBOOK_DISABLE_TELEMETRY=${STORYBOOK_DISABLE_TELEMETRY} \
     DO_NOT_TRACK=${DO_NOT_TRACK} \
     PNPM_HOME="/pnpm" \
-    PATH="/pnpm:$PATH"
+    PATH="/pnpm:$PATH" \
+    STORYBOOK_FLAVOR='petstore'
 
 # Install pnpm via corepack (ships with Node 20)
 RUN corepack enable && corepack prepare pnpm@11 --activate
@@ -31,7 +32,7 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Copy source and build all static outputs
 COPY . .
-RUN pnpm run build-storybook && pnpm run build-petstore
+RUN pnpm run build
 
 # ---------------------------------------------------------------------------
 # Stage 2 — serve
@@ -47,7 +48,8 @@ ARG GIT_SHA=N/A
 # Environment variables
 ENV VERSION=${VERSION} \
     GIT_SHA=${GIT_SHA} \
-    BUILD_DATE=${BUILD_DATE}
+    BUILD_DATE=${BUILD_DATE} \
+    STORYBOOK_FLAVOR='petstore'
 
 # Remove default nginx welcome page and server config
 RUN rm -rf /usr/share/nginx/html/* /etc/nginx/conf.d/default.conf
@@ -57,7 +59,7 @@ COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker/security-headers.conf /etc/nginx/conf.d/security-headers.conf
 
 # Copy built outputs into the nginx document root:
-#   /                  → public/ (homepage)
+#   /                  → nginx redirect to /petstore/ (configured in docker/nginx.conf)
 #   /storybook/        → storybook-static/
 #   /petstore/         → petstore/ + petstore/dist/ (React SPA)
 COPY --from=builder /app/public          /usr/share/nginx/html

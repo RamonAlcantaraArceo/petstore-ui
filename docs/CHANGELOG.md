@@ -8,6 +8,25 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.1] - 2026-06-05
+
+### Added
+
+- Source map generation in the build pipeline to improve debugging capabilities
+- Quality‑of‑life Visual Studio Code configuration to streamline development
+- Documentation updates covering new workflows, revived tooling, and configuration changes
+- Visual Reporter restored and re‑integrated into the project
+
+### Changed
+
+- Enhanced launch configurations to provide a more robust debugging experience
+- Updated Nginx configuration to improve redirect behavior and fallback handling
+- Improved internal development tooling and monorepo consistency
+
+### Removed
+
+- Significant amount of stale and unused code removed to reduce noise and improve maintainability
+
 ## [1.1.0] - 2026-06-03
 
 ### Changed

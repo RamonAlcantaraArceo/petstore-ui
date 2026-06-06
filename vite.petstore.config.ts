@@ -25,9 +25,13 @@ function generateConfigJs(): string {
 }
 
 export default defineConfig({
+  root: '.',
   server: {
+    host: true,
     port: 5173,
     strictPort: true,
+    // open: '/petstore/',
+
     proxy: {
       '/api': {
         target: API_PROXY_TARGET,
@@ -35,6 +39,12 @@ export default defineConfig({
         secure: true,
       },
     },
+  },
+  build: {
+    sourcemap: true,
+  },
+  css: {
+    devSourcemap: true,
   },
   plugins: [
     {

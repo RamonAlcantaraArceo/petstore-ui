@@ -24,6 +24,9 @@ if (!shouldSkipBuild) {
   steps.push({
     label: 'Build Storybook static output',
     cmd: ['pnpm', 'run', 'build-storybook'],
+    env: {
+      STORYBOOK_FLAVOR: 'petstore',
+    },
   });
 }
 
@@ -38,7 +41,7 @@ if (!shouldSkipTests) {
       ...(shouldUpdateSnapshots ? ['--update-snapshots'] : []),
     ],
     env: {
-      STORY_FILTER: 'petstore-atoms-',
+      STORYBOOK_FLAVOR: 'petstore',
     },
   });
 }
@@ -46,6 +49,9 @@ if (!shouldSkipTests) {
 steps.push({
   label: 'Generate custom visual report data',
   cmd: ['pnpm', 'run', 'report:visual:build'],
+  env: {
+    STORYBOOK_FLAVOR: 'petstore',
+  },
 });
 
 const runStep = (step: Step): number => {

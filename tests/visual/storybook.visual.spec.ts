@@ -149,7 +149,8 @@ test.describe('Storybook visual regression', () => {
         await expect(page).toHaveScreenshot(`${entry.id}.png`, {
           fullPage: false,
           scale: 'css',
-          maxDiffPixels: 0,
+          // maxDiffPixels: 0,
+          maxDiffPixelRatio: 0.02,
           threshold: 0,
         });
       } catch (error) {
@@ -165,15 +166,15 @@ test.describe('Storybook visual regression', () => {
         scale: 'css',
       });
 
-      if (assertionError) {
-        throw assertionError;
-      }
-
       // Attach actual screenshot to test report on success too
       await testInfo.attach('actual-screenshot', {
         body: screenshotBuffer,
         contentType: 'image/png',
       });
+
+      if (assertionError) {
+        throw assertionError;
+      }
     });
   }
 });

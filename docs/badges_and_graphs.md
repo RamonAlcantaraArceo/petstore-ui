@@ -254,9 +254,9 @@ pnpm run test -- --reporter=verbose
 **Output:**
 
 ```
-✓ src/components/Button.test.tsx (1250ms)
-✓ src/components/Input.test.tsx (1100ms)
-✓ src/services/apiClient.test.ts (500ms)
+✓ packages/atoms/src/components/atoms/Button.test.tsx (1250ms)
+✓ packages/atoms/src/components/atoms/Input.test.tsx (1100ms)
+✓ packages/app/src/services/apiClient.test.ts (500ms)
 ```
 
 Identify slow tests and optimize when needed.

@@ -1,0 +1,56 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Petstore: Debug (F5)",
+      "type": "node-terminal",
+      "autoAttachChildProcesses": false,
+      "request": "launch",
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "name": "Petstore: Integrated",
+        "pattern": "http://localhost:5173/?",
+        // "uriFormat": "http://localhost:5173/petstore/",
+        "action": "startDebugging"
+      }
+    },
+    {
+      "name": "Petstore: Integrated",
+      "type": "editor-browser",
+      "request": "launch",
+      "url": "http://localhost:5173/petstore/",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"],
+      "sourceMapPathOverrides": {
+        "vite:///./*": "${workspaceFolder}/*",
+        "vite:///*": "${workspaceFolder}/*",
+        "/@fs/*": "*",
+        "/*": "${workspaceFolder}/*"
+      },
+      "skipFiles": ["**/node_modules/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Petstore UI",
+      "runtimeExecutable": "vite",
+      "cwd": "${workspaceFolder}",
+      "args": ["--config", "vite.petstore.config.ts", "--host"],
+      "serverReadyAction": {
+        "name": "Petstore: Integrated",
+        "pattern": "http://localhost:5173/",
+        // "uriFormat": "http://localhost:5173/petstore/",
+        "action": "startDebugging"
+      }
+    },
+    {
+      "type": "editor-browser",
+      "request": "launch",
+      "name": "Launch Browser @ localhost:5173",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}

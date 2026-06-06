@@ -1,7 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 const isCI = !!process.env.CI;
 const additionalViewportProjectsEnabled = process.env.PW_ENABLE_ADDITIONAL_VIEWPORTS === '1';
@@ -48,7 +45,6 @@ export default defineConfig({
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
   workers: isCI ? 2 : undefined,
-  quiet: true,
   reporter: isCI
     ? [
         ['github'],
@@ -56,15 +52,15 @@ export default defineConfig({
         ['json', { outputFile: 'test-results/playwright-report.json' }],
       ]
     : [
-        ['dot', { stdout: 'never' }],
+        ['dot'],
         ['html', { open: 'never' }],
         ['json', { outputFile: 'test-results/playwright-report.json' }],
       ],
   use: {
-    baseURL: 'http://127.0.0.1:4000',
+    baseURL: 'http://localhost:6006',
     headless: true,
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    screenshot: 'on', //'only-on-failure',
     animation: 'disabled',
   },
   expect: {
@@ -76,10 +72,4 @@ export default defineConfig({
   projects: additionalViewportProjectsEnabled
     ? [...baseProjects, ...additionalProjects]
     : baseProjects,
-  webServer: {
-    command: 'pnpm run preview',
-    port: 4000,
-    timeout: 120 * 1000,
-    reuseExistingServer: !isCI,
-  },
 });
