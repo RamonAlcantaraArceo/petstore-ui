@@ -8,6 +8,9 @@
 export { Button } from './Button';
 export type { ButtonProps } from './Button';
 
+export { TabButton } from './TabButton';
+export type { TabButtonProps } from './TabButton';
+
 export { Input } from './Input';
 export type { InputProps } from './Input';
 
@@ -26,15 +29,16 @@ export type { ModalProps } from './Modal';
 export { Table } from './Table';
 export type { TableProps, TableColumn } from './Table';
 
-export { Tabs } from './Tabs';
-export type { TabsProps, TabItem } from './Tabs';
+export { FormAlert } from './FormAlert';
+export type { FormAlertProps } from './FormAlert';
 
 // Re-export default exports for alternative import patterns
 export { default as ButtonComponent } from './Button';
+export { default as TabButtonComponent } from './TabButton';
 export { default as InputComponent } from './Input';
 export { default as CardComponent } from './Card';
 export { default as BadgeComponent } from './Badge';
 export { default as SelectComponent } from './Select';
 export { default as ModalComponent } from './Modal';
 export { default as TableComponent } from './Table';
-export { default as TabsComponent } from './Tabs';
+export { default as FormAlertComponent } from './FormAlert';

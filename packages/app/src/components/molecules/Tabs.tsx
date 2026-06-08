@@ -1,8 +1,9 @@
 import React from 'react';
 import type { FC } from 'react';
-import { theme } from '../../tokens/theme';
-import { useTranslation } from '../../i18n';
-import { useAccessibility, useKeyboardNavigation } from '../../accessibility';
+import { useTranslation } from '@petstore-ui/atoms';
+import { useAccessibility, useKeyboardNavigation } from '@petstore-ui/atoms';
+import { theme } from '@petstore-ui/atoms';
+import { TabButton } from '@petstore-ui/atoms';
 
 export interface TabItem {
   id: string;
@@ -97,23 +98,6 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
     borderBottom: `1px solid ${theme.colors.secondary[300]}`,
   };
 
-  const buttonStyles = (isActive: boolean): React.CSSProperties => ({
-    border: 'none',
-    borderBottom: `2px solid ${isActive ? theme.colors.primary[500] : 'transparent'}`,
-    background: 'transparent',
-    color: isActive ? theme.colors.primary[700] : theme.colors.secondary[600],
-    padding: `${theme.spacing[2]} ${theme.spacing[3]}`,
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: theme.spacing[2],
-    fontFamily: theme.typography.fontFamily.sans.join(', '),
-    fontSize: theme.typography.fontSize.sm,
-    fontWeight: isActive
-      ? theme.typography.fontWeight.semibold
-      : theme.typography.fontWeight.medium,
-    cursor: 'pointer',
-  });
-
   return (
     <div
       data-component="Tabs"
@@ -131,24 +115,20 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
           : (tab.label ?? tab.id);
 
         return (
-          <button
+          <TabButton
             key={tab.id}
             id={tabId}
             ref={(node) => {
               tabRefs.current[index] = node;
             }}
-            role="tab"
-            aria-selected={isActive}
-            aria-controls={panelId}
-            tabIndex={isActive ? 0 : -1}
-            style={buttonStyles(isActive)}
+            selected={isActive}
+            controls={panelId}
             onClick={() => onChange(tab.id)}
             onKeyDown={(event) => handleTabKeyDown(event, index)}
-            type="button"
           >
             {tab.icon}
             {displayLabel}
-          </button>
+          </TabButton>
         );
       })}
     </div>

@@ -4,6 +4,7 @@ import { Input } from '@petstore-ui/atoms';
 import { Button } from '@petstore-ui/atoms';
 import { useTranslation } from '@petstore-ui/atoms';
 import { useAccessibility } from '@petstore-ui/atoms';
+import { FormAlert } from '@petstore-ui/atoms';
 
 export interface LoginFormProps {
   /** Called with (username, password) on submit */
@@ -39,23 +40,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isLoading = false, erro
       {...ariaAttributes}
       autoComplete="on"
     >
-      {error && (
-        <div
-          role="alert"
-          aria-live="assertive"
-          style={{
-            color: '#dc2626',
-            fontSize: '0.875rem',
-            marginBottom: '0.75rem',
-            padding: '0.5rem 0.75rem',
-            background: '#fef2f2',
-            borderRadius: '0.375rem',
-            border: '1px solid #fca5a5',
-          }}
-        >
-          {error}
-        </div>
-      )}
+      {error && <FormAlert message={error} />}
       <Input
         name="username"
         labelTranslationKey="petstore.auth.form.username"

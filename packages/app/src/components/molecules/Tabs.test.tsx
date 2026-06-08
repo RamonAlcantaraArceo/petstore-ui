@@ -1,17 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Tabs } from './Tabs';
-import { useTranslation } from '../../i18n';
-import { useAccessibility, useKeyboardNavigation } from '../../accessibility';
+import { useTranslation } from '@petstore-ui/atoms';
+import { useAccessibility, useKeyboardNavigation } from '@petstore-ui/atoms';
 
-vi.mock('../../i18n', () => ({
-  useTranslation: vi.fn(),
-}));
-
-vi.mock('../../accessibility', () => ({
-  useAccessibility: vi.fn(),
-  useKeyboardNavigation: vi.fn(),
-}));
+vi.mock('@petstore-ui/atoms', async () => {
+  const actual = await vi.importActual<typeof import('@petstore-ui/atoms')>('@petstore-ui/atoms');
+  return {
+    ...actual,
+    useTranslation: vi.fn(),
+    useAccessibility: vi.fn(),
+    useKeyboardNavigation: vi.fn(),
+  };
+});
 
 describe('Tabs', () => {
   beforeEach(() => {

@@ -1,6 +1,9 @@
 export { Button } from './components/atoms/Button';
 export type { ButtonProps } from './components/atoms/Button';
 
+export { TabButton } from './components/atoms/TabButton';
+export type { TabButtonProps } from './components/atoms/TabButton';
+
 export { Input } from './components/atoms/Input';
 export type { InputProps } from './components/atoms/Input';
 
@@ -19,8 +22,8 @@ export type { ModalProps } from './components/atoms/Modal';
 export { Table } from './components/atoms/Table';
 export type { TableProps, TableColumn } from './components/atoms/Table';
 
-export { Tabs } from './components/atoms/Tabs';
-export type { TabsProps, TabItem } from './components/atoms/Tabs';
+export { FormAlert } from './components/atoms/FormAlert';
+export type { FormAlertProps } from './components/atoms/FormAlert';
 
 export {
   default as theme,

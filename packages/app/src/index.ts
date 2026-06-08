@@ -13,6 +13,9 @@ export type { UserManagementViewProps } from './components/organisms/UserManagem
 export { PetstoreApp } from './components/organisms/PetstoreApp';
 export type { PetstoreAppProps } from './components/organisms/PetstoreApp';
 
+export { Tabs } from './components/molecules/Tabs';
+export type { TabsProps, TabItem } from './components/molecules/Tabs';
+
 export { LoginForm } from './components/molecules/LoginForm';
 export type { LoginFormProps } from './components/molecules/LoginForm';
 

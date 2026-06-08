@@ -10,7 +10,7 @@ const tabs = [
 ];
 
 const meta: Meta<typeof Tabs> = {
-  title: 'Common/Atoms/Tabs',
+  title: 'Petstore/Molecules/Tabs',
   component: Tabs,
   parameters: {
     layout: 'centered',

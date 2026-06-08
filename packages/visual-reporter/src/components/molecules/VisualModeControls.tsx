@@ -1,7 +1,6 @@
 import type { CSSProperties, FC, KeyboardEvent } from 'react';
 import { useMemo, useRef } from 'react';
-import { useTranslation } from '@petstore-ui/atoms';
-import { theme } from '@petstore-ui/atoms';
+import { TabButton, theme, useTranslation } from '@petstore-ui/atoms';
 import { COMPARISON_MODES, DEFAULT_COMPARISON_MODE } from '../../visual-report/constants';
 import { resolveSelectableMode } from '../../visual-report/model';
 import type { ComparisonMode, VisualVariant } from '../../visual-report/types';
@@ -104,30 +103,14 @@ export const VisualModeControls: FC<VisualModeControlsProps> = ({
       {COMPARISON_MODES.map((mode) => {
         const disabled = disabledModes.has(mode.value);
         const selected = activeMode === mode.value;
-        const style: CSSProperties = {
-          border: `1px solid ${selected ? 'var(--color-primary)' : 'var(--color-border-strong)'}`,
-          background: selected ? 'var(--color-primary-soft)' : 'var(--color-surface)',
-          color: 'var(--color-text)',
-          borderRadius: theme.borderRadius.md,
-          padding: '6px 10px',
-          fontSize: theme.typography.fontSize.xs,
-          lineHeight: theme.typography.lineHeight.tight,
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          opacity: disabled ? 0.45 : 1,
-        };
-
         return (
-          <button
+          <TabButton
             key={mode.value}
             id={`${idPrefix}-tab-${mode.value}`}
-            type="button"
-            role="tab"
-            aria-controls={`${idPrefix}-panel`}
-            aria-selected={selected}
-            aria-disabled={disabled}
+            selected={selected}
+            appearance="pill"
+            controls={`${idPrefix}-panel`}
             disabled={disabled}
-            tabIndex={selected ? 0 : -1}
-            style={style}
             onKeyDown={handleKeyDown}
             onClick={() => !disabled && selectMode(mode.value)}
             ref={(element) => {
@@ -135,7 +118,7 @@ export const VisualModeControls: FC<VisualModeControlsProps> = ({
             }}
           >
             {t(mode.labelKey)}
-          </button>
+          </TabButton>
         );
       })}
     </div>

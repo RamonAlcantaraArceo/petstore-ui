@@ -1,5 +1,5 @@
 import { useEffect, useState, type FC } from 'react';
-import { Tabs } from '@petstore-ui/atoms';
+import { Tabs } from '../molecules/Tabs';
 import { Button } from '@petstore-ui/atoms';
 import { useTranslation } from '@petstore-ui/atoms';
 import { useAccessibility } from '@petstore-ui/atoms';
