@@ -61,7 +61,7 @@ export default defineConfig({
         ['json', { outputFile: 'test-results/playwright-report.json' }],
       ],
   use: {
-    baseURL: 'http://127.0.0.1:4000',
+    baseURL: 'http://127.0.0.1:6006',
     headless: true,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
@@ -77,8 +77,8 @@ export default defineConfig({
     ? [...baseProjects, ...additionalProjects]
     : baseProjects,
   webServer: {
-    command: 'pnpm run preview',
-    port: 4000,
+    command: 'pnpm run storybook:petstore',
+    port: 6006,
     timeout: 120 * 1000,
     reuseExistingServer: !isCI,
   },

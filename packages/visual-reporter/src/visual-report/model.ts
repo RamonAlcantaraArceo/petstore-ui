@@ -193,7 +193,19 @@ export const buildTree = (componentGroups: VisualComponentGroup[]): TreeNodeByNa
 export const getVariantMode = (
   variantModes: Map<string, ComparisonMode>,
   variantKey: string,
-): ComparisonMode => variantModes.get(variantKey) ?? DEFAULT_COMPARISON_MODE;
+  variant: Pick<VisualVariant, 'expected' | 'actual'>,
+): ComparisonMode => {
+  const selectedMode = variantModes.get(variantKey);
+  if (selectedMode) {
+    return selectedMode;
+  }
+
+  if (!variant.expected || !variant.actual) {
+    return 'side-by-side';
+  }
+
+  return DEFAULT_COMPARISON_MODE;
+};
 
 export const resolveSelectableMode = (
   mode: ComparisonMode,

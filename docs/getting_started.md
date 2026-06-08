@@ -109,14 +109,12 @@ pnpm run build
 pnpm run preview
 ```
 
-Preview opens at **http://localhost:4000**
+Preview opens at **http://localhost:4000/visual-report/**
 
 **What you can do:**
 
-- Preview homepage, Storybook, and Petstore app
-- Test production build
-- Verify navigation and routing
-- Test visual regression report at `/visual-report/`
+- Preview generated visual report output
+- Validate visual-report routing and assets
 
 **Best for:** Pre-deployment testing, validating production builds.
 

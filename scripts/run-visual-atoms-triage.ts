@@ -95,4 +95,13 @@ if (failedSteps.length === 0) {
   }
 }
 
-console.log('Run `pnpm run preview` then open http://localhost:4000/visual-report/ to triage.');
+console.log('\n▶ Launch visual report preview');
+console.log('$ pnpm run preview');
+console.log('Open http://localhost:4000/visual-report/ to triage.\n');
+
+spawnSync('pnpm', ['run', 'preview'], {
+  cwd: process.cwd(),
+  env: process.env,
+  stdio: 'inherit',
+  shell: false,
+});

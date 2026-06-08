@@ -159,7 +159,7 @@ export const VisualReportApp: FC<VisualReportAppProps> = ({ data }) => {
                         story={story}
                         variant={variant}
                         generatedAt={data.generatedAt}
-                        activeMode={getVariantMode(variantModes, variantKey)}
+                        activeMode={getVariantMode(variantModes, variantKey, variant)}
                         onModeChange={(key, mode) => {
                           setVariantModes((prev) => {
                             const next = new Map(prev);

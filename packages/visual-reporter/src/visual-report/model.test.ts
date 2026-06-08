@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  getVariantMode,
   getFilterCounts,
   toggleStatusFilter,
   toViewData,
@@ -46,5 +47,23 @@ describe('visual report model', () => {
     expect(counts.get('all')).toBe(3);
     expect(counts.get('failed')).toBe(1);
     expect(counts.get('passed')).toBe(2);
+  });
+
+  it('defaults to side-by-side when either comparison image is missing', () => {
+    const modeWithoutStoredSelection = getVariantMode(new Map(), 'story::desktop', {
+      expected: 'expected.png',
+      actual: null,
+    });
+
+    expect(modeWithoutStoredSelection).toBe('side-by-side');
+  });
+
+  it('keeps slider default when both images are present', () => {
+    const modeWithoutStoredSelection = getVariantMode(new Map(), 'story::desktop', {
+      expected: 'expected.png',
+      actual: 'actual.png',
+    });
+
+    expect(modeWithoutStoredSelection).toBe('slider');
   });
 });

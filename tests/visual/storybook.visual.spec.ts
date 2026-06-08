@@ -118,7 +118,7 @@ test.describe('Storybook visual regression', () => {
 
   for (const entry of storyEntries) {
     test(`${entry.id} (${entry.type ?? 'unknown'})`, async ({ page }, testInfo) => {
-      const iframeUrl = `/storybook/iframe.html?id=${encodeURIComponent(entry.id)}&viewMode=${entry.type === 'docs' ? 'docs' : 'story'}`;
+      const iframeUrl = `/iframe.html?id=${encodeURIComponent(entry.id)}&viewMode=${entry.type === 'docs' ? 'docs' : 'story'}`;
 
       await page.goto(iframeUrl, { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState('networkidle');
