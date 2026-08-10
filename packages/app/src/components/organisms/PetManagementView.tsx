@@ -14,6 +14,8 @@ import type { Pet, PetStatus } from '../../services/types';
 import { findPetsByStatus, addPet, updatePet, deletePet } from '../../services/petApi';
 import { theme } from '@petstore-ui/atoms';
 
+const ALL_STATUSES: PetStatus[] = ['available', 'pending', 'sold'];
+
 export interface PetManagementViewProps {
   /** Whether user is authenticated (shows CRUD buttons) */
   isLoggedIn?: boolean;
@@ -34,7 +36,6 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
   });
 
   // State
-  const ALL_STATUSES: PetStatus[] = ['available', 'pending', 'sold'];
   const [selectedStatus, setSelectedStatus] = React.useState<PetStatusFilter>('');
   const [pets, setPets] = React.useState<Pet[]>(initialPets || []);
   const [isLoading, setIsLoading] = React.useState(false);
