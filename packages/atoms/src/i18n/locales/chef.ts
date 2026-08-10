@@ -212,6 +212,7 @@ export const chef = {
       close: 'Çløøsë-a',
       selectLabel: 'Sëlëct-a øptïøñ',
       status: {
+        all: 'Äll-a',
         available: 'Aväïläblë-a',
         pending: 'Pëñdïñg-a',
         sold: 'Søld-a',

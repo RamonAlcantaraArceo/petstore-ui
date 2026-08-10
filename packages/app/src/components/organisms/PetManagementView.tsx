@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { Button } from '@petstore-ui/atoms';
 import { Modal } from '@petstore-ui/atoms';
 import { StatusFilter } from '../molecules/StatusFilter';
+import type { PetStatusFilter } from '../molecules/StatusFilter';
 import { PetCard } from '../molecules/PetCard';
 import { PetForm } from '../molecules/PetForm';
 import type { PetFormFields } from '../molecules/PetForm';
@@ -34,7 +35,7 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
 
   // State
   const ALL_STATUSES: PetStatus[] = ['available', 'pending', 'sold'];
-  const [selectedStatus, setSelectedStatus] = React.useState<PetStatus>('available');
+  const [selectedStatus, setSelectedStatus] = React.useState<PetStatusFilter>('');
   const [pets, setPets] = React.useState<Pet[]>(initialPets || []);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -50,7 +51,8 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
     if (mockMode) return;
     setIsLoading(true);
     setError(null);
-    const result = await findPetsByStatus([selectedStatus]);
+    const statusesToFetch = selectedStatus ? [selectedStatus] : ALL_STATUSES;
+    const result = await findPetsByStatus(statusesToFetch);
     if (result.data) {
       setPets(result.data);
     } else {
@@ -135,7 +137,7 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
         <StatusFilter
           statuses={ALL_STATUSES}
           selectedStatus={selectedStatus}
-          onChange={setSelectedStatus}
+          onChange={(s: PetStatusFilter) => setSelectedStatus(s)}
           onRefresh={fetchPets}
           isLoading={isLoading}
         />

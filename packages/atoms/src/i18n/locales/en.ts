@@ -208,6 +208,7 @@ export const en = {
       close: 'Close',
       selectLabel: 'Select option',
       status: {
+        all: 'All',
         available: 'Available',
         pending: 'Pending',
         sold: 'Sold',
