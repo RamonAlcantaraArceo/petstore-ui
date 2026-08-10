@@ -28,6 +28,7 @@ export const chef = {
       fields: {
         username: 'Üsërnämë-a',
         password: 'Påsswørd-a',
+        confirmPassword: 'Cønfïrm Påsswørd-a',
         email: 'Émäïl (øptïøñäl)-a',
         firstName: 'Fïrst Nämë (øptïøñäl)-a',
         lastName: 'Läst Nämë (øptïøñäl)-a',
@@ -39,6 +40,7 @@ export const chef = {
       errors: {
         usernameRequired: 'Üsërnämë ïs rëqüïrëd-a',
         passwordRequired: 'Påsswørd ïs rëqüïrëd-a',
+        passwordMismatch: 'Påsswørds dø nøt mätch-a',
         emailInvalid: 'Ïñvälïd émâïl ädrëss-a',
         generic: 'Fäïlëd tø crëätë üsër. Plëäsë try ägäïñ.-a',
       },
@@ -202,6 +204,10 @@ export const chef = {
     },
   },
   petstore: {
+    dialog: {
+      openButton: 'Øpëñ dïäløg-a',
+      cannotUndoMessage: 'Thïs äctïøñ cäññøt bë üñdøñë.-a',
+    },
     common: {
       close: 'Çløøsë-a',
       selectLabel: 'Sëlëct-a øptïøñ',
@@ -310,6 +316,14 @@ export const chef = {
         submit: 'Sïgñ Ïñ-a',
         announceSubmit: 'Sïgnïng ïñ...-a',
       },
+      errors: {
+        invalidCredentials: 'Ïñvälïd üsërnämë ør påsswørd. Plëäsë try ägäïñ-a.',
+        unauthorized: 'Yøü ärë nøt äüthørïzëd tø përførm thïs äctïøñ-a.',
+        notFound: 'Üsër nøt føüñd-a.',
+        serverError: 'Ä sërvër ërrør øccürrëd. Plëäsë try ägäïñ lätër-a.',
+        networkError: 'Cøüld nøt cøññëct tø thë sërvër. Chëck yøür ïñtërnët cøññëctïøñ-a.',
+        generic: 'Søméthïñg wëñt wrøñg. Plëäsë try ägäïñ-a.',
+      },
     },
     pets: {
       card: {
@@ -367,6 +381,23 @@ export const chef = {
         loggedInAs: 'Løggëd ïñ äs {username}-a',
         announceSignIn: 'Øpëñïñg sïgñ ïñ førm-a',
         announceSignOut: 'Sïgñïñg øüt-a',
+        deleteAccount: 'Dëlëtë My Äccøüñt-a',
+        deleteAccountTitle: 'Dëlëtë Äccøüñt-a',
+        deleteAccountMessage:
+          'Ärë yøü sürë yøü wäñt tø përmänëñtly dëlëtë yøür äccøüñt ({username})? Thïs äctïøñ cännøt bë üñdøñë-a.',
+        announceDeleteAccount: 'Øpëñïñg dëlëtë äccøüñt cøñfïrmätïøñ-a',
+        buildInfoButton: 'Büïld ïñførmätïøñ-a',
+        buildInfoTitle: 'Büïld Ïñførmätïøñ-a',
+        buildInfoUiSection: 'ÜÏ-a',
+        buildInfoApiSection: 'ÄPÏ-a',
+        buildInfoVersion: 'Vërsïøñ-a',
+        buildInfoBuildDate: 'Büïld Dätë-a',
+        buildInfoGitSha: 'Gït Cømmït-a',
+        buildInfoApiStatus: 'Stätüs-a',
+        buildInfoApiMode: 'Mødë-a',
+        buildInfoCopy: 'Cøpy JSØÑ-a',
+        buildInfoCopied: 'Cøpïëd!-a',
+        buildInfoClose: 'Cløsë-a',
       },
       pets: {
         ariaLabel: 'Pët mänägëmëñt-a',

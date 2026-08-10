@@ -25,6 +25,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isLoading = false, erro
     announceOnAction: t('petstore.auth.form.announceSubmit'),
   });
 
+  const isSubmitDisabled = isLoading || !username.trim() || !password.trim();
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     onLogin(username, password);
@@ -81,7 +82,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isLoading = false, erro
           type="submit"
           variant="primary"
           fullWidth
-          disabled={isLoading}
+          disabled={isSubmitDisabled}
           loading={isLoading}
           announceOnAction={t('petstore.auth.form.announceSubmit')}
         >

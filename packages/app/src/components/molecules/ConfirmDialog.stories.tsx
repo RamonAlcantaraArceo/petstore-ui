@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ConfirmDialog } from './ConfirmDialog';
-import { Button } from '@petstore-ui/atoms';
+import { Button, useTranslation } from '@petstore-ui/atoms';
 
 const meta: Meta<typeof ConfirmDialog> = {
   title: 'Petstore/Molecules/ConfirmDialog',
@@ -34,13 +34,14 @@ const WithTrigger = ({
   message?: string;
 }) => {
   const [open, setOpen] = React.useState(false);
+  const { t } = useTranslation();
 
   return (
     <div>
-      <Button onClick={() => setOpen(true)}>Open dialog</Button>
+      <Button onClick={() => setOpen(true)}>{t('petstore.dialog.openButton')}</Button>
       <ConfirmDialog
         isOpen={open}
-        {...(message !== undefined && { message })}
+        {...(message !== undefined && { message: t(message) })}
         variant={variant}
         onConfirm={() => {
           console.log('Confirmed');
@@ -57,7 +58,7 @@ const WithTrigger = ({
 
 export const Default: Story = {
   name: 'Default',
-  render: () => <WithTrigger message="This action cannot be undone." />,
+  render: () => <WithTrigger message="petstore.dialog.cannotUndoMessage" />,
   parameters: {
     docs: {
       description: {
@@ -84,9 +85,10 @@ export const CustomTitle: Story = {
   name: 'Custom Title',
   render: () => {
     const [open, setOpen] = React.useState(false);
+    const { t } = useTranslation();
     return (
       <div>
-        <Button onClick={() => setOpen(true)}>Open dialog</Button>
+        <Button onClick={() => setOpen(true)}>{t('petstore.dialog.openButton')}</Button>
         <ConfirmDialog
           isOpen={open}
           title="Delete Pet?"

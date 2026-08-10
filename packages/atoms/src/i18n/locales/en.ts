@@ -27,6 +27,7 @@ export const en = {
       fields: {
         username: 'Username',
         password: 'Password',
+        confirmPassword: 'Confirm Password',
         email: 'Email (optional)',
         firstName: 'First Name (optional)',
         lastName: 'Last Name (optional)',
@@ -38,6 +39,7 @@ export const en = {
       errors: {
         usernameRequired: 'Username is required',
         passwordRequired: 'Password is required',
+        passwordMismatch: 'Passwords do not match',
         emailInvalid: 'Invalid email address',
         generic: 'Failed to create user. Please try again.',
       },
@@ -198,6 +200,10 @@ export const en = {
     },
   },
   petstore: {
+    dialog: {
+      openButton: 'Open dialog',
+      cannotUndoMessage: 'This action cannot be undone.',
+    },
     common: {
       close: 'Close',
       selectLabel: 'Select option',
@@ -306,6 +312,14 @@ export const en = {
         submit: 'Sign In',
         announceSubmit: 'Signing in...',
       },
+      errors: {
+        invalidCredentials: 'Invalid username or password. Please try again.',
+        unauthorized: 'You are not authorized to perform this action.',
+        notFound: 'User not found.',
+        serverError: 'A server error occurred. Please try again later.',
+        networkError: 'Could not connect to the server. Check your internet connection.',
+        generic: 'Something went wrong. Please try again.',
+      },
     },
     pets: {
       card: {
@@ -363,6 +377,23 @@ export const en = {
         loggedInAs: 'Logged in as {username}',
         announceSignIn: 'Opening sign in form',
         announceSignOut: 'Signing out',
+        deleteAccount: 'Delete My Account',
+        deleteAccountTitle: 'Delete Account',
+        deleteAccountMessage:
+          'Are you sure you want to permanently delete your account ({username})? This action cannot be undone.',
+        announceDeleteAccount: 'Opening delete account confirmation',
+        buildInfoButton: 'Build information',
+        buildInfoTitle: 'Build Information',
+        buildInfoUiSection: 'UI',
+        buildInfoApiSection: 'API',
+        buildInfoVersion: 'Version',
+        buildInfoBuildDate: 'Build Date',
+        buildInfoGitSha: 'Git Commit',
+        buildInfoApiStatus: 'Status',
+        buildInfoApiMode: 'Mode',
+        buildInfoCopy: 'Copy JSON',
+        buildInfoCopied: 'Copied!',
+        buildInfoClose: 'Close',
       },
       pets: {
         ariaLabel: 'Pet management',

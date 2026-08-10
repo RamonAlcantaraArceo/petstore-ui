@@ -245,3 +245,52 @@ export function put<T>(path: string, body?: unknown): Promise<ApiResult<T>> {
 export function del<T>(path: string): Promise<ApiResult<T>> {
   return request<T>('DELETE', path);
 }
+
+// ---------------------------------------------------------------------------
+// Error parsing utilities
+// ---------------------------------------------------------------------------
+
+export interface ParsedApiError {
+  /** HTTP status code, or null for network errors */
+  status: number | null;
+  /** Human-readable message extracted from the error payload */
+  message: string;
+  /** Original raw error string */
+  raw: string;
+}
+
+/**
+ * Parse a raw API error string (e.g. `"401: {\"detail\":\"Invalid credentials.\"}"`)
+ * into a structured `ParsedApiError` object.
+ *
+ * Recognises the `status: body` format produced by the `request()` helper and
+ * attempts to extract a readable message from common JSON error shapes:
+ * `{ detail }`, `{ message }`, `{ error }`.
+ */
+export function parseApiError(raw: string): ParsedApiError {
+  // Try to match `<status>: <body>` format
+  const statusMatch = /^(\d{3}):\s*(.*)$/s.exec(raw.trim());
+  if (!statusMatch) {
+    return { status: null, message: raw, raw };
+  }
+
+  const status = parseInt(statusMatch[1]!, 10);
+  const body = statusMatch[2]!.trim();
+
+  // Attempt to parse JSON body for a human-readable message
+  try {
+    const parsed = JSON.parse(body) as Record<string, unknown>;
+    const msg =
+      (typeof parsed.detail === 'string' ? parsed.detail : null) ??
+      (typeof parsed.message === 'string' ? parsed.message : null) ??
+      (typeof parsed.error === 'string' ? parsed.error : null);
+
+    if (msg) {
+      return { status, message: msg, raw };
+    }
+  } catch {
+    // body was not JSON — fall through to use it as-is
+  }
+
+  return { status, message: body || raw, raw };
+}

@@ -4,11 +4,14 @@ import { AuthProvider, useAuthContext } from '../../context/AuthContext';
 import { LocaleProvider, useTranslation } from '@petstore-ui/atoms';
 import { Modal } from '@petstore-ui/atoms';
 import { LoginForm } from '../molecules/LoginForm';
+import { ConfirmDialog } from '../molecules/ConfirmDialog';
 import { AppNavigation } from './AppNavigation';
 import type { AppId } from './AppNavigation';
 import { PetManagementView } from './PetManagementView';
 import { StoreOrdersView } from './StoreOrdersView';
 import { UserManagementView } from './UserManagementView';
+import { deleteUser } from '../../services/userApi';
+import { parseApiError } from '../../services/apiClient';
 import { theme } from '@petstore-ui/atoms';
 
 /** Map hash fragments to AppId values */
@@ -21,6 +24,34 @@ function hashToApp(hash: string): AppId {
 
 function appToHash(app: AppId): string {
   return `#/${app}`;
+}
+
+/**
+ * Map a raw API error string to a human-readable, translated message.
+ * Handles the `"<status>: <body>"` format produced by apiClient.
+ */
+function translateApiError(raw: string | null | undefined, t: (key: string) => string): string {
+  if (!raw) return t('petstore.auth.errors.generic');
+
+  const { status, message } = parseApiError(raw);
+
+  // Network / no status
+  if (status === null) return t('petstore.auth.errors.networkError');
+
+  // Map well-known HTTP statuses to friendly keys
+  if (status === 401 || status === 403) {
+    // If the message hints at credentials vs authorisation
+    const lower = message.toLowerCase();
+    if (lower.includes('credential') || lower.includes('password') || lower.includes('login')) {
+      return t('petstore.auth.errors.invalidCredentials');
+    }
+    return t('petstore.auth.errors.unauthorized');
+  }
+  if (status === 404) return t('petstore.auth.errors.notFound');
+  if (status >= 500) return t('petstore.auth.errors.serverError');
+
+  // Fall back to the extracted message (already stripped of JSON wrapper)
+  return message || t('petstore.auth.errors.generic');
 }
 
 export interface PetstoreAppProps {
@@ -46,6 +77,9 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
   const [loginOpen, setLoginOpen] = React.useState(false);
   const [loginLoading, setLoginLoading] = React.useState(false);
   const [loginError, setLoginError] = React.useState<string | undefined>(undefined);
+
+  // Delete account confirmation state
+  const [deleteAccountOpen, setDeleteAccountOpen] = React.useState(false);
 
   // Listen for hash changes
   React.useEffect(() => {
@@ -80,12 +114,23 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
       setLoginOpen(false);
       setLoginError(undefined);
     } else {
-      setLoginError(result.error ?? t('petstore.app.shell.loginFailed'));
+      setLoginError(translateApiError(result.error, t));
     }
   };
 
   const handleLogout = async () => {
     if (mockMode) return;
+    await logout();
+  };
+
+  const handleDeleteAccountRequest = () => {
+    setDeleteAccountOpen(true);
+  };
+
+  const handleDeleteAccountConfirm = async () => {
+    setDeleteAccountOpen(false);
+    if (mockMode || !username) return;
+    await deleteUser(username);
     await logout();
   };
 
@@ -106,6 +151,7 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
         {...(username !== null ? { username } : {})}
         onLogin={handleLoginRequest}
         onLogout={handleLogout}
+        {...(isLoggedIn ? { onDeleteAccount: handleDeleteAccountRequest } : {})}
       />
 
       <main>
@@ -129,6 +175,16 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
           {...(loginError !== undefined ? { error: loginError } : {})}
         />
       </Modal>
+
+      {/* Delete Account Confirmation */}
+      <ConfirmDialog
+        isOpen={deleteAccountOpen}
+        titleTranslationKey="petstore.app.navigation.deleteAccountTitle"
+        message={username ? t('petstore.app.navigation.deleteAccountMessage', { username }) : ''}
+        variant="danger"
+        onConfirm={handleDeleteAccountConfirm}
+        onCancel={() => setDeleteAccountOpen(false)}
+      />
     </div>
   );
 };
