@@ -9,16 +9,29 @@ import type { Pet, PetStatus, ApiResponse, ApiResult } from './types';
 import { get, post, put, del } from './apiClient';
 
 /**
- * Find pets by one or more statuses.
- * @param statuses — Array of pet statuses to filter by
+ * Find pets by one or more statuses, with optional server-side pagination.
+ * @param statuses — Array of pet statuses to filter by (empty = no filter)
+ * @param skip     — Number of results to skip (offset)
+ * @param limit    — Maximum number of results to return
  */
-export function findPetsByStatus(statuses: PetStatus[]): Promise<ApiResult<Pet[]>> {
-  if (statuses.length === 0) {
-    return get<Pet[]>('/pet/findByStatus');
+export function findPetsByStatus(
+  statuses: PetStatus[],
+  skip?: number,
+  limit?: number,
+): Promise<ApiResult<Pet[]>> {
+  const params: Record<string, string> = {};
+
+  if (statuses.length > 0) {
+    params.status = statuses.join(',');
   }
-  return get<Pet[]>('/pet/findByStatus', {
-    status: statuses.join(','),
-  });
+  if (skip !== undefined) {
+    params.skip = String(skip);
+  }
+  if (limit !== undefined) {
+    params.limit = String(limit);
+  }
+
+  return get<Pet[]>('/pet/findByStatus', Object.keys(params).length ? params : undefined);
 }
 
 /**

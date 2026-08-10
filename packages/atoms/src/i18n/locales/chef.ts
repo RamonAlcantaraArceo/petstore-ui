@@ -408,7 +408,7 @@ export const chef = {
         loadMore: 'Løäd Mørë-a',
         loadingMore: 'Løädïñg...-a',
         allDisplayed: 'Äll rësülts dïspläyëd-a',
-        showingCount: 'Shøwïñg {shown} øf {total}-a',
+        showingCount: 'Shøwïñg {shown} rësülts-a',
         deleteTitle: 'Dëlëtë Pët-a',
         deleteMessage: 'Ärë yøü sürë yøü wäñt tø dëlëtë {name}?-a',
       },

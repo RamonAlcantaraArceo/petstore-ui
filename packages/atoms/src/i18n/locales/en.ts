@@ -404,7 +404,7 @@ export const en = {
         loadMore: 'Load More',
         loadingMore: 'Loading...',
         allDisplayed: 'All results displayed',
-        showingCount: 'Showing {shown} of {total}',
+        showingCount: 'Showing {shown} results',
         deleteTitle: 'Delete Pet',
         deleteMessage: 'Are you sure you want to delete {name}?',
       },
