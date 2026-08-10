@@ -23,12 +23,15 @@ export interface PetManagementViewProps {
   initialPets?: Pet[];
   /** When true, skip API calls (story mode) */
   mockMode?: boolean;
+  /** Number of pets shown per page / load-more step */
+  pageSize?: number;
 }
 
 export const PetManagementView: FC<PetManagementViewProps> = ({
   isLoggedIn = false,
   initialPets,
   mockMode = false,
+  pageSize = 4,
 }) => {
   const { t } = useTranslation();
   const { ariaAttributes } = useAccessibility({
@@ -37,9 +40,14 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
 
   // State
   const [selectedStatus, setSelectedStatus] = React.useState<PetStatusFilter>('');
-  const [pets, setPets] = React.useState<Pet[]>(initialPets || []);
+  const [allPets, setAllPets] = React.useState<Pet[]>(initialPets || []);
+  const [visibleCount, setVisibleCount] = React.useState(pageSize);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+
+  // Derived
+  const visiblePets = allPets.slice(0, visibleCount);
+  const hasMore = visibleCount < allPets.length;
 
   // Modal states
   const [formOpen, setFormOpen] = React.useState(false);
@@ -47,7 +55,7 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
   const [deletingPet, setDeletingPet] = React.useState<Pet | undefined>(undefined);
   const [formLoading, setFormLoading] = React.useState(false);
 
-  // Fetch pets
+  // Fetch pets — resets visible page
   const fetchPets = React.useCallback(async () => {
     if (mockMode) return;
     setIsLoading(true);
@@ -55,18 +63,27 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
     const statusesToFetch = selectedStatus ? [selectedStatus] : [];
     const result = await findPetsByStatus(statusesToFetch);
     if (result.data) {
-      setPets(result.data);
+      setAllPets(result.data);
+      setVisibleCount(pageSize);
     } else {
       setError(result.error);
     }
     setIsLoading(false);
-  }, [selectedStatus, mockMode]);
+  }, [selectedStatus, mockMode, pageSize]);
 
   React.useEffect(() => {
     if (!initialPets) {
       fetchPets();
     }
   }, [fetchPets, initialPets]);
+
+  // Reset visible count when initialPets changes (story mode)
+  React.useEffect(() => {
+    if (initialPets) {
+      setAllPets(initialPets);
+      setVisibleCount(pageSize);
+    }
+  }, [initialPets, pageSize]);
 
   // CRUD handlers
   const handleAdd = () => {
@@ -116,6 +133,10 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
     await deletePet(deletingPet.id);
     setDeletingPet(undefined);
     fetchPets();
+  };
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + pageSize, allPets.length));
   };
 
   return (
@@ -172,7 +193,7 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
       )}
 
       {/* Empty state */}
-      {!isLoading && pets.length === 0 && !error && (
+      {!isLoading && allPets.length === 0 && !error && (
         <p style={{ color: theme.colors.text.secondary, fontSize: theme.typography.fontSize.sm }}>
           {t('petstore.app.pets.emptyState')}
         </p>
@@ -186,7 +207,7 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
           gap: theme.spacing[4],
         }}
       >
-        {pets.map((pet) => (
+        {visiblePets.map((pet) => (
           <PetCard
             key={pet.id}
             pet={pet}
@@ -196,6 +217,53 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
           />
         ))}
       </div>
+
+      {/* Pagination footer */}
+      {allPets.length > 0 && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: theme.spacing[2],
+            marginTop: theme.spacing[6],
+          }}
+        >
+          <span
+            style={{
+              fontSize: theme.typography.fontSize.sm,
+              color: theme.colors.text.secondary,
+            }}
+          >
+            {t('petstore.app.pets.showingCount', {
+              shown: visiblePets.length,
+              total: allPets.length,
+            })}
+          </span>
+          {hasMore ? (
+            <Button
+              variant="secondary"
+              onClick={handleLoadMore}
+              disabled={isLoading}
+              loading={isLoading}
+            >
+              {t('petstore.app.pets.loadMore')}
+            </Button>
+          ) : (
+            <p
+              role="status"
+              style={{
+                fontSize: theme.typography.fontSize.sm,
+                color: theme.colors.text.secondary,
+                fontStyle: 'italic',
+                margin: 0,
+              }}
+            >
+              {t('petstore.app.pets.allDisplayed')}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Add / Edit modal */}
       <Modal
