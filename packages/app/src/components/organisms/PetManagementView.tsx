@@ -52,7 +52,7 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
     if (mockMode) return;
     setIsLoading(true);
     setError(null);
-    const statusesToFetch = selectedStatus ? [selectedStatus] : ALL_STATUSES;
+    const statusesToFetch = selectedStatus ? [selectedStatus] : [];
     const result = await findPetsByStatus(statusesToFetch);
     if (result.data) {
       setPets(result.data);

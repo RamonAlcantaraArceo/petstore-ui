@@ -13,6 +13,9 @@ import { get, post, put, del } from './apiClient';
  * @param statuses — Array of pet statuses to filter by
  */
 export function findPetsByStatus(statuses: PetStatus[]): Promise<ApiResult<Pet[]>> {
+  if (statuses.length === 0) {
+    return get<Pet[]>('/pet/findByStatus');
+  }
   return get<Pet[]>('/pet/findByStatus', {
     status: statuses.join(','),
   });
