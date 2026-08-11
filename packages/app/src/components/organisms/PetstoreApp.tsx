@@ -20,6 +20,7 @@ import {
   subscribeToApiErrors,
   type ApiErrorRecord,
 } from '../../services/apiClient';
+import { parseJsonBody } from '../../services/errorFormatting';
 import { theme } from '@petstore-ui/atoms';
 
 /** Map hash fragments to AppId values */
@@ -66,7 +67,7 @@ function buildErrorMarkdown(error: ApiErrorRecord): string {
         method: error.method,
         url: error.url,
         headers: error.request.headers,
-        body: error.request.body,
+        body: parseJsonBody(error.request.body),
       },
       null,
       2,
@@ -75,7 +76,14 @@ function buildErrorMarkdown(error: ApiErrorRecord): string {
     ``,
     `#### Response`,
     '```json',
-    JSON.stringify(error.fullResponse, null, 2),
+    JSON.stringify(
+      {
+        ...error.fullResponse,
+        body: parseJsonBody(error.fullResponse.body),
+      },
+      null,
+      2,
+    ),
     '```',
   ].join('\n');
 }
@@ -102,6 +110,9 @@ function translateApiError(raw: string | null | undefined, t: (key: string) => s
     return t('petstore.auth.errors.unauthorized');
   }
   if (status === 404) return t('petstore.auth.errors.notFound');
+  if (status === 422 && message.toLowerCase().includes('email')) {
+    return t('petstore.auth.errors.invalidEmail');
+  }
   if (status >= 500) return t('petstore.auth.errors.serverError');
 
   // Fall back to the extracted message (already stripped of JSON wrapper)
@@ -450,12 +461,19 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
                           responseTimestamp: selectedError.responseTimestamp,
                           durationMs: selectedError.durationMs,
                           headers: selectedError.request.headers,
-                          body: selectedError.request.body,
+                          body: parseJsonBody(selectedError.request.body),
                         },
                         null,
                         2,
                       )
-                    : JSON.stringify(selectedError.fullResponse, null, 2)}
+                    : JSON.stringify(
+                        {
+                          ...selectedError.fullResponse,
+                          body: parseJsonBody(selectedError.fullResponse.body),
+                        },
+                        null,
+                        2,
+                      )}
                 </pre>
                 <div
                   style={{

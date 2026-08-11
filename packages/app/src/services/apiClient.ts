@@ -25,7 +25,12 @@ import type { ApiResult } from './types';
 // scripts/preview-server.ts serves it dynamically in local dev mode).
 declare global {
   interface Window {
-    __RUNTIME_CONFIG__?: { API_BASE_URL?: string; API_KEY?: string };
+    __RUNTIME_CONFIG__?: {
+      API_BASE_URL?: string;
+      API_KEY?: string;
+      USE_POST_LOGIN_ENDPOINT?: boolean | string;
+      use_post_login_endpoint?: boolean | string;
+    };
   }
 }
 
@@ -93,6 +98,20 @@ export function setBaseUrl(url: string): void {
 /** Get the current API base URL. */
 export function getBaseUrl(): string {
   return _baseUrl;
+}
+
+/** Whether login should use the POST body-based endpoint instead of the legacy GET flow. */
+export function isPostLoginEndpointEnabled(): boolean {
+  try {
+    const value =
+      typeof window !== 'undefined'
+        ? (window.__RUNTIME_CONFIG__?.USE_POST_LOGIN_ENDPOINT ??
+          window.__RUNTIME_CONFIG__?.use_post_login_endpoint)
+        : undefined;
+    return value === true || (typeof value === 'string' && value.trim().toLowerCase() === 'true');
+  } catch {
+    return false;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -361,6 +380,23 @@ export interface ParsedApiError {
   raw: string;
 }
 
+function extractValidationMessage(detail: unknown): string | null {
+  if (!Array.isArray(detail)) {
+    return null;
+  }
+
+  for (const item of detail) {
+    if (item && typeof item === 'object') {
+      const message = (item as { msg?: unknown }).msg;
+      if (typeof message === 'string' && message.trim()) {
+        return message.trim();
+      }
+    }
+  }
+
+  return null;
+}
+
 /**
  * Parse a raw API error string (e.g. `"401: {\"detail\":\"Invalid credentials.\"}"`)
  * into a structured `ParsedApiError` object.
@@ -384,6 +420,7 @@ export function parseApiError(raw: string): ParsedApiError {
     const parsed = JSON.parse(body) as Record<string, unknown>;
     const msg =
       (typeof parsed.detail === 'string' ? parsed.detail : null) ??
+      extractValidationMessage(parsed.detail) ??
       (typeof parsed.message === 'string' ? parsed.message : null) ??
       (typeof parsed.error === 'string' ? parsed.error : null);
 

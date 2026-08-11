@@ -23,3 +23,4 @@ export {
   updateUser,
   deleteUser,
 } from './services/userApi';
+export type { LoginResponse } from './services/userApi';

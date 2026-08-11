@@ -165,6 +165,10 @@ Current variable roles:
 
 1. `API_BASE_URL` = browser-facing API path used by the frontend (usually `/api/v1`)
 2. `API_PROXY_TARGET` = upstream backend origin used by nginx proxy
+3. `USE_POST_LOGIN_ENDPOINT` = `true` uses `POST /api/v1/user/login` with an
+   `email`/`password` JSON body; `false` preserves the legacy GET flow
+
+The lowercase alias `use_post_login_endpoint` is also supported.
 
 In other words, the frontend should usually call `/api/v1` (same-origin), and
 you change backend targets by changing `API_PROXY_TARGET`.
@@ -238,6 +242,7 @@ The Fly config lives in `.fly/dev/fly.toml`. Key settings:
 | `memory`           | `256mb`                                         |
 | `API_BASE_URL`     | `/api/v1`                                       |
 | `API_PROXY_TARGET` | `https://petstore-api-dev.ramon-alcantara.work` |
+| `USE_POST_LOGIN_ENDPOINT` | `false` |
 | Health check       | `GET /` every 15 s                              |
 
 **Rollback:** re-trigger the deploy workflow with a previous `sha-<short-sha>` tag.

@@ -19,13 +19,16 @@ All configuration is driven by environment variables. These can be set via:
 
 ### Optional Variables
 
-| Variable           | Default | Purpose                                                                        | Example                                         |
-| ------------------ | ------- | ------------------------------------------------------------------------------ | ----------------------------------------------- |
-| `API_PROXY_TARGET` | (none)  | Upstream backend for nginx proxy (Docker only)                                 | `https://petstore-api-dev.ramon-alcantara.work` |
-| `API_KEY`          | (none)  | Authentication header for backend (injected by server, not exposed to browser) | `Bearer secret-token-here`                      |
-| `VERSION`          | `local` | Build version for UI display and diagnostics                                   | `1.2.3` or `sha-a1b2c3d`                        |
-| `GIT_SHA`          | `N/A`   | Git commit hash for traceability                                               | Auto-set by CI                                  |
-| `BUILD_DATE`       | Current | ISO 8601 timestamp of build                                                    | Auto-set by CI                                  |
+| Variable                  | Default | Purpose                                                                        | Example                                         |
+| ------------------------- | ------- | ------------------------------------------------------------------------------ | ----------------------------------------------- |
+| `API_PROXY_TARGET`        | (none)  | Upstream backend for nginx proxy (Docker only)                                 | `https://petstore-api-dev.ramon-alcantara.work` |
+| `API_KEY`                 | (none)  | Authentication header for backend (injected by server, not exposed to browser) | `Bearer secret-token-here`                      |
+| `VERSION`                 | `local` | Build version for UI display and diagnostics                                   | `1.2.3` or `sha-a1b2c3d`                        |
+| `GIT_SHA`                 | `N/A`   | Git commit hash for traceability                                               | Auto-set by CI                                  |
+| `BUILD_DATE`              | Current | ISO 8601 timestamp of build                                                    | Auto-set by CI                                  |
+| `USE_POST_LOGIN_ENDPOINT` | `false` | Use the email/password POST login contract instead of the legacy GET flow      | `true`                                          |
+
+The lowercase alias `use_post_login_endpoint` is also supported.
 
 ## Configuration Resolution
 
@@ -39,6 +42,7 @@ When running in Docker, the entrypoint generates `/config.js`:
 # docker/entrypoint.sh generates:
 window.__RUNTIME_CONFIG__ = {
   API_BASE_URL: "/api/v1",
+  USE_POST_LOGIN_ENDPOINT: "false",
   API_KEY: "<from environment>",
   VERSION: "1.0.0",
   GIT_SHA: "abc1234",

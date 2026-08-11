@@ -1,7 +1,7 @@
 import './testSetup';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { clearApiToken } from './apiClient';
-import { createUser, getUserByName, updateUser } from './userApi';
+import { createUser, getUserByName, loginUser, updateUser } from './userApi';
 
 function mockFetch(
   responseData: unknown,
@@ -29,6 +29,82 @@ describe('userApi', () => {
   afterEach(() => {
     globalThis.fetch = originalFetch;
     clearApiToken();
+    if (window.__RUNTIME_CONFIG__) {
+      window.__RUNTIME_CONFIG__.USE_POST_LOGIN_ENDPOINT = false;
+      window.__RUNTIME_CONFIG__.use_post_login_endpoint = false;
+    }
+  });
+
+  describe('loginUser()', () => {
+    it('uses POST with an email/password body when the feature flag is enabled', async () => {
+      window.__RUNTIME_CONFIG__ = {
+        ...window.__RUNTIME_CONFIG__,
+        USE_POST_LOGIN_ENDPOINT: 'TRUE',
+        use_post_login_endpoint: undefined,
+      };
+      let capturedUrl = '';
+      let capturedInit: RequestInit | undefined;
+      globalThis.fetch = vi.fn(async (url: string, init?: RequestInit) => {
+        capturedUrl = url;
+        capturedInit = init;
+        return {
+          ok: true,
+          status: 200,
+          headers: { get: () => 'application/json' },
+          json: async () => ({
+            access_token: 'access-token',
+            token_type: 'bearer',
+            user: {
+              id: 'user-id',
+              email: 'ramalc.ms+99@outlook.com',
+              username: 'ramalc.ms+99@outlook.com',
+            },
+          }),
+        };
+      }) as typeof globalThis.fetch;
+
+      const result = await loginUser('ramalc.ms+99@outlook.com', 'authpass');
+
+      expect(capturedUrl).toContain('/user/login');
+      expect(capturedInit?.method).toBe('POST');
+      expect(capturedInit?.body).toBe(
+        JSON.stringify({
+          email: 'ramalc.ms+99@outlook.com',
+          password: 'authpass',
+        }),
+      );
+      expect(result.data).toMatchObject({ access_token: 'access-token' });
+    });
+
+    it('keeps the legacy GET flow when the feature flag is disabled', async () => {
+      window.__RUNTIME_CONFIG__ = {
+        ...window.__RUNTIME_CONFIG__,
+        USE_POST_LOGIN_ENDPOINT: false,
+      };
+      let capturedUrl = '';
+      let capturedInit: RequestInit | undefined;
+      globalThis.fetch = vi.fn(async (url: string, init?: RequestInit) => {
+        capturedUrl = url;
+        capturedInit = init;
+        return {
+          ok: true,
+          status: 200,
+          headers: { get: () => 'application/json' },
+          json: async () => ({
+            code: 200,
+            type: 'unknown',
+            message: 'logged in user session:legacy-token',
+          }),
+        };
+      }) as typeof globalThis.fetch;
+
+      await loginUser('legacy-user', 'legacy-pass');
+
+      expect(capturedInit?.method).toBe('GET');
+      expect(capturedInit?.body).toBeUndefined();
+      expect(capturedUrl).toContain('username=legacy-user');
+      expect(capturedUrl).toContain('password=legacy-pass');
+    });
   });
 
   describe('createUser()', () => {

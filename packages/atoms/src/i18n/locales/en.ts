@@ -308,6 +308,8 @@ export const en = {
         ariaLabel: 'Sign in form',
         username: 'Username',
         usernamePlaceholder: 'Enter username...',
+        email: 'Email',
+        emailPlaceholder: 'Enter email address...',
         password: 'Password',
         passwordPlaceholder: 'Enter password...',
         submit: 'Sign In',
@@ -315,6 +317,7 @@ export const en = {
       },
       errors: {
         invalidCredentials: 'Invalid username or password. Please try again.',
+        invalidEmail: 'Enter a valid email address.',
         unauthorized: 'You are not authorized to perform this action.',
         notFound: 'User not found.',
         serverError: 'A server error occurred. Please try again later.',

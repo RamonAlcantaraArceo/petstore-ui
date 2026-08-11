@@ -9,6 +9,7 @@ import {
   setYApiToken,
   clearApiToken,
   getApiToken,
+  parseApiError,
 } from './apiClient';
 
 // -------------------------------------------------------------------------
@@ -45,6 +46,19 @@ describe('apiClient', () => {
   afterEach(() => {
     globalThis.fetch = originalFetch;
     clearApiToken();
+  });
+
+  describe('parseApiError()', () => {
+    it('extracts a message from FastAPI validation details', () => {
+      const parsed = parseApiError(
+        '422: {"detail":[{"type":"value_error","loc":["body","email"],"msg":"value is not a valid email address","input":"dd"}]}',
+      );
+
+      expect(parsed).toMatchObject({
+        status: 422,
+        message: 'value is not a valid email address',
+      });
+    });
   });
 
   // -----------------------------------------------------------------------

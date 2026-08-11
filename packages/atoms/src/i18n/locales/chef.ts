@@ -312,6 +312,8 @@ export const chef = {
         ariaLabel: 'Sïgñ ïñ førm-a',
         username: 'Üsërnämë-a',
         usernamePlaceholder: 'Éntër üsërnämë...-a',
+        email: 'Émäïl-a',
+        emailPlaceholder: 'Éntër ëmäïl äddrëss...-a',
         password: 'Påsswørd-a',
         passwordPlaceholder: 'Éntër påsswørd...-a',
         submit: 'Sïgñ Ïñ-a',
@@ -319,6 +321,7 @@ export const chef = {
       },
       errors: {
         invalidCredentials: 'Ïñvälïd üsërnämë ør påsswørd. Plëäsë try ägäïñ-a.',
+        invalidEmail: 'Éntër ä välïd ëmäïl äddrëss-a.',
         unauthorized: 'Yøü ärë nøt äüthørïzëd tø përførm thïs äctïøñ-a.',
         notFound: 'Üsër nøt føüñd-a.',
         serverError: 'Ä sërvër ërrør øccürrëd. Plëäsë try ägäïñ lätër-a.',

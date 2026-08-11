@@ -6,7 +6,19 @@
  */
 
 import type { User, ApiResponse, ApiResult } from './types';
-import { get, post, put, del } from './apiClient';
+import { get, post, put, del, isPostLoginEndpointEnabled } from './apiClient';
+
+export interface LoginResponse {
+  access_token: string;
+  token_type: string;
+  user: {
+    id: string;
+    email: string;
+    username: string;
+  };
+}
+
+type LoginApiResponse = ApiResponse | LoginResponse;
 
 type ApiUser = {
   id?: number;
@@ -67,14 +79,21 @@ function convertApiUserToFrontendFormat(user: ApiUser): User {
 }
 
 /**
- * Log in a user. On success the API returns a session token embedded in the
- * `message` field of the response (format: `"logged in user session:<token>"`).
+ * Log in a user. USE_POST_LOGIN_ENDPOINT switches between the body-based POST
+ * contract and the legacy query-string GET contract.
  *
- * @param username — Registered username
+ * @param username — Registered username, or email for the POST contract
  * @param password — User password
- * @returns ApiResult containing the raw ApiResponse (caller extracts token)
+ * @returns ApiResult containing the login response (caller extracts token)
  */
-export function loginUser(username: string, password: string): Promise<ApiResult<ApiResponse>> {
+export function loginUser(
+  username: string,
+  password: string,
+): Promise<ApiResult<LoginApiResponse>> {
+  if (isPostLoginEndpointEnabled()) {
+    return post<LoginResponse>('/user/login', { email: username, password });
+  }
+
   return get<ApiResponse>('/user/login', { username, password });
 }
 

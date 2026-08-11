@@ -102,16 +102,19 @@ function serveFromDir(dir: string, urlPath: string, res: ServerResponse): boolea
 
 /**
  * Generate runtime configuration for the frontend.
- * Reads API_BASE_URL, API_KEY, and build metadata from environment.
+ * Reads API settings, feature flags, and build metadata from environment.
  */
 function generateConfigJs(): string {
   const apiBaseUrl = process.env.API_BASE_URL || '/api/v1';
   const apiKey = process.env.API_KEY;
+  const usePostLoginEndpoint =
+    process.env.USE_POST_LOGIN_ENDPOINT || process.env.use_post_login_endpoint || 'false';
   const version = process.env.VERSION || 'local';
   const gitSha = process.env.GIT_SHA || 'N/A';
   const buildDate = process.env.BUILD_DATE || 'N/A';
   const config: Record<string, string> = {
     API_BASE_URL: apiBaseUrl,
+    USE_POST_LOGIN_ENDPOINT: usePostLoginEndpoint,
     VERSION: version,
     GIT_SHA: gitSha,
     BUILD_DATE: buildDate,
