@@ -448,6 +448,7 @@ export const en = {
         errorInspectorCopiedDetails: 'Error details copied',
         errorInspectorNotProvided: 'Not provided by server',
         errorInspectorEmpty: 'No request errors captured yet.',
+        errorInspectorClearAndClose: 'Clear and Close',
         errorInspectorClose: 'Close',
       },
     },

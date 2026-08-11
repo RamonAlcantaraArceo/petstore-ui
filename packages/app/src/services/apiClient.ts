@@ -467,3 +467,8 @@ export function subscribeToApiErrors(listener: ApiErrorListener): () => void {
     apiErrorListeners.delete(listener);
   };
 }
+
+export function clearApiErrorHistory(): void {
+  apiErrorHistory.length = 0;
+  notifyApiErrorListeners();
+}

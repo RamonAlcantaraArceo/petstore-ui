@@ -452,6 +452,7 @@ export const chef = {
         errorInspectorCopiedDetails: 'Ërrør dëtäïls cøpïëd-a',
         errorInspectorNotProvided: 'Nøt prøvïdëd by sërvër-a',
         errorInspectorEmpty: 'Nø rëqüëst ërrørs cäptürëd yët-a.',
+        errorInspectorClearAndClose: 'Clëär änd Cløsë-a',
         errorInspectorClose: 'Cløsë-a',
       },
     },

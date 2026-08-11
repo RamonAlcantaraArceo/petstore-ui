@@ -14,6 +14,7 @@ import { StoreOrdersView } from './StoreOrdersView';
 import { UserManagementView } from './UserManagementView';
 import { deleteUser } from '../../services/userApi';
 import {
+  clearApiErrorHistory,
   getApiErrorHistory,
   parseApiError,
   subscribeToApiErrors,
@@ -253,6 +254,13 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
     );
   }, [copyToClipboard, selectedError]);
 
+  const handleClearAndCloseInspector = React.useCallback(() => {
+    clearApiErrorHistory();
+    setSelectedErrorIndex(0);
+    setCopiedFeedback(null);
+    setErrorInspectorOpen(false);
+  }, []);
+
   return (
     <div
       data-component="PetstoreApp"
@@ -489,7 +497,17 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
           </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: theme.spacing[5] }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: theme.spacing[3],
+            marginTop: theme.spacing[5],
+          }}
+        >
+          <Button type="button" variant="secondary" onClick={handleClearAndCloseInspector}>
+            {t('petstore.app.shell.errorInspectorClearAndClose')}
+          </Button>
           <Button type="button" variant="primary" onClick={() => setErrorInspectorOpen(false)}>
             {t('petstore.app.shell.errorInspectorClose')}
           </Button>
