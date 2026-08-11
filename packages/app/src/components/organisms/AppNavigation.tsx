@@ -5,6 +5,7 @@ import { Modal } from '@petstore-ui/atoms';
 import { useTranslation } from '@petstore-ui/atoms';
 import { useAccessibility } from '@petstore-ui/atoms';
 import { theme } from '@petstore-ui/atoms';
+import { get } from '../../services/apiClient';
 
 export type AppId = 'pets' | 'orders' | 'users';
 
@@ -101,20 +102,9 @@ export const AppNavigation: FC<AppNavigationProps> = ({
     let isMounted = true;
 
     const fetchApiHealth = async () => {
-      try {
-        const response = await fetch('/api/v1/health');
-
-        if (!response.ok) {
-          return;
-        }
-
-        const data = (await response.json()) as ApiHealthResponse;
-
-        if (isMounted) {
-          setApiHealth(data);
-        }
-      } catch {
-        // Keep fallback health data when endpoint is unreachable.
+      const result = await get<ApiHealthResponse>('/health');
+      if (result.data && isMounted) {
+        setApiHealth(result.data);
       }
     };
 

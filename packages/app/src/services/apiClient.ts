@@ -63,7 +63,27 @@ function resolveBaseUrl(): string {
 }
 
 let _baseUrl: string = resolveBaseUrl();
-const inFlightGetRequests = new Map<string, Promise<ApiResult<unknown>>>();
+
+class RequestCoalescer {
+  private readonly inFlight = new Map<string, Promise<unknown>>();
+
+  run<T>(key: string, fn: () => Promise<T>): Promise<T> {
+    const existing = this.inFlight.get(key);
+    if (existing) {
+      return existing as Promise<T>;
+    }
+
+    const promise = fn();
+    this.inFlight.set(key, promise as Promise<unknown>);
+    promise.finally(() => {
+      this.inFlight.delete(key);
+    });
+
+    return promise;
+  }
+}
+
+const requestCoalescer = new RequestCoalescer();
 
 /** Override the API base URL at runtime. */
 export function setBaseUrl(url: string): void {
@@ -159,6 +179,18 @@ function buildUrl(path: string, params?: Record<string, string>): string {
   return url.toString();
 }
 
+function serializeHeaders(headers: Record<string, string>): string {
+  return JSON.stringify(
+    Object.entries(headers)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, value]) => [key, value]),
+  );
+}
+
+function buildGetDedupeKey(method: string, url: string, headers: Record<string, string>): string {
+  return `${method}|${url}|${serializeHeaders(headers)}`;
+}
+
 async function request<T>(
   method: string,
   path: string,
@@ -170,20 +202,12 @@ async function request<T>(
 ): Promise<ApiResult<T>> {
   const requestStartedAt = Date.now();
   const url = buildUrl(path, options.params);
-  const dedupeKey = method === 'GET' ? `${method}:${url}` : null;
-
-  if (dedupeKey) {
-    const existing = inFlightGetRequests.get(dedupeKey);
-    if (existing) {
-      return existing as Promise<ApiResult<T>>;
-    }
-  }
+  const requestHeaders = buildHeaders(options.headers);
+  const requestBody = options.body !== undefined ? JSON.stringify(options.body) : null;
 
   const performRequest = async (): Promise<ApiResult<T>> => {
     const requestTimestamp = new Date(requestStartedAt).toISOString();
     try {
-      const requestHeaders = buildHeaders(options.headers);
-      const requestBody = options.body !== undefined ? JSON.stringify(options.body) : null;
       const init: RequestInit = {
         method,
         headers: requestHeaders,
@@ -263,8 +287,8 @@ async function request<T>(
         correlationId: null,
         rawError: message,
         request: {
-          headers: sanitizeHeaders(buildHeaders(options.headers)),
-          body: options.body !== undefined ? JSON.stringify(options.body) : null,
+          headers: sanitizeHeaders(requestHeaders),
+          body: requestBody,
         },
         fullResponse: {
           status: null,
@@ -277,17 +301,12 @@ async function request<T>(
     }
   };
 
-  if (!dedupeKey) {
+  if (method !== 'GET') {
     return performRequest();
   }
 
-  const pendingRequest = performRequest();
-  inFlightGetRequests.set(dedupeKey, pendingRequest as Promise<ApiResult<unknown>>);
-  pendingRequest.finally(() => {
-    inFlightGetRequests.delete(dedupeKey);
-  });
-
-  return pendingRequest;
+  const dedupeKey = buildGetDedupeKey(method, url, requestHeaders);
+  return requestCoalescer.run(dedupeKey, performRequest);
 }
 
 // ---------------------------------------------------------------------------
