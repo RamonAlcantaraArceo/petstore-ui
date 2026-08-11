@@ -1342,7 +1342,10 @@ runtime config into <code>/config.js</code>, which Storybook loads on every page
 <ol>
 <li><code>API_BASE_URL</code> = browser-facing API path used by the frontend (usually <code>/api/v1</code>)</li>
 <li><code>API_PROXY_TARGET</code> = upstream backend origin used by nginx proxy</li>
+<li><code>USE_POST_LOGIN_ENDPOINT</code> = <code>true</code> uses <code>POST /api/v1/user/login</code> with an
+   <code>email</code>/<code>password</code> JSON body; <code>false</code> preserves the legacy GET flow</li>
 </ol>
+<p>The lowercase alias <code>use_post_login_endpoint</code> is also supported.</p>
 <p>In other words, the frontend should usually call <code>/api/v1</code> (same-origin), and
 you change backend targets by changing <code>API_PROXY_TARGET</code>.</p>
 <p>Resolution order:</p>
@@ -1421,6 +1424,10 @@ you change backend targets by changing <code>API_PROXY_TARGET</code>.</p>
 <tr>
 <td><code>API_PROXY_TARGET</code></td>
 <td><code>https://petstore-api-dev.ramon-alcantara.work</code></td>
+</tr>
+<tr>
+<td><code>USE_POST_LOGIN_ENDPOINT</code></td>
+<td><code>false</code></td>
 </tr>
 <tr>
 <td>Health check</td>

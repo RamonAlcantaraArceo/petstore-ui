@@ -1768,8 +1768,15 @@
 <td>ISO 8601 timestamp of build</td>
 <td>Auto-set by CI</td>
 </tr>
+<tr>
+<td><code>USE_POST_LOGIN_ENDPOINT</code></td>
+<td><code>false</code></td>
+<td>Use the email/password POST login contract instead of the legacy GET flow</td>
+<td><code>true</code></td>
+</tr>
 </tbody>
 </table>
+<p>The lowercase alias <code>use_post_login_endpoint</code> is also supported.</p>
 <h2 id="configuration-resolution">Configuration Resolution<a class="headerlink" href="#configuration-resolution" title="Permanent link">&para;</a></h2>
 <p>The application resolves API configuration in this order:</p>
 <h3 id="1-runtime-config-configjs-from-docker">1. Runtime Config (<code>/config.js</code> from Docker)<a class="headerlink" href="#1-runtime-config-configjs-from-docker" title="Permanent link">&para;</a></h3>
@@ -1777,11 +1784,12 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># docker/entrypoint.sh generates:</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>window.__RUNTIME_CONFIG__<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>API_BASE_URL:<span class="w"> </span><span class="s2">&quot;/api/v1&quot;</span>,
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>API_KEY:<span class="w"> </span><span class="s2">&quot;&lt;from environment&gt;&quot;</span>,
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>VERSION:<span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span>,
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>GIT_SHA:<span class="w"> </span><span class="s2">&quot;abc1234&quot;</span>,
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span>BUILD_DATE:<span class="w"> </span><span class="s2">&quot;2026-05-28T10:00:00Z&quot;</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="o">}</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>USE_POST_LOGIN_ENDPOINT:<span class="w"> </span><span class="s2">&quot;false&quot;</span>,
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>API_KEY:<span class="w"> </span><span class="s2">&quot;&lt;from environment&gt;&quot;</span>,
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>VERSION:<span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span>,
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span>GIT_SHA:<span class="w"> </span><span class="s2">&quot;abc1234&quot;</span>,
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span>BUILD_DATE:<span class="w"> </span><span class="s2">&quot;2026-05-28T10:00:00Z&quot;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="o">}</span><span class="p">;</span>
 </code></pre></div>
 <p>The Storybook preview loads this file in <code>.storybook/preview-head.html</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/config.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
