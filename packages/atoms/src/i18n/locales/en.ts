@@ -436,6 +436,8 @@ export const en = {
         errorInspectorShortcutHint: 'Shortcut: Control + Shift + I',
         errorInspectorCorrelationId: 'Correlation ID',
         errorInspectorTimestamp: 'Request timestamp',
+        errorInspectorResponseTimestamp: 'Response timestamp',
+        errorInspectorDuration: 'Duration (ms)',
         errorInspectorRawError: 'Error summary',
         errorInspectorFullResponse: 'Full response',
         errorInspectorRequestTab: 'Request',

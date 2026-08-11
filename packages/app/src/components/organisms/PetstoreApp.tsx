@@ -50,6 +50,8 @@ function buildErrorMarkdown(error: ApiErrorRecord): string {
     `### Request Error Report`,
     ``,
     `- **Timestamp:** ${error.timestamp}`,
+    `- **Response timestamp:** ${error.responseTimestamp}`,
+    `- **Duration (ms):** ${error.durationMs ?? 'Unknown'}`,
     `- **Correlation ID:** ${error.correlationId ?? 'Not provided'}`,
     `- **Method:** ${error.method}`,
     `- **Path:** ${error.path}`,
@@ -392,6 +394,22 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
                 </div>
                 <div style={{ marginBottom: theme.spacing[4] }}>
                   <p style={{ margin: 0, fontWeight: theme.typography.fontWeight.semibold }}>
+                    {t('petstore.app.shell.errorInspectorResponseTimestamp')}
+                  </p>
+                  <p style={{ margin: 0, color: theme.colors.text.secondary }}>
+                    {selectedError.responseTimestamp}
+                  </p>
+                </div>
+                <div style={{ marginBottom: theme.spacing[4] }}>
+                  <p style={{ margin: 0, fontWeight: theme.typography.fontWeight.semibold }}>
+                    {t('petstore.app.shell.errorInspectorDuration')}
+                  </p>
+                  <p style={{ margin: 0, color: theme.colors.text.secondary }}>
+                    {selectedError.durationMs ?? t('petstore.app.shell.errorInspectorNotProvided')}
+                  </p>
+                </div>
+                <div style={{ marginBottom: theme.spacing[4] }}>
+                  <p style={{ margin: 0, fontWeight: theme.typography.fontWeight.semibold }}>
                     {t('petstore.app.shell.errorInspectorRawError')}
                   </p>
                   <p style={{ margin: 0, color: theme.colors.text.secondary }}>
@@ -421,6 +439,8 @@ const PetstoreShell: FC<{ mockMode: boolean }> = ({ mockMode }) => {
                           path: selectedError.path,
                           url: selectedError.url,
                           timestamp: selectedError.timestamp,
+                          responseTimestamp: selectedError.responseTimestamp,
+                          durationMs: selectedError.durationMs,
                           headers: selectedError.request.headers,
                           body: selectedError.request.body,
                         },

@@ -167,7 +167,8 @@ async function request<T>(
     headers?: Record<string, string>;
   } = {},
 ): Promise<ApiResult<T>> {
-  const requestTimestamp = new Date().toISOString();
+  const requestStartedAt = Date.now();
+  const requestTimestamp = new Date(requestStartedAt).toISOString();
   try {
     const url = buildUrl(path, options.params);
     const requestHeaders = buildHeaders(options.headers);
@@ -182,6 +183,8 @@ async function request<T>(
     }
 
     const response = await fetch(url, init);
+    const responseTimestamp = new Date().toISOString();
+    const durationMs = Date.now() - requestStartedAt;
 
     if (!response.ok) {
       const text = await response.text().catch(() => 'Unknown error');
@@ -192,6 +195,8 @@ async function request<T>(
       recordApiError({
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
         timestamp: requestTimestamp,
+        responseTimestamp,
+        durationMs,
         method,
         path,
         url,
@@ -233,9 +238,13 @@ async function request<T>(
     const message = err instanceof Error ? err.message : 'Network error';
     console.error(`API ${method} ${path} failed:`, message);
     const url = buildUrl(path, options.params);
+    const responseTimestamp = new Date().toISOString();
+    const durationMs = Date.now() - requestStartedAt;
     recordApiError({
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
       timestamp: requestTimestamp,
+      responseTimestamp,
+      durationMs,
       method,
       path,
       url,
@@ -349,6 +358,8 @@ export function parseApiError(raw: string): ParsedApiError {
 export interface ApiErrorRecord {
   id: string;
   timestamp: string;
+  responseTimestamp: string;
+  durationMs: number | null;
   method: string;
   path: string;
   url: string;

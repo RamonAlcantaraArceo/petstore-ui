@@ -440,6 +440,8 @@ export const chef = {
         errorInspectorShortcutHint: 'Shørtcüt: Cøñtrøl + Shïft + Ï-a',
         errorInspectorCorrelationId: 'Cørrëlätïøñ ÏD-a',
         errorInspectorTimestamp: 'Rëqüëst tïmëstämp-a',
+        errorInspectorResponseTimestamp: 'Rëspøñsë tïmëstämp-a',
+        errorInspectorDuration: 'Dürätïøñ (ms)-a',
         errorInspectorRawError: 'Ërrør sümmäry-a',
         errorInspectorFullResponse: 'Füll rëspøñsë-a',
         errorInspectorRequestTab: 'Rëqüëst-a',
