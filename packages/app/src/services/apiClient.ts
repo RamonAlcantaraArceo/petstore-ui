@@ -63,6 +63,7 @@ function resolveBaseUrl(): string {
 }
 
 let _baseUrl: string = resolveBaseUrl();
+const inFlightGetRequests = new Map<string, Promise<ApiResult<unknown>>>();
 
 /** Override the API base URL at runtime. */
 export function setBaseUrl(url: string): void {
@@ -168,30 +169,87 @@ async function request<T>(
   } = {},
 ): Promise<ApiResult<T>> {
   const requestStartedAt = Date.now();
-  const requestTimestamp = new Date(requestStartedAt).toISOString();
-  try {
-    const url = buildUrl(path, options.params);
-    const requestHeaders = buildHeaders(options.headers);
-    const requestBody = options.body !== undefined ? JSON.stringify(options.body) : null;
-    const init: RequestInit = {
-      method,
-      headers: requestHeaders,
-    };
+  const url = buildUrl(path, options.params);
+  const dedupeKey = method === 'GET' ? `${method}:${url}` : null;
 
-    if (requestBody !== null) {
-      init.body = requestBody;
+  if (dedupeKey) {
+    const existing = inFlightGetRequests.get(dedupeKey);
+    if (existing) {
+      return existing as Promise<ApiResult<T>>;
     }
+  }
 
-    const response = await fetch(url, init);
-    const responseTimestamp = new Date().toISOString();
-    const durationMs = Date.now() - requestStartedAt;
+  const performRequest = async (): Promise<ApiResult<T>> => {
+    const requestTimestamp = new Date(requestStartedAt).toISOString();
+    try {
+      const requestHeaders = buildHeaders(options.headers);
+      const requestBody = options.body !== undefined ? JSON.stringify(options.body) : null;
+      const init: RequestInit = {
+        method,
+        headers: requestHeaders,
+      };
 
-    if (!response.ok) {
-      const text = await response.text().catch(() => 'Unknown error');
-      const responseHeaders = headersToObject(response.headers);
-      const correlationId = extractCorrelationId(responseHeaders, text);
-      const rawError = `${response.status}: ${text}`;
+      if (requestBody !== null) {
+        init.body = requestBody;
+      }
 
+      const response = await fetch(url, init);
+      const responseTimestamp = new Date().toISOString();
+      const durationMs = Date.now() - requestStartedAt;
+
+      if (!response.ok) {
+        const text = await response.text().catch(() => 'Unknown error');
+        const responseHeaders = headersToObject(response.headers);
+        const correlationId = extractCorrelationId(responseHeaders, text);
+        const rawError = `${response.status}: ${text}`;
+
+        recordApiError({
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+          timestamp: requestTimestamp,
+          responseTimestamp,
+          durationMs,
+          method,
+          path,
+          url,
+          status: response.status,
+          statusText: response.statusText || null,
+          correlationId,
+          rawError,
+          request: {
+            headers: sanitizeHeaders(requestHeaders),
+            body: requestBody,
+          },
+          fullResponse: {
+            status: response.status,
+            statusText: response.statusText || null,
+            headers: responseHeaders,
+            body: text,
+          },
+        });
+
+        return { data: null, error: rawError };
+      }
+
+      // Some endpoints return empty bodies (204, etc.)
+      const contentType = response.headers.get('content-type') ?? '';
+      if (!contentType.includes('application/json')) {
+        // Return the raw text wrapped as T (useful for login which returns a
+        // JSON‑shaped response with content-type text/plain).
+        const text = await response.text();
+        try {
+          return { data: JSON.parse(text) as T, error: null };
+        } catch {
+          return { data: text as unknown as T, error: null };
+        }
+      }
+
+      const data = (await response.json()) as T;
+      return { data, error: null };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Network error';
+      console.error(`API ${method} ${path} failed:`, message);
+      const responseTimestamp = new Date().toISOString();
+      const durationMs = Date.now() - requestStartedAt;
       recordApiError({
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
         timestamp: requestTimestamp,
@@ -200,71 +258,36 @@ async function request<T>(
         method,
         path,
         url,
-        status: response.status,
-        statusText: response.statusText || null,
-        correlationId,
-        rawError,
-        request: {
-          headers: sanitizeHeaders(requestHeaders),
-          body: requestBody,
-        },
-        fullResponse: {
-          status: response.status,
-          statusText: response.statusText || null,
-          headers: responseHeaders,
-          body: text,
-        },
-      });
-
-      return { data: null, error: rawError };
-    }
-
-    // Some endpoints return empty bodies (204, etc.)
-    const contentType = response.headers.get('content-type') ?? '';
-    if (!contentType.includes('application/json')) {
-      // Return the raw text wrapped as T (useful for login which returns a
-      // JSON‑shaped response with content-type text/plain).
-      const text = await response.text();
-      try {
-        return { data: JSON.parse(text) as T, error: null };
-      } catch {
-        return { data: text as unknown as T, error: null };
-      }
-    }
-
-    const data = (await response.json()) as T;
-    return { data, error: null };
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Network error';
-    console.error(`API ${method} ${path} failed:`, message);
-    const url = buildUrl(path, options.params);
-    const responseTimestamp = new Date().toISOString();
-    const durationMs = Date.now() - requestStartedAt;
-    recordApiError({
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-      timestamp: requestTimestamp,
-      responseTimestamp,
-      durationMs,
-      method,
-      path,
-      url,
-      status: null,
-      statusText: null,
-      correlationId: null,
-      rawError: message,
-      request: {
-        headers: sanitizeHeaders(buildHeaders(options.headers)),
-        body: options.body !== undefined ? JSON.stringify(options.body) : null,
-      },
-      fullResponse: {
         status: null,
         statusText: null,
-        headers: {},
-        body: message,
-      },
-    });
-    return { data: null, error: message };
+        correlationId: null,
+        rawError: message,
+        request: {
+          headers: sanitizeHeaders(buildHeaders(options.headers)),
+          body: options.body !== undefined ? JSON.stringify(options.body) : null,
+        },
+        fullResponse: {
+          status: null,
+          statusText: null,
+          headers: {},
+          body: message,
+        },
+      });
+      return { data: null, error: message };
+    }
+  };
+
+  if (!dedupeKey) {
+    return performRequest();
   }
+
+  const pendingRequest = performRequest();
+  inFlightGetRequests.set(dedupeKey, pendingRequest as Promise<ApiResult<unknown>>);
+  pendingRequest.finally(() => {
+    inFlightGetRequests.delete(dedupeKey);
+  });
+
+  return pendingRequest;
 }
 
 // ---------------------------------------------------------------------------
