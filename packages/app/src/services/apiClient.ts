@@ -167,22 +167,51 @@ async function request<T>(
     headers?: Record<string, string>;
   } = {},
 ): Promise<ApiResult<T>> {
+  const requestTimestamp = new Date().toISOString();
   try {
     const url = buildUrl(path, options.params);
+    const requestHeaders = buildHeaders(options.headers);
+    const requestBody = options.body !== undefined ? JSON.stringify(options.body) : null;
     const init: RequestInit = {
       method,
-      headers: buildHeaders(options.headers),
+      headers: requestHeaders,
     };
 
-    if (options.body !== undefined) {
-      init.body = JSON.stringify(options.body);
+    if (requestBody !== null) {
+      init.body = requestBody;
     }
 
     const response = await fetch(url, init);
 
     if (!response.ok) {
       const text = await response.text().catch(() => 'Unknown error');
-      return { data: null, error: `${response.status}: ${text}` };
+      const responseHeaders = headersToObject(response.headers);
+      const correlationId = extractCorrelationId(responseHeaders, text);
+      const rawError = `${response.status}: ${text}`;
+
+      recordApiError({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+        timestamp: requestTimestamp,
+        method,
+        path,
+        url,
+        status: response.status,
+        statusText: response.statusText || null,
+        correlationId,
+        rawError,
+        request: {
+          headers: sanitizeHeaders(requestHeaders),
+          body: requestBody,
+        },
+        fullResponse: {
+          status: response.status,
+          statusText: response.statusText || null,
+          headers: responseHeaders,
+          body: text,
+        },
+      });
+
+      return { data: null, error: rawError };
     }
 
     // Some endpoints return empty bodies (204, etc.)
@@ -203,6 +232,28 @@ async function request<T>(
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Network error';
     console.error(`API ${method} ${path} failed:`, message);
+    const url = buildUrl(path, options.params);
+    recordApiError({
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+      timestamp: requestTimestamp,
+      method,
+      path,
+      url,
+      status: null,
+      statusText: null,
+      correlationId: null,
+      rawError: message,
+      request: {
+        headers: sanitizeHeaders(buildHeaders(options.headers)),
+        body: options.body !== undefined ? JSON.stringify(options.body) : null,
+      },
+      fullResponse: {
+        status: null,
+        statusText: null,
+        headers: {},
+        body: message,
+      },
+    });
     return { data: null, error: message };
   }
 }
@@ -293,4 +344,115 @@ export function parseApiError(raw: string): ParsedApiError {
   }
 
   return { status, message: body || raw, raw };
+}
+
+export interface ApiErrorRecord {
+  id: string;
+  timestamp: string;
+  method: string;
+  path: string;
+  url: string;
+  status: number | null;
+  statusText: string | null;
+  correlationId: string | null;
+  rawError: string;
+  request: {
+    headers: Record<string, string>;
+    body: string | null;
+  };
+  fullResponse: {
+    status: number | null;
+    statusText: string | null;
+    headers: Record<string, string>;
+    body: string;
+  };
+}
+
+type ApiErrorListener = (errors: ApiErrorRecord[]) => void;
+
+const MAX_ERROR_HISTORY = 100;
+const apiErrorHistory: ApiErrorRecord[] = [];
+const apiErrorListeners = new Set<ApiErrorListener>();
+
+function notifyApiErrorListeners(): void {
+  const snapshot = [...apiErrorHistory];
+  apiErrorListeners.forEach((listener) => listener(snapshot));
+}
+
+function headersToObject(headers: Headers): Record<string, string> {
+  const result: Record<string, string> = {};
+  headers.forEach((value, key) => {
+    result[key.toLowerCase()] = value;
+  });
+  return result;
+}
+
+function sanitizeHeaderValue(key: string, value: string): string {
+  const lowerKey = key.toLowerCase();
+  if (
+    lowerKey === 'authorization' ||
+    lowerKey === 'x-api-key' ||
+    lowerKey === 'y-api-key' ||
+    lowerKey.includes('token')
+  ) {
+    return '[REDACTED]';
+  }
+  return value;
+}
+
+function sanitizeHeaders(headers: Record<string, string>): Record<string, string> {
+  const sanitized: Record<string, string> = {};
+  for (const [key, value] of Object.entries(headers)) {
+    sanitized[key] = sanitizeHeaderValue(key, value);
+  }
+  return sanitized;
+}
+
+function extractCorrelationId(
+  headers: Record<string, string>,
+  responseText: string,
+): string | null {
+  const headerCorrelationId =
+    headers['x-correlation-id'] ??
+    headers['correlation-id'] ??
+    headers['x-request-id'] ??
+    headers['request-id'] ??
+    headers['trace-id'];
+  if (headerCorrelationId) {
+    return headerCorrelationId;
+  }
+
+  try {
+    const body = JSON.parse(responseText) as Record<string, unknown>;
+    const bodyCorrelationId =
+      (typeof body.correlationId === 'string' ? body.correlationId : null) ??
+      (typeof body.correlation_id === 'string' ? body.correlation_id : null) ??
+      (typeof body.requestId === 'string' ? body.requestId : null) ??
+      (typeof body.request_id === 'string' ? body.request_id : null) ??
+      (typeof body.traceId === 'string' ? body.traceId : null) ??
+      (typeof body.trace_id === 'string' ? body.trace_id : null);
+    return bodyCorrelationId;
+  } catch {
+    return null;
+  }
+}
+
+function recordApiError(entry: ApiErrorRecord): void {
+  apiErrorHistory.unshift(entry);
+  if (apiErrorHistory.length > MAX_ERROR_HISTORY) {
+    apiErrorHistory.length = MAX_ERROR_HISTORY;
+  }
+  notifyApiErrorListeners();
+}
+
+export function getApiErrorHistory(): ApiErrorRecord[] {
+  return [...apiErrorHistory];
+}
+
+export function subscribeToApiErrors(listener: ApiErrorListener): () => void {
+  apiErrorListeners.add(listener);
+  listener([...apiErrorHistory]);
+  return () => {
+    apiErrorListeners.delete(listener);
+  };
 }
