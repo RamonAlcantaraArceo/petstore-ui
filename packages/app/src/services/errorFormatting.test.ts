@@ -11,4 +11,8 @@ describe('parseJsonBody', () => {
   it('preserves non-JSON bodies', () => {
     expect(parseJsonBody('Service unavailable')).toBe('Service unavailable');
   });
+
+  it.each([null, ''])('preserves empty body value %s', (body) => {
+    expect(parseJsonBody(body)).toBe(body);
+  });
 });

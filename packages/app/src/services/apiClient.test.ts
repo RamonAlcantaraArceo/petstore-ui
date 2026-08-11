@@ -7,9 +7,14 @@ import {
   del,
   setApiToken,
   setYApiToken,
+  clearYApiToken,
   clearApiToken,
   getApiToken,
   parseApiError,
+  isPostLoginEndpointEnabled,
+  getApiErrorHistory,
+  subscribeToApiErrors,
+  clearApiErrorHistory,
 } from './apiClient';
 
 // -------------------------------------------------------------------------
@@ -24,7 +29,8 @@ function mockFetch(
   return vi.fn(async () => ({
     ok,
     status,
-    headers: { get: () => contentType },
+    statusText: ok ? 'OK' : 'Error',
+    headers: new Headers({ 'content-type': contentType }),
     json: async () => responseData,
     text: async () =>
       typeof responseData === 'string' ? responseData : JSON.stringify(responseData),
@@ -41,11 +47,19 @@ describe('apiClient', () => {
   beforeEach(() => {
     originalFetch = globalThis.fetch;
     clearApiToken();
+    clearYApiToken();
+    clearApiErrorHistory();
   });
 
   afterEach(() => {
     globalThis.fetch = originalFetch;
     clearApiToken();
+    clearYApiToken();
+    clearApiErrorHistory();
+    if (window.__RUNTIME_CONFIG__) {
+      window.__RUNTIME_CONFIG__.USE_POST_LOGIN_ENDPOINT = false;
+      window.__RUNTIME_CONFIG__.use_post_login_endpoint = false;
+    }
   });
 
   describe('parseApiError()', () => {
@@ -58,6 +72,41 @@ describe('apiClient', () => {
         status: 422,
         message: 'value is not a valid email address',
       });
+    });
+
+    it.each([
+      ['401: {"detail":"Invalid credentials."}', 401, 'Invalid credentials.'],
+      ['400: {"message":"Bad request"}', 400, 'Bad request'],
+      ['503: Service unavailable', 503, 'Service unavailable'],
+      ['Network error', null, 'Network error'],
+    ])('normalizes common API error shapes', (raw, status, message) => {
+      expect(parseApiError(raw)).toMatchObject({ status, message, raw });
+    });
+  });
+
+  describe('login feature flag', () => {
+    it.each([
+      [true, true],
+      [' TRUE ', true],
+      ['false', false],
+      [undefined, false],
+    ])('normalizes runtime value %s', (value, expected) => {
+      window.__RUNTIME_CONFIG__ = {
+        ...window.__RUNTIME_CONFIG__,
+        USE_POST_LOGIN_ENDPOINT: value,
+      };
+
+      expect(isPostLoginEndpointEnabled()).toBe(expected);
+    });
+
+    it('supports the lowercase runtime alias', () => {
+      window.__RUNTIME_CONFIG__ = {
+        ...window.__RUNTIME_CONFIG__,
+        USE_POST_LOGIN_ENDPOINT: undefined,
+        use_post_login_endpoint: 'true',
+      };
+
+      expect(isPostLoginEndpointEnabled()).toBe(true);
     });
   });
 
@@ -85,6 +134,49 @@ describe('apiClient', () => {
   // GET
   // -----------------------------------------------------------------------
   describe('get()', () => {
+    it('coalesces concurrent identical GETs but permits a later refresh', async () => {
+      let resolveFirst!: (value: unknown) => void;
+      globalThis.fetch = vi
+        .fn()
+        .mockImplementationOnce(
+          () =>
+            new Promise((resolve) => {
+              resolveFirst = resolve;
+            }),
+        )
+        .mockImplementationOnce(mockFetch({ id: 2, name: 'Later' }));
+
+      const first = get<{ id: number }>('/pet/1');
+      const duplicate = get<{ id: number }>('/pet/1');
+
+      expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+      resolveFirst({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        headers: new Headers({ 'content-type': 'application/json' }),
+        json: async () => ({ id: 1 }),
+      });
+      await expect(Promise.all([first, duplicate])).resolves.toEqual([
+        { data: { id: 1 }, error: null },
+        { data: { id: 1 }, error: null },
+      ]);
+
+      await get('/pet/1');
+      expect(globalThis.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('does not coalesce requests with different query parameters', async () => {
+      globalThis.fetch = mockFetch([]) as typeof globalThis.fetch;
+
+      await Promise.all([
+        get('/pet/findByStatus', { status: 'available' }),
+        get('/pet/findByStatus', { status: 'sold' }),
+      ]);
+
+      expect(globalThis.fetch).toHaveBeenCalledTimes(2);
+    });
+
     it('returns data on successful response', async () => {
       globalThis.fetch = mockFetch({ id: 1, name: 'Buddy' }) as any;
       const result = await get<{ id: number; name: string }>('/pet/1');
@@ -151,6 +243,14 @@ describe('apiClient', () => {
   // POST
   // -----------------------------------------------------------------------
   describe('post()', () => {
+    it('does not coalesce concurrent writes', async () => {
+      globalThis.fetch = mockFetch({ id: 1 }) as typeof globalThis.fetch;
+
+      await Promise.all([post('/pet', { name: 'Buddy' }), post('/pet', { name: 'Buddy' })]);
+
+      expect(globalThis.fetch).toHaveBeenCalledTimes(2);
+    });
+
     it('sends body and returns created data', async () => {
       const petData = { name: 'Whiskers', status: 'available' };
       globalThis.fetch = mockFetch({ id: 2, ...petData }) as any;
@@ -168,6 +268,51 @@ describe('apiClient', () => {
       const result = await post('/pet', {});
       expect(result.data).toBeNull();
       expect(result.error).toContain('400');
+    });
+
+    it('records a sanitized diagnostic and notifies subscribers', async () => {
+      setApiToken('api-secret');
+      setYApiToken('session-secret');
+      const listener = vi.fn();
+      const unsubscribe = subscribeToApiErrors(listener);
+      globalThis.fetch = vi.fn(async () => ({
+        ok: false,
+        status: 401,
+        statusText: 'Unauthorized',
+        headers: new Headers({
+          'content-type': 'application/json',
+          'x-correlation-id': 'correlation-123',
+        }),
+        text: async () => '{"detail":"Invalid credentials."}',
+      })) as typeof globalThis.fetch;
+
+      await post('/user/login', { email: 'person@example.com', password: 'wrong' });
+
+      const [record] = getApiErrorHistory();
+      expect(record).toMatchObject({
+        method: 'POST',
+        path: '/user/login',
+        status: 401,
+        statusText: 'Unauthorized',
+        correlationId: 'correlation-123',
+        request: {
+          body: '{"email":"person@example.com","password":"wrong"}',
+          headers: {
+            'x-api-key': '[REDACTED]',
+            'y-api-key': '[REDACTED]',
+            Authorization: '[REDACTED]',
+          },
+        },
+        fullResponse: {
+          body: '{"detail":"Invalid credentials."}',
+        },
+      });
+      expect(record?.durationMs).toBeGreaterThanOrEqual(0);
+      expect(listener).toHaveBeenLastCalledWith([record]);
+
+      clearApiErrorHistory();
+      expect(listener).toHaveBeenLastCalledWith([]);
+      unsubscribe();
     });
   });
 
