@@ -414,6 +414,8 @@ export const chef = {
       },
       orders: {
         ariaLabel: 'Størë ørdërs-a',
+        authRequiredTitle: 'Äüthëñtïcätïøñ rëqüïrëd-a',
+        authRequiredMessage: 'Yøü müst bë sïgñëd ïñ tø vïëw änd mänägë størë ørdërs-a.',
         inventoryTitle: 'Ïñvëñtøry-a',
         loading: 'Løädïñg...-a',
         lookupTitle: 'Ørdër Løøküp-a',

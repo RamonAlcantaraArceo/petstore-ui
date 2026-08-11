@@ -85,6 +85,10 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
 
   // Fetch inventory orders
   const fetchInventory = React.useCallback(async () => {
+    if (!isLoggedIn) {
+      setOrders([]);
+      return;
+    }
     if (mockMode && initialOrders) {
       setOrders(initialOrders);
       return;
@@ -96,14 +100,21 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
       setOrders(result.data);
     }
     setInventoryLoading(false);
-  }, [mockMode, initialOrders]);
+  }, [isLoggedIn, mockMode, initialOrders]);
 
   React.useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
     fetchInventory();
-  }, [fetchInventory]);
+  }, [fetchInventory, isLoggedIn]);
 
   // Order lookup handler
   const handleLookup = async () => {
+    if (!isLoggedIn) {
+      setLookupError(t('petstore.app.orders.authRequiredMessage'));
+      return;
+    }
     const id = Number(lookupId);
     if (!id || id < 1) return;
     setLookupError(null);
@@ -125,6 +136,9 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
 
   // Place order
   const handlePlaceOrder = async (fields: OrderFormFields) => {
+    if (!isLoggedIn) {
+      return;
+    }
     if (mockMode) {
       setFormOpen(false);
       return;
@@ -144,6 +158,10 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
 
   // Delete order
   const handleDeleteConfirm = async () => {
+    if (!isLoggedIn) {
+      setDeletingOrder(undefined);
+      return;
+    }
     if (!deletingOrder || mockMode) {
       setDeletingOrder(undefined);
       return;
@@ -162,125 +180,153 @@ export const StoreOrdersView: FC<StoreOrdersViewProps> = ({
       {...ariaAttributes}
       style={{ padding: theme.spacing[4] }}
     >
-      {/* --- Inventory Section --- */}
-      <div style={{ marginBottom: theme.spacing[6] }}>
-        <h2
-          style={{
-            fontSize: theme.typography.fontSize.lg,
-            marginBottom: theme.spacing[3],
-            fontWeight: theme.typography.fontWeight.semibold,
-          }}
-        >
-          {t('petstore.app.orders.inventoryTitle')}
-        </h2>
-        {inventoryLoading ? (
-          <p style={{ color: theme.colors.text.secondary, fontSize: theme.typography.fontSize.sm }}>
-            {t('petstore.app.orders.loading')}
-          </p>
-        ) : (
-          <OrdersTable data={orders} />
-        )}
-      </div>
-
-      {/* --- Order Lookup Section --- */}
-      <div style={{ marginBottom: theme.spacing[6] }}>
-        <h2
-          style={{
-            fontSize: theme.typography.fontSize.lg,
-            marginBottom: theme.spacing[3],
-            fontWeight: theme.typography.fontWeight.semibold,
-          }}
-        >
-          {t('petstore.app.orders.lookupTitle')}
-        </h2>
+      {!isLoggedIn && (
         <div
+          role="status"
           style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            gap: theme.spacing[3],
-            flexWrap: 'wrap',
-            marginBottom: theme.spacing[3],
+            padding: `${theme.spacing[3]} ${theme.spacing[4]}`,
+            borderRadius: theme.borderRadius.md,
+            border: `1px solid ${theme.colors.secondary[300]}`,
+            backgroundColor: theme.colors.background.primary,
+            color: theme.colors.text.secondary,
+            maxWidth: '42rem',
           }}
         >
-          <Input
-            name="orderId"
-            type="number"
-            labelTranslationKey="petstore.app.orders.lookupLabel"
-            placeholderTranslationKey="petstore.app.orders.lookupPlaceholder"
-            value={lookupId}
-            onChange={(e) => setLookupId(e.target.value)}
-            min={1}
-          />
-          <Button
-            variant="secondary"
-            onClick={handleLookup}
-            disabled={lookupLoading || !lookupId}
-            loading={lookupLoading}
-          >
-            {t('petstore.app.orders.lookupButton')}
-          </Button>
-          {isLoggedIn && (
-            <Button
-              variant="primary"
-              onClick={() => setFormOpen(true)}
-              announceOnAction={t('petstore.app.orders.announcePlaceOrder')}
-            >
-              {t('petstore.app.orders.placeOrderButton')}
-            </Button>
-          )}
+          <strong style={{ display: 'block', marginBottom: theme.spacing[1] }}>
+            {t('petstore.app.orders.authRequiredTitle')}
+          </strong>
+          <span>{t('petstore.app.orders.authRequiredMessage')}</span>
         </div>
+      )}
 
-        {lookupError && (
-          <div
-            role="alert"
-            style={{
-              color: theme.colors.semantic.error,
-              fontSize: theme.typography.fontSize.sm,
-              marginBottom: theme.spacing[3],
-            }}
+      {isLoggedIn && (
+        <>
+          {/* --- Inventory Section --- */}
+          <div style={{ marginBottom: theme.spacing[6] }}>
+            <h2
+              style={{
+                fontSize: theme.typography.fontSize.lg,
+                marginBottom: theme.spacing[3],
+                fontWeight: theme.typography.fontWeight.semibold,
+              }}
+            >
+              {t('petstore.app.orders.inventoryTitle')}
+            </h2>
+            {inventoryLoading ? (
+              <p
+                style={{
+                  color: theme.colors.text.secondary,
+                  fontSize: theme.typography.fontSize.sm,
+                }}
+              >
+                {t('petstore.app.orders.loading')}
+              </p>
+            ) : (
+              <OrdersTable data={orders} />
+            )}
+          </div>
+
+          {/* --- Order Lookup Section --- */}
+          <div style={{ marginBottom: theme.spacing[6] }}>
+            <h2
+              style={{
+                fontSize: theme.typography.fontSize.lg,
+                marginBottom: theme.spacing[3],
+                fontWeight: theme.typography.fontWeight.semibold,
+              }}
+            >
+              {t('petstore.app.orders.lookupTitle')}
+            </h2>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                gap: theme.spacing[3],
+                flexWrap: 'wrap',
+                marginBottom: theme.spacing[3],
+              }}
+            >
+              <Input
+                name="orderId"
+                type="number"
+                labelTranslationKey="petstore.app.orders.lookupLabel"
+                placeholderTranslationKey="petstore.app.orders.lookupPlaceholder"
+                value={lookupId}
+                onChange={(e) => setLookupId(e.target.value)}
+                min={1}
+              />
+              <Button
+                variant="secondary"
+                onClick={handleLookup}
+                disabled={lookupLoading || !lookupId}
+                loading={lookupLoading}
+              >
+                {t('petstore.app.orders.lookupButton')}
+              </Button>
+              {isLoggedIn && (
+                <Button
+                  variant="primary"
+                  onClick={() => setFormOpen(true)}
+                  announceOnAction={t('petstore.app.orders.announcePlaceOrder')}
+                >
+                  {t('petstore.app.orders.placeOrderButton')}
+                </Button>
+              )}
+            </div>
+
+            {lookupError && (
+              <div
+                role="alert"
+                style={{
+                  color: theme.colors.semantic.error,
+                  fontSize: theme.typography.fontSize.sm,
+                  marginBottom: theme.spacing[3],
+                }}
+              >
+                {lookupError}
+              </div>
+            )}
+
+            {lookedUpOrder && (
+              <div style={{ maxWidth: '24rem' }}>
+                <OrderCard
+                  order={lookedUpOrder}
+                  readonly={!isLoggedIn}
+                  {...(isLoggedIn ? { onDelete: (o: Order) => setDeletingOrder(o) } : {})}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Place Order Modal */}
+          <Modal
+            isOpen={formOpen}
+            onClose={() => setFormOpen(false)}
+            titleTranslationKey="petstore.orders.form.ariaLabel"
+            size="small"
           >
-            {lookupError}
-          </div>
-        )}
-
-        {lookedUpOrder && (
-          <div style={{ maxWidth: '24rem' }}>
-            <OrderCard
-              order={lookedUpOrder}
-              readonly={!isLoggedIn}
-              {...(isLoggedIn ? { onDelete: (o: Order) => setDeletingOrder(o) } : {})}
+            <OrderForm
+              onSubmit={handlePlaceOrder}
+              onCancel={() => setFormOpen(false)}
+              isLoading={formLoading}
             />
-          </div>
-        )}
-      </div>
+          </Modal>
 
-      {/* Place Order Modal */}
-      <Modal
-        isOpen={formOpen}
-        onClose={() => setFormOpen(false)}
-        titleTranslationKey="petstore.orders.form.ariaLabel"
-        size="small"
-      >
-        <OrderForm
-          onSubmit={handlePlaceOrder}
-          onCancel={() => setFormOpen(false)}
-          isLoading={formLoading}
-        />
-      </Modal>
-
-      {/* Delete Confirmation */}
-      <ConfirmDialog
-        isOpen={!!deletingOrder}
-        titleTranslationKey="petstore.app.orders.deleteTitle"
-        message={
-          deletingOrder
-            ? t('petstore.app.orders.deleteMessage', { id: String(deletingOrder.id) })
-            : ''
-        }
-        variant="danger"
-        onConfirm={handleDeleteConfirm}
-        onCancel={() => setDeletingOrder(undefined)}
-      />
+          {/* Delete Confirmation */}
+          <ConfirmDialog
+            isOpen={!!deletingOrder}
+            titleTranslationKey="petstore.app.orders.deleteTitle"
+            message={
+              deletingOrder
+                ? t('petstore.app.orders.deleteMessage', { id: String(deletingOrder.id) })
+                : ''
+            }
+            variant="danger"
+            onConfirm={handleDeleteConfirm}
+            onCancel={() => setDeletingOrder(undefined)}
+          />
+        </>
+      )}
     </section>
   );
 };

@@ -410,6 +410,8 @@ export const en = {
       },
       orders: {
         ariaLabel: 'Store orders',
+        authRequiredTitle: 'Authentication required',
+        authRequiredMessage: 'You must be signed in to view and manage store orders.',
         inventoryTitle: 'Inventory',
         loading: 'Loading...',
         lookupTitle: 'Order Lookup',
