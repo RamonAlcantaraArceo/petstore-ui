@@ -1,9 +1,11 @@
-import { useEffect, useState, type FC } from 'react';
+import { useEffect, useState, useCallback, type FC } from 'react';
 import { Tabs } from '@petstore-ui/atoms';
 import { Button } from '@petstore-ui/atoms';
+import { Modal } from '@petstore-ui/atoms';
 import { useTranslation } from '@petstore-ui/atoms';
 import { useAccessibility } from '@petstore-ui/atoms';
 import { theme } from '@petstore-ui/atoms';
+import { get } from '../../services/apiClient';
 
 export type AppId = 'pets' | 'orders' | 'users';
 
@@ -38,6 +40,8 @@ export interface AppNavigationProps {
   onLogin: () => void;
   /** Called when Sign Out button is clicked */
   onLogout: () => void;
+  /** Called when Delete Account button is clicked */
+  onDeleteAccount?: () => void;
 }
 
 const TAB_IDS: AppId[] = ['pets', 'orders', 'users'];
@@ -83,6 +87,7 @@ export const AppNavigation: FC<AppNavigationProps> = ({
   username,
   onLogin,
   onLogout,
+  onDeleteAccount,
 }) => {
   const { t } = useTranslation();
   const { ariaAttributes } = useAccessibility({
@@ -90,25 +95,16 @@ export const AppNavigation: FC<AppNavigationProps> = ({
   });
   const buildInfo = getRuntimeBuildInfo();
   const [apiHealth, setApiHealth] = useState<ApiHealthResponse>(getFallbackApiHealth());
+  const [buildInfoOpen, setBuildInfoOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
 
     const fetchApiHealth = async () => {
-      try {
-        const response = await fetch('/api/v1/health');
-
-        if (!response.ok) {
-          return;
-        }
-
-        const data = (await response.json()) as ApiHealthResponse;
-
-        if (isMounted) {
-          setApiHealth(data);
-        }
-      } catch {
-        // Keep fallback health data when endpoint is unreachable.
+      const result = await get<ApiHealthResponse>('/health');
+      if (result.data && isMounted) {
+        setApiHealth(result.data);
       }
     };
 
@@ -119,14 +115,14 @@ export const AppNavigation: FC<AppNavigationProps> = ({
     };
   }, []);
 
-  const buildInfoTooltip = JSON.stringify(
-    {
-      ui: buildInfo,
-      api: apiHealth,
-    },
-    null,
-    2,
-  );
+  const buildInfoPayload = JSON.stringify({ ui: buildInfo, api: apiHealth }, null, 2);
+
+  const handleCopyBuildInfo = useCallback(() => {
+    void navigator.clipboard.writeText(buildInfoPayload).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }, [buildInfoPayload]);
 
   const tabs = TAB_IDS.map((id) => ({
     id,
@@ -134,76 +130,237 @@ export const AppNavigation: FC<AppNavigationProps> = ({
   }));
 
   return (
-    <nav
-      data-component="AppNavigation"
-      {...ariaAttributes}
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: `${theme.spacing[2]} ${theme.spacing[4]}`,
-        borderBottom: `1px solid ${theme.colors.secondary[200]}`,
-        backgroundColor: theme.colors.background.primary,
-        flexWrap: 'wrap',
-        gap: theme.spacing[3],
-      }}
-    >
-      <Tabs tabs={tabs} activeTab={activeApp} onChange={(id) => onNavigate(id as AppId)} />
+    <>
+      <nav
+        data-component="AppNavigation"
+        {...ariaAttributes}
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: `${theme.spacing[2]} ${theme.spacing[4]}`,
+          borderBottom: `1px solid ${theme.colors.secondary[200]}`,
+          backgroundColor: theme.colors.background.primary,
+          flexWrap: 'wrap',
+          gap: theme.spacing[3],
+        }}
+      >
+        <Tabs tabs={tabs} activeTab={activeApp} onChange={(id) => onNavigate(id as AppId)} />
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: theme.spacing[3] }}>
-        <span
-          title={buildInfoTooltip}
-          aria-label={buildInfoTooltip}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '1.25rem',
-            height: '1.25rem',
-            borderRadius: theme.borderRadius.full,
-            border: `1px solid ${theme.colors.secondary[400]}`,
-            color: theme.colors.secondary[700],
-            fontSize: theme.typography.fontSize.xs,
-            fontWeight: theme.typography.fontWeight.bold,
-            cursor: 'help',
-            userSelect: 'none',
-            backgroundColor: theme.colors.background.secondary,
-          }}
-        >
-          i
-        </span>
-        {isLoggedIn ? (
-          <>
-            <span
-              style={{
-                fontSize: theme.typography.fontSize.sm,
-                color: theme.colors.text.secondary,
-                fontWeight: theme.typography.fontWeight.medium,
-              }}
-              aria-label={t('petstore.app.navigation.loggedInAs', { username: username || '' })}
-            >
-              {username}
-            </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: theme.spacing[3] }}>
+          <button
+            type="button"
+            onClick={() => setBuildInfoOpen(true)}
+            aria-label={t('petstore.app.navigation.buildInfoButton')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '1.25rem',
+              height: '1.25rem',
+              borderRadius: theme.borderRadius.full,
+              border: `1px solid ${theme.colors.secondary[400]}`,
+              color: theme.colors.secondary[700],
+              fontSize: theme.typography.fontSize.xs,
+              fontWeight: theme.typography.fontWeight.bold,
+              cursor: 'pointer',
+              userSelect: 'none',
+              backgroundColor: theme.colors.background.secondary,
+              padding: 0,
+              flexShrink: 0,
+            }}
+          >
+            i
+          </button>
+          {isLoggedIn ? (
+            <>
+              <span
+                style={{
+                  fontSize: theme.typography.fontSize.sm,
+                  color: theme.colors.text.secondary,
+                  fontWeight: theme.typography.fontWeight.medium,
+                }}
+                aria-label={t('petstore.app.navigation.loggedInAs', { username: username || '' })}
+              >
+                {username}
+              </span>
+              <Button
+                size="small"
+                variant="secondary"
+                onClick={onLogout}
+                announceOnAction={t('petstore.app.navigation.announceSignOut')}
+              >
+                {t('petstore.app.navigation.signOut')}
+              </Button>
+              {onDeleteAccount && (
+                <Button
+                  size="small"
+                  variant="danger"
+                  onClick={onDeleteAccount}
+                  announceOnAction={t('petstore.app.navigation.announceDeleteAccount')}
+                >
+                  {t('petstore.app.navigation.deleteAccount')}
+                </Button>
+              )}
+            </>
+          ) : (
             <Button
               size="small"
-              variant="secondary"
-              onClick={onLogout}
-              announceOnAction={t('petstore.app.navigation.announceSignOut')}
+              variant="primary"
+              onClick={onLogin}
+              announceOnAction={t('petstore.app.navigation.announceSignIn')}
             >
-              {t('petstore.app.navigation.signOut')}
+              {t('petstore.app.navigation.signIn')}
             </Button>
-          </>
-        ) : (
-          <Button
-            size="small"
-            variant="primary"
-            onClick={onLogin}
-            announceOnAction={t('petstore.app.navigation.announceSignIn')}
+          )}
+        </div>
+      </nav>
+
+      <Modal
+        isOpen={buildInfoOpen}
+        onClose={() => setBuildInfoOpen(false)}
+        title={t('petstore.app.navigation.buildInfoTitle')}
+        size="medium"
+      >
+        <div data-component="BuildInfoModal">
+          {/* UI section */}
+          <h3
+            style={{
+              fontSize: theme.typography.fontSize.sm,
+              fontWeight: theme.typography.fontWeight.semibold,
+              color: theme.colors.text.secondary,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: theme.spacing[2],
+            }}
           >
-            {t('petstore.app.navigation.signIn')}
-          </Button>
-        )}
-      </div>
-    </nav>
+            {t('petstore.app.navigation.buildInfoUiSection')}
+          </h3>
+          <table
+            style={{
+              width: '100%',
+              borderCollapse: 'collapse',
+              marginBottom: theme.spacing[4],
+              fontSize: theme.typography.fontSize.sm,
+            }}
+          >
+            <tbody>
+              {(
+                [
+                  [t('petstore.app.navigation.buildInfoVersion'), buildInfo.version],
+                  [t('petstore.app.navigation.buildInfoBuildDate'), buildInfo.build_date],
+                  [t('petstore.app.navigation.buildInfoGitSha'), buildInfo.git_commit_sha],
+                ] as [string, string][]
+              ).map(([label, value]) => (
+                <tr
+                  key={label}
+                  style={{ borderBottom: `1px solid ${theme.colors.secondary[100]}` }}
+                >
+                  <td
+                    style={{
+                      padding: `${theme.spacing[2]} ${theme.spacing[3]} ${theme.spacing[2]} 0`,
+                      color: theme.colors.text.secondary,
+                      fontWeight: theme.typography.fontWeight.medium,
+                      whiteSpace: 'nowrap',
+                      width: '40%',
+                    }}
+                  >
+                    {label}
+                  </td>
+                  <td
+                    style={{
+                      padding: `${theme.spacing[2]} 0`,
+                      color: theme.colors.text.primary,
+                      fontFamily: theme.typography.fontFamily.mono.join(', '),
+                      wordBreak: 'break-all',
+                    }}
+                  >
+                    {value}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* API section */}
+          <h3
+            style={{
+              fontSize: theme.typography.fontSize.sm,
+              fontWeight: theme.typography.fontWeight.semibold,
+              color: theme.colors.text.secondary,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: theme.spacing[2],
+            }}
+          >
+            {t('petstore.app.navigation.buildInfoApiSection')}
+          </h3>
+          <table
+            style={{
+              width: '100%',
+              borderCollapse: 'collapse',
+              marginBottom: theme.spacing[5],
+              fontSize: theme.typography.fontSize.sm,
+            }}
+          >
+            <tbody>
+              {(
+                [
+                  [t('petstore.app.navigation.buildInfoApiStatus'), apiHealth.status],
+                  [t('petstore.app.navigation.buildInfoApiMode'), apiHealth.mode],
+                  [t('petstore.app.navigation.buildInfoVersion'), apiHealth.details.version],
+                  [t('petstore.app.navigation.buildInfoBuildDate'), apiHealth.details.build_date],
+                  [t('petstore.app.navigation.buildInfoGitSha'), apiHealth.details.git_commit_sha],
+                ] as [string, string][]
+              ).map(([label, value]) => (
+                <tr
+                  key={label}
+                  style={{ borderBottom: `1px solid ${theme.colors.secondary[100]}` }}
+                >
+                  <td
+                    style={{
+                      padding: `${theme.spacing[2]} ${theme.spacing[3]} ${theme.spacing[2]} 0`,
+                      color: theme.colors.text.secondary,
+                      fontWeight: theme.typography.fontWeight.medium,
+                      whiteSpace: 'nowrap',
+                      width: '40%',
+                    }}
+                  >
+                    {label}
+                  </td>
+                  <td
+                    style={{
+                      padding: `${theme.spacing[2]} 0`,
+                      color: theme.colors.text.primary,
+                      fontFamily: theme.typography.fontFamily.mono.join(', '),
+                      wordBreak: 'break-all',
+                    }}
+                  >
+                    {value}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Actions */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: theme.spacing[3] }}>
+            <Button type="button" variant="secondary" size="small" onClick={handleCopyBuildInfo}>
+              {copied
+                ? t('petstore.app.navigation.buildInfoCopied')
+                : t('petstore.app.navigation.buildInfoCopy')}
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              size="small"
+              onClick={() => setBuildInfoOpen(false)}
+            >
+              {t('petstore.app.navigation.buildInfoClose')}
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 };

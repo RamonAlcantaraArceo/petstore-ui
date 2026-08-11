@@ -12,6 +12,8 @@
 #                      Example: https://petstore-api-dev.ramon-alcantara.work
 #   API_BASE_URL     — Browser-facing API path written into config.js.
 #                      Default: /api/v1. Keep this relative to avoid CORS.
+#   USE_POST_LOGIN_ENDPOINT — Set to "true" to use POST /api/v1/user/login
+#                             with an email/password JSON body. Default: false.
 #   API_KEY          — Optional. If set, injected as the x-api-key header on every
 #                      proxied request (server-side only — never sent to the browser).
 #
@@ -49,6 +51,7 @@ FRONTEND_API_BASE_URL="${API_BASE_URL:-/api/v1}"
 VERSION_VALUE="${VERSION:-local}"
 GIT_SHA_VALUE="${GIT_SHA:-N/A}"
 BUILD_DATE_VALUE="${BUILD_DATE:-N/A}"
+USE_POST_LOGIN_ENDPOINT_VALUE="${USE_POST_LOGIN_ENDPOINT:-${use_post_login_endpoint:-false}}"
 
 json_escape() {
   printf '%s' "$1" | awk 'BEGIN { ORS=""; first=1 } { if (!first) print "\\n"; first=0; gsub(/\\/,"\\\\"); gsub(/"/,"\\\""); gsub(/\r/,"\\r"); gsub(/\t/,"\\t"); print }'
@@ -58,16 +61,18 @@ JSON_ESCAPED_FRONTEND_API_BASE_URL=$(json_escape "$FRONTEND_API_BASE_URL")
 JSON_ESCAPED_VERSION=$(json_escape "$VERSION_VALUE")
 JSON_ESCAPED_GIT_SHA=$(json_escape "$GIT_SHA_VALUE")
 JSON_ESCAPED_BUILD_DATE=$(json_escape "$BUILD_DATE_VALUE")
+JSON_ESCAPED_USE_POST_LOGIN_ENDPOINT=$(json_escape "$USE_POST_LOGIN_ENDPOINT_VALUE")
 cat > /usr/share/nginx/html/config.js <<EOF
 /* Runtime configuration – generated at container startup. Do not edit. */
 window.__RUNTIME_CONFIG__ = {
   API_BASE_URL: "${JSON_ESCAPED_FRONTEND_API_BASE_URL}",
+  USE_POST_LOGIN_ENDPOINT: "${JSON_ESCAPED_USE_POST_LOGIN_ENDPOINT}",
   VERSION: "${JSON_ESCAPED_VERSION}",
   GIT_SHA: "${JSON_ESCAPED_GIT_SHA}",
   BUILD_DATE: "${JSON_ESCAPED_BUILD_DATE}"
 };
 EOF
-echo "[entrypoint] config.js written — API_BASE_URL=${FRONTEND_API_BASE_URL}, VERSION=${VERSION_VALUE}, GIT_SHA=${GIT_SHA_VALUE}, BUILD_DATE=${BUILD_DATE_VALUE} (proxied -> ${BACKEND})"
+echo "[entrypoint] config.js written — API_BASE_URL=${FRONTEND_API_BASE_URL}, USE_POST_LOGIN_ENDPOINT=${USE_POST_LOGIN_ENDPOINT_VALUE}, VERSION=${VERSION_VALUE}, GIT_SHA=${GIT_SHA_VALUE}, BUILD_DATE=${BUILD_DATE_VALUE} (proxied -> ${BACKEND})"
 
 # 2. nginx proxy location — generated with the runtime backend URL.
 #    For host.docker.internal / localhost we use a static proxy_pass because

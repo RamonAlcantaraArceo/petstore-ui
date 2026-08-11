@@ -13,7 +13,8 @@ function mockFetch(responseData: unknown, options: { status?: number; ok?: boole
   return vi.fn(async () => ({
     ok,
     status,
-    headers: { get: () => 'application/json' },
+    statusText: ok ? 'OK' : 'Error',
+    headers: new Headers({ 'content-type': 'application/json' }),
     json: async () => responseData,
     text: async () => JSON.stringify(responseData),
   }));
@@ -69,6 +70,26 @@ describe('petApi', () => {
       }) as any;
       await findPetsByStatus(['available', 'pending']);
       expect(capturedUrl).toContain('status=available%2Cpending');
+    });
+
+    it('sends server pagination without a status filter for the All option', async () => {
+      let capturedUrl = '';
+      globalThis.fetch = vi.fn(async (url: string) => {
+        capturedUrl = url;
+        return {
+          ok: true,
+          status: 200,
+          headers: new Headers({ 'content-type': 'application/json' }),
+          json: async () => [],
+        };
+      }) as typeof globalThis.fetch;
+
+      await findPetsByStatus([], 8, 4);
+
+      const url = new URL(capturedUrl);
+      expect(url.searchParams.has('status')).toBe(false);
+      expect(url.searchParams.get('skip')).toBe('8');
+      expect(url.searchParams.get('limit')).toBe('4');
     });
 
     it('returns empty array when no pets match', async () => {

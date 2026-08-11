@@ -50,6 +50,7 @@ export const UserForm: FC<UserFormProps> = ({
     password: '',
     phone: user?.phone || '',
   });
+  const [confirmPassword, setConfirmPassword] = React.useState('');
   const [submitError, setSubmitError] = React.useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = React.useState<string | null>(null);
 
@@ -78,6 +79,10 @@ export const UserForm: FC<UserFormProps> = ({
 
     if (isCreateMode && !fields.password.trim()) {
       return t('components.userCreateForm.errors.passwordRequired');
+    }
+
+    if (isCreateMode && fields.password !== confirmPassword) {
+      return t('components.userCreateForm.errors.passwordMismatch');
     }
 
     if (fields.email.trim()) {
@@ -185,6 +190,17 @@ export const UserForm: FC<UserFormProps> = ({
         required={isCreateMode}
         autoComplete="new-password"
       />
+      {isCreateMode && (
+        <Input
+          name="confirmPassword"
+          labelTranslationKey="components.userCreateForm.fields.confirmPassword"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          type="password"
+          required
+          autoComplete="new-password"
+        />
+      )}
       <Input
         name="phone"
         labelTranslationKey={getFieldLabelKey('phone')}

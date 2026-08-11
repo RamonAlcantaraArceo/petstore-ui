@@ -13,7 +13,8 @@ function mockFetch(responseData: unknown, options: { status?: number; ok?: boole
   return vi.fn(async () => ({
     ok,
     status,
-    headers: { get: () => 'application/json' },
+    statusText: ok ? 'OK' : 'Error',
+    headers: new Headers({ 'content-type': 'application/json' }),
     json: async () => responseData,
     text: async () => JSON.stringify(responseData),
   }));

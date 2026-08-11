@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StatusFilter } from './StatusFilter';
+import type { PetStatusFilter } from './StatusFilter';
 import type { PetStatus } from '../../services/types';
 
 const meta: Meta<typeof StatusFilter> = {
@@ -28,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 const ALL_STATUSES: PetStatus[] = ['available', 'pending', 'sold'];
 
 const InteractiveFilter = () => {
-  const [selected, setSelected] = React.useState<PetStatus>('available');
+  const [selected, setSelected] = React.useState<PetStatusFilter>('');
   return (
     <StatusFilter
       statuses={ALL_STATUSES}

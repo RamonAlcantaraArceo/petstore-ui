@@ -4,10 +4,12 @@ import { Button } from '@petstore-ui/atoms';
 import { useTranslation } from '@petstore-ui/atoms';
 import type { PetStatus } from '../../services/types';
 
+export type PetStatusFilter = PetStatus | '';
+
 export interface StatusFilterProps {
   statuses: PetStatus[];
-  selectedStatus: PetStatus;
-  onChange: (status: PetStatus) => void;
+  selectedStatus: PetStatusFilter;
+  onChange: (status: PetStatusFilter) => void;
   onRefresh: () => void;
   isLoading?: boolean;
   className?: string;
@@ -23,10 +25,13 @@ export const StatusFilter: FC<StatusFilterProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const options = statuses.map((s) => ({
-    value: s,
-    labelTranslationKey: `petstore.common.status.${s}`,
-  }));
+  const options = [
+    { value: '', labelTranslationKey: 'petstore.common.status.all' },
+    ...statuses.map((s) => ({
+      value: s,
+      labelTranslationKey: `petstore.common.status.${s}`,
+    })),
+  ];
 
   return (
     <div
@@ -38,7 +43,7 @@ export const StatusFilter: FC<StatusFilterProps> = ({
       <Select
         options={options}
         value={selectedStatus}
-        onChange={(val) => onChange(val as PetStatus)}
+        onChange={(val) => onChange(val as PetStatusFilter)}
         labelTranslationKey="petstore.pets.filter.label"
       />
       <Button

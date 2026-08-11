@@ -3,6 +3,8 @@
 type RuntimeConfigWindow = Window & {
   __RUNTIME_CONFIG__?: {
     API_BASE_URL?: string;
+    USE_POST_LOGIN_ENDPOINT?: boolean | string;
+    use_post_login_endpoint?: boolean | string;
   };
 };
 

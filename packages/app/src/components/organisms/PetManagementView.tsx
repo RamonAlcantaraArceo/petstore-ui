@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { Button } from '@petstore-ui/atoms';
 import { Modal } from '@petstore-ui/atoms';
 import { StatusFilter } from '../molecules/StatusFilter';
+import type { PetStatusFilter } from '../molecules/StatusFilter';
 import { PetCard } from '../molecules/PetCard';
 import { PetForm } from '../molecules/PetForm';
 import type { PetFormFields } from '../molecules/PetForm';
@@ -13,6 +14,8 @@ import type { Pet, PetStatus } from '../../services/types';
 import { findPetsByStatus, addPet, updatePet, deletePet } from '../../services/petApi';
 import { theme } from '@petstore-ui/atoms';
 
+const ALL_STATUSES: PetStatus[] = ['available', 'pending', 'sold'];
+
 export interface PetManagementViewProps {
   /** Whether user is authenticated (shows CRUD buttons) */
   isLoggedIn?: boolean;
@@ -20,12 +23,15 @@ export interface PetManagementViewProps {
   initialPets?: Pet[];
   /** When true, skip API calls (story mode) */
   mockMode?: boolean;
+  /** Number of pets shown per page / load-more step */
+  pageSize?: number;
 }
 
 export const PetManagementView: FC<PetManagementViewProps> = ({
   isLoggedIn = false,
   initialPets,
   mockMode = false,
+  pageSize = 4,
 }) => {
   const { t } = useTranslation();
   const { ariaAttributes } = useAccessibility({
@@ -33,10 +39,12 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
   });
 
   // State
-  const ALL_STATUSES: PetStatus[] = ['available', 'pending', 'sold'];
-  const [selectedStatus, setSelectedStatus] = React.useState<PetStatus>('available');
+  const [selectedStatus, setSelectedStatus] = React.useState<PetStatusFilter>('');
   const [pets, setPets] = React.useState<Pet[]>(initialPets || []);
+  const [skip, setSkip] = React.useState(0);
+  const [hasMore, setHasMore] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoadingMore, setIsLoadingMore] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
   // Modal states
@@ -45,25 +53,37 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
   const [deletingPet, setDeletingPet] = React.useState<Pet | undefined>(undefined);
   const [formLoading, setFormLoading] = React.useState(false);
 
-  // Fetch pets
+  // Initial / filter-reset fetch
   const fetchPets = React.useCallback(async () => {
     if (mockMode) return;
     setIsLoading(true);
     setError(null);
-    const result = await findPetsByStatus([selectedStatus]);
+    const statusesToFetch = selectedStatus ? [selectedStatus] : [];
+    const result = await findPetsByStatus(statusesToFetch, 0, pageSize);
     if (result.data) {
       setPets(result.data);
+      setSkip(result.data.length);
+      setHasMore(result.data.length === pageSize);
     } else {
       setError(result.error);
     }
     setIsLoading(false);
-  }, [selectedStatus, mockMode]);
+  }, [selectedStatus, mockMode, pageSize]);
 
   React.useEffect(() => {
     if (!initialPets) {
       fetchPets();
     }
   }, [fetchPets, initialPets]);
+
+  // Reset when initialPets changes (story mode)
+  React.useEffect(() => {
+    if (initialPets) {
+      setPets(initialPets);
+      setSkip(initialPets.length);
+      setHasMore(initialPets.length === pageSize);
+    }
+  }, [initialPets, pageSize]);
 
   // CRUD handlers
   const handleAdd = () => {
@@ -115,6 +135,19 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
     fetchPets();
   };
 
+  const handleLoadMore = async () => {
+    if (mockMode) return;
+    setIsLoadingMore(true);
+    const statusesToFetch = selectedStatus ? [selectedStatus] : [];
+    const result = await findPetsByStatus(statusesToFetch, skip, pageSize);
+    if (result.data) {
+      setPets((prev) => [...prev, ...result.data!]);
+      setSkip((prev) => prev + result.data!.length);
+      setHasMore(result.data.length === pageSize);
+    }
+    setIsLoadingMore(false);
+  };
+
   return (
     <section
       data-component="PetManagementView"
@@ -135,7 +168,7 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
         <StatusFilter
           statuses={ALL_STATUSES}
           selectedStatus={selectedStatus}
-          onChange={setSelectedStatus}
+          onChange={(s: PetStatusFilter) => setSelectedStatus(s)}
           onRefresh={fetchPets}
           isLoading={isLoading}
         />
@@ -193,6 +226,50 @@ export const PetManagementView: FC<PetManagementViewProps> = ({
           />
         ))}
       </div>
+
+      {/* Pagination footer */}
+      {pets.length > 0 && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: theme.spacing[2],
+            marginTop: theme.spacing[6],
+          }}
+        >
+          <span
+            style={{
+              fontSize: theme.typography.fontSize.sm,
+              color: theme.colors.text.secondary,
+            }}
+          >
+            {t('petstore.app.pets.showingCount', { shown: pets.length })}
+          </span>
+          {hasMore ? (
+            <Button
+              variant="secondary"
+              onClick={handleLoadMore}
+              disabled={isLoadingMore}
+              loading={isLoadingMore}
+            >
+              {t('petstore.app.pets.loadMore')}
+            </Button>
+          ) : (
+            <p
+              role="status"
+              style={{
+                fontSize: theme.typography.fontSize.sm,
+                color: theme.colors.text.secondary,
+                fontStyle: 'italic',
+                margin: 0,
+              }}
+            >
+              {t('petstore.app.pets.allDisplayed')}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Add / Edit modal */}
       <Modal

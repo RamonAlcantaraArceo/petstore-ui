@@ -4,6 +4,7 @@ import { Input } from '@petstore-ui/atoms';
 import { Button } from '@petstore-ui/atoms';
 import { useTranslation } from '@petstore-ui/atoms';
 import { useAccessibility } from '@petstore-ui/atoms';
+import { isPostLoginEndpointEnabled } from '../../services/apiClient';
 
 export interface LoginFormProps {
   /** Called with (username, password) on submit */
@@ -20,15 +21,26 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isLoading = false, erro
   const { t } = useTranslation();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [validationError, setValidationError] = React.useState<string | null>(null);
+  const requiresEmail = isPostLoginEndpointEnabled();
 
   const { ariaAttributes } = useAccessibility({
     announceOnAction: t('petstore.auth.form.announceSubmit'),
   });
 
+  const isSubmitDisabled = isLoading || !username.trim() || !password.trim();
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    setValidationError(null);
+
+    if (requiresEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username.trim())) {
+      setValidationError(t('petstore.auth.errors.invalidEmail'));
+      return;
+    }
+
     onLogin(username, password);
   };
+  const displayError = validationError ?? error;
 
   return (
     <form
@@ -39,7 +51,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isLoading = false, erro
       {...ariaAttributes}
       autoComplete="on"
     >
-      {error && (
+      {displayError && (
         <div
           role="alert"
           aria-live="assertive"
@@ -53,18 +65,28 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isLoading = false, erro
             border: '1px solid #fca5a5',
           }}
         >
-          {error}
+          {displayError}
         </div>
       )}
       <Input
-        name="username"
-        labelTranslationKey="petstore.auth.form.username"
-        placeholderTranslationKey="petstore.auth.form.usernamePlaceholder"
+        name={requiresEmail ? 'email' : 'username'}
+        type="text"
+        labelTranslationKey={
+          requiresEmail ? 'petstore.auth.form.email' : 'petstore.auth.form.username'
+        }
+        placeholderTranslationKey={
+          requiresEmail
+            ? 'petstore.auth.form.emailPlaceholder'
+            : 'petstore.auth.form.usernamePlaceholder'
+        }
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={(e) => {
+          setUsername(e.target.value);
+          setValidationError(null);
+        }}
         required
         autoFocus
-        autoComplete="username"
+        autoComplete={requiresEmail ? 'email' : 'username'}
       />
       <Input
         name="password"
@@ -81,7 +103,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isLoading = false, erro
           type="submit"
           variant="primary"
           fullWidth
-          disabled={isLoading}
+          disabled={isSubmitDisabled}
           loading={isLoading}
           announceOnAction={t('petstore.auth.form.announceSubmit')}
         >

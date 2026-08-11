@@ -38,7 +38,7 @@ describe('UserForm Integration Tests', () => {
       const inputs = screen.getAllByRole('textbox');
       const [usernameInput, firstNameInput, lastNameInput, emailInput, phoneInput] = inputs;
       const passwordInputs = screen.getAllByDisplayValue('');
-      const passwordInput = passwordInputs.find(
+      const [passwordInput, confirmPasswordInput] = passwordInputs.filter(
         (input) => (input as HTMLInputElement).type === 'password',
       );
 
@@ -47,6 +47,7 @@ describe('UserForm Integration Tests', () => {
       await userEvent.type(lastNameInput, 'Doe');
       await userEvent.type(emailInput, 'john@example.com');
       await userEvent.type(passwordInput!, 'password123');
+      await userEvent.type(confirmPasswordInput!, 'password123');
       await userEvent.type(phoneInput, '555-1234');
 
       const buttons = screen.getAllByRole('button');
@@ -87,12 +88,13 @@ describe('UserForm Integration Tests', () => {
       const inputs = screen.getAllByRole('textbox');
       const [usernameInput] = inputs;
       const passwordInputs = screen.getAllByDisplayValue('');
-      const passwordInput = passwordInputs.find(
+      const [passwordInput, confirmPasswordInput] = passwordInputs.filter(
         (input) => (input as HTMLInputElement).type === 'password',
       );
 
       await userEvent.type(usernameInput, 'testuser');
       await userEvent.type(passwordInput!, 'password123');
+      await userEvent.type(confirmPasswordInput!, 'password123');
 
       const buttons = screen.getAllByRole('button');
       const submitButton = buttons.find((btn) => btn.className.includes('btn--primary'));
@@ -155,12 +157,13 @@ describe('UserForm Integration Tests', () => {
       const inputs = screen.getAllByRole('textbox');
       const [usernameInput, , , emailInput] = inputs;
       const passwordInputs = screen.getAllByDisplayValue('');
-      const passwordInput = passwordInputs.find(
+      const [passwordInput, confirmPasswordInput] = passwordInputs.filter(
         (input) => (input as HTMLInputElement).type === 'password',
       );
 
       await userEvent.type(usernameInput, 'testuser');
       await userEvent.type(passwordInput!, 'password123');
+      await userEvent.type(confirmPasswordInput!, 'password123');
       await userEvent.type(emailInput, 'invalid-email');
 
       const buttons = screen.getAllByRole('button');
@@ -171,6 +174,27 @@ describe('UserForm Integration Tests', () => {
         expect(mockOnSubmit).not.toHaveBeenCalled();
         const alert = screen.getByRole('alert');
         expect(alert).toBeDefined();
+      });
+    });
+
+    it('requires matching passwords when creating a user', async () => {
+      renderWithLocale(<UserForm onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
+
+      await userEvent.type(screen.getAllByRole('textbox')[0]!, 'testuser');
+      const [passwordInput, confirmPasswordInput] = screen
+        .getAllByDisplayValue('')
+        .filter((input) => (input as HTMLInputElement).type === 'password');
+      await userEvent.type(passwordInput!, 'password123');
+      await userEvent.type(confirmPasswordInput!, 'different');
+
+      const submitButton = screen
+        .getAllByRole('button')
+        .find((button) => button.className.includes('btn--primary'));
+      fireEvent.click(submitButton!);
+
+      await waitFor(() => {
+        expect(mockOnSubmit).not.toHaveBeenCalled();
+        expect(screen.getByRole('alert').textContent).toContain('Passwords do not match');
       });
     });
 
